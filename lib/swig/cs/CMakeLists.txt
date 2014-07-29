@@ -51,6 +51,7 @@ CSHARP_BUILD_SWIG_MODULE(io_cs_swig io_cs_swig IO)
 
 SET(cs_sources
     AssemblyInfo.cs
+    NatureListComboBox.cs
 )
 FOREACH(src ${cs_sources})
     CONFIGURE_FILE(
