@@ -9,15 +9,15 @@ using System.Windows.Forms;
 
 namespace LibPKMN
 {
-    public class NatureListComboBox: ComboBox
+    public class TypeListComboBox: ComboBox
     {
-        public NatureListComboBox(): base()
+        public TypeListComboBox(uint gen): base()
         {
-            string_vec nature_vec = new string_vec();
-            LibPKMN.getNatureList(nature_vec);
-            for(int i = 0; i < nature_vec.Count; i++)
+            string_vec type_vec = new string_vec();
+            LibPKMN.getTypeList(type_vec, gen);
+            for(int i = 0; i < type_vec.Count; i++)
             {
-                Items.Add(nature_vec[i]);
+                Items.Add(type_vec[i]);
             }
         }
     }

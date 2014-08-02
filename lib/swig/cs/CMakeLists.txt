@@ -50,8 +50,12 @@ CSHARP_BUILD_SWIG_MODULE(database_cs_swig database_cs_swig Database)
 CSHARP_BUILD_SWIG_MODULE(io_cs_swig io_cs_swig IO)
 
 SET(cs_sources
+    AbilityListComboBox.cs
     AssemblyInfo.cs
     NatureListComboBox.cs
+    PokemonListComboBox.cs
+    TypeListComboBox.cs
+    VersionListComboBox.cs
 )
 FOREACH(src ${cs_sources})
     CONFIGURE_FILE(
