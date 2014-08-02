@@ -50,7 +50,7 @@ print sysconfig.get_python_lib(plat_specific=True, prefix='')
     INCLUDE(${SWIG_USE_FILE})
 
     SET(LIBPKMN_PYTHON_INCLUDE_DIRS
-        ${CMAKE_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}
         ${LIBPKMN_SWIG_SOURCE_DIR}
         ${LIBPKMN_SWIG_SOURCE_DIR}/python
         ${Boost_INCLUDE_DIRS}
@@ -75,9 +75,13 @@ print sysconfig.get_python_lib(plat_specific=True, prefix='')
     FOREACH(dir ${LIBPKMN_PYTHON_INCLUDE_DIRS})
         LIST(APPEND CMAKE_SWIG_FLAGS "-I${dir}")
     ENDFOREACH(dir ${LIBPKMN_PYTHON_INCLUDE_DIRS})
-    SET_SOURCE_FILES_PROPERTIES(${module_name}.i PROPERTIES CPLUSPLUS ON)
 
-    SWIG_ADD_MODULE(${module_name} python ${module_name}.i)
+    CONFIGURE_FILE(
+        ${CMAKE_CURRENT_SOURCE_DIR}/${module_name}.i
+        ${CMAKE_CURRENT_BINARY_DIR}/${module_name}.i
+    @ONLY)
+    SET_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_BINARY_DIR}/${module_name}.i PROPERTIES CPLUSPLUS ON)
+    SWIG_ADD_MODULE(${module_name} python ${CMAKE_CURRENT_BINARY_DIR}/${module_name}.i)
     ADD_DEPENDENCIES(${SWIG_MODULE_${module_name}_REAL_NAME} python_enums)
     IF(CMAKE_COMPILER_IS_GNUCXX)
         IF(UNIX)

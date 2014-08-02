@@ -29,6 +29,28 @@ GENERATE_QT4_WRAPPER_FILES("PokemonListComboBox")
 GENERATE_QT4_WRAPPER_FILES("TypesComboBox")
 GENERATE_QT4_WRAPPER_FILES("VersionsComboBox")
 
+#Generate Qt4 SWIG interface file
+SET(QT4_SWIG
+"%feature (\"autodoc\", \"1\");
+
+%include \"stl.i\"
+%import \"libpkmn_python_swig.i\"
+
+%{")
+FOREACH(header ${qt4proxy_headers})
+    GET_FILENAME_COMPONENT(filename ${header} NAME)
+    SET(QT4_SWIG "${QT4_SWIG}
+    #include \"${filename}\"")
+ENDFOREACH(header ${qt4proxyheaders})
+SET(QT4_SWIG "${QT4_SWIG}
+%}
+")
+FOREACH(header ${qt4proxy_headers})
+    GET_FILENAME_COMPONENT(filename ${header} NAME)
+    SET(QT4_SWIG "${QT4_SWIG}
+%include \"${filename}\"")
+ENDFOREACH(header ${qt4proxyheaders})
+
 #Generate Qt4 subclass wrappers
 ADD_CUSTOM_COMMAND(
     OUTPUT ${qt4proxy_sources}
