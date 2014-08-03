@@ -5,7 +5,7 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-import org.nc.*;
+import org.nc.LibPKMN.*;
 
 public class JavaDictTest
 {

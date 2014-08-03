@@ -25,7 +25,7 @@ MACRO(JAVA_BUILD_SWIG_MODULE swig_source java_module_name)
     SET_SOURCE_FILES_PROPERTIES(${swig_source}.i PROPERTIES CPLUSPLUS ON)
 
     SET(CMAKE_SWIG_OUTDIR ${CMAKE_CURRENT_BINARY_DIR}/org/nc/LibPKMN)
-    SET(CMAKE_SWIG_FLAGS -module ${java_module_name} -package "org.nc" ${CMAKE_GLOBAL_SWIG_FLAGS})
+    SET(CMAKE_SWIG_FLAGS -module ${java_module_name} -package "org.nc.LibPKMN" ${CMAKE_GLOBAL_SWIG_FLAGS})
     SWIG_ADD_MODULE(${swig_source} java ${swig_source}.i)
     ADD_DEPENDENCIES(${SWIG_MODULE_${swig_source}_REAL_NAME} java_enums)
     IF(UNIX)

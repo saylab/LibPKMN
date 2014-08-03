@@ -5,7 +5,7 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-import org.nc.*;
+import org.nc.LibPKMN.*;
 
 /*
  * This unit test confirms that the SWIG'd shared_ptr returned from

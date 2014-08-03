@@ -28,7 +28,7 @@ ADD_CUSTOM_TARGET(
 INCLUDE(UseSWIG)
 INCLUDE(LibPKMNJava)
 
-JAVA_BUILD_SWIG_MODULE(libpkmn_java_swig Core)
+JAVA_BUILD_SWIG_MODULE(libpkmn_java_swig LibPKMN)
 JAVA_BUILD_SWIG_MODULE(calculations_java_swig Calculations)
 JAVA_BUILD_SWIG_MODULE(database_java_swig Database)
 JAVA_BUILD_SWIG_MODULE(io_java_swig IO)

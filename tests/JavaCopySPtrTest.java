@@ -5,7 +5,7 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-import org.nc.*;
+import org.nc.LibPKMN.*;
 
 /*
  * This test's LibPKMN's internal functionality for copying shared pointers,

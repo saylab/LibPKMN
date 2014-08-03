@@ -475,7 +475,7 @@ def generate_java_files(output_dir, license):
         f = open("%s.java" % key,'w')
         f.write(license + "\n\n")
 
-        f.write("package org.nc;\n\n");
+        f.write("package org.nc.LibPKMN;\n\n");
 
         f.write("""public class %s
 {""" % key)
@@ -493,7 +493,7 @@ def generate_java_files(output_dir, license):
         f = open("%s_Forms.java" % forms[i][0],'w')
         f.write(license + "\n\n")
 
-        f.write("package org.nc;\n\n");
+        f.write("package org.nc.LibPKMN;\n\n");
 
         f.write("""public class %s_Forms
 {""" % forms[i][0])
@@ -510,7 +510,7 @@ def generate_java_files(output_dir, license):
     f = open("Hoenn_Ribbons.java",'w')
     f.write(license + "\n\n")
 
-    f.write("package org.nc;\n\n")
+    f.write("package org.nc.LibPKMN;\n\n")
 
     f.write("""public class Hoenn_Ribbons
 {""")
@@ -527,7 +527,7 @@ def generate_java_files(output_dir, license):
     f = open("Sinnoh_Ribbons.java",'w')
     f.write(license + "\n\n")
 
-    f.write("package org.nc;\n\n")
+    f.write("package org.nc.LibPKMN;\n\n")
 
     f.write("""public class Sinnoh_Ribbons
 {""")
@@ -545,7 +545,7 @@ def generate_java_files(output_dir, license):
     f = open("Unova_Ribbons.java",'w')
     f.write(license + "\n\n")
 
-    f.write("package org.nc;\n\n")
+    f.write("package org.nc.LibPKMN;\n\n")
 
     f.write("""public class Unova_Ribbons
 {""")
@@ -563,7 +563,7 @@ def generate_java_files(output_dir, license):
     f = open("Kalos_Ribbons.java",'w')
     f.write(license + "\n\n")
 
-    f.write("package org.nc;\n\n")
+    f.write("package org.nc.LibPKMN;\n\n")
 
     f.write("""public class Kalos_Ribbons
 {""")
