@@ -25,6 +25,19 @@ ADD_CUSTOM_TARGET(
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/org/nc/LibPKMN/Abilities.java
 )
 
+#Copy GUI files into JAR directory
+SET(gui_files
+    ${CMAKE_CURRENT_SOURCE_DIR}/AbilityListComboBox.java
+)
+FOREACH(gui_file ${gui_files})
+    GET_FILENAME_COMPONENT(filename ${gui_file} NAME)
+
+    CONFIGURE_FILE(
+        ${gui_file}
+        ${CMAKE_CURRENT_BINARY_DIR}/org/nc/LibPKMN/${filename}
+    @ONLY)
+ENDFOREACH(gui_file ${gui_files})
+
 INCLUDE(UseSWIG)
 INCLUDE(LibPKMNJava)
 
@@ -42,6 +55,7 @@ ADD_CUSTOM_COMMAND(
     DEPENDS ${SWIG_MODULE_calculations_java_swig_REAL_NAME}
     DEPENDS ${SWIG_MODULE_database_java_swig_REAL_NAME}
     DEPENDS ${SWIG_MODULE_io_java_swig_REAL_NAME}
+    DEPENDS ${gui_files}
     DEPENDS java_enums
 )
 ADD_CUSTOM_TARGET(
