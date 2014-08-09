@@ -35,6 +35,8 @@ namespace pkmn
 
             typedef pkmn::shared_ptr<prng> sptr;
 
+            virtual ~prng() {};
+
             /*!
              * This is the PRNG's factory function. 
              *
@@ -103,11 +105,12 @@ namespace pkmn
              */
             virtual uint32_t mtrng() = 0;
 
-            virtual ~prng() {}; //Can this be avoided?
-    
         protected:
-        
             prng() {};
+
+        private:
+            prng(const prng&);
+            const prng& operator=(const prng&);
     };
 }
 
