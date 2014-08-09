@@ -10,7 +10,7 @@
     try {
         System.loadLibrary("libpkmn_java_swig");
     } catch (UnsatisfiedLinkError e) {
-      System.err.println("Native code library failed to load. \n" + e);
+      System.err.println("Failed to load libpkmn_java_swig with the following error:\n" + e);
       System.exit(1);
     }
   }
