@@ -16,24 +16,6 @@
   }
 %}
 
-%typemap(javacode) pkmn::pokemon_text %{
-    public char charAt(int index) {
-        return toString().charAt(index);
-    }
-
-    @Override public boolean equals(Object other) {
-        return (toString().equals(((PokemonText)other).toString()));
-    }
-
-    public boolean isEmpty() {
-        return toString().isEmpty();
-    }
-
-    @Override public String toString() {
-        return const_char();
-    }
-%}
-
 /*
  * Macro for dict templates to avoid individual javacode declarations for HashMaps
  */
