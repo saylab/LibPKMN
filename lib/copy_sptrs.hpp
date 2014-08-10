@@ -9,10 +9,10 @@
 
 #include <pkmn/bag.hpp>
 #include <pkmn/base_pokemon.hpp>
-#include <pkmn/game_save.hpp>
 #include <pkmn/item.hpp>
 #include <pkmn/move.hpp>
 #include <pkmn/pocket.hpp>
+#include <pkmn/trainer.hpp>
 
 namespace pkmn
 {

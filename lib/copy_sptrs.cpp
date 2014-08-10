@@ -15,7 +15,6 @@
 #include "base_pokemon_gen1impl.hpp"
 #include "base_pokemon_gen2impl.hpp"
 #include "base_pokemon_modernimpl.hpp"
-#include "game_save_gen1impl.hpp"
 #include "item_impl.hpp"
 #include "item_machineimpl.hpp"
 #include "move_impl.hpp"
