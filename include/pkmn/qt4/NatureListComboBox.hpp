@@ -4,8 +4,8 @@
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  */
-#ifndef INCLUDED_VERSIONSCOMBOBOX_HPP
-#define INCLUDED_VERSIONSCOMBOBOX_HPP
+#ifndef INCLUDED_NATURESCOMBOBOX_HPP
+#define INCLUDED_NATURESCOMBOBOX_HPP
 
 #include <pkmn/config.hpp>
 
@@ -15,20 +15,14 @@ namespace pkmn
 {
     namespace qt4
     {
-        class PKMN_API VersionsComboBox: public QComboBox
+        class PKMN_API NatureListComboBox: public QComboBox
         {
             Q_OBJECT
 
             public:
-                VersionsComboBox(unsigned int gen, QWidget* parent = NULL);
-
-            /*signals:
-
-            slots:
-
-            private:*/
+                NatureListComboBox(QWidget* parent = NULL);
         };
     }
 }
 
-#endif /* INCLUDED_VERSIONSCOMBOBOX_HPP */
+#endif /* INCLUDED_NATURESCOMBOBOX_HPP */

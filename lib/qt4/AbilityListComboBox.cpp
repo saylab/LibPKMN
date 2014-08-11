@@ -8,14 +8,14 @@
 #include <string>
 #include <vector>
 
-#include <pkmn/qt4/AbilitiesComboBox.hpp>
+#include <pkmn/qt4/AbilityListComboBox.hpp>
 #include <pkmn/lists.hpp>
 
 namespace pkmn
 {
     namespace qt4
     {
-        AbilitiesComboBox::AbilitiesComboBox(unsigned int gen, QWidget* parent): QComboBox(parent)
+        AbilityListComboBox::AbilityListComboBox(unsigned int gen, QWidget* parent): QComboBox(parent)
         {
             std::vector<std::string> abilities_vec;
             get_ability_list(abilities_vec, gen);

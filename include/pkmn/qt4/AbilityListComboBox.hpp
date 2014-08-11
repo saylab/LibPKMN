@@ -15,18 +15,12 @@ namespace pkmn
 {
     namespace qt4
     {
-        class PKMN_API AbilitiesComboBox: public QComboBox
+        class PKMN_API AbilityListComboBox: public QComboBox
         {
             Q_OBJECT
 
             public:
-                AbilitiesComboBox(unsigned int gen, QWidget* parent = NULL);
-
-            /*signals:
-
-            slots:
-
-            private:*/
+                AbilityListComboBox(unsigned int gen, QWidget* parent = NULL);
         };
     }
 }
