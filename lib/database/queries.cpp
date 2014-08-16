@@ -124,6 +124,47 @@ namespace pkmn
             GET_STRING(query);
         }
 
+        unsigned int get_experience(const unsigned int species_id, const unsigned int level)
+        {
+            CONNECT_TO_DB();
+            if(species_id == 0 or level == 0) return 0;
+
+            std::ostringstream query_stream;
+            query_stream << "SELECT experience FROM experience WHERE level=" << level
+                         << " AND growth_rate_id=(SELECT growth_rate_id FROM pokemon_species"
+                         << " WHERE id=" << species_id << ")";
+            SQLite::Statement query(*db, query_stream.str().c_str());
+            GET_NUM(query);
+        }
+
+        unsigned int get_experience(const std::string &species_name, const unsigned int level)
+        {
+            return get_experience(get_species_id(species_name), level);
+        }
+
+        unsigned int get_level(const unsigned int species_id, const unsigned int experience)
+        {
+            CONNECT_TO_DB();
+            if(species_id == 0) return 0;
+
+            std::ostringstream query_stream;
+            query_stream << "SELECT experience.level "
+                         << "FROM   experience "
+                         << "       INNER JOIN pokemon_species "
+                         << "               ON experience.growth_rate_id = pokemon_species.growth_rate_id "
+                         << "                  AND experience.growth_rate_id = pokemon_species.growth_rate_id "
+                         << "WHERE  ( experience.experience <= " << experience << " ) "
+                         << "       AND ( pokemon_species.id = " << species_id << " ) "
+                         << "ORDER  BY experience.level DESC";
+            SQLite::Statement query(*db, query_stream.str().c_str());
+            GET_NUM(query);
+        }
+
+        unsigned int get_level(const std::string &species_name, const unsigned int experience)
+        {
+            return get_level(get_species_id(species_name), experience);
+        }
+
         unsigned int get_generation(const unsigned int version_id)
         {
             CONNECT_TO_DB();

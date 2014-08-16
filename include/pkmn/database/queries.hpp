@@ -23,6 +23,11 @@ namespace pkmn
         unsigned int PKMN_API get_egg_group_id(const std::string &egg_group_name);
         std::string PKMN_API get_egg_group_name(const unsigned int egg_group_id);
 
+        unsigned int PKMN_API get_experience(const unsigned int species_id, const unsigned int level);
+        unsigned int PKMN_API get_experience(const std::string &species_name, const unsigned int level);
+        unsigned int PKMN_API get_level(const unsigned int species_id, const unsigned int experience);
+        unsigned int PKMN_API get_level(const std::string &species_name, const unsigned int experience);
+
         unsigned int PKMN_API get_generation(const unsigned int version_id);
         unsigned int PKMN_API get_generation(const std::string &version_name);
 
