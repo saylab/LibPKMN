@@ -22,12 +22,34 @@ MACRO(GENERATE_QT4_WRAPPER_FILES subclass)
     LIST(APPEND qt4wrapper_sources ${CMAKE_CURRENT_BINARY_DIR}/${subclass}.py)
 ENDMACRO(GENERATE_QT4_WRAPPER_FILES)
 
-GENERATE_QT4_WRAPPER_FILES("AbilitiesComboBox")
+GENERATE_QT4_WRAPPER_FILES("AbilityListComboBox")
 GENERATE_QT4_WRAPPER_FILES("AboutMessageBox")
-GENERATE_QT4_WRAPPER_FILES("NaturesComboBox")
+GENERATE_QT4_WRAPPER_FILES("NatureListComboBox")
 GENERATE_QT4_WRAPPER_FILES("PokemonListComboBox")
-GENERATE_QT4_WRAPPER_FILES("TypesComboBox")
-GENERATE_QT4_WRAPPER_FILES("VersionsComboBox")
+GENERATE_QT4_WRAPPER_FILES("TypeListComboBox")
+GENERATE_QT4_WRAPPER_FILES("VersionListComboBox")
+
+#Generate Qt4 SWIG interface file
+SET(QT4_SWIG
+"%feature (\"autodoc\", \"1\");
+
+%include \"stl.i\"
+%import \"libpkmn_python_swig.i\"
+
+%{")
+FOREACH(header ${qt4proxy_headers})
+    GET_FILENAME_COMPONENT(filename ${header} NAME)
+    SET(QT4_SWIG "${QT4_SWIG}
+    #include \"${filename}\"")
+ENDFOREACH(header ${qt4proxyheaders})
+SET(QT4_SWIG "${QT4_SWIG}
+%}
+")
+FOREACH(header ${qt4proxy_headers})
+    GET_FILENAME_COMPONENT(filename ${header} NAME)
+    SET(QT4_SWIG "${QT4_SWIG}
+%include \"${filename}\"")
+ENDFOREACH(header ${qt4proxyheaders})
 
 #Generate Qt4 subclass wrappers
 ADD_CUSTOM_COMMAND(

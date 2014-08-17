@@ -6,9 +6,9 @@
 # or copy at http://opensource.org/licenses/MIT)
 #
 
-from AbilitiesComboBox import AbilitiesComboBox
+from AbilityListComboBox import AbilityListComboBox
 from AboutMessageBox import AboutMessageBox
-from NaturesComboBox import NaturesComboBox
+from NatureListComboBox import NatureListComboBox
 from PokemonListComboBox import PokemonListComboBox
-from TypesComboBox import TypesComboBox
-from VersionsComboBox import VersionsComboBox
+from TypeListComboBox import TypeListComboBox
+from VersionListComboBox import VersionListComboBox

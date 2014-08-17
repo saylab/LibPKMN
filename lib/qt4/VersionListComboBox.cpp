@@ -8,17 +8,17 @@
 #include <string>
 #include <vector>
 
-#include <pkmn/qt4/VersionsComboBox.hpp>
+#include <pkmn/qt4/VersionListComboBox.hpp>
 #include <pkmn/lists.hpp>
 
 namespace pkmn
 {
     namespace qt4
     {
-        VersionsComboBox::VersionsComboBox(unsigned int gen, QWidget* parent): QComboBox(parent)
+        VersionListComboBox::VersionListComboBox(unsigned int gen, QWidget* parent): QComboBox(parent)
         {
             std::vector<std::string> games_vec;
-            get_game_group_list(games_vec);
+            get_game_list(games_vec);
 
             for(unsigned int i = 0; i < games_vec.size(); i++)
             {

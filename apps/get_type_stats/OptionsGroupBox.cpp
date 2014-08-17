@@ -28,8 +28,8 @@ OptionsGroupBox::OptionsGroupBox(QWidget* parent): QGroupBox(parent)
 
     //typesLayout
     QLabel* typesLabel = new QLabel(tr("Input type(s):"),this);
-    TypesComboBox* type1ComboBox = new TypesComboBox(5,this);
-    TypesComboBox* type2ComboBox = new TypesComboBox(5,this);
+    TypeListComboBox* type1ComboBox = new TypeListComboBox(5,this);
+    TypeListComboBox* type2ComboBox = new TypeListComboBox(5,this);
     type2ComboBox->insertItem(0,QString("Any"));
     type2ComboBox->insertItem(1,QString("None"));
     type2ComboBox->setCurrentIndex(0);

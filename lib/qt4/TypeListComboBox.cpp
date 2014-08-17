@@ -9,13 +9,13 @@
 #include <vector>
 
 #include <pkmn/lists.hpp>
-#include <pkmn/qt4/TypesComboBox.hpp>
+#include <pkmn/qt4/TypeListComboBox.hpp>
 
 namespace pkmn
 {
     namespace qt4
     {
-        TypesComboBox::TypesComboBox(unsigned int gen, QWidget* parent): QComboBox(parent)
+        TypeListComboBox::TypeListComboBox(unsigned int gen, QWidget* parent): QComboBox(parent)
         {
             std::vector<std::string> types_vec;
             get_type_list(types_vec, gen);

@@ -9,13 +9,13 @@
 #include <vector>
 
 #include <pkmn/lists.hpp>
-#include <pkmn/qt4/NaturesComboBox.hpp>
+#include <pkmn/qt4/NatureListComboBox.hpp>
 
 namespace pkmn
 {
     namespace qt4
     {
-        NaturesComboBox::NaturesComboBox(QWidget* parent): QComboBox(parent)
+        NatureListComboBox::NatureListComboBox(QWidget* parent): QComboBox(parent)
         {
             std::vector<std::string> natures_vec;
             get_nature_list(natures_vec);
