@@ -32,7 +32,7 @@ IF(ENABLE_LIBPKMN)
         ${CMAKE_CURRENT_BINARY_DIR}/build_info.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/paths.cpp
         library_bridge.cpp
-        prng_impl.cpp
+        prng.cpp
         pokemon_text.cpp
         nature.cpp
         calculations.cpp

@@ -10,6 +10,7 @@
 #include <cstdint>
 
 #include <pkmn/config.hpp>
+#include <pkmn/types/dict.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
 namespace pkmn
@@ -35,15 +36,15 @@ namespace pkmn
 
             typedef pkmn::shared_ptr<prng> sptr;
 
-            virtual ~prng() {};
-
             /*!
              * This is the PRNG's factory function. 
              *
              * \param gen generation of desired PRNG
              * \return shared pointer to instance of specified generation's PRNG
              */
-            static sptr get(unsigned int gen);
+            static sptr get(uint8_t gen);
+
+            ~prng() {};
 
             /*!
              * Linear Congruential Random Number Generator (LCRNG)
@@ -66,7 +67,7 @@ namespace pkmn
              *
              * \return next LCRNG value
              */
-            virtual uint64_t lcrng() = 0;
+            uint64_t lcrng();
             
             /*!
              * Alternative Pseudorandom Number Generator (ARNG)
@@ -84,7 +85,7 @@ namespace pkmn
              *
              * \return next ARNG value
              */
-            virtual uint32_t arng() = 0;
+            uint32_t arng();
 
             /*!
              * Mersenne Twister (MTRNG)
@@ -103,14 +104,16 @@ namespace pkmn
              *
              * \return next MTRNG value
              */
-            virtual uint32_t mtrng() = 0;
-
-        protected:
-            prng() {};
+            uint32_t mtrng();
 
         private:
+            prng() {};
+            prng(uint8_t gen);
             prng(const prng&);
             const prng& operator=(const prng&);
+
+            uint8_t _gen;
+            static pkmn::dict<uint8_t, sptr> _prngs;
     };
 }
 

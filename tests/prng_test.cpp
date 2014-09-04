@@ -13,8 +13,10 @@
 
 BOOST_AUTO_TEST_CASE(check_singleton_addresses)
 {
-    pkmn::prng::sptr gen1_instance = pkmn::prng::get(1);
-    pkmn::prng::sptr gen2_instance = pkmn::prng::get(2);
+    pkmn::prng::sptr gen1_instance1 = pkmn::prng::get(1);
+    pkmn::prng::sptr gen1_instance2 = pkmn::prng::get(1);
+    pkmn::prng::sptr gen2_instance1 = pkmn::prng::get(2);
+    pkmn::prng::sptr gen2_instance2 = pkmn::prng::get(2);
     pkmn::prng::sptr gen3_instance1 = pkmn::prng::get(3);
     pkmn::prng::sptr gen3_instance2 = pkmn::prng::get(3);
     pkmn::prng::sptr gen4_instance1 = pkmn::prng::get(4);
@@ -24,13 +26,15 @@ BOOST_AUTO_TEST_CASE(check_singleton_addresses)
     pkmn::prng::sptr gen6_instance1 = pkmn::prng::get(6);
     pkmn::prng::sptr gen6_instance2 = pkmn::prng::get(6);
     
-    BOOST_CHECK(gen1_instance.get() == gen2_instance.get());
-    BOOST_CHECK(gen2_instance.get() == gen3_instance1.get());
-    BOOST_CHECK(gen1_instance.get() == gen3_instance1.get());
+    BOOST_CHECK(gen1_instance1.get() == gen1_instance2.get());
+    BOOST_CHECK(gen2_instance1.get() == gen2_instance2.get());
     BOOST_CHECK(gen3_instance1.get() == gen3_instance2.get());
     BOOST_CHECK(gen4_instance1.get() == gen4_instance2.get());
     BOOST_CHECK(gen5_instance1.get() == gen5_instance2.get());
     BOOST_CHECK(gen6_instance1.get() == gen6_instance2.get());
+
+    BOOST_CHECK(gen1_instance1.get() != gen2_instance1.get());
+    BOOST_CHECK(gen2_instance1.get() != gen3_instance1.get());
     BOOST_CHECK(gen3_instance1.get() != gen4_instance1.get());
     BOOST_CHECK(gen4_instance1.get() != gen5_instance1.get());
     BOOST_CHECK(gen5_instance1.get() != gen6_instance1.get());
