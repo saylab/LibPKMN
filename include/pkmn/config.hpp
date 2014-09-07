@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -11,19 +11,6 @@
  * Allow use of and/or/not in MSVC
  ***************************************************************************/
 #include <ciso646>
-
-/***************************************************************************
- * In order to prevent users from needing Boost to develop off of
- * LibPKMN, these alternatives are used to get around what would
- * usually be done with Boost. These are mainly usd by dict and array,
- * which are publicly exposed.
- ***************************************************************************/
-
-//Alternative to BOOST_FOREACH
-#define FOREACH(VAR, BEGIN, END) \
-    for (auto _foreach_range = std::make_pair((BEGIN), (END)); _foreach_range.first != _foreach_range.second; ++_foreach_range.first) \
-        if (bool _foreach_inner = false) {} else \
-            for (VAR = *_foreach_range.first; !_foreach_inner; _foreach_inner = true)
 
 //Alternative to boost::lexical_cast
 #include <sstream>
@@ -44,7 +31,7 @@ inline std::string to_string (const T& t)
     #define PKMN_INLINE         __forceinline
     #define PKMN_DEPRECATED     __declspec(deprecated)
     #define PKMN_ALIGNED(x)     __declspec(align(x))
-    # pragma warning(disable: 4251) // class 'A<T>' needs to have dll-interface to be used by clients of class 'B'
+    #pragma warning(disable: 4251) // class 'A<T>' needs to have dll-interface to be used by clients of class 'B'
 #elif defined(__GNUG__) && __GNUG__ >= 4
     #define PKMN_EXPORT         __attribute__((visibility("default")))
     #define PKMN_IMPORT         __attribute__((visibility("default")))

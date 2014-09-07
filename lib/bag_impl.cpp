@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include <boost/assign.hpp>
+#include <boost/foreach.hpp>
 #include <boost/format.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -433,7 +434,7 @@ namespace pkmn
 
     void bag_impl::_check() const
     {
-        FOREACH(std::string& key, _pockets.keys().begin(), _pockets.keys().end())
+        BOOST_FOREACH(const std::string& key, _pockets.keys())
         {
             if(_game_id != _pockets[key]->get_game_id())
             {
