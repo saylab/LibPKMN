@@ -5,6 +5,22 @@
 # or copy at http://opensource.org/licenses/MIT)
 #
 
+IF(DEFINED __INCLUDED_LIBPKMNPYTHON_CMAKE)
+    RETURN()
+ENDIF(DEFINED __INCLUDED_LIBPKMNPYTHON_CMAKE)
+SET(__INCLUDED_LIBPKMNPYTHON_CMAKE TRUE)
+
+########################################################################
+# Set the Python install directory
+########################################################################
+    EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "
+from distutils import sysconfig
+print sysconfig.get_python_lib(plat_specific=True, prefix='')
+    " OUTPUT_VARIABLE LIBPKMN_PYTHON_DIR OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    FILE(TO_CMAKE_PATH ${LIBPKMN_PYTHON_DIR} LIBPKMN_PYTHON_DIR)
+    SET(LIBPKMN_PYTHON_DIR ${LIBPKMN_PYTHON_DIR} CACHE FILEPATH "Python install directory")
+
 ########################################################################
 # Check for the existence of a python module:
 # - desc a string description of the check
@@ -39,14 +55,6 @@ ENDMACRO(PYTHON_CHECK_MODULE)
 # Assumes LIBPKMN_SWIG_SOURCE_DIR is set
 ########################################################################
 MACRO(PYTHON_BUILD_SWIG_MODULE module_name install_dir)
-    EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "
-from distutils import sysconfig
-print sysconfig.get_python_lib(plat_specific=True, prefix='')
-    " OUTPUT_VARIABLE LIBPKMN_PYTHON_DIR OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    FILE(TO_CMAKE_PATH ${LIBPKMN_PYTHON_DIR} LIBPKMN_PYTHON_DIR)
-    SET(LIBPKMN_PYTHON_DIR ${LIBPKMN_PYTHON_DIR} CACHE FILEPATH "Python install directory")
-
     INCLUDE(${SWIG_USE_FILE})
 
     SET(LIBPKMN_PYTHON_INCLUDE_DIRS
