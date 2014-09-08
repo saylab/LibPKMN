@@ -9,7 +9,7 @@ package org.nc.LibPKMN;
 
 import javax.swing.*;
 
-public class PokemonListComboBox extends JComboBox
+public class PokemonListComboBox extends JComboBox<String>
 {
     public PokemonListComboBox(long version_id)
     {

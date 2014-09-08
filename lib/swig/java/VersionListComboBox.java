@@ -9,7 +9,7 @@ package org.nc.LibPKMN;
 
 import javax.swing.*;
 
-public class VersionListComboBox extends JComboBox
+public class VersionListComboBox extends JComboBox<String>
 {
     public VersionListComboBox(long gen)
     {

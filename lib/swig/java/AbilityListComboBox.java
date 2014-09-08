@@ -9,7 +9,7 @@ package org.nc.LibPKMN;
 
 import javax.swing.*;
 
-public class AbilityListComboBox extends JComboBox
+public class AbilityListComboBox extends JComboBox<String>
 {
     public AbilityListComboBox(long gen)
     {
