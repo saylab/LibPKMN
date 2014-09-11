@@ -145,10 +145,7 @@ ENDIF(ENABLE_PYTHON)
 # C# tests
 ##################################################
 IF(ENABLE_CSHARP)
-    FILE(TO_NATIVE_PATH "${LIBPKMN_BINARY_DIR}/lib/swig/cs/libpkmn-cs.dll" LIBPKMN_CS_DLL)
-    SET(LIBPKMN_CS_DLL ${LIBPKMN_CS_DLL} CACHE FILEPATH "libpkmn-cs.dll location")
-    FILE(TO_NATIVE_PATH "${LIBPKMN_BINARY_DIR}/lib/swig/cs" LIBRARY_PATH)
-    SET(LIBRARY_PATH "${LIBRARY_PATH}" CACHE FILEPATH "LibPKMN C# library directory")
+    SET(LIBPKMN_CS_DLL "${LIBPKMN_BINARY_DIR}/lib/swig/cs/libpkmn-cs.dll" CACHE FILEPATH "libpkmn-cs.dll location")
 
     SET(cs_test_names
         CSharpDictTest
