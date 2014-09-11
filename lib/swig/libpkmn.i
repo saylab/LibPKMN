@@ -54,18 +54,18 @@ namespace std
  * Their functionality will be replicated in the other languages.
  */
 %ignore pkmn::dict::operator[];
-%ignore pkmn::pkstring::pkstring(std::string);
+%ignore pkmn::pkstring::pkstring(const std::string&);
 %ignore pkmn::pkstring::pkstring(const wchar_t*);
-%ignore pkmn::pkstring::pkstring(std::wstring);
+%ignore pkmn::pkstring::pkstring(const std::wstring&);
 %ignore pkmn::pkstring::operator[];
 %ignore pkmn::pkstring::operator std::string;
 %ignore pkmn::pkstring::operator std::wstring;
 %ignore pkmn::pkstring::const_wchar_t() const;
 %ignore pkmn::pkstring::std_string() const;
 %ignore pkmn::pkstring::std_wstring() const;
-%ignore pkmn::pkstring::set(std::string);
+%ignore pkmn::pkstring::set(const std::string&);
 %ignore pkmn::pkstring::set(const wchar_t*);
-%ignore pkmn::pkstring::set(std::wstring);
+%ignore pkmn::pkstring::set(const std::wstring&);
 %ignore pkmn::nature::operator[];
 
 %{
