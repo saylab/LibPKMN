@@ -19,8 +19,6 @@ namespace pkmn
      */
     std::string PKMN_INLINE getenv(const char* var)
     {
-        std::string value;
-
         #ifdef PKMN_PLATFORM_WIN32
         char* arr;
         size_t len;
@@ -28,7 +26,7 @@ namespace pkmn
         if(!arr) return std::string("");
         else
         {
-            value = std::string(arr);
+            std::string value = std::string(arr);
             free(arr);
             return value;
         }
