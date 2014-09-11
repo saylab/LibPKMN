@@ -15,21 +15,19 @@
 #include <pkmn/pocket.hpp>
 #include <pkmn/database/queries.hpp>
 
-using namespace std;
-
 namespace pkmn
 {
-    pocket::sptr pocket::make(unsigned int game, string name, unsigned int size)
+    pocket::sptr pocket::make(unsigned int game, const pkmn::pkstring &name, unsigned int size)
     {
         return sptr(new pocket_impl(game, name, size));
     }
 
-    pocket::sptr pocket::make(std::string game, std::string name, unsigned int size)
+    pocket::sptr pocket::make(const pkmn::pkstring &game, const pkmn::pkstring &name, unsigned int size)
     {
         return make(database::get_version_id(game), name, size);
     }
 
-    pocket_impl::pocket_impl(unsigned int game, string name, unsigned int size)
+    pocket_impl::pocket_impl(unsigned int game, const pkmn::pkstring &name, unsigned int size)
     {
         _game_id = game;
         _pocket_size = size;
@@ -38,15 +36,15 @@ namespace pkmn
         _item_dict = pkmn::dict<uint16_t, uint8_t>();
     }
 
-    std::string pocket_impl::get_game() const {return database::get_version_name(_game_id);}
+    pkmn::pkstring pocket_impl::get_game() const {return database::get_version_name(_game_id);}
 
     unsigned int pocket_impl::get_generation() const {return _generation;}
 
-    std::string pocket_impl::get_name() const {return _pocket_name;}
+    pkmn::pkstring pocket_impl::get_name() const {return _pocket_name;}
 
     unsigned int pocket_impl::size() const {return _pocket_size;}
 
-    void pocket_impl::add_item(pokemon_text item_name, unsigned int amount)
+    void pocket_impl::add_item(const pkmn::pkstring &item_name, unsigned int amount)
     {
         add_item(database::get_item_id(item_name), amount);
     }
@@ -65,7 +63,7 @@ namespace pkmn
         add_item(item_sptr->get_item_id(), amount);
     }
 
-    void pocket_impl::remove_item(pokemon_text item_name, unsigned int amount)
+    void pocket_impl::remove_item(const pkmn::pkstring &item_name, unsigned int amount)
     {
         remove_item(database::get_item_id(item_name), amount);
     }
@@ -84,7 +82,7 @@ namespace pkmn
         remove_item(item_sptr->get_item_id(), amount);
     }
 
-    unsigned int pocket_impl::get_item_amount(pokemon_text item_name) const
+    unsigned int pocket_impl::get_item_amount(const pkmn::pkstring &item_name) const
     {
         return get_item_amount(database::get_item_id(item_name));
     }

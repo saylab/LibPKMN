@@ -20,7 +20,7 @@ namespace pkmn
 
             nature() {};
             nature(unsigned int id);
-            nature(std::string name);
+            nature(const std::string &name);
             ~nature() {};
 
             std::string get_name();

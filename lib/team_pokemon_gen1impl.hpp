@@ -24,27 +24,27 @@ namespace pkmn
             ~team_pokemon_gen1impl() {};
 
             //Getting Individual Stat Info
-            std::string get_gender() const;
+            pkmn::pkstring get_gender() const;
             nature get_nature() const;
-            std::string get_ability() const;
+            pkmn::pkstring get_ability() const;
             bool is_shiny() const;
-            pkmn::dict<std::string, unsigned int> get_stats() const;
-            pkmn::dict<std::string, unsigned int> get_EVs() const;
-            pkmn::dict<std::string, unsigned int> get_IVs() const;
+            pkmn::dict<pkmn::pkstring, unsigned int> get_stats() const;
+            pkmn::dict<pkmn::pkstring, unsigned int> get_EVs() const;
+            pkmn::dict<pkmn::pkstring, unsigned int> get_IVs() const;
 
             //Setting Individual Stat Info
             void set_personality(unsigned int personality);
-            void set_nature(std::string nature_name);
-            void set_ability(std::string ability);
-            void set_EV(std::string stat_name, unsigned int stat);
-            void set_IV(std::string stat_name, unsigned int stat);
+            void set_nature(const pkmn::pkstring &nature_name);
+            void set_ability(const pkmn::pkstring &ability);
+            void set_EV(const pkmn::pkstring &stat_name, unsigned int stat);
+            void set_IV(const pkmn::pkstring &stat_name, unsigned int stat);
 
         private:
 
             unsigned int _SPCL, _evSPCL, _ivSPCL;
 
             unsigned int _get_hp() const;
-            unsigned int _get_stat(std::string stat, unsigned int EV, unsigned int IV) const;
+            unsigned int _get_stat(const pkmn::pkstring &stat, unsigned int EV, unsigned int IV) const;
             void _set_stats();
     };
 }

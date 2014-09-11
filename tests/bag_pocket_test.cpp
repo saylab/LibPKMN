@@ -20,7 +20,7 @@
 BOOST_AUTO_TEST_CASE(gen1_bag)
 {
     pkmn::bag::sptr item_bag = pkmn::bag::make("Blue");
-    pkmn::dict<std::string, pkmn::pocket::sptr> pocket_dict = item_bag->get_pockets();
+    pkmn::dict<pkmn::pkstring, pkmn::pocket::sptr> pocket_dict = item_bag->get_pockets();
     BOOST_CHECK(pocket_dict.has_key("Items"));
     BOOST_CHECK(pocket_dict["Items"]->size() == 20);
     BOOST_CHECK(pocket_dict.size() == 1);
@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE(gen1_bag)
 BOOST_AUTO_TEST_CASE(gen2_bag)
 {
     pkmn::bag::sptr item_bag = pkmn::bag::make("Silver");
-    pkmn::dict<std::string, pkmn::pocket::sptr> pocket_dict = item_bag->get_pockets();
+    pkmn::dict<pkmn::pkstring, pkmn::pocket::sptr> pocket_dict = item_bag->get_pockets();
     BOOST_CHECK(pocket_dict.has_key("Items"));
     BOOST_CHECK(pocket_dict["Items"]->size() == 20);
     BOOST_CHECK(pocket_dict.has_key("Balls"));
@@ -46,7 +46,7 @@ BOOST_AUTO_TEST_CASE(gen2_bag)
 BOOST_AUTO_TEST_CASE(RS_bag)
 {
     pkmn::bag::sptr item_bag = pkmn::bag::make("Sapphire");
-    pkmn::dict<std::string, pkmn::pocket::sptr> pocket_dict = item_bag->get_pockets();
+    pkmn::dict<pkmn::pkstring, pkmn::pocket::sptr> pocket_dict = item_bag->get_pockets();
     BOOST_CHECK(pocket_dict.has_key("Items"));
     BOOST_CHECK(pocket_dict["Items"]->size() == 20);
     BOOST_CHECK(pocket_dict.has_key("Poke Balls"));
@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE(RS_bag)
 BOOST_AUTO_TEST_CASE(emerald_bag)
 {
     pkmn::bag::sptr item_bag = pkmn::bag::make("Emerald");
-    pkmn::dict<std::string, pkmn::pocket::sptr> pocket_dict = item_bag->get_pockets();
+    pkmn::dict<pkmn::pkstring, pkmn::pocket::sptr> pocket_dict = item_bag->get_pockets();
     BOOST_CHECK(pocket_dict.has_key("Items"));
     BOOST_CHECK(pocket_dict["Items"]->size() == 20);
     BOOST_CHECK(pocket_dict.has_key("Poke Balls"));
@@ -82,7 +82,7 @@ BOOST_AUTO_TEST_CASE(emerald_bag)
 BOOST_AUTO_TEST_CASE(FRLG_bag)
 {
     pkmn::bag::sptr item_bag = pkmn::bag::make("Leaf Green");
-    pkmn::dict<std::string, pkmn::pocket::sptr> pocket_dict = item_bag->get_pockets();
+    pkmn::dict<pkmn::pkstring, pkmn::pocket::sptr> pocket_dict = item_bag->get_pockets();
     BOOST_CHECK(pocket_dict.has_key("Items"));
     BOOST_CHECK(pocket_dict["Items"]->size() == 42);
     BOOST_CHECK(pocket_dict.has_key("Key Items"));
@@ -100,7 +100,7 @@ BOOST_AUTO_TEST_CASE(FRLG_bag)
 BOOST_AUTO_TEST_CASE(DPP_bag)
 {
     pkmn::bag::sptr item_bag = pkmn::bag::make("Pearl");
-    pkmn::dict<std::string, pkmn::pocket::sptr> pocket_dict = item_bag->get_pockets();
+    pkmn::dict<pkmn::pkstring, pkmn::pocket::sptr> pocket_dict = item_bag->get_pockets();
     BOOST_CHECK(pocket_dict.has_key("Items"));
     BOOST_CHECK(pocket_dict["Items"]->size() == 165);
     BOOST_CHECK(pocket_dict.has_key("Medicine"));
@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE(DPP_bag)
 BOOST_AUTO_TEST_CASE(HGSS_bag)
 {   
     pkmn::bag::sptr item_bag = pkmn::bag::make("Heart Gold");
-    pkmn::dict<std::string, pkmn::pocket::sptr> pocket_dict = item_bag->get_pockets();
+    pkmn::dict<pkmn::pkstring, pkmn::pocket::sptr> pocket_dict = item_bag->get_pockets();
     BOOST_CHECK(pocket_dict.has_key("Items"));
     BOOST_CHECK(pocket_dict["Items"]->size() == 165);
     BOOST_CHECK(pocket_dict.has_key("Medicine"));
@@ -148,7 +148,7 @@ BOOST_AUTO_TEST_CASE(HGSS_bag)
 BOOST_AUTO_TEST_CASE(gen56_bags)
 {
     pkmn::bag::sptr item_bag = pkmn::bag::make("Black 2");
-    pkmn::dict<std::string, pkmn::pocket::sptr> pocket_dict = item_bag->get_pockets();
+    pkmn::dict<pkmn::pkstring, pkmn::pocket::sptr> pocket_dict = item_bag->get_pockets();
     BOOST_CHECK(pocket_dict.has_key("Items"));
     BOOST_CHECK(pocket_dict["Items"]->size() == 310);
     BOOST_CHECK(pocket_dict.has_key("Medicine"));

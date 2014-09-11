@@ -331,9 +331,9 @@
 %rename(getVersionGroup) pkmn::database::get_version_group;
 
 /*
- * pkmn/types/pokemon_text.hpp
+ * pkmn/types/pkstring.hpp
  */
-%rename(PokemonText) pkmn::pokemon_text;
+%rename(PKString) pkmn::pkstring;
 
 /*
  * pkmn/types/prng.hpp

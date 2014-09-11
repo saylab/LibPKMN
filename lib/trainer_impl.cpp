@@ -22,23 +22,21 @@
 
 #include "trainer_impl.hpp"
 
-using namespace std;
-
 namespace pkmn
 {
-    trainer::sptr trainer::make(unsigned int game, pokemon_text name, unsigned int gender)
+    trainer::sptr trainer::make(unsigned int game, const pkmn::pkstring &name, unsigned int gender)
     {
         return sptr(new trainer_impl(game, name, gender));
     }
 
-    trainer::sptr trainer::make(std::string game, pokemon_text name, std::string gender)
+    trainer::sptr trainer::make(const pkmn::pkstring &game, const pkmn::pkstring &name, const pkmn::pkstring &gender)
     {
         return make(database::get_version_id(game),
                     name,
                     ((gender == "Female") ? Genders::FEMALE : Genders::MALE));
     }
 
-    trainer_impl::trainer_impl(unsigned int game, pokemon_text name, unsigned int gender): trainer()
+    trainer_impl::trainer_impl(unsigned int game, const pkmn::pkstring &name, unsigned int gender): trainer()
     {
         _game_id = game;
         _generation = database::get_generation(_game_id);
@@ -64,15 +62,15 @@ namespace pkmn
         _bag = bag::make(_game_id);
     }
 
-    pokemon_text trainer_impl::get_game() const {return database::get_version_name(_game_id);}
+    pkmn::pkstring trainer_impl::get_game() const {return database::get_version_name(_game_id);}
 
     unsigned int trainer_impl::get_generation() const {return _generation;}
 
-    pokemon_text trainer_impl::get_name() const {return _trainer_name;}
+    pkmn::pkstring trainer_impl::get_name() const {return _trainer_name;}
 
     unsigned int trainer_impl::get_money() const {return _money;}
 
-    pokemon_text trainer_impl::get_gender() const
+    pkmn::pkstring trainer_impl::get_gender() const
     {
         return (_gender_id == Genders::MALE) ? "Male" : "Female";
     }
@@ -91,7 +89,7 @@ namespace pkmn
                                  : _tid.secret_id;
     }
 
-    void trainer_impl::set_name(pokemon_text name)
+    void trainer_impl::set_name(const pkmn::pkstring &name)
     {
         _trainer_name = (name.std_string().length() >= 1
                          and name.std_string().length() <= 7) ? name
@@ -103,7 +101,7 @@ namespace pkmn
         _money = (money > 999999) ? _money : money;
     }
 
-    void trainer_impl::set_gender(pokemon_text gender)
+    void trainer_impl::set_gender(const pkmn::pkstring &gender)
     {
         if(gender == "Male") _gender_id = Genders::MALE;
         else if(gender == "Female") _gender_id = Genders::FEMALE;
@@ -155,13 +153,13 @@ namespace pkmn
         }
     }
 
-    void trainer_impl::get_party(pokemon_team_t& party)
+    void trainer_impl::get_party(pokemon_team_t &party)
     {
         party = _party;
     }
 
     //TODO: allow for other trainers' Pokemon
-    void trainer_impl::set_party(pokemon_team_t& party)
+    void trainer_impl::set_party(pokemon_team_t &party)
     {
         //Only set party if party and all Pokemon are valid
         if(party.size() != 6) return;

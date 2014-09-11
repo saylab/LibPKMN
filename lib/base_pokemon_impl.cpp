@@ -45,7 +45,7 @@ namespace pkmn
         }
     }
 
-    base_pokemon::sptr base_pokemon::make(std::string species, std::string game)
+    base_pokemon::sptr base_pokemon::make(const pkmn::pkstring &species, const pkmn::pkstring &game)
     {
         return make(database::get_species_id(species), database::get_version_id(game));
     }
@@ -146,7 +146,7 @@ namespace pkmn
         _images_gen_string = "generation-" + to_string(_generation);
     }
 
-    std::string base_pokemon_impl::get_game() const
+    pkmn::pkstring base_pokemon_impl::get_game() const
     {
         std::string query_string = "SELECT name FROM version_names WHERE local_language_id=9 AND version_id="
                                  + to_string(_game_id);
@@ -155,7 +155,7 @@ namespace pkmn
 
     unsigned int base_pokemon_impl::get_generation() const {return _generation;}
 
-    std::string base_pokemon_impl::get_name() const
+    pkmn::pkstring base_pokemon_impl::get_name() const
     {
         switch(_species_id)
         {
@@ -170,7 +170,7 @@ namespace pkmn
         }
     }
 
-    std::string base_pokemon_impl::get_species() const
+    pkmn::pkstring base_pokemon_impl::get_species() const
     {
         switch(_species_id)
         {
@@ -190,11 +190,11 @@ namespace pkmn
     }
 
     unsigned int base_pokemon_impl::get_pokedex_num() const {return _species_id;}
-    std::string base_pokemon_impl::get_pokedex_entry() const {return database::get_pokedex_entry(_species_id, _game_id);}
+    pkmn::pkstring base_pokemon_impl::get_pokedex_entry() const {return database::get_pokedex_entry(_species_id, _game_id);}
 
-    string_pair_t base_pokemon_impl::get_types() const
+    pkmn::pkstring_pair_t base_pokemon_impl::get_types() const
     {
-        string_pair_t types;
+        pkmn::pkstring_pair_t types;
         types.first = database::get_type_name(_type1_id);
         types.second = database::get_type_name(_type2_id);
 
@@ -274,7 +274,7 @@ namespace pkmn
         }
     }
 
-    std::string base_pokemon_impl::get_form() const
+    pkmn::pkstring base_pokemon_impl::get_form() const
     {
         if(_form_id == _species_id) return "Standard";
         else

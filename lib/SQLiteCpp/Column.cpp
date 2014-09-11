@@ -4,6 +4,7 @@
  * @brief   Encapsulation of a Column in a row of the result pointed by the prepared SQLite::Statement.
  *
  * Copyright (c) 2012-2013 Sebastien Rombauts (sebastien.rombauts@gmail.com)
+ *               2013-2014 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -60,6 +61,12 @@ double Column::getDouble(void) const throw() // nothrow
 const char* Column::getText(void) const throw() // nothrow
 {
     return (const char*)sqlite3_column_text(mStmtPtr, mIndex);
+}
+
+// Return a pointer to the 16-bit text value (NULL terminated string) of the column specified by its index starting at 0
+const uint16_t* Column::getText16(void) const throw() // nothrow
+{
+    return (const uint16_t*)sqlite3_column_text16(mStmtPtr, mIndex);
 }
 
 // Return a pointer to the text value (NULL terminated string) of the column specified by its index starting at 0

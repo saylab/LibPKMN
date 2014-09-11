@@ -5,9 +5,9 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-%rename(tostring) pkmn::pokemon_text::const_char;
+%rename(tostring) pkmn::pkstring::const_char;
 
-%typemap(cscode) pkmn::pokemon_text %{
+%typemap(cscode) pkmn::pkstring %{
     /// <summary>
     /// The [] operator gets or sets individual characters.
     /// </summary>
@@ -42,17 +42,17 @@
     }
 
     /// <summary>
-    /// Allows an instance of LibPKMN.PokemonText to be cast as a native C# string.
+    /// Allows an instance of LibPKMN.PKString to be cast as a native C# string.
     /// </summary>
-    public static implicit operator string(PokemonText input) {
+    public static implicit operator string(PKString input) {
         return input.tostring();
     }
 
     /// <summary>
-    /// Allows a native C# string to be cast as an instance of LibPKMN.PokemonText.
+    /// Allows a native C# string to be cast as an instance of LibPKMN.PKString.
     /// </summary>
-    public static implicit operator PokemonText(string input) {
-        PokemonText temp = new PokemonText(input);
+    public static implicit operator PKString(string input) {
+        PKString temp = new PKString(input);
         return temp;
     }
 %}
@@ -152,7 +152,7 @@
     #include "pkmn/paths.hpp"
 
     #include "pkmn/types/dict.hpp"
-    #include "pkmn/types/pokemon_text.hpp"
+    #include "pkmn/types/pkstring.hpp"
     #include "pkmn/types/prng.hpp"
 
     #include "pkmn/nature.hpp"
@@ -173,7 +173,7 @@
 %include "pkmn/paths.hpp"
 
 %include "pkmn/types/dict.hpp"
-%include "pkmn/types/pokemon_text.hpp"
+%include "pkmn/types/pkstring.hpp"
 %include "pkmn/types/prng.hpp"
 
 %include "pkmn/nature.hpp"
@@ -196,6 +196,7 @@
 %template(Moveset) std::vector<pkmn::move::sptr>;
 %template(PocketSPtr_vec) std::vector<pkmn::pocket::sptr>; //Temporary, necessary for dict for now
 %template(PokemonTeam) std::vector<pkmn::team_pokemon::sptr>;
+%template(PKStringVector) std::vector<pkmn::pkstring>;
 
 LIBPKMN_CS_DICT(StringIntDict, std::string, int, string, int)
 LIBPKMN_CS_DICT(StringStringDict, std::string, std::string, string, string)

@@ -22,8 +22,8 @@
 
 %{
     #include "pkmn/database/lists.hpp"
-    #include "pkmn/database/queries.hpp"
+    #include "java_databasewrapper.hpp"
 %}
 
 %include "pkmn/database/lists.hpp"
-%include "pkmn/database/queries.hpp"
+%include "java_databasewrapper.hpp"

@@ -4,11 +4,14 @@
  * @brief   Encapsulation of a Column in a row of the result pointed by the prepared SQLite::Statement.
  *
  * Copyright (c) 2012-2013 Sebastien Rombauts (sebastien.rombauts@gmail.com)
+ *               2013-2014 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  */
 #pragma once
+
+#include <cstdint>
 
 #include "sqlite3.h"
 
@@ -76,6 +79,13 @@ public:
      *          thus you must copy it before using it beyond its scope (to a std::string for instance).
      */
     const char*     getText  (void) const throw(); // nothrow
+    /**
+     * @brief Return a pointer to the 16-bit text value (NULL terminated string) of the column.
+     *
+     * @warning The value pointed at is only valid while the statement is valid (ie. not finalized),
+     *          thus you must copy it before using it beyond its scope (to a std::string for instance).
+     */
+    const uint16_t* getText16(void) const throw(); // nothrow
     /**
      * @brief Return a pointer to the binary blob value of the column.
      *
@@ -165,6 +175,15 @@ public:
     inline operator const char*() const
     {
         return getText();
+    }
+    /**
+     * @brief Inline cast operator to uint16_t*
+     *
+     * @see getText 
+     */
+    inline operator const uint16_t*() const
+    {
+        return getText16();
     }
     /**
      * @brief Inline cast operator to void*

@@ -134,7 +134,7 @@ namespace pkmn
         return (*this);
     }
 
-    void base_pokemon_modernimpl::get_egg_groups(std::vector<std::string>& egg_group_vec) const
+    void base_pokemon_modernimpl::get_egg_groups(pkmn::pkstring_vector_t& egg_group_vec) const
     {
         std::vector<unsigned int> egg_group_ids;
         get_egg_group_ids(egg_group_ids);
@@ -148,7 +148,7 @@ namespace pkmn
            or _species_id == Species::INVALID) return false;
         else
         {
-            string query_string = "SELECT has_gender_differences FROM pokemon_species WHERE id=" + to_string(_pokemon_id);
+            std::string query_string = "SELECT has_gender_differences FROM pokemon_species WHERE id=" + to_string(_pokemon_id);
             return bool(int(_db->execAndGet(query_string.c_str())));
         }
     }
@@ -175,7 +175,7 @@ namespace pkmn
                 gender_val_map[6] = 0.25;
                 gender_val_map[8] = 0.0;
 
-                string query_string = "SELECT gender_rate FROM pokemon_species WHERE id=" + to_string(_species_id);
+                std::string query_string = "SELECT gender_rate FROM pokemon_species WHERE id=" + to_string(_species_id);
                 int gender_val = _db->execAndGet(query_string.c_str());
 
                 if(gender_val == -1) return 0.0;
@@ -205,7 +205,7 @@ namespace pkmn
                 gender_val_map[6] = 0.25;
                 gender_val_map[8] = 0.0;
 
-                string query_string = "SELECT gender_rate FROM pokemon_species WHERE id=" + to_string(_species_id);
+                std::string query_string = "SELECT gender_rate FROM pokemon_species WHERE id=" + to_string(_species_id);
                 int gender_val = _db->execAndGet(query_string.c_str());
 
                 if(gender_val == -1) return 0.0;
@@ -213,9 +213,9 @@ namespace pkmn
         }
     }
 
-    string_pair_t base_pokemon_modernimpl::get_abilities() const
+    pkmn::pkstring_pair_t base_pokemon_modernimpl::get_abilities() const
     {
-        string_pair_t abilities;
+        pkmn::pkstring_pair_t abilities;
         abilities.first = "None";
         abilities.second = "None";
 
@@ -246,7 +246,7 @@ namespace pkmn
         return abilities;
     }
 
-    std::string base_pokemon_modernimpl::get_hidden_ability() const
+    pkmn::pkstring base_pokemon_modernimpl::get_hidden_ability() const
     {
         std::string query_string = "SELECT ability_id FROM pokemon_abilities WHERE pokemon_id=" + to_string(_pokemon_id)
                                  + " AND is_hidden=1 AND slot=3";
@@ -263,9 +263,9 @@ namespace pkmn
         else return "None";
     }
 
-    dict<std::string, unsigned int> base_pokemon_modernimpl::get_base_stats() const
+    pkmn::dict<pkmn::pkstring, unsigned int> base_pokemon_modernimpl::get_base_stats() const
     {
-        dict<std::string, unsigned int> stats;
+        pkmn::dict<pkmn::pkstring, unsigned int> stats;
         stats["HP"] = _hp;
         stats["Attack"] = _attack;
         stats["Defense"] = _defense;
@@ -276,9 +276,9 @@ namespace pkmn
         return stats;
     }
 
-    dict<std::string, unsigned int> base_pokemon_modernimpl::get_ev_yields() const
+    pkmn::dict<pkmn::pkstring, unsigned int> base_pokemon_modernimpl::get_ev_yields() const
     {
-        dict<std::string, unsigned int> ev_yields;
+        pkmn::dict<pkmn::pkstring, unsigned int> ev_yields;
         switch(_species_id)
         {
             case Species::NONE:
@@ -291,7 +291,7 @@ namespace pkmn
                 ev_yields["Speed"] = 0;
 
             default:
-                string query_string = "SELECT effort FROM pokemon_stats WHERE pokemon_id=" + to_string(_pokemon_id) +
+                std::string query_string = "SELECT effort FROM pokemon_stats WHERE pokemon_id=" + to_string(_pokemon_id) +
                                " AND stat_id IN (1,2,3,4,5,6)";
                 SQLite::Statement stats_query(*_db, query_string.c_str());
 
@@ -1259,7 +1259,7 @@ namespace pkmn
                                                    else if(form == "Mega") set_form(Forms::name::MEGA); \
                                                    else throw std::runtime_error("Invalid form.");
 
-    void base_pokemon_modernimpl::set_form(std::string form)
+    void base_pokemon_modernimpl::set_form(const pkmn::pkstring &form)
     {
         boost::format png_format("%d.png");
         std::string gen_string = "generation-" + to_string(_generation);
@@ -1325,7 +1325,7 @@ namespace pkmn
 
             case Species::UNOWN:
             {
-                char letter = boost::algorithm::to_lower_copy(form)[0];
+                char letter = boost::algorithm::to_lower_copy(form.std_string())[0];
                 if(letter >= 'a' and letter <= 'z')
                 {
                     SET_IMAGES_PATHS(str(boost::format("201-%c.png") % letter))
@@ -1474,15 +1474,15 @@ namespace pkmn
 
             case Species::ARCEUS:
             {
-                std::vector<std::string> type_vec;
+                std::vector<pkmn::pkstring> type_vec;
                 get_type_list(type_vec, 4);
 
                 if(find(type_vec.begin(), type_vec.end(), form) != type_vec.end())
                 {
                     _type1_id = database::get_type_id(form);
                     _type2_id = Types::NONE;
-                    transform(form.begin(), form.end(), form.begin(), ::tolower);
-                    string basename = (boost::format("493-%s.png") % form).str();
+                    std::string basename = (boost::format("493-%s.png")
+                                            % boost::algorithm::to_lower_copy(form.std_string())).str();
 
                     SET_IMAGES_PATHS(basename);
                 }
@@ -1506,8 +1506,8 @@ namespace pkmn
             case Species::SAWSBUCK:
                 if(form == "Spring" or form == "Summer" or form == "Autumn" or form == "Winter")
                 {
-                    std::transform(form.begin(), form.end(), form.begin(), ::tolower);
-                    std::string basename = (boost::format("%d-%s.png") % _species_id % form).str();
+                    std::string basename = (boost::format("%d-%s.png") % _species_id
+                                            % boost::algorithm::to_lower_copy(form.std_string())).str();
 
                     SET_IMAGES_PATHS(basename);
                 }
@@ -1659,7 +1659,7 @@ namespace pkmn
                 return;
 
             default:
-                if(form != "Standard") throw std::runtime_error("Invalid form.");
+                if(form.std_string() != "Standard") throw std::runtime_error("Invalid form.");
         }
 
         std::ostringstream query_stream;
@@ -1689,13 +1689,13 @@ namespace pkmn
         form_signal2();
     }
 
-    string base_pokemon_modernimpl::get_icon_path(bool is_male) const
+    std::string base_pokemon_modernimpl::get_icon_path(bool is_male) const
     {
         if(_generation > 3 and not is_male) return _female_icon_path.string();
         else return _male_icon_path.string();
     }
 
-    string base_pokemon_modernimpl::get_sprite_path(bool is_male, bool is_shiny) const
+    std::string base_pokemon_modernimpl::get_sprite_path(bool is_male, bool is_shiny) const
     {
         if(is_male)
         {

@@ -13,7 +13,7 @@ namespace LibPKMN
     {
         public AbilityListComboBox(uint gen): base()
         {
-            string_vec ability_vec = new string_vec();
+            PKStringVector ability_vec = new PKStringVector();
             LibPKMN.getAbilityList(ability_vec, gen);
             for(int i = 0; i < ability_vec.Count; i++)
             {

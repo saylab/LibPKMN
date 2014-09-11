@@ -89,6 +89,7 @@ MACRO(PYTHON_BUILD_SWIG_MODULE module_name install_dir)
         ${CMAKE_CURRENT_BINARY_DIR}/${module_name}.i
     @ONLY)
     SET_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_BINARY_DIR}/${module_name}.i PROPERTIES CPLUSPLUS ON)
+    #SET(CMAKE_SWIG_FLAGS -E)
     SWIG_ADD_MODULE(${module_name} python ${CMAKE_CURRENT_BINARY_DIR}/${module_name}.i)
     ADD_DEPENDENCIES(${SWIG_MODULE_${module_name}_REAL_NAME} python_enums)
     IF(CMAKE_COMPILER_IS_GNUCXX)

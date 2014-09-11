@@ -17,12 +17,12 @@ namespace pkmn
     {
         TypeListComboBox::TypeListComboBox(unsigned int gen, QWidget* parent): QComboBox(parent)
         {
-            std::vector<std::string> types_vec;
+            std::vector<pkstring> types_vec;
             get_type_list(types_vec, gen);
 
             for(int i = 0; i < types_vec.size(); i++)
             {
-                addItem(tr(types_vec[i].c_str()), QVariant(i));
+                addItem(tr(types_vec[i].const_char()), QVariant(i));
             }
         }
     } /* namespace qt4 */

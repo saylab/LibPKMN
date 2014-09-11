@@ -19,19 +19,19 @@ namespace pkmn
             base_pokemon_gen1impl(unsigned int id, unsigned int game_id);
 
             //Non-Battle Attributes
-            void get_egg_groups(std::vector<std::string>& egg_group_vec) const;
+            void get_egg_groups(pkmn::pkstring_vector_t& egg_group_vec) const;
             bool has_gender_differences() const;
             double get_chance_male() const;
             double get_chance_female() const;
-            string_pair_t get_abilities() const;
-            std::string get_hidden_ability() const;
+            pkmn::pkstring_pair_t get_abilities() const;
+            pkmn::pkstring get_hidden_ability() const;
 
             //Battle Stats
-            dict<std::string, unsigned int> get_base_stats() const;
-            dict<std::string, unsigned int> get_ev_yields() const;
+            pkmn::dict<pkmn::pkstring, unsigned int> get_base_stats() const;
+            pkmn::dict<pkmn::pkstring, unsigned int> get_ev_yields() const;
 
             void set_form(unsigned int form);
-            void set_form(std::string form);
+            void set_form(const pkmn::pkstring &form);
 
             std::string get_icon_path(bool is_male) const;
             std::string get_sprite_path(bool is_male, bool is_shiny) const;

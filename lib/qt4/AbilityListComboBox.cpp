@@ -17,12 +17,12 @@ namespace pkmn
     {
         AbilityListComboBox::AbilityListComboBox(unsigned int gen, QWidget* parent): QComboBox(parent)
         {
-            std::vector<std::string> abilities_vec;
+            std::vector<pkstring> abilities_vec;
             get_ability_list(abilities_vec, gen);
 
             for(unsigned int i = 0; i < abilities_vec.size(); i++)
             {
-                addItem(tr(abilities_vec[i].c_str()), QVariant(i));
+                addItem(tr(abilities_vec[i].const_char()), QVariant(i));
             }
         }
     }

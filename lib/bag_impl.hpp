@@ -7,8 +7,6 @@
 #ifndef INCLUDED_BAG_IMPL_HPP
 #define INCLUDED_BAG_IMPL_HPP
 
-#include <string>
-
 #include <pkmn/bag.hpp>
 
 #include "SQLiteCpp/SQLiteC++.h"
@@ -24,33 +22,33 @@ namespace pkmn
             bag_impl& operator=(const bag_impl& other);
             ~bag_impl() {};
 
-            std::string get_game() const;
+            pkmn::pkstring get_game() const;
             unsigned int get_generation() const;
 
-            void add_item(pokemon_text item_name, unsigned int amount);
+            void add_item(const pkmn::pkstring &item_name, unsigned int amount);
             void add_item(unsigned int item_id, unsigned int amount);
             void add_item(item::sptr item_sptr, unsigned int amount);
-            void remove_item(pokemon_text item_name, unsigned int amount);
+            void remove_item(const pkmn::pkstring &item_name, unsigned int amount);
             void remove_item(unsigned int item_id, unsigned int amount);
             void remove_item(item::sptr item_sptr, unsigned int amount);
-            unsigned int get_item_amount(pokemon_text item_name) const;
+            unsigned int get_item_amount(const pkmn::pkstring &item_name) const;
             unsigned int get_item_amount(unsigned int item_id) const;
             unsigned int get_item_amount(item::sptr item_sptr) const;
 
-            pocket::sptr get_pocket(std::string name) const;
-            pkmn::dict<std::string, pocket::sptr> get_pockets() const;
+            pocket::sptr get_pocket(const pkmn::pkstring &name) const;
+            pkmn::dict<pkmn::pkstring, pocket::sptr> get_pockets() const;
 
             unsigned int get_game_id() const;
 
         private:
 
             static pkmn::shared_ptr<SQLite::Database> _db;
-            static std::vector<std::vector<std::string> > _category_pockets;
+            static std::vector<std::vector<pkmn::pkstring> > _category_pockets;
 
             unsigned int _game_id, _generation;
-            pkmn::dict<std::string, pocket::sptr> _pockets; 
+            pkmn::dict<pkmn::pkstring, pocket::sptr> _pockets; 
 
-            std::string _get_pocket_name(unsigned int item_id) const;
+            pkmn::pkstring _get_pocket_name(unsigned int item_id) const;
             void _check() const;
     };
 }

@@ -20,23 +20,23 @@ namespace pkmn
             move_impl(unsigned int id, unsigned int game);
 
             //Game-specific Info
-            std::string get_game() const;
+            pkmn::pkstring get_game() const;
             unsigned int get_generation() const;
 
             //Non-battle Stats
-            std::string get_name() const;
-            std::string get_description() const;
+            pkmn::pkstring get_name() const;
+            pkmn::pkstring get_description() const;
 
             //Battle Stats
-            std::string get_type() const;
+            pkmn::pkstring get_type() const;
             unsigned int get_base_power() const;
             unsigned int get_base_pp() const;
-            std::string get_move_damage_class() const;
+            pkmn::pkstring get_move_damage_class() const;
             double get_base_accuracy() const;
-            std::string get_effect() const;
+            pkmn::pkstring get_effect() const;
             double get_effect_chance() const;
             int get_priority() const;
-            std::string get_target() const;
+            pkmn::pkstring get_target() const;
 
             //Database Info
             unsigned int get_move_id() const;
@@ -57,7 +57,7 @@ namespace pkmn
             int _base_priority;
             double _base_accuracy, _effect_chance;
             unsigned int _move_damage_class;
-            std::string _move_name, _effect;
+            pkmn::pkstring _move_name, _effect;
 
             static pkmn::shared_ptr<SQLite::Database> _db;
     };

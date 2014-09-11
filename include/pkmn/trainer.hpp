@@ -12,7 +12,7 @@
 #include <pkmn/bag.hpp>
 #include <pkmn/config.hpp>
 #include <pkmn/team_pokemon.hpp>
-#include <pkmn/types/pokemon_text.hpp>
+#include <pkmn/types/pkstring.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
 namespace pkmn
@@ -43,7 +43,7 @@ namespace pkmn
              * \param gender SQLite ID of the trainer's gender
              * \return shared pointer to instance of pkmn::trainer with described parameters
              */
-            static sptr make(unsigned int game, pokemon_text name, unsigned int gender);
+            static sptr make(unsigned int game, const pkmn::pkstring &name, unsigned int gender);
 
             /*!
              * This is the class's factory function. It takes in the name of the game this trainer
@@ -54,7 +54,7 @@ namespace pkmn
              * \param gender trainer's gender
              * \return shared pointer to instance of pkmn::trainer with described parameters
              */
-            static sptr make(std::string game, pokemon_text name, std::string gender);
+            static sptr make(const pkmn::pkstring &game, const pkmn::pkstring &name, const pkmn::pkstring &gender);
             
             trainer() {};
             virtual ~trainer() {};
@@ -66,7 +66,7 @@ namespace pkmn
              *
              * \return game's name
              */
-            virtual pokemon_text get_game() const = 0;
+            virtual pkmn::pkstring get_game() const = 0;
 
             /*!
              * Return the generation (1-6) of the game from which this trainer
@@ -81,7 +81,7 @@ namespace pkmn
              *
              * \return name of trainer
              */
-            virtual pokemon_text get_name() const = 0;
+            virtual pkmn::pkstring get_name() const = 0;
 
             /*!
              * Return the amount of money the trainer currently has (0-999999).
@@ -95,7 +95,7 @@ namespace pkmn
              *
              * \return trainer's gender
              */
-            virtual pokemon_text get_gender() const = 0;
+            virtual pkmn::pkstring get_gender() const = 0;
 
             /*!
              * Return the trainer's full ID. In Generations I-II, this value can span the entire
@@ -129,7 +129,7 @@ namespace pkmn
              *
              * \param name trainer's new name
              */
-            virtual void set_name(pokemon_text name) = 0;
+            virtual void set_name(const pkmn::pkstring &name) = 0;
 
             /*!
              * Set the amount of money the trainer has. This value must be 0-999999, or the function will do nothing.
@@ -143,7 +143,7 @@ namespace pkmn
              *
              * \param gender trainer's new gender
              */
-            virtual void set_gender(pokemon_text gender) = 0;
+            virtual void set_gender(const pkmn::pkstring &gender) = 0;
 
             /*!
              * Set the trainer's new full ID. This value must be in range 0-4294967295 (the range of an unsigned 32-bit
@@ -200,7 +200,7 @@ namespace pkmn
              *
              * \param party reference to a pokemon_team vector
              */
-            virtual void get_party(pokemon_team_t& party) = 0;
+            virtual void get_party(pokemon_team_t &party) = 0;
 
             /*!
              * Sets the party to the given pokemon_vector. Currently only takes Pokémon
@@ -208,7 +208,7 @@ namespace pkmn
              *
              * \param party reference to a pokemon_team vector
              */
-            virtual void set_party(pokemon_team_t& party) = 0;
+            virtual void set_party(pokemon_team_t &party) = 0;
 
             //! Returns a pointer to the trainer's bag.
             virtual bag::sptr get_bag() const = 0;

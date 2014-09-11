@@ -11,11 +11,11 @@ import javax.swing.*;
 
 public class PokemonListComboBox extends JComboBox<String>
 {
-    public PokemonListComboBox(long version_id)
+    public PokemonListComboBox(int version_id)
     {
         super();
 
-        string_vec pokemonVec = new string_vec();
+        WStringVector pokemonVec = new WStringVector();
         LibPKMN.getPokemonList(pokemonVec, version_id);
         for(int i = 0; i < pokemonVec.size(); i++)
         {

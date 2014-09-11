@@ -95,8 +95,8 @@ namespace pkmn
 
     void game_save_impl::set_trainer_party(pokemon_team_t& party) {_trainer->set_party(party);}
 
-    pokemon_text game_save_impl::get_trainer_name() const {return _trainer->get_name();}
+    pkmn::pkstring game_save_impl::get_trainer_name() const {return _trainer->get_name();}
 
-    void game_save_impl::set_trainer_name(pokemon_text trainer_name) {_trainer->set_name(trainer_name);}
+    void game_save_impl::set_trainer_name(const pkmn::pkstring &trainer_name) {_trainer->set_name(trainer_name);}
 
 } /* namespace pkmn */

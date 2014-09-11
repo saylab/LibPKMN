@@ -25,25 +25,25 @@ namespace pkmn
             ~team_pokemon_modernimpl() {};
 
             //Getting Individual Stat Info
-            std::string get_gender() const;
+            pkmn::pkstring get_gender() const;
             nature get_nature() const;
-            std::string get_ability() const;
+            pkmn::pkstring get_ability() const;
             bool is_shiny() const;
-            pkmn::dict<std::string, unsigned int> get_stats() const;
-            pkmn::dict<std::string, unsigned int> get_EVs() const;
-            pkmn::dict<std::string, unsigned int> get_IVs() const;
+            pkmn::dict<pkmn::pkstring, unsigned int> get_stats() const;
+            pkmn::dict<pkmn::pkstring, unsigned int> get_EVs() const;
+            pkmn::dict<pkmn::pkstring, unsigned int> get_IVs() const;
 
             //Setting Individual Stat Info
             void set_personality(unsigned int personality);
-            void set_gender(std::string gender);
-            void set_nature(std::string nature_name);
-            void set_ability(std::string ability);
+            void set_gender(const pkmn::pkstring &gender);
+            void set_nature(const pkmn::pkstring &nature_name);
+            void set_ability(const pkmn::pkstring &ability);
             virtual void set_using_hidden_ability(bool value);
-            void set_EV(std::string stat_name, unsigned int stat);
-            void set_IV(std::string stat_name, unsigned int stat);
+            void set_EV(const pkmn::pkstring &stat_name, unsigned int stat);
+            void set_IV(const pkmn::pkstring &stat_name, unsigned int stat);
 
             //Misc
-            void set_form(std::string form);
+            void set_form(const pkmn::pkstring &form);
             void set_form(unsigned int form);
 
         private:
@@ -51,15 +51,15 @@ namespace pkmn
             unsigned int _SATK, _SDEF;
             unsigned int _evSATK, _evSDEF;
             unsigned int _ivSATK, _ivSDEF;
-            nature _nature;
+            pkmn::nature _nature;
 
             unsigned int _get_hp() const;
-            unsigned int _get_stat(std::string stat, unsigned int EV, unsigned int IV) const;
+            unsigned int _get_stat(const pkmn::pkstring &stat, unsigned int EV, unsigned int IV) const;
             void _set_stats();
 
             void _determine_ability();
-            std::string _determine_gender() const;
-            std::string _determine_nature() const;
+            pkmn::pkstring _determine_gender() const;
+            pkmn::nature _determine_nature() const;
     };
 }
 

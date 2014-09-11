@@ -69,7 +69,7 @@ namespace pkmn
     }
 
     //No eggs in Generation 1
-    void base_pokemon_gen1impl::get_egg_groups(std::vector<std::string>& egg_group_vec) const
+    void base_pokemon_gen1impl::get_egg_groups(pkmn::pkstring_vector_t& egg_group_vec) const
     {
         egg_group_vec.clear();
         egg_group_vec.push_back("None");
@@ -81,20 +81,20 @@ namespace pkmn
     double base_pokemon_gen1impl::get_chance_female() const {return 0.0;}
 
     //No abilities in Generation 1
-    string_pair_t base_pokemon_gen1impl::get_abilities() const
+    pkmn::pkstring_pair_t base_pokemon_gen1impl::get_abilities() const
     {
-        string_pair_t abilities;
+        pkmn::pkstring_pair_t abilities;
         abilities.first = "None";
         abilities.second = "None";
 
         return abilities;
     }
 
-    std::string base_pokemon_gen1impl::get_hidden_ability() const {return "None";}
+    pkmn::pkstring base_pokemon_gen1impl::get_hidden_ability() const {return "None";}
 
-    pkmn::dict<std::string, unsigned int> base_pokemon_gen1impl::get_base_stats() const
+    pkmn::dict<pkmn::pkstring, unsigned int> base_pokemon_gen1impl::get_base_stats() const
     {
-        pkmn::dict<std::string, unsigned int> stats;
+        pkmn::dict<pkmn::pkstring, unsigned int> stats;
         stats["HP"] = _hp;
         stats["Attack"] = _attack;
         stats["Defense"] = _defense;
@@ -105,14 +105,14 @@ namespace pkmn
     }
 
     //In Generation 1, EV yields were the same as the corresponding base stat
-    pkmn::dict<std::string, unsigned int> base_pokemon_gen1impl::get_ev_yields() const
+    pkmn::dict<pkmn::pkstring, unsigned int> base_pokemon_gen1impl::get_ev_yields() const
     {
         return get_base_stats();
     }
 
     //No forms in Generation 1    
     void base_pokemon_gen1impl::set_form(unsigned int form) {};
-    void base_pokemon_gen1impl::set_form(std::string form) {};
+    void base_pokemon_gen1impl::set_form(const pkmn::pkstring &form) {};
 
     //No genders in Generation 1
     std::string base_pokemon_gen1impl::get_icon_path(bool is_male) const

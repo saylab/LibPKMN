@@ -107,11 +107,11 @@ namespace pkmn
         return (*this);
     }
 
-    std::string team_pokemon_modernimpl::get_gender() const {return _gender;}
+    pkmn::pkstring team_pokemon_modernimpl::get_gender() const {return _gender;}
 
-    nature team_pokemon_modernimpl::get_nature() const {return _nature;}
+    pkmn::nature team_pokemon_modernimpl::get_nature() const {return _nature;}
 
-    std::string team_pokemon_modernimpl::get_ability() const {return _ability;}
+    pkmn::pkstring team_pokemon_modernimpl::get_ability() const {return _ability;}
 
     bool team_pokemon_modernimpl::is_shiny() const
     {
@@ -123,9 +123,9 @@ namespace pkmn
         return (E ^ F) < 8;
     }
 
-    pkmn::dict<std::string, unsigned int> team_pokemon_modernimpl::get_stats() const
+    pkmn::dict<pkmn::pkstring, unsigned int> team_pokemon_modernimpl::get_stats() const
     {
-        pkmn::dict<std::string, unsigned int> stats;
+        pkmn::dict<pkmn::pkstring, unsigned int> stats;
         stats["HP"] = _HP;
         stats["Attack"] = _ATK;
         stats["Defense"] = _DEF;
@@ -136,9 +136,9 @@ namespace pkmn
         return stats;
     }
 
-    pkmn::dict<std::string, unsigned int> team_pokemon_modernimpl::get_EVs() const
+    pkmn::dict<pkmn::pkstring, unsigned int> team_pokemon_modernimpl::get_EVs() const
     {
-        pkmn::dict<std::string, unsigned int> EVs;
+        pkmn::dict<pkmn::pkstring, unsigned int> EVs;
         EVs["HP"] = _evHP;
         EVs["Attack"] = _evATK;
         EVs["Defense"] = _evDEF;
@@ -149,9 +149,9 @@ namespace pkmn
         return EVs;
     }
 
-    pkmn::dict<std::string, unsigned int> team_pokemon_modernimpl::get_IVs() const
+    pkmn::dict<pkmn::pkstring, unsigned int> team_pokemon_modernimpl::get_IVs() const
     {
-        pkmn::dict<std::string, unsigned int> IVs;
+        pkmn::dict<pkmn::pkstring, unsigned int> IVs;
         IVs["HP"] = _ivHP;
         IVs["Attack"] = _ivATK;
         IVs["Defense"] = _ivDEF;
@@ -171,16 +171,16 @@ namespace pkmn
         _nature = _determine_nature();
     }
 
-    void team_pokemon_modernimpl::set_gender(std::string gender)
+    void team_pokemon_modernimpl::set_gender(const pkmn::pkstring &gender)
     {
         if(gender == "Male" or gender == "Female") _gender = gender;
     }
 
-    void team_pokemon_modernimpl::set_nature(std::string nature_name)
+    void team_pokemon_modernimpl::set_nature(const pkmn::pkstring &nature_name)
     {
         //Search for given nature in database
         std::string query_string = str(boost::format("SELECT nature_id FROM nature_names WHERE name='%s'")
-                                       % nature_name.c_str());
+                                       % nature_name.const_char());
         SQLite::Statement nature_names_query(*_db, query_string.c_str());
         if(nature_names_query.executeStep())
         {
@@ -191,7 +191,7 @@ namespace pkmn
 
         //If not in nature_names, check in abilities
         query_string = str(boost::format("Select id FROM natures WHERE identifier='%s'")
-                           % nature_name.c_str());
+                           % nature_name.const_char());
         SQLite::Statement natures_query(*_db, query_string.c_str());
         if(natures_query.executeStep())
         {
@@ -200,11 +200,11 @@ namespace pkmn
         }
     }
 
-    void team_pokemon_modernimpl::set_ability(std::string ability)
+    void team_pokemon_modernimpl::set_ability(const pkmn::pkstring &ability)
     {
         //Search for given ability in database
         std::string query_string = str(boost::format("SELECT ability_id FROM ability_names WHERE name='%s'")
-                                       % ability.c_str());
+                                       % ability.const_char());
         SQLite::Statement ability_names_query(*_db, query_string.c_str());
         if(ability_names_query.executeStep())
         {
@@ -214,13 +214,9 @@ namespace pkmn
 
         //If not in ability_names, check in abilities
         query_string = str(boost::format("Select id FROM abilities WHERE identifier='%s'")
-                           % ability);
+                           % ability.const_char());
         SQLite::Statement abilities_query(*_db, query_string.c_str());
-        if(abilities_query.executeStep())
-        {
-            ability[0] = tolower(ability[0]);
-            _ability = ability;
-        }
+        if(abilities_query.executeStep()) _ability = ability;
     }
 
     void team_pokemon_modernimpl::set_using_hidden_ability(bool val)
@@ -229,7 +225,7 @@ namespace pkmn
         _determine_ability();
     }
 
-    void team_pokemon_modernimpl::set_EV(std::string EV, unsigned int val)
+    void team_pokemon_modernimpl::set_EV(const pkmn::pkstring &EV, unsigned int val)
     {
         if(val > 255) throw std::runtime_error("Gen 3-6 EV's must be 0-255.");
 
@@ -265,7 +261,7 @@ namespace pkmn
         }
     }
 
-    void team_pokemon_modernimpl::set_IV(std::string IV, unsigned int val)
+    void team_pokemon_modernimpl::set_IV(const pkmn::pkstring &IV, unsigned int val)
     {
         if(val > 31) throw std::runtime_error("Gen 3-6 IV's must be 0-31.");
 
@@ -306,23 +302,23 @@ namespace pkmn
         _base_pkmn->set_form(form);
     }
 
-    void team_pokemon_modernimpl::set_form(std::string form)
+    void team_pokemon_modernimpl::set_form(const pkmn::pkstring &form)
     {
         _base_pkmn->set_form(form);
     }
 
     unsigned int team_pokemon_modernimpl::_get_hp() const
     {
-        pkmn::dict<std::string, unsigned int> stats = _base_pkmn->get_base_stats();
+        pkmn::dict<pkmn::pkstring, unsigned int> stats = _base_pkmn->get_base_stats();
 
         unsigned int hp_val = int(floor(((double(_ivHP) + (2.0*double(stats["HP"])) + (0.25*double(_evHP)) + 100.0)
                             * double(_level))/100.0 + 10.0));
         return hp_val;
     }
 
-    unsigned int team_pokemon_modernimpl::_get_stat(std::string stat, unsigned int EV, unsigned int IV) const
+    unsigned int team_pokemon_modernimpl::_get_stat(const pkmn::pkstring &stat, unsigned int EV, unsigned int IV) const
     {
-        pkmn::dict<std::string, unsigned int> stats = _base_pkmn->get_base_stats();
+        pkmn::dict<pkmn::pkstring, unsigned int> stats = _base_pkmn->get_base_stats();
 
         unsigned int stat_val = int(ceil(((((double(IV) + 2.0*double(stats[stat]) + 0.25*double(EV))
                               * double(_level))/100.0) + 5.0) * _nature[stat]));
@@ -343,8 +339,8 @@ namespace pkmn
 
     void team_pokemon_modernimpl::_determine_ability()
     {
-        string_pair_t abilities = _base_pkmn->get_abilities();
-        std::string hidden_ability = _base_pkmn->get_hidden_ability();
+        pkmn::pkstring_pair_t abilities = _base_pkmn->get_abilities();
+        pkmn::pkstring hidden_ability = _base_pkmn->get_hidden_ability();
 
         if(_base_pkmn->get_species_id() == Species::NONE or _base_pkmn->get_species_id() == Species::INVALID){
             _ability = "None";
@@ -353,7 +349,7 @@ namespace pkmn
         else _ability = ((_personality % 2) == 0) ? abilities.first : abilities.second;
     }
 
-    std::string team_pokemon_modernimpl::_determine_gender() const
+    pkmn::pkstring team_pokemon_modernimpl::_determine_gender() const
     {
         if(_base_pkmn->get_chance_male() + _base_pkmn->get_chance_female() == 0
            or _base_pkmn->get_species_id() == Species::NONE
@@ -370,8 +366,8 @@ namespace pkmn
         return "Male";
     }
 
-    std::string team_pokemon_modernimpl::_determine_nature() const
+    pkmn::nature team_pokemon_modernimpl::_determine_nature() const
     {
-        return database::get_nature_name(_personality % 24);
+        return pkmn::nature(_personality % 24);
     }
 } /* namespace pkmn */

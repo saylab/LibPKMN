@@ -18,7 +18,7 @@ FILE(TO_NATIVE_PATH ${DATABASE_PATH} DATABASE_PATH)
 SET(cpp_test_sources
     old_values_test.cpp
     dict_test.cpp
-    pokemon_text_test.cpp
+    pkstring_test.cpp
     bag_pocket_test.cpp
     prng_test.cpp
     copy_sptr_test.cpp
@@ -131,7 +131,7 @@ IF(ENABLE_PYTHON)
     SET(python_test_names
         python_dict_test
         python_enum_test
-        python_pokemon_text_test
+        python_pkstring_test
         python_bag_pocket_test
         python_copy_sptr_test
     )
@@ -150,7 +150,7 @@ IF(ENABLE_CSHARP)
 
     SET(cs_test_names
         CSharpDictTest
-        CSharpPokemonTextTest
+        CSharpPKStringTest
         CSharpBagPocketTest
         CSharpCopySPtrTest
     )
@@ -177,6 +177,7 @@ IF(ENABLE_JAVA)
         JavaDictTest
         JavaBagPocketTest
         JavaCopySPtrTest
+        JavaStringTest
     )
 
     FOREACH(java_test ${java_test_names})

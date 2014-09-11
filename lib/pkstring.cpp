@@ -7,49 +7,49 @@
 
 #include <stdexcept>
 
-#include <pkmn/types/pokemon_text.hpp>
+#include <pkmn/types/pkstring.hpp>
 
 #include "boost_nowide.hpp"
 
 namespace pkmn
 {
-    pokemon_text::pokemon_text(const char* input) {set(input);}
-    pokemon_text::pokemon_text(const wchar_t* input) {set(input);}
-    pokemon_text::pokemon_text(std::string input) {set(input);}
-    pokemon_text::pokemon_text(std::wstring input) {set(input);}
+    pkstring::pkstring(const char* input) {set(input);}
+    pkstring::pkstring(const wchar_t* input) {set(input);}
+    pkstring::pkstring(const std::string& input) {set(input);}
+    pkstring::pkstring(const std::wstring& input) {set(input);}
 
-    const char* pokemon_text::const_char() const {return stdstring.c_str();}
-    const wchar_t* pokemon_text::const_wchar_t() const {return stdwstring.c_str();}
-    std::string pokemon_text::std_string() const {return stdstring;}
-    std::wstring pokemon_text::std_wstring() const {return stdwstring;}
+    const char* pkstring::const_char() const {return stdstring.c_str();}
+    const wchar_t* pkstring::const_wchar_t() const {return stdwstring.c_str();}
+    std::string pkstring::std_string() const {return stdstring;}
+    std::wstring pkstring::std_wstring() const {return stdwstring;}
 
-    void pokemon_text::set(const char* input)
+    void pkstring::set(const char* input)
     {
         stdstring = std::string(input);
         stdwstring = boost::nowide::widen(input);
     }
 
-    void pokemon_text::set(const wchar_t* input)
+    void pkstring::set(const wchar_t* input)
     {
         stdstring = boost::nowide::narrow(input);
         stdwstring = std::wstring(input);
     }
 
-    void pokemon_text::set(std::string input)
+    void pkstring::set(const std::string& input)
     {
         stdstring = input;
         stdwstring = boost::nowide::widen(input);
     }
 
-    void pokemon_text::set(std::wstring input)
+    void pkstring::set(const std::wstring& input)
     {
         stdstring = boost::nowide::narrow(input);
         stdwstring = input;
     }
 
-    size_t pokemon_text::length() const {return stdstring.length();}
+    size_t pkstring::length() const {return stdstring.length();}
 
-    const char& pokemon_text::operator[](size_t pos) const
+    const char& pkstring::operator[](size_t pos) const
     {
         size_t size = stdstring.size();
         if(pos >= size)
@@ -60,13 +60,13 @@ namespace pkmn
         else return stdstring[pos];
     }
 
-    bool operator==(const pokemon_text& l, const pokemon_text& r)
+    bool operator==(const pkstring& l, const pkstring& r)
     {
         return (l.std_string() == r.std_string()
                and (l.std_wstring() == r.std_wstring()));
     }
 
-    std::istream& operator>>(std::istream& stream, pokemon_text& text)
+    std::istream& operator>>(std::istream& stream, pkstring& text)
     {
         std::string to_set;
         stream >> to_set;
@@ -74,7 +74,7 @@ namespace pkmn
         return stream;
     }
 
-    std::wistream& operator>>(std::wistream& wstream, pokemon_text& text)
+    std::wistream& operator>>(std::wistream& wstream, pkstring& text)
     {
         std::wstring to_set;
         wstream >> to_set;
@@ -82,13 +82,13 @@ namespace pkmn
         return wstream;
     }
 
-    std::ostream& operator<<(std::ostream& stream, const pokemon_text& text)
+    std::ostream& operator<<(std::ostream& stream, const pkstring& text)
     {
         stream << text.std_string();
         return stream;
     }
 
-    std::wostream& operator<<(std::wostream& wstream, const pokemon_text& text)
+    std::wostream& operator<<(std::wostream& wstream, const pkstring& text)
     {
         wstream << text.std_wstring();
         return wstream;

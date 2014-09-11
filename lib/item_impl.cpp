@@ -33,7 +33,7 @@ namespace pkmn
         else return sptr(new item_impl(id, game));
     }
 
-    item::sptr item::make(std::string name, std::string game)
+    item::sptr item::make(const pkmn::pkstring &name, const pkmn::pkstring &game)
     {
         return make(database::get_item_id(name), database::get_version_id(game));
     }
@@ -53,15 +53,15 @@ namespace pkmn
         _description = database::get_item_description(_item_id, _game_id);
     }
 
-    std::string item_impl::get_game() const {return database::get_version_name(_game_id);}
+    pkmn::pkstring item_impl::get_game() const {return database::get_version_name(_game_id);}
 
     unsigned int item_impl::get_generation() const {return _generation;}
 
-    std::string item_impl::get_name() const {return _item_name;}
+    pkmn::pkstring item_impl::get_name() const {return _item_name;}
 
-    std::string item_impl::get_description() const {return _description;}
+    pkmn::pkstring item_impl::get_description() const {return _description;}
 
-    std::string item_impl::get_category() const
+    pkmn::pkstring item_impl::get_category() const
     {
         std::string query_string = "SELECT name FROM item_category_prose "
                                    "WHERE local_language_id=9 AND item_category_id="

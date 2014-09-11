@@ -17,12 +17,12 @@ namespace pkmn
     {
         VersionListComboBox::VersionListComboBox(unsigned int gen, QWidget* parent): QComboBox(parent)
         {
-            std::vector<std::string> games_vec;
+            std::vector<pkstring> games_vec;
             get_game_list(games_vec);
 
             for(unsigned int i = 0; i < games_vec.size(); i++)
             {
-                addItem(tr(games_vec[i].c_str()), QVariant(i));
+                addItem(tr(games_vec[i].const_char()), QVariant(i));
             }
         }
     } /* namespace qt4 */

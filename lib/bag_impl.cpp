@@ -28,11 +28,15 @@ namespace pkmn
         return sptr(new bag_impl(game));
     }
 
-    bag::sptr bag::make(std::string game)
+    bag::sptr bag::make(const pkmn::pkstring &game)
     {
         //FRLG and HGSS are stored without spaces
-        if(game != "Black 2" and game != "White 2") boost::erase_all(game, " ");
-        return make(database::get_version_id(game));
+        if(game == "Black 2" or game == "White 2") return make(database::get_version_id(game));
+        else
+        {
+            pkmn::pkstring actual_game = boost::erase_all_copy(game.std_string(), " ");
+            return make(database::get_version_id(actual_game));
+        }
     }
 
     pkmn::shared_ptr<SQLite::Database> bag_impl::_db;
@@ -46,8 +50,8 @@ namespace pkmn
      * The outer vector corresponds to a game's version group, and the inner vector
      * corresponds to the Generation VI item pocket ID.
      */
-    std::vector<std::vector<std::string> > bag_impl::_category_pockets =
-        boost::assign::list_of<std::vector<std::string> >
+    std::vector<std::vector<pkmn::pkstring> > bag_impl::_category_pockets =
+        boost::assign::list_of<std::vector<pkmn::pkstring> >
         (
             boost::assign::list_of //Never used
                 ("Items") //Invalid
@@ -248,7 +252,7 @@ namespace pkmn
 
         _game_id = game;
         _generation = database::get_generation(_game_id);
-        _pockets = pkmn::dict<std::string, pocket::sptr>();
+        _pockets = pkmn::dict<pkmn::pkstring, pocket::sptr>();
 
         switch(game)
         {
@@ -339,7 +343,7 @@ namespace pkmn
         _game_id(other._game_id),
         _generation(other._generation)
     {
-        std::vector<std::string> pocket_names = other._pockets.keys();
+        std::vector<pkmn::pkstring> pocket_names = other._pockets.keys();
         std::vector<pocket::sptr> pockets = other._pockets.vals();
 
         for(size_t i = 0; i < pocket_names.size(); i++)
@@ -353,7 +357,7 @@ namespace pkmn
         _game_id = other._game_id;
         _generation = other._generation;
 
-        std::vector<std::string> pocket_names = other._pockets.keys();
+        std::vector<pkmn::pkstring> pocket_names = other._pockets.keys();
         std::vector<pocket::sptr> pockets = other._pockets.vals();
 
         for(size_t i = 0; i < pocket_names.size(); i++)
@@ -364,11 +368,11 @@ namespace pkmn
         return *this;
     }
 
-    std::string bag_impl::get_game() const {return database::get_version_name(_game_id);}
+    pkmn::pkstring bag_impl::get_game() const {return database::get_version_name(_game_id);}
 
     unsigned int bag_impl::get_generation() const {return _generation;}
 
-    void bag_impl::add_item(pokemon_text item_name, unsigned int amount)
+    void bag_impl::add_item(const pkmn::pkstring &item_name, unsigned int amount)
     {
         add_item(database::get_item_id(item_name), amount);
     }
@@ -383,7 +387,7 @@ namespace pkmn
         add_item(item_sptr->get_item_id(), amount);
     }
 
-    void bag_impl::remove_item(pokemon_text item_name, unsigned int amount)
+    void bag_impl::remove_item(const pkmn::pkstring &item_name, unsigned int amount)
     {
         remove_item(database::get_item_id(item_name), amount);
     }
@@ -398,7 +402,7 @@ namespace pkmn
         remove_item(item_sptr->get_item_id(), amount);
     }
 
-    unsigned int bag_impl::get_item_amount(pokemon_text item_name) const
+    unsigned int bag_impl::get_item_amount(const pkmn::pkstring &item_name) const
     {
         return get_item_amount(database::get_item_id(item_name));
     }
@@ -413,14 +417,14 @@ namespace pkmn
         return get_item_amount(item_sptr->get_item_id());
     }
 
-    pocket::sptr bag_impl::get_pocket(std::string name) const {return _pockets[name];}
+    pocket::sptr bag_impl::get_pocket(const pkmn::pkstring &name) const {return _pockets[name];}
 
-    pkmn::dict<std::string, pocket::sptr> bag_impl::get_pockets() const {return _pockets;}
+    pkmn::dict<pkmn::pkstring, pocket::sptr> bag_impl::get_pockets() const {return _pockets;}
 
     unsigned int bag_impl::get_game_id() const {return _game_id;}
 
     //Determine correct pocket for given item
-    std::string bag_impl::_get_pocket_name(unsigned int item_id) const
+    pkmn::pkstring bag_impl::_get_pocket_name(unsigned int item_id) const
     {
         unsigned int version_group = database::get_version_group_id(_game_id);
 

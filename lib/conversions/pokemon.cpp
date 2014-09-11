@@ -22,7 +22,7 @@
 #include <pkmn/paths.hpp>
 #include <pkmn/team_pokemon.hpp>
 #include <pkmn/database/queries.hpp>
-#include <pkmn/types/pokemon_text.hpp>
+#include <pkmn/types/pkstring.hpp>
 
 #include <rpokesav/data.hpp>
 #include <rpokesav/utils.hpp>
@@ -100,10 +100,10 @@ namespace pkmn
         void export_gen1_pokemon(team_pokemon::sptr t_pkmn, rpokesav::gen1_pokemon pkmn)
         {
             //Necessary values
-            pkmn::dict<std::string, unsigned int> stats = t_pkmn->get_stats();
-            pkmn::dict<std::string, unsigned int> EVs = t_pkmn->get_EVs();
-            pkmn::dict<std::string, unsigned int> IVs = t_pkmn->get_IVs();
-            string_pair_t types = t_pkmn->get_types();
+            pkmn::dict<pkmn::pkstring, unsigned int> stats = t_pkmn->get_stats();
+            pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
+            pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
+            pkmn::pkstring_pair_t types = t_pkmn->get_types();
             pkmn::moveset_t moves;
             std::vector<unsigned int> move_PPs;
             t_pkmn->get_moves(moves);
@@ -292,9 +292,9 @@ namespace pkmn
             uint16_t* met_int = reinterpret_cast<uint16_t*>(&(pkmn->met_loc)+1);
             uint32_t* IV_int = reinterpret_cast<uint32_t*>(&(pkmn->iv));
             uint32_t* ribbon_int = reinterpret_cast<uint32_t*>(&(pkmn->ribbon));
-            pkmn::dict<std::string, int> attributes = t_pkmn->get_attributes();
-            pkmn::dict<std::string, unsigned int> EVs = t_pkmn->get_EVs();
-            pkmn::dict<std::string, unsigned int> IVs = t_pkmn->get_IVs();
+            pkmn::dict<pkmn::pkstring, int> attributes = t_pkmn->get_attributes();
+            pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
+            pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
 
             //ID's
             pkmn->pid = t_pkmn->get_personality();
@@ -449,7 +449,7 @@ namespace pkmn
         void export_gen3_pokemon(team_pokemon::sptr t_pkmn, pk3_t* pkmn, gba_savetype_t save_type)
         {
             uint8_t* status_int = reinterpret_cast<uint8_t*>(&(pkmn->party));
-            pkmn::dict<std::string, unsigned int> stats = t_pkmn->get_stats();
+            pkmn::dict<pkmn::pkstring, unsigned int> stats = t_pkmn->get_stats();
 
             export_gen3_pokemon(t_pkmn, &(pkmn->box), save_type);
             *status_int = 0;
@@ -661,7 +661,7 @@ namespace pkmn
             pokelib_pkmn.pkm->pkm.move[2] = move_PPs[2];
             pokelib_pkmn.pkm->pkm.move[3] = move_PPs[3];
 
-            dict<std::string, unsigned int> EVs = t_pkmn->get_EVs();
+            pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
             pokelib_pkmn.pkm->pkm.ev_hp = EVs["HP"];
             pokelib_pkmn.pkm->pkm.ev_atk = EVs["Attack"];
             pokelib_pkmn.pkm->pkm.ev_def = EVs["Defense"];
@@ -669,7 +669,7 @@ namespace pkmn
             pokelib_pkmn.pkm->pkm.ev_sdef = EVs["Special Defense"];
             pokelib_pkmn.pkm->pkm.ev_spd = EVs["Speed"];
 
-            dict<std::string, unsigned int> IVs = t_pkmn->get_IVs();
+            pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
             uint32_t* IVint = &(pokelib_pkmn.pkm->pkm.IVint);
             modern_set_IV(IVint, Stats::HP, IVs["HP"]);
             modern_set_IV(IVint, Stats::ATTACK, IVs["Attack"]);
@@ -683,7 +683,7 @@ namespace pkmn
             pokelib_pkmn.pkm->pkm.hometown = libpkmn_game_to_hometown(t_pkmn->get_original_game_id());
 
             //Attributes
-            dict<std::string, int> attributes = t_pkmn->get_attributes();
+            pkmn::dict<pkmn::pkstring, int> attributes = t_pkmn->get_attributes();
 
             uint8_t* markings = &(pokelib_pkmn.pkm->pkm.markings);
             pokelib_pkmn.pkm->pkm.friendship = attributes.at("friendship",0);
@@ -817,7 +817,7 @@ namespace pkmn
                 t_pkmn->set_nickname(getpkmnickname(p_pkm));
                 t_pkmn->set_trainer_name(getpkmotname(p_pkm));
             #else
-                //Testing new pokemon_text class, need to get around PKMDS's use of chars for Linux
+                //Testing new pkstring class, need to get around PKMDS's use of chars for Linux
                 wchar_t nickname[11];
                 wchar_t otname[8];
                 memcpy(nickname, p_pkm->nickname, 22);
@@ -1016,7 +1016,7 @@ namespace pkmn
             p_pkm->tid = t_pkmn->get_trainer_public_id();
             p_pkm->sid = t_pkmn->get_trainer_secret_id();
 
-            dict<std::string, unsigned int> stats = t_pkmn->get_stats();
+            pkmn::dict<pkmn::pkstring, unsigned int> stats = t_pkmn->get_stats();
             p_pkm->party_data.maxhp = stats["HP"];
             p_pkm->party_data.attack = stats["Attack"];
             p_pkm->party_data.defense = stats["Defense"];
@@ -1024,7 +1024,7 @@ namespace pkmn
             p_pkm->party_data.spdef = stats["Special Defense"];
             p_pkm->party_data.speed = stats["Speed"];
 
-            dict<std::string, unsigned int> IVs = t_pkmn->get_IVs();
+            pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
             uint32_t* IVint = reinterpret_cast<uint32_t*>(&(p_pkm->ppup[3])+1);
             modern_set_IV(IVint, Stats::HP, IVs["HP"]);
             modern_set_IV(IVint, Stats::ATTACK, IVs["Attack"]);
@@ -1033,7 +1033,7 @@ namespace pkmn
             modern_set_IV(IVint, Stats::SPECIAL_DEFENSE, IVs["Special Defense"]);
             modern_set_IV(IVint, Stats::SPEED, IVs["Speed"]);
 
-            dict<std::string, unsigned int> EVs = t_pkmn->get_EVs();
+            pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
             p_pkm->evs.hp = EVs["HP"];
             p_pkm->evs.attack = EVs["Attack"];
             p_pkm->evs.defense = EVs["Defense"];
@@ -1044,7 +1044,7 @@ namespace pkmn
             p_pkm->hometown = ::Hometowns::hometowns(libpkmn_game_to_hometown(t_pkmn->get_original_game_id()));
 
             //Attributes
-            dict<std::string, int> attributes = t_pkmn->get_attributes();
+            pkmn::dict<pkmn::pkstring, int> attributes = t_pkmn->get_attributes();
 
             uint8_t* markings = reinterpret_cast<uint8_t*>(&(p_pkm->ability)+1);
             p_pkm->tameness = attributes.at("friendship",0);
@@ -1240,7 +1240,7 @@ namespace pkmn
             p_pkx->tid = t_pkmn->get_trainer_public_id();
             p_pkx->sid = t_pkmn->get_trainer_secret_id();
 
-            dict<std::string, unsigned int> stats = t_pkmn->get_stats();
+            pkmn::dict<pkmn::pkstring, unsigned int> stats = t_pkmn->get_stats();
             p_pkx->party_data.maxhp = stats["HP"];
             p_pkx->party_data.attack = stats["Attack"];
             p_pkx->party_data.defense = stats["Defense"];
@@ -1248,7 +1248,7 @@ namespace pkmn
             p_pkx->party_data.spdef = stats["Special Defense"];
             p_pkx->party_data.speed = stats["Speed"];
 
-            dict<std::string, unsigned int> IVs = t_pkmn->get_IVs();
+            pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
             uint32_t* IVint = reinterpret_cast<uint32_t*>(&(p_pkx->ppup[3])+1);
             modern_set_IV(IVint, Stats::HP, IVs["HP"]);
             modern_set_IV(IVint, Stats::ATTACK, IVs["Attack"]);
@@ -1257,7 +1257,7 @@ namespace pkmn
             modern_set_IV(IVint, Stats::SPECIAL_DEFENSE, IVs["Special Defense"]);
             modern_set_IV(IVint, Stats::SPEED, IVs["Speed"]);
 
-            dict<std::string, unsigned int> EVs = t_pkmn->get_EVs();
+            pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
             p_pkx->evs.hp = EVs["HP"];
             p_pkx->evs.attack = EVs["Attack"];
             p_pkx->evs.defense = EVs["Defense"];

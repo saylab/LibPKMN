@@ -12,10 +12,10 @@ public class JavaDictTest
     public static void main(String[] args)
     {
         BasePokemonSPtr bPKMN = BasePokemon.make("Mewtwo", "Emerald");
-        StringUIntDict stats = bPKMN.getBaseStats();
+        StringIntDict stats = bPKMN.getBaseStats();
         string_vec keys = stats.KeySet();
 
-        java.util.HashMap<String, Long> statsHashMap = stats.toHashMap();
+        java.util.HashMap<String, Integer> statsHashMap = stats.toHashMap();
 
         for(int i = 0; i < stats.size(); i++)
         {

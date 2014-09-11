@@ -11,11 +11,11 @@ import javax.swing.*;
 
 public class TypeListComboBox extends JComboBox<String>
 {
-    public TypeListComboBox(long gen)
+    public TypeListComboBox(int gen)
     {
         super();
 
-        string_vec typeVec = new string_vec();
+        WStringVector typeVec = new WStringVector();
         LibPKMN.getTypeList(typeVec, gen);
         for(int i = 0; i < typeVec.size(); i++)
         {

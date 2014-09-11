@@ -11,7 +11,7 @@
 
 #include <pkmn/enums.hpp>
 #include <pkmn/database/queries.hpp>
-#include <pkmn/types/pokemon_text.hpp>
+#include <pkmn/types/pkstring.hpp>
 
 #include "../library_bridge.hpp"
 #include "items.hpp"
@@ -58,7 +58,7 @@ namespace pkmn
     {
         trainer::sptr import_gen1_trainer(rpokesav_gen1_sptr sav)
         {
-            pokemon_text trainer_name = sav->get_trainer_name();
+            pkstring trainer_name = sav->get_trainer_name();
 
             /*
              * Generation I has no way to distinguish between games, so just
@@ -94,7 +94,7 @@ namespace pkmn
 
             uint16_t name_arr[7];
             gba_text_to_ucs2((char16_t*)name_arr, (char8_t*)libspec_trainer->name, 7);
-            pokemon_text trainer_name(boost::locale::conv::utf_to_utf<wchar_t>(name_arr));
+            pkstring trainer_name(boost::locale::conv::utf_to_utf<wchar_t>(name_arr));
 
             unsigned int game_id = _game_ids[libspec_save->type];
             unsigned int gender_id = (libspec_trainer->gender == 0) ? Genders::MALE : Genders::FEMALE;
@@ -160,7 +160,7 @@ namespace pkmn
                         break;
                 }
             }
-            pokemon_text trainer_name = pokelib_trainer->getName();
+            pkstring trainer_name = pokelib_trainer->getName();
             unsigned int gender = (pokelib_trainer->getFemale()) ? Genders::FEMALE : Genders::MALE;
 
             trainer::sptr libpkmn_trainer = trainer::make(game_id, trainer_name, gender);
@@ -238,7 +238,7 @@ namespace pkmn
                 gender = Genders::MALE;
             }
 
-            pokemon_text pkmds_name = ::getsavtrainername(pkmds_save->cur);
+            pkstring pkmds_name = ::getsavtrainername(pkmds_save->cur);
             trainer::sptr libpkmn_trainer = trainer::make(game_id, pkmds_name, gender);
 
             libpkmn_trainer->set_public_id(pkmds_public_id);

@@ -7,7 +7,7 @@
 
 %include "exception.i"
 %include "CamelCase.i"
-%import "libpkmn.i"
+%import "libpkmn_cs_swig.i"
 
 %{
     #include "pkmn/database/lists.hpp"

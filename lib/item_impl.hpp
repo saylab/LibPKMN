@@ -21,12 +21,12 @@ namespace pkmn
             item_impl(unsigned int id, unsigned int game);
 
             //Game-specific Info
-            std::string get_game() const;
+            pkmn::pkstring get_game() const;
             unsigned int get_generation() const;
 
-            std::string get_name() const;
-            std::string get_description() const;
-            std::string get_category() const;
+            pkmn::pkstring get_name() const;
+            pkmn::pkstring get_description() const;
+            pkmn::pkstring get_category() const;
             unsigned int get_game_index() const;
 
             //Database Info
@@ -37,7 +37,7 @@ namespace pkmn
         protected:
 
             unsigned int _item_id, _game_id, _category_id, _game_index, _generation;
-            std::string _category_name, _description, _item_name;
+            pkmn::pkstring _category_name, _description, _item_name;
 
             static pkmn::shared_ptr<SQLite::Database> _db;
     };

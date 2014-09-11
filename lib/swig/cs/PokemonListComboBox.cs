@@ -13,7 +13,7 @@ namespace LibPKMN
     {
         public PokemonListComboBox(uint version_id): base()
         {
-            string_vec pokemon_vec = new string_vec();
+            PKStringVector pokemon_vec = new PKStringVector();
             LibPKMN.getPokemonList(pokemon_vec, version_id);
             for(int i = 0; i < pokemon_vec.Count; i++)
             {

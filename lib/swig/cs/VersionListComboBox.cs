@@ -13,7 +13,7 @@ namespace LibPKMN
     {
         public VersionListComboBox(): base()
         {
-            string_vec version_vec = new string_vec();
+            PKStringVector version_vec = new PKStringVector();
             LibPKMN.getGameList(version_vec);
             for(int i = 0; i < version_vec.Count; i++)
             {

@@ -54,18 +54,18 @@ namespace std
  * Their functionality will be replicated in the other languages.
  */
 %ignore pkmn::dict::operator[];
-%ignore pkmn::pokemon_text::pokemon_text(std::string);
-%ignore pkmn::pokemon_text::pokemon_text(const wchar_t*);
-%ignore pkmn::pokemon_text::pokemon_text(std::wstring);
-%ignore pkmn::pokemon_text::operator[];
-%ignore pkmn::pokemon_text::operator std::string;
-%ignore pkmn::pokemon_text::operator std::wstring;
-%ignore pkmn::pokemon_text::const_wchar_t() const;
-%ignore pkmn::pokemon_text::std_string() const;
-%ignore pkmn::pokemon_text::std_wstring() const;
-%ignore pkmn::pokemon_text::set(std::string);
-%ignore pkmn::pokemon_text::set(const wchar_t*);
-%ignore pkmn::pokemon_text::set(std::wstring);
+%ignore pkmn::pkstring::pkstring(std::string);
+%ignore pkmn::pkstring::pkstring(const wchar_t*);
+%ignore pkmn::pkstring::pkstring(std::wstring);
+%ignore pkmn::pkstring::operator[];
+%ignore pkmn::pkstring::operator std::string;
+%ignore pkmn::pkstring::operator std::wstring;
+%ignore pkmn::pkstring::const_wchar_t() const;
+%ignore pkmn::pkstring::std_string() const;
+%ignore pkmn::pkstring::std_wstring() const;
+%ignore pkmn::pkstring::set(std::string);
+%ignore pkmn::pkstring::set(const wchar_t*);
+%ignore pkmn::pkstring::set(std::wstring);
 %ignore pkmn::nature::operator[];
 
 %{

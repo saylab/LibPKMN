@@ -11,11 +11,11 @@ import javax.swing.*;
 
 public class AbilityListComboBox extends JComboBox<String>
 {
-    public AbilityListComboBox(long gen)
+    public AbilityListComboBox(int gen)
     {
         super();
 
-        string_vec abilityVec = new string_vec();
+        WStringVector abilityVec = new WStringVector();
         LibPKMN.getAbilityList(abilityVec, gen);
         for(int i = 0; i < abilityVec.size(); i++)
         {

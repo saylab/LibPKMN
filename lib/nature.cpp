@@ -21,7 +21,7 @@ namespace pkmn
         _populate_dict();
     }
 
-    nature::nature(std::string name)
+    nature::nature(const std::string &name)
     {
         _name = name;
         _id = database::get_nature_id(name);

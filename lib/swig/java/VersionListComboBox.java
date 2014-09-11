@@ -11,11 +11,11 @@ import javax.swing.*;
 
 public class VersionListComboBox extends JComboBox<String>
 {
-    public VersionListComboBox(long gen)
+    public VersionListComboBox(int gen)
     {
         super();
 
-        string_vec versionVec = new string_vec();
+        WStringVector versionVec = new WStringVector();
         LibPKMN.getGameList(versionVec);
         for(int i = 0; i < versionVec.size(); i++)
         {

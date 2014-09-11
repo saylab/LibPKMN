@@ -56,17 +56,17 @@ namespace pkmn
         return (*this);
     }
 
-    std::string team_pokemon_gen1impl::get_gender() const {return "Male";}
+    pkmn::pkstring team_pokemon_gen1impl::get_gender() const {return "Male";}
 
-    nature team_pokemon_gen1impl::get_nature() const {return nature();}
+    pkmn::nature team_pokemon_gen1impl::get_nature() const {return nature();}
 
-    std::string team_pokemon_gen1impl::get_ability() const {return "None";}
+    pkmn::pkstring team_pokemon_gen1impl::get_ability() const {return "None";}
 
     bool team_pokemon_gen1impl::is_shiny() const {return false;}
 
-    pkmn::dict<std::string, unsigned int> team_pokemon_gen1impl::get_stats() const
+    pkmn::dict<pkmn::pkstring, unsigned int> team_pokemon_gen1impl::get_stats() const
     {
-        pkmn::dict<std::string, unsigned int> stats;
+        pkmn::dict<pkmn::pkstring, unsigned int> stats;
         stats["HP"] = _HP;
         stats["Attack"] = _ATK;
         stats["Defense"] = _DEF;
@@ -76,9 +76,9 @@ namespace pkmn
         return stats;
     }
 
-    pkmn::dict<std::string, unsigned int> team_pokemon_gen1impl::get_EVs() const
+    pkmn::dict<pkmn::pkstring, unsigned int> team_pokemon_gen1impl::get_EVs() const
     {
-        pkmn::dict<std::string, unsigned int> EVs;
+        pkmn::dict<pkmn::pkstring, unsigned int> EVs;
         EVs["HP"] = _evHP;
         EVs["Attack"] = _evATK;
         EVs["Defense"] = _evDEF;
@@ -88,9 +88,9 @@ namespace pkmn
         return EVs;
     }
 
-    pkmn::dict<std::string, unsigned int> team_pokemon_gen1impl::get_IVs() const
+    pkmn::dict<pkmn::pkstring, unsigned int> team_pokemon_gen1impl::get_IVs() const
     {
-        pkmn::dict<std::string, unsigned int> IVs;
+        pkmn::dict<pkmn::pkstring, unsigned int> IVs;
         IVs["HP"] = _ivHP;
         IVs["Attack"] = _ivATK;
         IVs["Defense"] = _ivDEF;
@@ -105,11 +105,11 @@ namespace pkmn
         _personality = personality;
     }
 
-    void team_pokemon_gen1impl::set_nature(std::string nature_name) {}
+    void team_pokemon_gen1impl::set_nature(const pkmn::pkstring &nature_name) {}
 
-    void team_pokemon_gen1impl::set_ability(std::string ability) {}
+    void team_pokemon_gen1impl::set_ability(const pkmn::pkstring &ability) {}
 
-    void team_pokemon_gen1impl::set_EV(std::string stat_name, unsigned int val)
+    void team_pokemon_gen1impl::set_EV(const pkmn::pkstring &stat_name, unsigned int val)
     {
         if(val > 65535) throw std::runtime_error("Gen 1 EV's must be 0-65535.");
 
@@ -122,7 +122,7 @@ namespace pkmn
         _set_stats();
     }
 
-    void team_pokemon_gen1impl::set_IV(std::string stat_name, unsigned int val)
+    void team_pokemon_gen1impl::set_IV(const pkmn::pkstring &stat_name, unsigned int val)
     {
         if(val > 15) throw std::runtime_error("Gen 1 IV's must be 0-15.");
 
@@ -137,16 +137,16 @@ namespace pkmn
 
     unsigned int team_pokemon_gen1impl::_get_hp() const
     {
-        pkmn::dict<std::string, unsigned int> stats = _base_pkmn->get_base_stats();
+        pkmn::dict<pkmn::pkstring, unsigned int> stats = _base_pkmn->get_base_stats();
 
         unsigned int hp_val = int(floor((((double(_ivHP) + double(stats["HP"]) + (pow(double(_evHP),0.5)/8.0)
                             + 50.0) * double(_level))/50.0) + 10.0));
         return hp_val;
     }
 
-    unsigned int team_pokemon_gen1impl::_get_stat(std::string stat, unsigned int EV, unsigned int IV) const
+    unsigned int team_pokemon_gen1impl::_get_stat(const pkmn::pkstring &stat, unsigned int EV, unsigned int IV) const
     {
-        pkmn::dict<std::string, unsigned int> stats = _base_pkmn->get_base_stats();
+        pkmn::dict<pkmn::pkstring, unsigned int> stats = _base_pkmn->get_base_stats();
 
         unsigned int stat_val = int(ceil((((double(IV) + double(stats[stat]) + (pow(double(EV),0.5)/8.0))
                               * double(_level))/50.0) + 5.0));

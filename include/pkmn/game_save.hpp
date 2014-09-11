@@ -38,8 +38,8 @@ namespace pkmn
             virtual void get_trainer_party(pokemon_team_t& party) = 0;
             virtual void set_trainer_party(pokemon_team_t& party) = 0;
             
-            virtual pokemon_text get_trainer_name() const = 0;
-            virtual void set_trainer_name(pokemon_text trainer_name) = 0;
+            virtual pkmn::pkstring get_trainer_name() const = 0;
+            virtual void set_trainer_name(const pkmn::pkstring &trainer_name) = 0;
     };
 }
 #endif /* INCLUDED_PKMN_GAME_SAVE_HPP */

@@ -23,7 +23,7 @@ namespace pkmn
         return sptr(new move_impl(id, game));
     }
 
-    move::sptr move::make(std::string name, std::string game)
+    move::sptr move::make(const pkmn::pkstring &name, const pkmn::pkstring &game)
     {
         return make(database::get_move_id(name), database::get_version_id(game));
     }
@@ -98,21 +98,21 @@ namespace pkmn
         }
     }
 
-    std::string move_impl::get_game() const {return database::get_version_name(_game_id);}
+    pkmn::pkstring move_impl::get_game() const {return database::get_version_name(_game_id);}
 
     unsigned int move_impl::get_generation() const {return _generation;}
 
-    std::string move_impl::get_name() const {return _move_name;}
+    pkmn::pkstring move_impl::get_name() const {return _move_name;}
 
-    std::string move_impl::get_description() const {return database::get_move_description(_move_id, _game_id);}
+    pkmn::pkstring move_impl::get_description() const {return database::get_move_description(_move_id, _game_id);}
 
-    std::string move_impl::get_type() const {return database::get_type_name(_type_id);}
+    pkmn::pkstring move_impl::get_type() const {return database::get_type_name(_type_id);}
 
     unsigned int move_impl::get_base_power() const {return _base_power;}
 
     unsigned int move_impl::get_base_pp() const {return _base_pp;}
 
-    std::string move_impl::get_move_damage_class() const
+    pkmn::pkstring move_impl::get_move_damage_class() const
     {
         if(_move_id == Moves::NONE or _move_id == Moves::INVALID) return "None";
         else
@@ -130,7 +130,7 @@ namespace pkmn
 
     double move_impl::get_base_accuracy() const {return _base_accuracy;}
 
-    std::string move_impl::get_effect() const
+    pkmn::pkstring move_impl::get_effect() const
     {
         if(_move_id == Moves::NONE or _move_id == Moves::INVALID) return "None";
         else
@@ -158,7 +158,7 @@ namespace pkmn
 
     int move_impl::get_priority() const {return _base_priority;}
 
-    std::string move_impl::get_target() const
+    pkmn::pkstring move_impl::get_target() const
     {
         std::ostringstream query_stream;
         query_stream << "SELECT name FROM move_target_prose WHERE local_language_id=9 AND move_target_id=" << _target_id;
@@ -176,7 +176,6 @@ namespace pkmn
     unsigned int move_impl::get_effect_id() const {return _effect_id;}
 
     void move_impl::_set_old_values()
-
     {
         std::ostringstream query_stream;
         query_stream << "SELECT gen" << _generation << "_accuracy FROM old_move_accuracies WHERE move_id=" << _move_id;

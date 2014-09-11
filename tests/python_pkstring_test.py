@@ -10,6 +10,6 @@ import python as LibPKMN
 
 if __name__ == "__main__":
 
-    test_text1 = LibPKMN.pokemon_text("foo")
-    print test_text1
-    print len(test_text1)
+    print LibPKMN.database.get_ability_id("Scrappy")
+    print LibPKMN.database.get_ability_name(LibPKMN.Abilities.SCRAPPY)
+    t = LibPKMN.trainer("Ruby","LibPKMN","Male") #Will throw if pkstring doesn't work

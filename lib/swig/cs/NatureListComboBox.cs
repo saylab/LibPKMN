@@ -13,7 +13,7 @@ namespace LibPKMN
     {
         public NatureListComboBox(): base()
         {
-            string_vec nature_vec = new string_vec();
+            PKStringVector nature_vec = new PKStringVector();
             LibPKMN.getNatureList(nature_vec);
             for(int i = 0; i < nature_vec.Count; i++)
             {

@@ -7,9 +7,8 @@
 #ifndef INCLUDED_PKMN_ITEM_HPP
 #define INCLUDED_PKMN_ITEM_HPP
 
-#include <string>
-
 #include <pkmn/config.hpp>
+#include <pkmn/types/pkstring.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
 namespace pkmn
@@ -51,26 +50,26 @@ namespace pkmn
              * \param game item's game
              * \return shared pointer to instance of pkmn::item with described parameters
              */
-            static sptr make(std::string name, std::string game);
+            static sptr make(const pkmn::pkstring &name, const pkmn::pkstring &game);
 
             //! Class constructor (use factory function instead)
             item() {};
             virtual ~item() {};
 
             //! Return the name of the item from which this item was created (ex. "Red", "Diamond").
-            virtual std::string get_game() const = 0;
+            virtual pkmn::pkstring get_game() const = 0;
 
             //! Return the generation of the item from which this item was created (1-6).
             virtual unsigned int get_generation() const = 0;
 
             //! Return the item's name.
-            virtual std::string get_name() const = 0;
+            virtual pkmn::pkstring get_name() const = 0;
 
             //! Return the item's description (varies between games).
-            virtual std::string get_description() const = 0;
+            virtual pkmn::pkstring get_description() const = 0;
 
             //! Return the item's category (ex. "Medicine", "Key Items").
-            virtual std::string get_category() const = 0;
+            virtual pkmn::pkstring get_category() const = 0;
 
             //! Return the items in-game index value (varies between version groups).
             virtual unsigned int get_game_index() const = 0;

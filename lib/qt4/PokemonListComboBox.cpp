@@ -5,12 +5,13 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
+#include <pkmn/lists.hpp>
 #include <pkmn/database/queries.hpp>
 #include <pkmn/qt4/PokemonListComboBox.hpp>
-#include <pkmn/lists.hpp>
 
 namespace pkmn
 {
@@ -18,12 +19,19 @@ namespace pkmn
     {
         PokemonListComboBox::PokemonListComboBox(const unsigned int version_id, QWidget* parent): QComboBox(parent)
         {
-            std::vector<std::string> pokemon_vec;
+            std::vector<pkstring> pokemon_vec;
             get_pokemon_list(pokemon_vec, version_id);
 
             for(unsigned int i = 0; i < pokemon_vec.size(); i++)
             {
-                addItem(tr(pokemon_vec[i].c_str()), QVariant(i));
+                QString name;
+                #ifdef PKMN_PLATFORM_WIN32
+                name = QString::fromUtf16((const uint16_t*)pokemon_vec[i].const_wchar_t());
+                #else
+                name = QString::fromWCharArray(pokemon_vec[i].const_wchar_t());
+                #endif
+
+                addItem(name, QVariant(i));
             }
         }
     } /* namespace qt4 */

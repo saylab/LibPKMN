@@ -177,9 +177,9 @@ namespace pkmn
 
         void export_to_pksql(team_pokemon::sptr t_pkmn, std::string filename, std::string title)
         {
-            dict<std::string, unsigned int> stats = t_pkmn->get_stats();
-            dict<std::string, unsigned int> EVs = t_pkmn->get_EVs();
-            dict<std::string, unsigned int> IVs = t_pkmn->get_IVs();
+            pkmn::dict<pkmn::pkstring, unsigned int> stats = t_pkmn->get_stats();
+            pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
+            pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
             moveset_t moves;
             t_pkmn->get_moves(moves);
 

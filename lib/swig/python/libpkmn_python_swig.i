@@ -6,7 +6,9 @@
  */
 
 %feature("autodoc", "1");
- 
+
+%include "typemaps.i"
+
 /*
  * An interface template needs to be created for each pkmn::shared_ptr used.
  *
@@ -31,10 +33,81 @@
     %template(python_name) pkmn::dict<type1, type2>;
 %enddef
 
-%ignore pkmn::pokemon_text::const_char;
-%rename(__eq__) pkmn::operator==(const pkmn::pokemon_text&, const pkmn::pokemon_text&);
-%rename(__len__) pkmn::pokemon_text::length;
-%extend pkmn::pokemon_text {
+//////////////////////////////////////////////////////////////////
+
+%typecheck(SWIG_TYPECHECK_STRING) pkmn::pkstring* %{
+    if(PyString_Check($input)) $1 = 1;
+    else
+    {
+        $1 = 0;
+        PyErr_Clear();
+    }
+%}
+
+%typecheck(SWIG_TYPECHECK_STRING) const pkmn::pkstring* %{
+    if(PyString_Check($input)) $1 = 1;
+    else
+    {
+        $1 = 0;
+        PyErr_Clear();
+    }
+%}
+
+%typecheck(SWIG_TYPECHECK_STRING) pkmn::pkstring& %{
+    if(PyString_Check($input)) $1 = 1;
+    else
+    {
+        $1 = 0;
+        PyErr_Clear();
+    }
+%}
+
+%typecheck(SWIG_TYPECHECK_STRING) const pkmn::pkstring& %{
+    if(PyString_Check($input)) $1 = 1;
+    else
+    {
+        $1 = 0;
+        PyErr_Clear();
+    }
+%}
+
+//////////////////////////////////////////////////////////////////
+
+%typemap(in) pkmn::pkstring (std::string temp) %{
+    temp = PyString_AsString($input);
+    $1 = pkmn::pkstring(temp);
+%}
+
+%typemap(in) pkmn::pkstring* (std::string temp) %{
+    temp = PyString_AsString($input);
+    $1 = new pkmn::pkstring(temp);
+%}
+
+%typemap(in) const pkmn::pkstring* (std::string temp) %{
+    temp = PyString_AsString($input);
+    $1 = new pkmn::pkstring(temp);
+%}
+
+%typemap(in) pkmn::pkstring& (std::string temp) %{
+    temp = PyString_AsString($input);
+    $1 = new pkmn::pkstring(temp);
+%}
+
+%typemap(in) const pkmn::pkstring& (std::string temp) %{
+    temp = PyString_AsString($input);
+    $1 = new pkmn::pkstring(temp);
+%}
+
+%typemap(out) pkmn::pkstring %{
+    $result = PyString_FromString($1.const_char());
+%}
+
+//////////////////////////////////////////////////////////////////
+
+%ignore pkmn::pkstring::const_char;
+%rename(__eq__) pkmn::operator==(const pkmn::pkstring&, const pkmn::pkstring&);
+%rename(__len__) pkmn::pkstring::length;
+%extend pkmn::pkstring {
     char* __repr__() {return (char*)((*self).const_char());}
     char* __str__() {return (char*)((*self).const_char());}
 };
@@ -50,7 +123,7 @@
     #include "pkmn/build_info.hpp"
 
     #include "pkmn/types/dict.hpp"
-    #include "pkmn/types/pokemon_text.hpp"
+    #include "pkmn/types/pkstring.hpp"
     #include "pkmn/types/prng.hpp"
 
     #include "pkmn/nature.hpp"
@@ -70,7 +143,7 @@
 %include "pkmn/build_info.hpp"
 
 %include "pkmn/types/dict.hpp"
-%include "pkmn/types/pokemon_text.hpp"
+%include "pkmn/types/pkstring.hpp"
 %include "pkmn/types/prng.hpp"
 
 %include "pkmn/nature.hpp"
@@ -86,19 +159,6 @@
 %include "pkmn/lists.hpp"
 %include "pkmn/paths.hpp"
 
-/*
- * pkmn::pokemon_text typemaps
- */
-//Python str -> pkmn::pokemon_text
-%typemap(in) pkmn::pokemon_text {
-    $1 = pkmn::pokemon_text(PyString_AsString($input));
-}
-
-//pkmn::pokemon_text -> Python str
-%typemap(out) PyString {
-    $result = PyString_FromString($1);
-}
-
 %template(bag_slot) std::pair<pkmn::item::sptr, unsigned int>;
 %template(item_list) std::vector<std::pair<pkmn::item::sptr, unsigned int> >;
 
@@ -107,6 +167,7 @@
 %template(moveset) std::vector<pkmn::move::sptr>;
 %template(pocket_vec) std::vector<pkmn::pocket::sptr>;
 %template(pokemon_team) std::vector<pkmn::team_pokemon::sptr>;
+%template(pkstring_vec) std::vector<pkmn::pkstring>;
 
 LIBPKMN_PYTHON_DICT(string_int_dict, std::string, int)
 LIBPKMN_PYTHON_DICT(string_string_dict, std::string, std::string)

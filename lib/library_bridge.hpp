@@ -14,14 +14,14 @@
 #include <pkmn/config.hpp>
 #include <pkmn/enums.hpp>
 #include <pkmn/types/dict.hpp>
-#include <pkmn/types/pokemon_text.hpp>
+#include <pkmn/types/pkstring.hpp>
 
 #include <pkmds/pkmds_g5.h>
 #include <pkmds/pkmds_g6.h>
 
 namespace pkmn
 {
-    static const pkmn::dict<uint8_t, pokemon_text> ball_dict = boost::assign::map_list_of
+    static const pkmn::dict<uint8_t, pkstring> ball_dict = boost::assign::map_list_of
         (PokeBalls::UNKNOWN, "Poke Ball")
         (PokeBalls::POKE_BALL, "Poke Ball")
         (PokeBalls::GREAT_BALL, "Great Ball")
@@ -51,7 +51,7 @@ namespace pkmn
         (PokeBalls::DREAM_BALL, "Dream Ball")
     ;
 
-    static const pkmn::dict<pokemon_text, uint8_t> reverse_ball_dict = boost::assign::map_list_of
+    static const pkmn::dict<pkstring, uint8_t> reverse_ball_dict = boost::assign::map_list_of
         ("None", PokeBalls::POKE_BALL)
         ("Poke Ball", PokeBalls::POKE_BALL)
         ("Great Ball", PokeBalls::GREAT_BALL)

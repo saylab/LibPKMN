@@ -58,9 +58,13 @@
         using std::tr1::dynamic_pointer_cast;
     } // namespace pkmn
 #else
-    using boost::shared_ptr;
-    using boost::make_shared;
-    using boost::dynamic_pointer_cast;
+    #include <boost/shared_ptr.hpp>
+    #include <boost/make_shared.hpp>
+    namespace pkmn {
+        using boost::shared_ptr;
+        using boost::make_shared;
+        using boost::dynamic_pointer_cast;
+    } // namespace pkmn
 #endif
 
 #endif /* INCLUDED_PKMN_TYPES_SHARED_PTR_HPP */

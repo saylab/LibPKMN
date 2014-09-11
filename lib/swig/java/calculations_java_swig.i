@@ -20,11 +20,11 @@
 %include "stdint.i"
 %include "std_pair.i"
 
-%include "CamelCase.i"
 %import "libpkmn_java_swig.i"
 
 %{
     #include "pkmn/calculations.hpp"
+    #include "java_calculationswrapper.hpp"
 %}
 
-%include "pkmn/calculations.hpp"
+%include "java_calculationswrapper.hpp"

@@ -7,8 +7,6 @@
 #ifndef INCLUDED_PKMN_BAG_HPP
 #define INCLUDED_PKMN_BAG_HPP
 
-#include <string>
-
 #include <pkmn/config.hpp>
 #include <pkmn/item.hpp>
 #include <pkmn/pocket.hpp>
@@ -135,7 +133,7 @@ namespace pkmn
              * \param game name of the desired game
              * \return shared pointer to instance of pkmn::trainer with described parameters
              */
-            static sptr make(std::string game);
+            static sptr make(const pkmn::pkstring &game);
 
             bag() {};
             virtual ~bag() {};
@@ -147,7 +145,7 @@ namespace pkmn
              *
              * \return game's name
              */
-            virtual std::string get_game() const = 0;
+            virtual pkmn::pkstring get_game() const = 0;
 
             /*!
              * Return the generation (1-6) of the game from which this bag
@@ -164,7 +162,7 @@ namespace pkmn
              * \param item_name item's name
              * \param amount how many of this item to add
              */
-            virtual void add_item(pokemon_text item_name, unsigned int amount) = 0;
+            virtual void add_item(const pkmn::pkstring &item_name, unsigned int amount) = 0;
 
             /*!
              * Add the specified item to the bag. The bag will automatically choose
@@ -192,7 +190,7 @@ namespace pkmn
              * \param item_name name of item to remove
              * \param amount how many of this item to remove
              */
-            virtual void remove_item(pokemon_text item_name, unsigned int amount) = 0;
+            virtual void remove_item(const pkmn::pkstring &item_name, unsigned int amount) = 0;
 
             /*!
              * Remove the given amount of the given item. If this item is not in the bag
@@ -220,7 +218,7 @@ namespace pkmn
              * \param item_name name of given item
              * \return amount of given item
              */
-            virtual unsigned int get_item_amount(pokemon_text item_name) const = 0;
+            virtual unsigned int get_item_amount(const pkmn::pkstring &item_name) const = 0;
 
             /*!
              * Remove the amount of the given item.
@@ -245,7 +243,7 @@ namespace pkmn
              * \param name name of pocket
              * \return shared_ptr to given pocket
              */
-            virtual pocket::sptr get_pocket(std::string name) const = 0;
+            virtual pocket::sptr get_pocket(const pkmn::pkstring &name) const = 0;
 
             /*!
              * Return all of the bag's pockets in a dictionary. Each pocket
@@ -253,7 +251,7 @@ namespace pkmn
              *
              * \return dictionary of pockets
              */
-            virtual pkmn::dict<std::string, pocket::sptr> get_pockets() const = 0;
+            virtual pkmn::dict<pkmn::pkstring, pocket::sptr> get_pockets() const = 0;
 
             //! Return SQLite ID of the game used to create this bag
             virtual unsigned int get_game_id() const = 0;

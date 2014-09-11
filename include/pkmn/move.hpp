@@ -11,6 +11,7 @@
 
 #include <pkmn/config.hpp>
 #include <pkmn/types/dict.hpp>
+#include <pkmn/types/pkstring.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
 namespace pkmn
@@ -48,23 +49,23 @@ namespace pkmn
              *
              * \return shared pointer to instance of pkmn::move with described parameters
              */
-            static sptr make(std::string name, std::string game);
+            static sptr make(const pkmn::pkstring &name, const pkmn::pkstring &game);
 
             //! Class constructor (use factory function instead)
             move() {};
             virtual ~move() {};
 
             //! Return the name of the item from which this move was created (ex. "Red", "Diamond").
-            virtual std::string get_game() const = 0;
+            virtual pkmn::pkstring get_game() const = 0;
 
             //! Return the generation of the item from which this move was created (1-6).
             virtual unsigned int get_generation() const = 0;
 
             //! Return the move's name.
-            virtual std::string get_name() const = 0;
+            virtual pkmn::pkstring get_name() const = 0;
 
             //! Return the move's description (varies between games).
-            virtual std::string get_description() const = 0;
+            virtual pkmn::pkstring get_description() const = 0;
 
             //! Return the move's type.
             /*!
@@ -76,7 +77,7 @@ namespace pkmn
              *
              * \return move's type
              */
-            virtual std::string get_type() const = 0;
+            virtual pkmn::pkstring get_type() const = 0;
 
             //! Return the move's base attack power.
             /*!
@@ -113,7 +114,7 @@ namespace pkmn
              *
              * \returns move's damage class
              */
-            virtual std::string get_move_damage_class() const = 0;
+            virtual pkmn::pkstring get_move_damage_class() const = 0;
 
             //! Return the move's accuracy (0.0-100.0).
             /*!
@@ -127,7 +128,7 @@ namespace pkmn
             virtual double get_base_accuracy() const = 0;
 
             //! Return the move's effect (ex. "Burn", "Confusion").
-            virtual std::string get_effect() const = 0;
+            virtual pkmn::pkstring get_effect() const = 0;
 
             //! Return the probability of the move's effect occurring (0.0-100.0).
             /*!
@@ -149,7 +150,7 @@ namespace pkmn
              *
              * \return move's target
              */
-            virtual std::string get_target() const = 0;
+            virtual pkmn::pkstring get_target() const = 0;
 
             //! Return move's SQLite database ID
             virtual unsigned int get_move_id() const = 0;

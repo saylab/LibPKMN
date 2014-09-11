@@ -21,8 +21,8 @@ if __name__ == "__main__":
     
     # Add items directly to pocket
     medicine_pocket = item_bag.get_pocket("Medicine")
-    medicine_pocket.add_item(LibPKMN.Items.POTION, 10) # TODO: fix str <-> LibPKMN.pokemon_text typemap
+    medicine_pocket.add_item("Potion", 10)
     
     # Check item amount from both bag and pocket
-    assert item_bag.get_pocket("Medicine").get_item_amount(LibPKMN.Items.POTION) == 10
-    assert item_bag.get_item_amount(LibPKMN.Items.POTION) == 10
+    assert item_bag.get_pocket("Medicine").get_item_amount("Potion") == 10
+    assert item_bag.get_item_amount("Potion") == 10

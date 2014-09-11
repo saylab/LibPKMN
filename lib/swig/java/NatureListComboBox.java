@@ -11,11 +11,11 @@ import javax.swing.*;
 
 public class NatureListComboBox extends JComboBox<String>
 {
-    public NatureListComboBox(long gen)
+    public NatureListComboBox(int gen)
     {
         super();
 
-        string_vec natureVec = new string_vec();
+        WStringVector natureVec = new WStringVector();
         LibPKMN.getNatureList(natureVec);
         for(int i = 0; i < natureVec.size(); i++)
         {

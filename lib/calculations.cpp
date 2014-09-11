@@ -30,7 +30,7 @@ namespace pkmn
             int gender_rate = getpkmgenderrate(::Species::species(species_id));
             closedb();
 
-            dict<uint32_t, uint32_t> thresholds = boost::assign::map_list_of
+            pkmn::dict<uint32_t, uint32_t> thresholds = boost::assign::map_list_of
                 (0,0)
                 (1,2)
                 (2,4)
@@ -136,7 +136,7 @@ namespace pkmn
         }
 
         uint32_t get_gen2_unown_form(uint8_t ivATK, uint8_t ivDEF,
-                                                 uint8_t ivSPD, uint8_t ivSPCL)
+                                     uint8_t ivSPD, uint8_t ivSPCL)
         {
             uint8_t form = (((ivATK & 6) << 6)
                          +  ((ivDEF & 6) << 4)
@@ -163,12 +163,12 @@ namespace pkmn
             return (((personality % 65536) % 10) < 5) ? Species::SILCOON : Species::CASCOON;
         }
 
-                unsigned int get_min_possible_stat(base_pokemon::sptr b_pkmn,
-                                           std::string stat_name,
+        unsigned int get_min_possible_stat(base_pokemon::sptr b_pkmn,
+                                           const pkmn::pkstring &stat_name,
                                            unsigned int level,
                                            unsigned int gen)
         {
-            pkmn::dict<std::string, unsigned int> stats = b_pkmn->get_base_stats();
+            pkmn::dict<pkmn::pkstring, unsigned int> stats = b_pkmn->get_base_stats();
 
             //Check inputs for errors
             if(not stats.has_key(stat_name)) return 0;
@@ -194,11 +194,11 @@ namespace pkmn
         }
 
         unsigned int get_max_possible_stat(base_pokemon::sptr b_pkmn,
-                                           std::string stat_name,
+                                           const pkmn::pkstring &stat_name,
                                            unsigned int level,
                                            unsigned int gen)
         {
-            pkmn::dict<std::string, unsigned int> stats = b_pkmn->get_base_stats();
+            pkmn::dict<pkmn::pkstring, unsigned int> stats = b_pkmn->get_base_stats();
 
             //Check inputs for errors
             if(stats.has_key(stat_name)) return -1;
@@ -227,13 +227,14 @@ namespace pkmn
         }
 
         bool is_stat_possible(base_pokemon::sptr b_pkmn, unsigned int stat_value,
-                              std::string stat_name, unsigned int level, unsigned int gen)
+                              const pkmn::pkstring &stat_name, unsigned int level, unsigned int gen)
         {
             return (stat_value > get_min_possible_stat(b_pkmn,stat_name,level,gen)
                    and stat_value < get_max_possible_stat(b_pkmn,stat_name,level,gen));
         }
 
-        std::pair<unsigned int, unsigned int> get_stat_range(base_pokemon::sptr b_pkmn, std::string stat_name,
+        std::pair<unsigned int, unsigned int> get_stat_range(base_pokemon::sptr b_pkmn,
+                                                             const pkmn::pkstring &stat_name,
                                                              unsigned int level, unsigned int gen)
         {
             std::pair<unsigned int, unsigned int> stat_pair;
@@ -245,7 +246,7 @@ namespace pkmn
         }
 
         //TODO: Account for Gen V-VI differences
-        double get_type_damage_mod(std::string type1, std::string type2, unsigned int gen)
+        double get_type_damage_mod(const pkmn::pkstring &type1, const pkmn::pkstring &type2, unsigned int gen)
         {
             SQLite::Database db(get_database_path().c_str());
 
@@ -256,7 +257,7 @@ namespace pkmn
                           or type2_id == Types::DARK or type2_id == Types::STEEL)) return 1;
 
             double damage_mod;
-            string query_string;
+            std::string query_string;
 
             if(type1_id != Types::NONE and type1_id != Types::QUESTION_MARK and type1_id != Types::SHADOW
             and type2_id != Types::NONE and type2_id != Types::QUESTION_MARK and type2_id != Types::SHADOW)

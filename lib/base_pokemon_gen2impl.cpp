@@ -75,7 +75,7 @@ namespace pkmn
         _form_id = _species_id;
     }
 
-    void base_pokemon_gen2impl::get_egg_groups(std::vector<std::string>& egg_group_vec) const
+    void base_pokemon_gen2impl::get_egg_groups(pkmn::pkstring_vector_t& egg_group_vec) const
     {
         std::vector<unsigned int> egg_group_ids;
         get_egg_group_ids(egg_group_ids);
@@ -148,20 +148,20 @@ namespace pkmn
     }
 
     //No abilities in Generation 2
-    string_pair_t base_pokemon_gen2impl::get_abilities() const
+    pkmn::pkstring_pair_t base_pokemon_gen2impl::get_abilities() const
     {
-        string_pair_t abilities;
+        pkmn::pkstring_pair_t abilities;
         abilities.first = "None";
         abilities.second = "None";
 
         return abilities;
     }
 
-    std::string base_pokemon_gen2impl::get_hidden_ability() const {return "None";}
+    pkmn::pkstring base_pokemon_gen2impl::get_hidden_ability() const {return "None";}
 
-    dict<std::string, unsigned int> base_pokemon_gen2impl::get_base_stats() const
+    pkmn::dict<pkmn::pkstring, unsigned int> base_pokemon_gen2impl::get_base_stats() const
     {
-        dict<std::string, unsigned int> stats;
+        pkmn::dict<pkmn::pkstring, unsigned int> stats;
         stats["HP"] = _hp;
         stats["Attack"] = _attack;
         stats["Defense"] = _defense;
@@ -172,10 +172,10 @@ namespace pkmn
         return stats;
     }
 
-    dict<std::string, unsigned int> base_pokemon_gen2impl::get_ev_yields() const
+    pkmn::dict<pkmn::pkstring, unsigned int> base_pokemon_gen2impl::get_ev_yields() const
     {
-        dict<std::string, unsigned int> stats = get_base_stats();
-        dict<std::string, unsigned int> ev_yields;
+        pkmn::dict<pkmn::pkstring, unsigned int> stats = get_base_stats();
+        pkmn::dict<pkmn::pkstring, unsigned int> ev_yields;
         ev_yields["HP"] = stats["HP"];
         ev_yields["Attack"] = stats["Attack"];
         ev_yields["Defense"] = stats["Defense"];
@@ -214,11 +214,11 @@ namespace pkmn
         else if(form != _species_id) throw std::runtime_error("Invalid form.");
     }
 
-    void base_pokemon_gen2impl::set_form(std::string form)
+    void base_pokemon_gen2impl::set_form(const pkmn::pkstring &form)
     {
         if(_species_id == Species::UNOWN)
         {
-            char letter = boost::algorithm::to_lower_copy(form)[0];
+            char letter = boost::algorithm::to_lower_copy(form.std_string())[0];
             if(letter >= 'a' and letter <= 'z')
             {
                 SET_IMAGES_PATHS(str(boost::format("201-%c.png") % letter))

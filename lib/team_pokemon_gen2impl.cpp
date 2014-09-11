@@ -61,11 +61,11 @@ namespace pkmn
         return (*this);
     }
 
-    std::string team_pokemon_gen2impl::get_gender() const {return _gender;}
+    pkmn::pkstring team_pokemon_gen2impl::get_gender() const {return _gender;}
 
     nature team_pokemon_gen2impl::get_nature() const {return nature();}
 
-    std::string team_pokemon_gen2impl::get_ability() const {return "None";}
+    pkmn::pkstring team_pokemon_gen2impl::get_ability() const {return "None";}
 
     bool team_pokemon_gen2impl::is_shiny() const
     {
@@ -76,9 +76,9 @@ namespace pkmn
                );
     }
 
-    pkmn::dict<std::string, unsigned int> team_pokemon_gen2impl::get_stats() const
+    pkmn::dict<pkmn::pkstring, unsigned int> team_pokemon_gen2impl::get_stats() const
     {
-        pkmn::dict<std::string, unsigned int> stats;
+        pkmn::dict<pkmn::pkstring, unsigned int> stats;
         stats["HP"] = _HP;
         stats["Attack"] = _ATK;
         stats["Defense"] = _DEF;
@@ -89,9 +89,9 @@ namespace pkmn
         return stats;
     }
 
-    pkmn::dict<std::string, unsigned int> team_pokemon_gen2impl::get_EVs() const
+    pkmn::dict<pkmn::pkstring, unsigned int> team_pokemon_gen2impl::get_EVs() const
     {
-        pkmn::dict<std::string, unsigned int> EVs;
+        pkmn::dict<pkmn::pkstring, unsigned int> EVs;
         EVs["HP"] = _evHP;
         EVs["Attack"] = _evATK;
         EVs["Defense"] = _evDEF;
@@ -101,9 +101,9 @@ namespace pkmn
         return EVs;
     }
 
-    pkmn::dict<std::string, unsigned int> team_pokemon_gen2impl::get_IVs() const
+    pkmn::dict<pkmn::pkstring, unsigned int> team_pokemon_gen2impl::get_IVs() const
     {
-        pkmn::dict<std::string, unsigned int> IVs;
+        pkmn::dict<pkmn::pkstring, unsigned int> IVs;
         IVs["HP"] = _ivHP;
         IVs["Attack"] = _ivATK;
         IVs["Defense"] = _ivDEF;
@@ -118,11 +118,11 @@ namespace pkmn
         _personality = personality;
     }
 
-    void team_pokemon_gen2impl::set_nature(std::string nature_name) {}
+    void team_pokemon_gen2impl::set_nature(const pkmn::pkstring &nature_name) {}
 
-    void team_pokemon_gen2impl::set_ability(std::string ability) {}
+    void team_pokemon_gen2impl::set_ability(const pkmn::pkstring &ability) {}
 
-    void team_pokemon_gen2impl::set_EV(std::string stat_name, unsigned int val)
+    void team_pokemon_gen2impl::set_EV(const pkmn::pkstring &stat_name, unsigned int val)
     {
         if(val > 65535) throw std::runtime_error("Gen 2 EV's must be 0-65535.");
 
@@ -135,7 +135,7 @@ namespace pkmn
         _set_stats();
     }
 
-    void team_pokemon_gen2impl::set_IV(std::string stat_name, unsigned int val)
+    void team_pokemon_gen2impl::set_IV(const pkmn::pkstring &stat_name, unsigned int val)
     {
         if(val > 15) throw std::runtime_error("Gen 2 IV's must be 0-15.");
 
@@ -150,16 +150,16 @@ namespace pkmn
 
     unsigned int team_pokemon_gen2impl::_get_hp() const
     {
-        pkmn::dict<std::string, unsigned int> stats = _base_pkmn->get_base_stats();
+        pkmn::dict<pkmn::pkstring, unsigned int> stats = _base_pkmn->get_base_stats();
 
         unsigned int hp_val = int(floor((((double(_ivHP) + double(stats["HP"]) + (pow(_evHP,0.5)/8.0)
                             + 50.0) * double(_level))/50.0) + 10.0));
         return hp_val;
     }
 
-    unsigned int team_pokemon_gen2impl::_get_stat(std::string stat, unsigned int EV, unsigned int IV) const
+    unsigned int team_pokemon_gen2impl::_get_stat(const pkmn::pkstring &stat, unsigned int EV, unsigned int IV) const
     {
-        pkmn::dict<std::string, unsigned int> stats = _base_pkmn->get_base_stats();
+        pkmn::dict<pkmn::pkstring, unsigned int> stats = _base_pkmn->get_base_stats();
 
         unsigned int stat_val = int(ceil((((double(IV) + double(stats[stat]) + (pow(EV,0.5)/8.0))
                                 * double(_level))/50.0) + 5.0));
@@ -176,7 +176,7 @@ namespace pkmn
         _SPD = _get_stat("Speed", _evSPD, _ivSPD);
     }
 
-    std::string team_pokemon_gen2impl::_determine_gender() const
+    pkmn::pkstring team_pokemon_gen2impl::_determine_gender() const
     {
         if(_base_pkmn->get_chance_male() + _base_pkmn->get_chance_female() == 0.0) return "Genderless";
         else if(_base_pkmn->get_chance_male() == 1.0) return "Male";

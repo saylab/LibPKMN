@@ -18,24 +18,24 @@ namespace pkmn
     {
         public:
 
-            trainer_impl(unsigned int game, pokemon_text name, unsigned int gender);
+            trainer_impl(unsigned int game, const pkmn::pkstring &name, unsigned int gender);
 
             //Game-specific Info
-            pokemon_text get_game() const;
+            pkmn::pkstring get_game() const;
             unsigned int get_generation() const;
 
             //Get attributes
-            pokemon_text get_name() const;
+            pkmn::pkstring get_name() const;
             unsigned int get_money() const;
-            pokemon_text get_gender() const;
+            pkmn::pkstring get_gender() const;
             unsigned int get_id() const;
             unsigned short get_public_id() const;
             unsigned short get_secret_id() const;
 
             //Set attributes
-            void set_name(pokemon_text name);
+            void set_name(const pkmn::pkstring &name);
             void set_money(unsigned int money);
-            void set_gender(pokemon_text gender);
+            void set_gender(const pkmn::pkstring &gender);
             void set_id(unsigned int id);
             void set_public_id(unsigned short id);
             void set_secret_id(unsigned short id);
@@ -44,8 +44,8 @@ namespace pkmn
             team_pokemon::sptr get_pokemon(unsigned int pos);
             void set_pokemon(unsigned int pos, team_pokemon::sptr t_pkmn);
             void remove_pokemon(unsigned int pos);
-            void get_party(pokemon_team_t& party);
-            void set_party(pokemon_team_t& party);
+            void get_party(pokemon_team_t &party);
+            void set_party(pokemon_team_t &party);
 
             //Bag
             bag::sptr get_bag() const;
@@ -68,7 +68,7 @@ namespace pkmn
             };
 
             bag::sptr _bag;
-            pokemon_text _trainer_name;
+            pkmn::pkstring _trainer_name;
             pokemon_team_t _party;
 
             std::string _sprite_path;

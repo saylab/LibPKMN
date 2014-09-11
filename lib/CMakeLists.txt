@@ -32,8 +32,8 @@ IF(ENABLE_LIBPKMN)
         ${CMAKE_CURRENT_BINARY_DIR}/build_info.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/paths.cpp
         library_bridge.cpp
+        pkstring.cpp
         prng.cpp
-        pokemon_text.cpp
         nature.cpp
         calculations.cpp
         base_pokemon_impl.cpp
@@ -103,11 +103,11 @@ IF(ENABLE_LIBPKMN)
     # Compiler-specific flags
     ####################################################################
     IF(CMAKE_COMPILER_IS_GNUCXX)
-        IF(LINUX)
+        IF(UNIX)
             SET_TARGET_PROPERTIES(pkmn PROPERTIES COMPILE_FLAGS "-std=c++0x -fPIC")
         ELSE() #Cygwin
             SET_TARGET_PROPERTIES(pkmn PROPERTIES COMPILE_FLAGS "-std=c++0x")
-        ENDIF(LINUX)
+        ENDIF(UNIX)
     ELSEIF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         SET_TARGET_PROPERTIES(pkmn PROPERTIES COMPILE_FLAGS "-std=c++11 -fPIC")
     ENDIF(CMAKE_COMPILER_IS_GNUCXX)
