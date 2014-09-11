@@ -145,7 +145,8 @@ ENDIF(ENABLE_PYTHON)
 # C# tests
 ##################################################
 IF(ENABLE_CSHARP)
-    SET(LIBPKMN_CS_DLL "${LIBPKMN_BINARY_DIR}/lib/swig/cs/libpkmn-cs.dll" CACHE FILEPATH "libpkmn-cs.dll location")
+    SET(LIBRARY_PATH "${LIBPKMN_BINARY_DIR}/lib/swig/cs" CACHE FILEPATH "C# library directory")
+    SET(LIBPKMN_CS_DLL "${LIBRARY_PATH}/libpkmn-cs.dll" CACHE FILEPATH "libpkmn-cs.dll location")
 
     SET(cs_test_names
         CSharpDictTest
