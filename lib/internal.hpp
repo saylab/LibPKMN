@@ -31,7 +31,7 @@ namespace pkmn
             return value;
         }
         #else
-        const char* arr = getenv(var);
+        const char* arr = ::getenv(var);
         return arr ? std::string(arr) : std::string("");
         #endif
     }
