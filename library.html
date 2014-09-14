@@ -52,10 +52,10 @@
 <pre>
 <code>pkmn::game_save::sptr sav = pkmn::game_save::make("pokemon_emerald.sav");
 pkmn::pokemon_team_t team;
-sav->get_party(team);</code>
+sav->get_trainer_party(team);</code>
 </pre>
 
-<p>And now the user has a vector of easy editable Pokémon. Once they're done, they simply need to call:</p>
+<p>And now the user has a vector of pointers to the trainer's Pokémon. Once the user is done editing the team, all they need to do is call:</p>
 
 <pre>
 <code>sav->save();</code>
