@@ -54,6 +54,8 @@ inline std::string to_string (const T& t)
 
 #if defined(linux) || defined(__linux) || defined(__linux__)
     #define PKMN_PLATFORM_LINUX
+#elif defined(__MINGW32__) || defined(MINGW32)
+    #define PKMN_PLATFORM_MINGW
 #elif defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
     #define PKMN_PLATFORM_WIN32
 #elif defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
