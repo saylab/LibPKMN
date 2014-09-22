@@ -33,89 +33,13 @@
     %template(python_name) pkmn::dict<type1, type2>;
 %enddef
 
-//////////////////////////////////////////////////////////////////
-
-%typecheck(SWIG_TYPECHECK_STRING) pkmn::pkstring* %{
-    if(PyString_Check($input)) $1 = 1;
-    else
-    {
-        $1 = 0;
-        PyErr_Clear();
-    }
-%}
-
-%typecheck(SWIG_TYPECHECK_STRING) const pkmn::pkstring* %{
-    if(PyString_Check($input)) $1 = 1;
-    else
-    {
-        $1 = 0;
-        PyErr_Clear();
-    }
-%}
-
-%typecheck(SWIG_TYPECHECK_STRING) pkmn::pkstring& %{
-    if(PyString_Check($input)) $1 = 1;
-    else
-    {
-        $1 = 0;
-        PyErr_Clear();
-    }
-%}
-
-%typecheck(SWIG_TYPECHECK_STRING) const pkmn::pkstring& %{
-    if(PyString_Check($input)) $1 = 1;
-    else
-    {
-        $1 = 0;
-        PyErr_Clear();
-    }
-%}
-
-//////////////////////////////////////////////////////////////////
-
-%typemap(in) pkmn::pkstring (std::string temp) %{
-    temp = PyString_AsString($input);
-    $1 = pkmn::pkstring(temp);
-%}
-
-%typemap(in) pkmn::pkstring* (std::string temp) %{
-    temp = PyString_AsString($input);
-    $1 = new pkmn::pkstring(temp);
-%}
-
-%typemap(in) const pkmn::pkstring* (std::string temp) %{
-    temp = PyString_AsString($input);
-    $1 = new pkmn::pkstring(temp);
-%}
-
-%typemap(in) pkmn::pkstring& (std::string temp) %{
-    temp = PyString_AsString($input);
-    $1 = new pkmn::pkstring(temp);
-%}
-
-%typemap(in) const pkmn::pkstring& (std::string temp) %{
-    temp = PyString_AsString($input);
-    $1 = new pkmn::pkstring(temp);
-%}
-
-%typemap(out) pkmn::pkstring %{
-    $result = PyString_FromString($1.const_char());
-%}
-
-//////////////////////////////////////////////////////////////////
-
-%ignore pkmn::pkstring::const_char;
-%rename(__eq__) pkmn::operator==(const pkmn::pkstring&, const pkmn::pkstring&);
-%rename(__len__) pkmn::pkstring::length;
-%extend pkmn::pkstring {
-    char* __repr__() {return (char*)((*self).const_char());}
-    char* __str__() {return (char*)((*self).const_char());}
-};
-
 %extend pkmn::nature {
     double __getitem__(std::string key) {return (*self)[key];}
     double __getitem__(unsigned int key) {return (*self)[key];}
 };
+
+/* Enough to warrant its own file */
+%include "python_pkstring.i"
 
 %include "libpkmn.i"
 
