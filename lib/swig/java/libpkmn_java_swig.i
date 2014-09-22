@@ -50,11 +50,11 @@
     double at(unsigned int key) {return (*self)[key];}
 };
 
-%include "replace_pkstring.i"
-
 %include "CamelCase.i"
 %include "stdint.i"
 %include "std_pair.i"
+
+%include "java_pkstring.i"
 %include "libpkmn.i"
 
 %{
@@ -62,6 +62,7 @@
     #include "pkmn/paths.hpp"
 
     #include "pkmn/types/dict.hpp"
+    #include "pkmn/types/pkstring.hpp"
     #include "pkmn/types/prng.hpp"
 
     #include "pkmn/nature.hpp"
@@ -73,14 +74,14 @@
     #include "pkmn/team_pokemon.hpp"
     #include "pkmn/trainer.hpp"
     #include "pkmn/game_save.hpp"
-
-    #include "java_generalwrapper.hpp"
+    #include "pkmn/lists.hpp"
 %}
 
 %include "pkmn/build_info.hpp"
 %include "pkmn/paths.hpp"
 
 %include "pkmn/types/dict.hpp"
+%include "pkmn/types/pkstring.hpp"
 %include "pkmn/types/prng.hpp"
 
 %include "pkmn/nature.hpp"
@@ -92,8 +93,7 @@
 %include "pkmn/team_pokemon.hpp"
 %include "pkmn/trainer.hpp"
 %include "pkmn/game_save.hpp"
-
-%include "java_generalwrapper.hpp"
+%include "pkmn/lists.hpp"
 
 //TODO: make C++ -> Java class name conversion function
 %template(BagSPtr)         pkmn::shared_ptr<pkmn::bag>;
@@ -113,17 +113,19 @@
 %template(IntPair) std::pair<int, int>;
 %template(ShortPairVector) std::vector<std::pair<short, short> >;
 %template(IntPairVector) std::vector<std::pair<int, int> >;
+%template(UIntPairVector) std::vector<std::pair<unsigned int, unsigned int> >;
 %template(BasePokemonVector) std::vector<pkmn::base_pokemon::sptr>;
 %template(Moveset) std::vector<pkmn::move::sptr>;
 %template(PocketVector) std::vector<pkmn::pocket::sptr>;
 %template(PokemonTeam) std::vector<pkmn::team_pokemon::sptr>;
-%template(WStringPair) std::pair<std::wstring, std::wstring>;
-%template(WStringVector) std::vector<std::wstring>;
 
-LIBPKMN_JAVA_DICT(StringIntDict, std::string, int, String, Integer, string_vec, int_vec)
-LIBPKMN_JAVA_DICT(StringStringDict, std::string, std::string, String, String, string_vec, string_vec)
-LIBPKMN_JAVA_DICT(StringUIntDict, std::string, unsigned int, String, Long, string_vec, uint_vec)
-LIBPKMN_JAVA_DICT(PocketDict, std::string, pkmn::pocket::sptr, String, PocketSPtr, string_vec, PocketVector)
+%template(StringPair) std::pair<pkmn::pkstring, pkmn::pkstring>;
+%template(StringVector) std::vector<pkmn::pkstring>;
+
+LIBPKMN_JAVA_DICT(StringIntDict, pkmn::pkstring, int, String, Integer, StringVector, int_vec)
+LIBPKMN_JAVA_DICT(StringStringDict, pkmn::pkstring, pkmn::pkstring, String, String, StringVector, StringVector)
+LIBPKMN_JAVA_DICT(StringUIntDict, pkmn::pkstring, unsigned int, String, Long, StringVector, uint_vec)
+LIBPKMN_JAVA_DICT(PocketDict, pkmn::pkstring, pkmn::pocket::sptr, String, PocketSPtr, StringVector, PocketVector)
 
 //Factory functions need to specifically be associated with newobject
 %newobject pkmn::bag::make;

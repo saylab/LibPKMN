@@ -15,7 +15,7 @@ public class AbilityListComboBox extends JComboBox<String>
     {
         super();
 
-        WStringVector abilityVec = new WStringVector();
+        StringVector abilityVec = new StringVector();
         LibPKMN.getAbilityList(abilityVec, gen);
         for(int i = 0; i < abilityVec.size(); i++)
         {

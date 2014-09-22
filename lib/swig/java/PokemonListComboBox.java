@@ -15,7 +15,7 @@ public class PokemonListComboBox extends JComboBox<String>
     {
         super();
 
-        WStringVector pokemonVec = new WStringVector();
+        StringVector pokemonVec = new StringVector();
         LibPKMN.getPokemonList(pokemonVec, version_id);
         for(int i = 0; i < pokemonVec.size(); i++)
         {

@@ -18,7 +18,7 @@ public class JavaStringTest
             throw new RuntimeException("std::wstring -> String conversion failed.");
         }
 
-        WStringVector stringVector = new WStringVector();
+        StringVector stringVector = new StringVector();
         LibPKMN.getPokemonList(stringVector, (short)(Versions.RED));
         System.out.println(stringVector.get(3));
         if(!stringVector.get(3).equals("Charmander"))

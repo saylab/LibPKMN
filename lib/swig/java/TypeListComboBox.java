@@ -15,7 +15,7 @@ public class TypeListComboBox extends JComboBox<String>
     {
         super();
 
-        WStringVector typeVec = new WStringVector();
+        StringVector typeVec = new StringVector();
         LibPKMN.getTypeList(typeVec, gen);
         for(int i = 0; i < typeVec.size(); i++)
         {

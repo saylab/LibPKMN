@@ -15,7 +15,7 @@ public class NatureListComboBox extends JComboBox<String>
     {
         super();
 
-        WStringVector natureVec = new WStringVector();
+        StringVector natureVec = new StringVector();
         LibPKMN.getNatureList(natureVec);
         for(int i = 0; i < natureVec.size(); i++)
         {

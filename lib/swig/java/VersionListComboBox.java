@@ -15,7 +15,7 @@ public class VersionListComboBox extends JComboBox<String>
     {
         super();
 
-        WStringVector versionVec = new WStringVector();
+        StringVector versionVec = new StringVector();
         LibPKMN.getGameList(versionVec);
         for(int i = 0; i < versionVec.size(); i++)
         {
