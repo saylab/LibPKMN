@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>LibPKMN - The PKString</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="javascripts/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/ncorgan/LibPKMN">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/ncorgan/LibPKMN/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/ncorgan/LibPKMN/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>LibPKMN</h1>
+          <p>The PKString</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/ncorgan">Nicholas Corgan</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+<p>The <a href="https://github.com/ncorgan/LibPKMN/blob/master/include/pkmn/types/pkstring.hpp">PKString</a> class is a custom string class used throughout LibPKMN. Using <a href="http://www.boost.org/doc/libs/1_56_0/libs/locale/doc/html/index.html">Boost.Locale</a>, it removes the distinction C++ makes between multi-byte strings and wide strings by allowing implicit conversions back and forth with both types. In most situations, the user does not even need to acknowledge the type itself. For example, the factory function for the <a href="https://github.com/ncorgan/LibPKMN/blob/master/include/pkmn/item.hpp">Item</a> is defined as:</p>
+
+<pre>
+static sptr make(const pkmn::pkstring &name, const pkmn::pkstring &game);
+</pre>
+
+<p>But the user can easily instantiate an Item with the following code, which uses C-strings:</p>
+
+<pre>
+pkmn::item::sptr foo = pkmn::item::make("Great Ball", "Ruby");
+</pre>
+
+<p>All strings returned from the database by functions in the pkmn::database namespace return their values as PKStrings to preserve any potential Unicode, such as the gender symbols in the Nidorans' species names.</p>
+
+<h3>
+<a name="swig" class="anchor" href="#swig"><span class="octicon octicon-link"></span></a>SWIG</h3>
+
+<p>LibPKMN's SWIG bindings allow the PKString to be used just as conveniently in each language as their own native string classes. The methods of doing so for each language are explained below:</p>
+
+<ul>
+    <li>
+        <a href="https://github.com/ncorgan/LibPKMN/blob/master/lib/swig/python/python_pkstring.i">Python</a>: SWIG is told to ignore certain functions and rename others to make the class's API as close as possible to that of Python's native string class. SWIG typemaps allow for implicit conversions between these classes.
+    </li>
+    <li>
+        <a href="https://github.com/ncorgan/LibPKMN/blob/53fc10146604355480717d67a0400d37f7ae8b8f/lib/swig/cs/libpkmn_cs_swig.i#L8">C#</a>: The main SWIG interface file adds implicit conversion operators between C#'s native string and the PKString, allowing C# strings to be used in most situations. Development is in progress to map the PKString directly to a C# string.
+    </li>
+    <li>
+        <a href="https://github.com/ncorgan/LibPKMN/blob/master/lib/swig/java/java_pkstring.i">Java</a>: SWIG maps the PKString directly to Java's native string class, allowing Java users to ignore the class altogether.
+    </li>
+</ul>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
