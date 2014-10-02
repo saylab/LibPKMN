@@ -63,6 +63,11 @@ namespace pkmn
         _gen = gen;
     }
 
+    void prng::seed(const uint32_t seed)
+    {
+        lcrng_seeds[_gen] = seed;
+    }
+
     uint64_t prng::lcrng()
     {
         if(_gen < 5)

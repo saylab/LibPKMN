@@ -46,6 +46,12 @@ namespace pkmn
 
             ~prng() {};
 
+            //! Reseed LCRNG for given PRNG's generation.
+            /*!
+             * \param seed new seed
+             */
+            void seed(const uint32_t seed);
+
             /*!
              * Linear Congruential Random Number Generator (LCRNG)
              *
@@ -59,7 +65,7 @@ namespace pkmn
              *  * Generate the individual values of a wild encountered Pokémon in Generation III and Generation IV.
              *  * Determining the species of a wild Pokémon.
              *  * Determining the Pokémon Lottery Corner lucky number.
-             *  *Determining if an egg will be available at the Pokémon Day Care.
+             *  * Determining if an egg will be available at the Pokémon Day Care.
              *
              * In Generation V and Generation VI, the games instead use a 64 bit LCRNG..."
              *
