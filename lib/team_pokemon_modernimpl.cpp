@@ -26,7 +26,7 @@ namespace pkmn
                                                      unsigned int move3, unsigned int move4): team_pokemon_impl(base,game,level,
                                                                                               move1,move2,move3,move4)
     {
-        prng::sptr _rand_gen = prng::get(_generation);
+        prng::sptr _rand_gen = prng::make(_generation);
 
         //Random individual values
         _ivHP = _rand_gen->lcrng() % 32;

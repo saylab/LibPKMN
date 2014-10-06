@@ -10,22 +10,18 @@
 #include <cstdint>
 
 #include <pkmn/config.hpp>
-#include <pkmn/types/dict.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
 namespace pkmn
 {
     /*!
-     * This class represents an in-game pseudorandom number generator (PRNG). The algorithms used by this class, while
-     * weak, match those used in the generation specified in the factory function's "gen" parameter.
+     * This class represents an in-game pseudorandom number generator (PRNG). The algorithms used by this class
+     * match those used in the generation specified in the factory function's "gen" parameter.
      *
-     * This class operates as a pseudo-singleton. Instead of a single instance existing, a single instance exists for
-     * each of the six generations, and each one is accessed by passing the appropriate parameter into the factory
-     * function, as shown below:
+     * You can instantiate a PRNG with the following factory function:
      * <pre>
-     * pkmn::prng::sptr gen3_instance = pkmn::prng::get(3);
-     * pkmn::prng::sptr gen4_instance1 = pkmn::prng::get(4);
-     * pkmn::prng::sptr gen4_instance2 = pkmn::prng::get(4);
+     * pkmn::prng::sptr gen3_prng = pkmn::prng::make(3);
+     * pkmn::prng::sptr gen4_prng = pkmn::prng::make(4);
      * </pre>
      *
      * All algorithms taken from: <a href="http://bulbapedia.bulbagarden.net/wiki/Pseudorandom_number_generation_in_Pok%C3%A9mon">Bulbapedia</a>
@@ -42,15 +38,16 @@ namespace pkmn
              * \param gen generation of desired PRNG
              * \return shared pointer to instance of specified generation's PRNG
              */
-            static sptr get(uint8_t gen);
+            static sptr make(uint16_t gen);
 
-            ~prng() {};
+            prng() {};
+            virtual ~prng() {};
 
-            //! Reseed LCRNG for given PRNG's generation.
+            //! Reseed LCRNG.
             /*!
              * \param seed new seed
              */
-            void seed(const uint32_t seed);
+            virtual void seed_lcrng(const uint64_t seed) = 0;
 
             /*!
              * Linear Congruential Random Number Generator (LCRNG)
@@ -73,8 +70,14 @@ namespace pkmn
              *
              * \return next LCRNG value
              */
-            uint64_t lcrng();
-            
+            virtual uint64_t lcrng() = 0;
+
+            //! Reseed ARNG.
+            /*!
+             * \param seed new seed
+             */
+            virtual void seed_arng(const uint32_t seed) = 0;
+
             /*!
              * Alternative Pseudorandom Number Generator (ARNG)
              *
@@ -91,7 +94,10 @@ namespace pkmn
              *
              * \return next ARNG value
              */
-            uint32_t arng();
+            virtual uint32_t arng() = 0;
+
+            //! Regenerate MTRNG's random numbers.
+            virtual void reset_mtrng() = 0;
 
             /*!
              * Mersenne Twister (MTRNG)
@@ -110,16 +116,7 @@ namespace pkmn
              *
              * \return next MTRNG value
              */
-            uint32_t mtrng();
-
-        private:
-            prng() {};
-            prng(uint8_t gen);
-            prng(const prng&);
-            const prng& operator=(const prng&);
-
-            uint8_t _gen;
-            static pkmn::dict<uint8_t, sptr> _prngs;
+            virtual uint32_t mtrng() = 0;
     };
 }
 

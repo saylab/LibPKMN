@@ -5,37 +5,37 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <iostream>
-
 #include <boost/test/unit_test.hpp>
 
 #include <pkmn/types/prng.hpp>
 
-BOOST_AUTO_TEST_CASE(check_singleton_addresses)
+BOOST_AUTO_TEST_CASE(check_lcrng)
 {
-    pkmn::prng::sptr gen1_instance1 = pkmn::prng::get(1);
-    pkmn::prng::sptr gen1_instance2 = pkmn::prng::get(1);
-    pkmn::prng::sptr gen2_instance1 = pkmn::prng::get(2);
-    pkmn::prng::sptr gen2_instance2 = pkmn::prng::get(2);
-    pkmn::prng::sptr gen3_instance1 = pkmn::prng::get(3);
-    pkmn::prng::sptr gen3_instance2 = pkmn::prng::get(3);
-    pkmn::prng::sptr gen4_instance1 = pkmn::prng::get(4);
-    pkmn::prng::sptr gen4_instance2 = pkmn::prng::get(4);
-    pkmn::prng::sptr gen5_instance1 = pkmn::prng::get(5);
-    pkmn::prng::sptr gen5_instance2 = pkmn::prng::get(5);
-    pkmn::prng::sptr gen6_instance1 = pkmn::prng::get(6);
-    pkmn::prng::sptr gen6_instance2 = pkmn::prng::get(6);
-    
-    BOOST_CHECK(gen1_instance1.get() == gen1_instance2.get());
-    BOOST_CHECK(gen2_instance1.get() == gen2_instance2.get());
-    BOOST_CHECK(gen3_instance1.get() == gen3_instance2.get());
-    BOOST_CHECK(gen4_instance1.get() == gen4_instance2.get());
-    BOOST_CHECK(gen5_instance1.get() == gen5_instance2.get());
-    BOOST_CHECK(gen6_instance1.get() == gen6_instance2.get());
+    pkmn::prng::sptr rng4 = pkmn::prng::make(4);
+    pkmn::prng::sptr rng5 = pkmn::prng::make(5);
 
-    BOOST_CHECK(gen1_instance1.get() != gen2_instance1.get());
-    BOOST_CHECK(gen2_instance1.get() != gen3_instance1.get());
-    BOOST_CHECK(gen3_instance1.get() != gen4_instance1.get());
-    BOOST_CHECK(gen4_instance1.get() != gen5_instance1.get());
-    BOOST_CHECK(gen5_instance1.get() != gen6_instance1.get());
+    uint64_t lcrng4_val1 = rng4->lcrng();
+    uint64_t lcrng5_val1 = rng5->lcrng();
+
+    //Make sure the Gen IV LCRNG seed is a valid 32-bit value
+    BOOST_CHECK(lcrng4_val1 < 4294967295);
+
+    rng4->lcrng();
+    rng5->lcrng();
+
+    uint64_t lcrng4_val2 = rng4->lcrng();
+    uint64_t lcrng5_val2 = rng5->lcrng();
+
+    //Run the check again
+    BOOST_CHECK(lcrng4_val2 < 4294967295);
+
+    rng4->seed_lcrng(lcrng4_val1);
+    rng5->seed_lcrng(lcrng5_val1);
+
+    rng4->lcrng();
+    rng5->lcrng();
+
+    //Make sure PRNG recreates value with same seed
+    BOOST_CHECK_EQUAL(rng4->lcrng(), lcrng4_val2);
+    BOOST_CHECK_EQUAL(rng5->lcrng(), lcrng5_val2);
 }

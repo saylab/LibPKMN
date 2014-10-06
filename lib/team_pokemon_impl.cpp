@@ -87,7 +87,7 @@ namespace pkmn
         _ball = database::get_item_name(Items::POKE_BALL);
         _met_level = 1;
 
-        prng::sptr _rand_gen = prng::get(_generation);
+        prng::sptr _rand_gen = prng::make(_generation);
         _personality = _rand_gen->lcrng();
         _trainer_id = _rand_gen->lcrng();
 

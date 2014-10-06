@@ -33,7 +33,7 @@ IF(ENABLE_LIBPKMN)
         ${CMAKE_CURRENT_BINARY_DIR}/paths.cpp
         library_bridge.cpp
         pkstring.cpp
-        prng.cpp
+        prng_impl.cpp
         nature.cpp
         calculations.cpp
         base_pokemon_impl.cpp
