@@ -6,10 +6,14 @@
  */
 
 #include <stdexcept>
+#include <string>
+
+#include <boost/locale/encoding_utf.hpp>
 
 #include <pkmn/types/pkstring.hpp>
 
-#include "boost_nowide.hpp"
+#define BOOST_NARROW(str) boost::locale::conv::utf_to_utf<char>(str)
+#define BOOST_WIDEN(str)  boost::locale::conv::utf_to_utf<wchar_t>(str)
 
 namespace pkmn
 {
@@ -26,24 +30,24 @@ namespace pkmn
     void pkstring::set(const char* input)
     {
         stdstring = std::string(input);
-        stdwstring = boost::nowide::widen(input);
+        stdwstring = BOOST_WIDEN(input);
     }
 
     void pkstring::set(const wchar_t* input)
     {
-        stdstring = boost::nowide::narrow(input);
+        stdstring = BOOST_NARROW(input);
         stdwstring = std::wstring(input);
     }
 
     void pkstring::set(const std::string& input)
     {
         stdstring = input;
-        stdwstring = boost::nowide::widen(input);
+        stdwstring = BOOST_WIDEN(input.c_str());
     }
 
     void pkstring::set(const std::wstring& input)
     {
-        stdstring = boost::nowide::narrow(input);
+        stdstring = BOOST_NARROW(input.c_str());
         stdwstring = input;
     }
 
@@ -54,8 +58,9 @@ namespace pkmn
         size_t size = stdstring.size();
         if(pos >= size)
         {
-            std::string invalid_pos_err_msg = "Position must be 0-" + to_string(size - 1) + ".";
-            throw std::runtime_error(invalid_pos_err_msg.c_str());
+            std::stringstream err_stream;
+            err_stream << "Position must be 0'" << stdstring.size() << ".";
+            throw std::runtime_error(err_stream.str().c_str());
         }
         else return stdstring[pos];
     }
