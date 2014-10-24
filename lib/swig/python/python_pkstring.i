@@ -7,33 +7,6 @@
 
 %include "typemaps.i"
 
-%typecheck(SWIG_TYPECHECK_STRING) pkmn::pkstring* %{
-    if(PyString_Check($input)) $1 = 1;
-    else
-    {
-        $1 = 0;
-        PyErr_Clear();
-    }
-%}
-
-%typecheck(SWIG_TYPECHECK_STRING) const pkmn::pkstring* %{
-    if(PyString_Check($input)) $1 = 1;
-    else
-    {
-        $1 = 0;
-        PyErr_Clear();
-    }
-%}
-
-%typecheck(SWIG_TYPECHECK_STRING) pkmn::pkstring& %{
-    if(PyString_Check($input)) $1 = 1;
-    else
-    {
-        $1 = 0;
-        PyErr_Clear();
-    }
-%}
-
 %typecheck(SWIG_TYPECHECK_STRING) const pkmn::pkstring& %{
     if(PyString_Check($input)) $1 = 1;
     else
@@ -46,21 +19,6 @@
 %typemap(in) pkmn::pkstring (std::string temp) %{
     temp = PyString_AsString($input);
     $1 = pkmn::pkstring(temp);
-%}
-
-%typemap(in) pkmn::pkstring* (std::string temp) %{
-    temp = PyString_AsString($input);
-    $1 = new pkmn::pkstring(temp);
-%}
-
-%typemap(in) const pkmn::pkstring* (std::string temp) %{
-    temp = PyString_AsString($input);
-    $1 = new pkmn::pkstring(temp);
-%}
-
-%typemap(in) pkmn::pkstring& (std::string temp) %{
-    temp = PyString_AsString($input);
-    $1 = new pkmn::pkstring(temp);
 %}
 
 %typemap(in) const pkmn::pkstring& (std::string temp) %{
