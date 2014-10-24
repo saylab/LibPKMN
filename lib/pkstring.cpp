@@ -12,14 +12,15 @@
 
 #include <pkmn/types/pkstring.hpp>
 
-#define BOOST_NARROW(str) boost::locale::conv::utf_to_utf<char>(str)
-#define BOOST_WIDEN(str)  boost::locale::conv::utf_to_utf<wchar_t>(str)
+#define CONVERT_STRING(str,type) boost::locale::conv::utf_to_utf<type>(str)
 
 namespace pkmn
 {
     pkstring::pkstring(const char* input) {set(input);}
+    pkstring::pkstring(const uint16_t* input) {set(input);}
     pkstring::pkstring(const wchar_t* input) {set(input);}
     pkstring::pkstring(const std::string& input) {set(input);}
+    pkstring::pkstring(const std::basic_string<uint16_t>& input) {set(input);}
     pkstring::pkstring(const std::wstring& input) {set(input);}
 
     const char* pkstring::const_char() const {return stdstring.c_str();}
@@ -30,24 +31,42 @@ namespace pkmn
     void pkstring::set(const char* input)
     {
         stdstring = std::string(input);
-        stdwstring = BOOST_WIDEN(input);
+        stdstring16 = CONVERT_STRING(input,uint16_t);
+        stdwstring = CONVERT_STRING(input,wchar_t);
+    }
+
+    void pkstring::set(const uint16_t* input)
+    {
+        stdstring = CONVERT_STRING(input,char);
+        stdstring16 = std::basic_string<uint16_t>(input);
+        stdwstring = CONVERT_STRING(input,wchar_t);
     }
 
     void pkstring::set(const wchar_t* input)
     {
-        stdstring = BOOST_NARROW(input);
+        stdstring = CONVERT_STRING(input,char);
+        stdstring16 = CONVERT_STRING(input,uint16_t);
         stdwstring = std::wstring(input);
     }
 
     void pkstring::set(const std::string& input)
     {
         stdstring = input;
-        stdwstring = BOOST_WIDEN(input.c_str());
+        stdstring16 = CONVERT_STRING(input,uint16_t);
+        stdwstring = CONVERT_STRING(input.c_str(),wchar_t);
+    }
+
+    void pkstring::set(const std::basic_string<uint16_t>& input)
+    {
+        stdstring = CONVERT_STRING(input,char);
+        stdstring16 = input;
+        stdwstring = CONVERT_STRING(input,wchar_t);
     }
 
     void pkstring::set(const std::wstring& input)
     {
-        stdstring = BOOST_NARROW(input.c_str());
+        stdstring = CONVERT_STRING(input.c_str(),char);
+        stdstring16 = CONVERT_STRING(input,uint16_t);
         stdwstring = input;
     }
 

@@ -150,7 +150,7 @@ IF(ENABLE_CSHARP)
 
     SET(cs_test_names
         CSharpDictTest
-        CSharpPKStringTest
+        CSharpStringTest
         CSharpBagPocketTest
         CSharpCopySPtrTest
     )

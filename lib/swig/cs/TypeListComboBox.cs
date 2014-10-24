@@ -13,7 +13,7 @@ namespace LibPKMN
     {
         public TypeListComboBox(uint gen): base()
         {
-            PKStringVector type_vec = new PKStringVector();
+            string_vec type_vec = new string_vec();
             LibPKMN.getTypeList(type_vec, gen);
             for(int i = 0; i < type_vec.Count; i++)
             {

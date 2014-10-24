@@ -7,6 +7,7 @@
 #ifndef INCLUDED_PKMN_TYPES_PKSTRING_HPP
 #define INCLUDED_PKMN_TYPES_PKSTRING_HPP
 
+#include <cstdint>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -32,8 +33,10 @@ namespace pkmn
 
             pkstring() {};
             pkstring(const char* input);
+            pkstring(const uint16_t* input);
             pkstring(const wchar_t* input);
             pkstring(const std::string& input);
+            pkstring(const std::basic_string<uint16_t>& input);
             pkstring(const std::wstring& input);
 
             //! Return the string as a multi-byte C-string.
@@ -51,13 +54,19 @@ namespace pkmn
             //! Set the string to the given multi-byte C-string.
             void set(const char* input);
 
-            //! Set the string to the given wide C-string.
+            //! Set the string to the given 2-byte C-string.
+            void set(const uint16_t* input);
+
+            //! Set the string to the given wide C-string (size is platform-dependent).
             void set(const wchar_t* input);
 
             //! Set the string to the given std::string.
             void set(const std::string& input);
 
-            //! Set the string to the given std::wstring.
+            //! Set the string to the given 2-byte STL string.
+            void set(const std::basic_string<uint16_t>& input);
+
+            //! Set the string to the given std::wstring (character size is platform-dependent).
             void set(const std::wstring& input);
 
             //! Return the number of characters in the string.
@@ -65,6 +74,9 @@ namespace pkmn
 
             //! Implicit typecast between pkmn::pkstring and std::string.
             PKMN_INLINE operator std::string() const {return stdstring;}
+
+            //! Implicit typecast between pkmn::pkstring and const uint16_t*.
+            PKMN_INLINE operator const uint16_t*() {return stdstring16.c_str();};
 
             //! Implicit typecast between pkmn::pkstring and std::wstring.
             PKMN_INLINE operator std::wstring() const {return stdwstring;}
@@ -75,6 +87,7 @@ namespace pkmn
         private:
 
             std::string stdstring;
+            std::basic_string<uint16_t> stdstring16;
             std::wstring stdwstring;
     };
 

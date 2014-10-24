@@ -45,7 +45,6 @@ namespace std
 
     %template(int_vec) vector<int>;
     %template(double_vec) vector<double>;
-    %template(string_vec) vector<string>;
     %template(uint_vec) vector<unsigned int>;
 };
 
@@ -55,10 +54,12 @@ namespace std
  */
 %ignore pkmn::dict::operator[];
 %ignore pkmn::pkstring::pkstring(const std::string&);
+%ignore pkmn::pkstring::pkstring(const uint16_t*);
 %ignore pkmn::pkstring::pkstring(const wchar_t*);
 %ignore pkmn::pkstring::pkstring(const std::wstring&);
 %ignore pkmn::pkstring::operator[];
 %ignore pkmn::pkstring::operator std::string;
+%ignore pkmn::pkstring::operator const uint16_t*;
 %ignore pkmn::pkstring::operator std::wstring;
 %ignore pkmn::pkstring::const_wchar_t() const;
 %ignore pkmn::pkstring::std_string() const;

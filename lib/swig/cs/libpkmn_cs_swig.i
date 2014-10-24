@@ -5,58 +5,6 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-%rename(tostring) pkmn::pkstring::const_char;
-
-%typemap(cscode) pkmn::pkstring %{
-    /// <summary>
-    /// The [] operator gets or sets individual characters.
-    /// </summary>
-    /// <returns>
-    /// Character whose position is given in [].
-    /// </returns>
-    public char this[int index] {
-        get {
-            return ToString()[index];
-        }
-        set {
-            char[] arr = ToString().ToCharArray();
-            arr[index] = value;
-            set(new string(arr));
-        }
-    }
-
-    /// <returns>
-    /// Length of string.
-    /// </returns>
-    public int Length {
-        get {
-            return ToString().Length;
-        }
-    }
-
-    /// <returns>
-    /// Native C# representation of string.
-    /// </returns>
-    public override string ToString() {
-        return tostring();
-    }
-
-    /// <summary>
-    /// Allows an instance of LibPKMN.PKString to be cast as a native C# string.
-    /// </summary>
-    public static implicit operator string(PKString input) {
-        return input.tostring();
-    }
-
-    /// <summary>
-    /// Allows a native C# string to be cast as an instance of LibPKMN.PKString.
-    /// </summary>
-    public static implicit operator PKString(string input) {
-        PKString temp = new PKString(input);
-        return temp;
-    }
-%}
-
 /*
  * Macro for dict templates to avoid using partial classes for every type
  */
@@ -145,6 +93,7 @@
 %}
 
 %include "CamelCase.i"
+%include "cs_pkstring.i"
 %include "libpkmn.i"
 
 %{
@@ -173,7 +122,6 @@
 %include "pkmn/paths.hpp"
 
 %include "pkmn/types/dict.hpp"
-%include "pkmn/types/pkstring.hpp"
 %include "pkmn/types/prng.hpp"
 
 %include "pkmn/nature.hpp"
@@ -196,12 +144,12 @@
 %template(Moveset) std::vector<pkmn::move::sptr>;
 %template(PocketSPtr_vec) std::vector<pkmn::pocket::sptr>; //Temporary, necessary for dict for now
 %template(PokemonTeam) std::vector<pkmn::team_pokemon::sptr>;
-%template(PKStringVector) std::vector<pkmn::pkstring>;
+%template(string_vec) std::vector<pkmn::pkstring>;
 
-LIBPKMN_CS_DICT(StringIntDict, std::string, int, string, int)
-LIBPKMN_CS_DICT(StringStringDict, std::string, std::string, string, string)
-LIBPKMN_CS_DICT(StringUIntDict, std::string, unsigned int, string, uint)
-LIBPKMN_CS_DICT(PocketDict, std::string, pkmn::pocket::sptr, string, PocketSPtr)
+LIBPKMN_CS_DICT(StringIntDict, pkmn::pkstring, int, string, int)
+LIBPKMN_CS_DICT(StringStringDict, pkmn::pkstring, pkmn::pkstring, string, string)
+LIBPKMN_CS_DICT(StringUIntDict, pkmn::pkstring, unsigned int, string, uint)
+LIBPKMN_CS_DICT(PocketDict, pkmn::pkstring, pkmn::pocket::sptr, string, PocketSPtr)
 
 //Factory functions need to specifically be associated with newobject
 %newobject pkmn::bag::make;

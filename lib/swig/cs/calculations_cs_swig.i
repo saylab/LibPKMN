@@ -13,6 +13,7 @@
 %import "libpkmn_cs_swig.i"
 
 %{
+    #include "pkmn/config.hpp"
     #include "pkmn/calculations.hpp"
 %}
 
