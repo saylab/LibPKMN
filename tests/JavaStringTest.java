@@ -15,7 +15,7 @@ public class JavaStringTest
         System.out.println(abilityFromDatabase);
         if(!abilityFromDatabase.equals("Torrent"))
         {
-            throw new RuntimeException("std::wstring -> String conversion failed.");
+            throw new RuntimeException("String -> pkmn::pkstring conversion failed.");
         }
 
         StringVector stringVector = new StringVector();
@@ -23,7 +23,7 @@ public class JavaStringTest
         System.out.println(stringVector.get(3));
         if(!stringVector.get(3).equals("Charmander"))
         {
-            throw new RuntimeException("std::wstring -> String conversion failed.");
+            throw new RuntimeException("pkmn::pkstring -> String conversion failed.");
         }
     }
 }
