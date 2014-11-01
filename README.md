@@ -43,7 +43,6 @@ If CMake does not automatically find the dependencies, this means they are not i
 ## Git Submodules
 
  * LibPKMN Images (https://github.com/ncorgan/LibPKMN-images) - Pokemon sprites and icons
- * Retro Pokesav (https://github.com/ncorgan/rpokesav) - Gen 1 save editing library
  * PokeLib-NC (https://github.com/ncorgan/PokeLib-NC) - Gen 4 save editing library
  * PKMDS (https://github.com/codemonkey85/PKMDS) - Gen 5-6 save editing library
 

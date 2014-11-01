@@ -17,6 +17,7 @@
 
 #include "game_save_impl.hpp"
 #include "game_save_gen1impl.hpp"
+#include "game_save_gen2impl.hpp"
 #include "game_save_gen3impl.hpp"
 #include "game_save_gen4impl.hpp"
 #include "game_save_gen5impl.hpp"
@@ -29,8 +30,12 @@ namespace pkmn
 {
     game_save::sptr game_save::make(const std::string &filename)
     {
-        uint32_t size = fs::file_size(fs::path(filename));
+        std::vector<uint8_t> data(fs::file_size(fs::path(filename)));
+        std::ifstream ifile(filename.c_str(), std::ios::binary);
+        ifile.read((char*)&data[0], data.size());
+        ifile.close();
 
+        uint32_t size = data.size();
         if(size >= 0x80000)
         {
             //Check to see if PokeLib-NC accepts this as a proper Gen IV save
@@ -58,18 +63,33 @@ namespace pkmn
         }
         else if(size >= 0x20000)
         {
-            //Check to see if LibSPEC accepts this as a proper Gen III save
-            std::ifstream ifile(filename.c_str(), std::ios::binary);
-            uint8_t* buffer = (uint8_t*)malloc(size);
-            ifile.read((char*)buffer, size);
-
-            if(gba_is_gba_save(buffer)) return sptr(new game_save_gen3impl(buffer, filename));
+            if(frlg_check(data))
+            {
+                return sptr(new game_save_gen3impl(filename, Versions::FIRERED));
+            }
+            else if(emerald_check(data))
+            {
+                return sptr(new game_save_gen3impl(filename, Versions::EMERALD));
+            }
+            else if(rs_check(data))
+            {
+                return sptr(new game_save_gen3impl(filename, Versions::RUBY));
+            }
         }
         else if(size >= (2 << 14))
         {
-            //Check to see if Retro Pokesav accepts this as a proper Gen I save
-            rpokesav_gen1_sptr g1_sav(new rpokesav::gen1_save(filename));
-            if(g1_sav->check()) return sptr(new game_save_gen1impl(g1_sav, filename));
+            if(gen1_check(data))
+            {
+                return sptr(new game_save_gen1impl(filename));
+            }
+            else if(gs_check(data))
+            {
+                return sptr(new game_save_gen2impl(filename, false));
+            }
+            else if(crystal_check(data))
+            {
+                return sptr(new game_save_gen2impl(filename, true));
+            }
         }
 
         throw std::runtime_error("This is not a valid save file.");
@@ -78,6 +98,12 @@ namespace pkmn
     game_save_impl::game_save_impl(const std::string &filename)
     {
         _filepath = fs::path(filename);
+        uint32_t file_size = fs::file_size(filename);
+
+        _data = std::vector<uint8_t>(file_size);
+        std::ifstream ifile(filename.c_str(), std::ios::binary);
+        ifile.read((char*)&_data[0], file_size);
+        ifile.close();
     }
 
     void game_save_impl::save()

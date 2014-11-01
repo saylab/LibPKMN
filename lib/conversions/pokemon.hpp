@@ -11,8 +11,10 @@
 #include <pkmn/team_pokemon.hpp>
 #include <pkmn/types/dict.hpp>
 
-#include <rpokesav/gen1_pokemon.hpp>
-#include "../libspec/game_gba.h"
+#include "text.hpp"
+
+#include "structs/pokemon.hpp"
+
 #include <PokeLib/PokeLib.h>
 #include <pkmds/pkmds_g5.h>
 #include <pkmds/pkmds_g6.h>
@@ -21,20 +23,66 @@ namespace pkmn
 {
     namespace conversions
     {
-        team_pokemon::sptr import_gen1_pokemon(const rpokesav::gen1_pokemon &pkmn);
-        void export_gen1_pokemon(team_pokemon::sptr t_pkmn, rpokesav::gen1_pokemon &pkmn);
+        /*
+         * Generation I
+         */
+        team_pokemon::sptr import_gen1_pokemon(const gen1_pc_pokemon_t &pkmn,
+                                               const uint8_t* nickname_buffer,
+                                               const uint8_t* otname_buffer);
+        void export_gen1_pokemon(team_pokemon::sptr t_pkmn, gen1_pc_pokemon_t &pkmn,
+                                 uint8_t* nickname_buf, uint8_t* otname_buf);
 
-        team_pokemon::sptr import_gen3_pokemon(pk3_box_t* pkmn, gba_savetype_t save_type);
-        team_pokemon::sptr import_gen3_pokemon(pk3_t* pkmn, gba_savetype_t save_type);
-        void export_gen3_pokemon(team_pokemon::sptr t_pkmn, pk3_box_t* pkmn, gba_savetype_t save_type);
-        void export_gen3_pokemon(team_pokemon::sptr t_pkmn, pk3_t* pkmn, gba_savetype_t save_type);
+        team_pokemon::sptr import_gen1_pokemon(const gen1_party_pokemon_t &pkmn,
+                                               const uint8_t* nickname_buf,
+                                               const uint8_t* otname_buf);
+        void export_gen1_pokemon(team_pokemon::sptr t_pkmn, gen1_party_pokemon_t &pkmn,
+                                 uint8_t* nickname_buffer, uint8_t* otname_buffer);
 
+        /*
+         * Generation II
+         */
+        team_pokemon::sptr import_gen2_pokemon(const gen2_pc_pokemon_t &pkmn,
+                                               const uint8_t* nickname_buffer,
+                                               const uint8_t* otname_buffer);
+        void export_gen2_pokemon(team_pokemon::sptr t_pkmn, gen2_pc_pokemon_t &pkmn,
+                                 uint8_t* nickname_buf, uint8_t* otname_buf);
+
+        team_pokemon::sptr import_gen2_pokemon(const gen2_party_pokemon_t &pkmn,
+                                               const uint8_t* nickname_buf,
+                                               const uint8_t* otname_buf);
+        void export_gen2_pokemon(team_pokemon::sptr t_pkmn, gen2_party_pokemon_t &pkmn,
+                                 uint8_t* nickname_buffer, uint8_t* otname_buffer);
+
+        /*
+         * Generation III
+         */
+        team_pokemon::sptr import_gen3_pokemon(const gen3_pc_pokemon_t &pkmn,
+                                               unsigned int version_id,
+                                               bool is_encrypted = true);
+        void export_gen3_pokemon(team_pokemon::sptr t_pkmn, gen3_pc_pokemon_t &pkmn,
+                                 bool encrypt = true);
+
+        team_pokemon::sptr import_gen3_pokemon(const gen3_party_pokemon_t &pkmn,
+                                               unsigned int version_id,
+                                               bool is_encrypted = true);
+        void export_gen3_pokemon(team_pokemon::sptr t_pkmn, gen3_party_pokemon_t &pkmn,
+                                 bool encrypt = true);
+
+        /*
+         * Generation IV
+         */
         team_pokemon::sptr import_gen4_pokemon(const PokeLib::Pokemon &pokelib_pkmn);
         PokeLib::Pokemon export_gen4_pokemon(team_pokemon::sptr t_pkmn);
 
+        /*
+         * Generation V
+         */
         team_pokemon::sptr import_gen5_pokemon(party_pkm* p_pkm);
         void export_gen5_pokemon(team_pokemon::sptr t_pkmn, party_pkm* p_pkm);
 
+        /*
+         * Generation VI
+         */
         team_pokemon::sptr import_gen6_pokemon(party_pkx* p_pkx);
         void export_gen6_pokemon(team_pokemon::sptr t_pkmn, party_pkx* p_pkx);
     }

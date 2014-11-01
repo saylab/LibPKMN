@@ -30,6 +30,7 @@ namespace pkmn
             virtual void load() = 0;
             virtual void save() = 0;
             virtual void save_as(const std::string &filename) = 0;
+            //virtual bool check() = 0;
 
             virtual unsigned int get_game_id() const = 0;
             

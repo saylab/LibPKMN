@@ -127,8 +127,7 @@ namespace pkmn
         if(pos >= 1 and pos <= 6)
         {
             //TODO: more through check (items, forms, etc)
-            if(database::get_version_group_id(_game_id) ==
-               database::get_version_group_id(t_pkmn->get_game_id())) _party[pos-1] = t_pkmn;
+            if(database::get_generation(t_pkmn->get_game_id()) <= _game_id) _party[pos-1] = t_pkmn;
         }
     }
 
@@ -163,14 +162,7 @@ namespace pkmn
     {
         //Only set party if party and all Pokemon are valid
         if(party.size() != 6) return;
-        if(party[0]->get_game_id() != _game_id or
-           party[1]->get_game_id() != _game_id or
-           party[2]->get_game_id() != _game_id or
-           party[3]->get_game_id() != _game_id or
-           party[4]->get_game_id() != _game_id or
-           party[5]->get_game_id() != _game_id) return;
-
-        _party = party;
+        for(size_t i = 0; i < 6; i++) set_pokemon((i+1), party[i]);
     }
 
     bag::sptr trainer_impl::get_bag() const {return _bag;}

@@ -268,7 +268,7 @@ namespace pkmn
                 _pockets["Items"] = pocket::make(_game_id, "Items", 20);
                 _pockets["Balls"] = pocket::make(_game_id, "Balls", 12);
                 _pockets["KeyItems"] = pocket::make(_game_id, "KeyItems", 26);
-                _pockets["TM/HM"] = pocket::make(_game_id, "TM/HM", 99);
+                _pockets["TM/HM"] = pocket::make(_game_id, "TM/HM", 57);
                 break;
 
             case Versions::RUBY:
@@ -281,7 +281,7 @@ namespace pkmn
                 break;
 
             case Versions::EMERALD:
-                _pockets["Items"] = pocket::make(_game_id, "Items", 20);
+                _pockets["Items"] = pocket::make(_game_id, "Items", 30);
                 _pockets["Poke Balls"] = pocket::make(_game_id, "Poke Balls", 16);
                 _pockets["TMs and HMs"] = pocket::make(_game_id, "TMs and HMs", 64);
                 _pockets["Berries"] = pocket::make(_game_id, "Berries", 46);

@@ -23,8 +23,6 @@ namespace pkmn
 
     std::string PKMN_API get_libpkmn_commit();
 
-    std::string PKMN_API get_rpokesav_commit();
-
     std::string PKMN_API get_pokelib_nc_commit();
 
     std::string PKMN_API get_pkmds_commit();

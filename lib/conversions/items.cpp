@@ -21,93 +21,272 @@
 #include "items.hpp"
 #include "../library_bridge.hpp"
 
-using namespace std;
-
 namespace pkmn
 {
     namespace conversions
     {
-        void import_gen1_bag(std::array<rpokesav::gen1_item_t,20> &rpokesav_bag,
-                             bag::sptr libpkmn_bag,
-                             uint8_t item_count)
+        void import_gen1_bag(bag::sptr libpkmn_bag, const gen1_item_bag_t* raw_bag)
         {
-            /*
-             * Generation I has no way to distinguish between games, so just
-             * use Yellow. There aren't enough differences to make a difference.
-             */
             pocket::sptr item_pocket = libpkmn_bag->get_pocket("Items");
 
-            for(size_t i = 0; i < item_count; i++)
+            for(size_t i = 0; i < raw_bag->count; i++)
             {
-                item_pocket->add_item(database::get_item_id(rpokesav_bag[i].index, Versions::YELLOW),
-                                      rpokesav_bag[i].count);
+                item_pocket->add_item(database::get_item_id(raw_bag->items[i].index, Versions::YELLOW),
+                                      raw_bag->items[i].count);
             }
         }
 
-        uint8_t export_gen1_bag(bag::sptr libpkmn_bag,
-                                std::array<rpokesav::gen1_item_t,20> &rpokesav_bag)
+        void export_gen1_bag(bag::sptr libpkmn_bag, gen1_item_bag_t* raw_bag)
         {
-            rpokesav_bag = std::array<rpokesav::gen1_item_t,20>();
-            pkmn::item_list_t items;
-            libpkmn_bag->get_pocket("Items")->get_item_list(items);
+            pocket::sptr item_pocket = libpkmn_bag->get_pocket("Items");
 
-            for(size_t i = 0; i < items.size(); i++)
+            item_list_t item_list;
+            item_pocket->get_item_list(item_list);
+            raw_bag->count = item_list.size();
+
+            for(size_t i = 0; i < item_list.size(); i++)
             {
-                rpokesav_bag[i].index = items[i].first->get_game_index();
-                rpokesav_bag[i].count = items[i].second;
+                raw_bag->items[i].index = database::get_item_game_index(item_list[i].first->get_item_id(), Versions::YELLOW);
+                raw_bag->items[i].count = item_list[i].second;
             }
-
-            return items.size();
         }
 
-        void import_gen3_items(bag::sptr item_bag, gba_save_t *save)
+        void import_gen2_bag(bag::sptr libpkmn_bag, const gen2_item_bag_t* raw_bag)
         {
-            //Get pocket names and pointers for appropriate storage structures
-            bool is_frlg = (item_bag->get_game_id() == Versions::FIRERED or item_bag->get_game_id() == Versions::LEAFGREEN);
+            pocket::sptr item_pocket = libpkmn_bag->get_pocket("Items");
+            pocket::sptr ball_pocket = libpkmn_bag->get_pocket("Balls");
+            pocket::sptr keyitem_pocket = libpkmn_bag->get_pocket("KeyItems");
+            pocket::sptr tmhm_pocket = libpkmn_bag->get_pocket("TM/HM");
 
-            pocket::sptr item_pocket = item_bag->get_pocket("Items");
-            pocket::sptr keyitem_pocket = item_bag->get_pocket("Key Items");
-            pocket::sptr ball_pocket = item_bag->get_pocket("Poke Balls");
-            pocket::sptr tmhm_pocket = is_frlg ? item_bag->get_pocket("TM Case")
-                                               : item_bag->get_pocket("TMs and HMs");
-            pocket::sptr berry_pocket = is_frlg ? item_bag->get_pocket("Berry Pouch")
-                                                : item_bag->get_pocket("Berries");
+            for(size_t i = 0; i < raw_bag->item_pocket.count; i++)
+            {
+                item_pocket->add_item(database::get_item_id(raw_bag->item_pocket.items[i].index, Versions::CRYSTAL),
+                                      raw_bag->item_pocket.items[i].count);
+            }
+            for(size_t i = 0; i < raw_bag->ball_pocket.count; i++)
+            {
+                ball_pocket->add_item(database::get_item_id(raw_bag->ball_pocket.items[i].index, Versions::CRYSTAL),
+                                      raw_bag->ball_pocket.items[i].count);
+            }
+            for(size_t i = 0; i < raw_bag->key_item_pocket.count; i++)
+            {
+                item_pocket->add_item(database::get_item_id(raw_bag->key_item_pocket.items[i].index, Versions::CRYSTAL),
+                                      raw_bag->key_item_pocket.items[i].count);
+            }
+            for(size_t i = 0; i < 50; i++)
+            {
+                if(raw_bag->tmhm_pocket.tm[i] > 0)
+                {
+                    tmhm_pocket->add_item((Items::TM01+i), raw_bag->tmhm_pocket.tm[i]);
+                }
+            }
+            for(size_t i = 0; i < 7; i++)
+            {
+                if(raw_bag->tmhm_pocket.hm[i] > 0)
+                {
+                    tmhm_pocket->add_item((Items::HM01+i), raw_bag->tmhm_pocket.hm[i]);
+                }
+            }
+        }
 
-            gba_item_slot_t* gba_item;
+        void export_gen2_bag(bag::sptr libpkmn_bag, gen2_item_bag_t* raw_bag)
+        {
+            pocket::sptr tmhm_pocket = libpkmn_bag->get_pocket("TM/HM");
+            for(size_t i = 0; i < 50; i++)
+            {
+                raw_bag->tmhm_pocket.tm[i] = tmhm_pocket->get_item_amount((Items::TM01+i));
+            }
+            for(size_t i = 0; i < 7; i++)
+            {
+                raw_bag->tmhm_pocket.hm[i] = tmhm_pocket->get_item_amount((Items::HM01+i));
+            }
+
+            item_list_t item_list;
+            libpkmn_bag->get_pocket("Items")->get_item_list(item_list);
+            raw_bag->item_pocket.count = item_list.size();
+            for(size_t i = 0; i < item_list.size(); i++)
+            {
+                raw_bag->item_pocket.items[i].count = item_list[i].second;
+                raw_bag->item_pocket.items[i].index = database::get_item_game_index(item_list[i].first->get_item_id(),
+                                                                                   Versions::CRYSTAL);
+            }
+
+            item_list_t keyitem_list;
+            libpkmn_bag->get_pocket("KeyItems")->get_item_list(keyitem_list);
+            raw_bag->key_item_pocket.count = keyitem_list.size();
+            for(size_t i = 0; i < item_list.size(); i++)
+            {
+                raw_bag->key_item_pocket.items[i].count = keyitem_list[i].second;
+                raw_bag->key_item_pocket.items[i].index = database::get_item_game_index(keyitem_list[i].first->get_item_id(),
+                                                                                       Versions::CRYSTAL);
+            }
+
+            item_list_t ball_list;
+            libpkmn_bag->get_pocket("Balls")->get_item_list(ball_list);
+            raw_bag->ball_pocket.count = ball_list.size();
+            for(size_t i = 0; i < item_list.size(); i++)
+            {
+                raw_bag->ball_pocket.items[i].count = ball_list[i].second;
+                raw_bag->ball_pocket.items[i].index = database::get_item_game_index(ball_list[i].first->get_item_id(),
+                                                                                   Versions::CRYSTAL);
+            }
+        }
+
+        void import_gen3_bag(bag::sptr libpkmn_bag, const void* raw_bag, const uint16_t security_key)
+        {
+            bool is_frlg = (libpkmn_bag->get_game_id() == Versions::FIRERED or
+                            libpkmn_bag->get_game_id() == Versions::LEAFGREEN);
+
+            pocket::sptr item_pocket = libpkmn_bag->get_pocket("Items");
+            pocket::sptr keyitem_pocket = libpkmn_bag->get_pocket("Key Items");
+            pocket::sptr ball_pocket = libpkmn_bag->get_pocket("Poke Balls");
+            pocket::sptr tmhm_pocket = libpkmn_bag->get_pocket(is_frlg ? "TM Case" : "TMs and HMs");
+            pocket::sptr berry_pocket = libpkmn_bag->get_pocket(is_frlg ? "Berry Pouch" : "Berries");
+
+            const modern_item_t *raw_item_pocket, *raw_keyitem_pocket, *raw_ball_pocket, *raw_tmhm_pocket, *raw_berry_pocket;
+
+            switch(libpkmn_bag->get_game_id())
+            {
+                case Versions::RUBY:
+                case Versions::SAPPHIRE:
+                    raw_item_pocket = reinterpret_cast<const rs_item_storage_t*>(raw_bag)->items;
+                    raw_keyitem_pocket = reinterpret_cast<const rs_item_storage_t*>(raw_bag)->key_items;
+                    raw_ball_pocket = reinterpret_cast<const rs_item_storage_t*>(raw_bag)->balls;
+                    raw_tmhm_pocket = reinterpret_cast<const rs_item_storage_t*>(raw_bag)->tms_hms;
+                    raw_berry_pocket = reinterpret_cast<const rs_item_storage_t*>(raw_bag)->berries;
+                    break;
+
+                case Versions::EMERALD:
+                    raw_item_pocket = reinterpret_cast<const e_item_storage_t*>(raw_bag)->items;
+                    raw_keyitem_pocket = reinterpret_cast<const e_item_storage_t*>(raw_bag)->key_items;
+                    raw_ball_pocket = reinterpret_cast<const e_item_storage_t*>(raw_bag)->balls;
+                    raw_tmhm_pocket = reinterpret_cast<const e_item_storage_t*>(raw_bag)->tms_hms;
+                    raw_berry_pocket = reinterpret_cast<const e_item_storage_t*>(raw_bag)->berries;
+                    break;
+
+                case Versions::FIRERED:
+                case Versions::LEAFGREEN:
+                    raw_item_pocket = reinterpret_cast<const frlg_item_storage_t*>(raw_bag)->items;
+                    raw_keyitem_pocket = reinterpret_cast<const frlg_item_storage_t*>(raw_bag)->key_items;
+                    raw_ball_pocket = reinterpret_cast<const frlg_item_storage_t*>(raw_bag)->balls;
+                    raw_tmhm_pocket = reinterpret_cast<const frlg_item_storage_t*>(raw_bag)->tms_hms;
+                    raw_berry_pocket = reinterpret_cast<const frlg_item_storage_t*>(raw_bag)->berries;
+                    break;
+
+                default:
+                    return;
+            }
+
             for(size_t i = 0; i < item_pocket->size(); i++)
             {
-                gba_item = gba_get_pocket_item(save, GBA_ITEM_POCKET_ITEM, i);
-
-                item_pocket->add_item(database::get_item_id(gba_item->index, item_bag->get_game_id()),
-                                      gba_item->amount);
+                if(raw_item_pocket[i].index == 0 or raw_item_pocket[i].count == 0) break;
+                else item_pocket->add_item(database::get_item_id(raw_item_pocket[i].index,
+                                                                 item_pocket->get_game_id()),
+                                           (raw_item_pocket[i].count ^ security_key));
             }
             for(size_t i = 0; i < keyitem_pocket->size(); i++)
             {
-                gba_item = gba_get_pocket_item(save, GBA_ITEM_POCKET_KEYITEM, i);
-
-                keyitem_pocket->add_item(database::get_item_id(gba_item->index, item_bag->get_game_id()),
-                                         gba_item->amount);
+                if(raw_keyitem_pocket[i].index == 0 or raw_keyitem_pocket[i].count == 0) break;
+                else keyitem_pocket->add_item(database::get_item_id(raw_keyitem_pocket[i].index,
+                                                                    keyitem_pocket->get_game_id()),
+                                              (raw_keyitem_pocket[i].count ^ security_key));
             }
             for(size_t i = 0; i < ball_pocket->size(); i++)
             {
-                gba_item = gba_get_pocket_item(save, GBA_ITEM_POCKET_BALL, i);
-
-                ball_pocket->add_item(database::get_item_id(gba_item->index, item_bag->get_game_id()),
-                                      gba_item->amount);
+                if(raw_ball_pocket[i].index == 0 or raw_ball_pocket[i].count == 0) break;
+                else ball_pocket->add_item(database::get_item_id(raw_ball_pocket[i].index,
+                                                                 ball_pocket->get_game_id()),
+                                           (raw_ball_pocket[i].count ^ security_key));
             }
             for(size_t i = 0; i < tmhm_pocket->size(); i++)
             {
-                gba_item = gba_get_pocket_item(save, GBA_ITEM_POCKET_HMTM, i);
-
-                tmhm_pocket->add_item(database::get_item_id(gba_item->index, item_bag->get_game_id()),
-                                      gba_item->amount);
+                if(raw_tmhm_pocket[i].index == 0 or raw_tmhm_pocket[i].count == 0) break;
+                else tmhm_pocket->add_item(database::get_item_id(raw_tmhm_pocket[i].index,
+                                                                 tmhm_pocket->get_game_id()),
+                                           (raw_tmhm_pocket[i].count ^ security_key));
             }
             for(size_t i = 0; i < berry_pocket->size(); i++)
             {
-                gba_item = gba_get_pocket_item(save, GBA_ITEM_POCKET_BERRY, i);
+                if(raw_berry_pocket[i].index == 0 or raw_berry_pocket[i].count == 0) break;
+                else berry_pocket->add_item(database::get_item_id(raw_berry_pocket[i].index,
+                                                                  berry_pocket->get_game_id()),
+                                           (raw_berry_pocket[i].count ^ security_key));
+            }
+        }
 
-                berry_pocket->add_item(database::get_item_id(gba_item->index, item_bag->get_game_id()),
-                                       gba_item->amount);
+        void export_gen3_bag(bag::sptr libpkmn_bag, void* raw_bag, const uint16_t security_key)
+        {
+            bool is_frlg = (libpkmn_bag->get_game_id() == Versions::FIRERED or
+                            libpkmn_bag->get_game_id() == Versions::LEAFGREEN);
+
+            modern_item_t *raw_item_pocket, *raw_keyitem_pocket, *raw_ball_pocket, *raw_tmhm_pocket, *raw_berry_pocket;
+
+            switch(libpkmn_bag->get_game_id())
+            {
+                case Versions::RUBY:
+                case Versions::SAPPHIRE:
+                    raw_item_pocket = reinterpret_cast<rs_item_storage_t*>(raw_bag)->items;
+                    raw_keyitem_pocket = reinterpret_cast<rs_item_storage_t*>(raw_bag)->key_items;
+                    raw_ball_pocket = reinterpret_cast<rs_item_storage_t*>(raw_bag)->balls;
+                    raw_tmhm_pocket = reinterpret_cast<rs_item_storage_t*>(raw_bag)->tms_hms;
+                    raw_berry_pocket = reinterpret_cast<rs_item_storage_t*>(raw_bag)->berries;
+                    break;
+
+                case Versions::EMERALD:
+                    raw_item_pocket = reinterpret_cast<e_item_storage_t*>(raw_bag)->items;
+                    raw_keyitem_pocket = reinterpret_cast<e_item_storage_t*>(raw_bag)->key_items;
+                    raw_ball_pocket = reinterpret_cast<e_item_storage_t*>(raw_bag)->balls;
+                    raw_tmhm_pocket = reinterpret_cast<e_item_storage_t*>(raw_bag)->tms_hms;
+                    raw_berry_pocket = reinterpret_cast<e_item_storage_t*>(raw_bag)->berries;
+                    break;
+
+                case Versions::FIRERED:
+                case Versions::LEAFGREEN:
+                    raw_item_pocket = reinterpret_cast<frlg_item_storage_t*>(raw_bag)->items;
+                    raw_keyitem_pocket = reinterpret_cast<frlg_item_storage_t*>(raw_bag)->key_items;
+                    raw_ball_pocket = reinterpret_cast<frlg_item_storage_t*>(raw_bag)->balls;
+                    raw_tmhm_pocket = reinterpret_cast<frlg_item_storage_t*>(raw_bag)->tms_hms;
+                    raw_berry_pocket = reinterpret_cast<frlg_item_storage_t*>(raw_bag)->berries;
+                    break;
+
+                default:
+                    return;
+            }
+
+            item_list_t item_list;
+            libpkmn_bag->get_pocket("Items")->get_item_list(item_list);
+            for(size_t i = 0; i < item_list.size(); i++)
+            {
+                raw_item_pocket[i].index = database::get_item_game_index(item_list[i].first->get_item_id(),
+                                                                         libpkmn_bag->get_game_id());
+                raw_item_pocket[i].count = item_list[i].second ^ security_key;
+            }
+
+            item_list_t keyitem_list;
+            libpkmn_bag->get_pocket("Key Items")->get_item_list(keyitem_list);
+            for(size_t i = 0; i < keyitem_list.size(); i++)
+            {
+                raw_keyitem_pocket[i].index = database::get_item_game_index(keyitem_list[i].first->get_item_id(),
+                                                                            libpkmn_bag->get_game_id());
+                raw_keyitem_pocket[i].count = keyitem_list[i].second ^ security_key;
+            }
+
+            item_list_t ball_list;
+            libpkmn_bag->get_pocket("Poke Balls")->get_item_list(ball_list);
+            for(size_t i = 0; i < ball_list.size(); i++)
+            {
+                raw_ball_pocket[i].index = database::get_item_game_index(ball_list[i].first->get_item_id(),
+                                                                         libpkmn_bag->get_game_id());
+                raw_ball_pocket[i].count = ball_list[i].second ^ security_key;
+            }
+
+            item_list_t tmhm_list;
+            libpkmn_bag->get_pocket(is_frlg ? "TM Case" : "TMs and HMs")->get_item_list(tmhm_list);
+            for(size_t i = 0; i < item_list.size(); i++)
+            {
+                raw_tmhm_pocket[i].index = database::get_item_game_index(tmhm_list[i].first->get_item_id(),
+                                                                         libpkmn_bag->get_game_id());
+                raw_tmhm_pocket[i].count = tmhm_list[i].second ^ security_key;
             }
         }
 

@@ -7,6 +7,8 @@
 #ifndef INCLUDED_GAME_SAVE_IMPL_HPP
 #define INCLUDED_GAME_SAVE_IMPL_HPP
 
+#include <vector>
+
 #include <boost/filesystem.hpp>
 #include <boost/noncopyable.hpp>
 
@@ -40,6 +42,7 @@ namespace pkmn
         protected:
 
             boost::filesystem::path _filepath;
+            std::vector<uint8_t> _data;
 
             unsigned int _game_id;
             trainer::sptr _trainer;
