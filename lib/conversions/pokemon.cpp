@@ -6,10 +6,11 @@
  */
 
 #ifdef _MSC_VER
-#pragma warning(disable:4800)
+#pragma warning(disable:4800) //Type-narrowing is inevitable
 #endif
 
 #include <string>
+#include <string.h>
 #include <vector>
 
 #include <boost/assign.hpp>
@@ -23,81 +24,77 @@
 #include <pkmn/team_pokemon.hpp>
 #include <pkmn/database/queries.hpp>
 #include <pkmn/types/pkstring.hpp>
+#include <pkmn/types/prng.hpp>
 
-#include <rpokesav/data.hpp>
-#include <rpokesav/utils.hpp>
 #include <pkmds/pkmds_g5_sqlite.h>
 
 #include "pokemon.hpp"
+#include "utils.hpp"
 #include "../library_bridge.hpp"
 #include "../SQLiteCpp/SQLiteC++.h"
-#include "../libspec/stat.h"
 
 namespace pkmn
 {
     namespace conversions
     {
-        team_pokemon::sptr import_gen1_pokemon(const rpokesav::gen1_pokemon &pkmn)
+        /*
+         * Generation I
+         */
+        team_pokemon::sptr import_gen1_pokemon(const gen1_pc_pokemon_t &pkmn,
+                                               const uint8_t* nickname_buffer,
+                                               const uint8_t* otname_buffer)
         {
-            unsigned int species_id;
-            uint16_t move1, move2, move3, move4;
-            uint8_t rpokesav_species = pkmn.raw.pc.species_index;
+            unsigned int species_id, move1_id, move2_id, move3_id, move4_id;
 
-            if(rpokesav_species == 0 or rpokesav_species > 190)
+            if(pkmn.species == 0 or pkmn.species > 190)
             {
                 species_id = Species::INVALID;
-                move1 = Moves::NONE;
-                move2 = Moves::NONE;
-                move3 = Moves::NONE;
-                move4 = Moves::NONE;
+                move1_id = Moves::NONE;
+                move2_id = Moves::NONE;
+                move3_id = Moves::NONE;
+                move4_id = Moves::NONE;
             }
             else
             {
-                /*
-                 * Generation I has no way to distinguish between games, so just
-                 * use Yellow. There aren't enough differences to make a difference.
-                 */
-                species_id = database::get_pokemon_id(rpokesav_species, Versions::YELLOW);
-                move1 = pkmn.raw.pc.moves[0];
-                move2 = pkmn.raw.pc.moves[1];
-                move3 = pkmn.raw.pc.moves[2];
-                move4 = pkmn.raw.pc.moves[3];
+                species_id = database::get_pokemon_id(pkmn.species, Versions::RED);
+                move1_id = pkmn.moves[0];
+                move2_id = pkmn.moves[1];
+                move3_id = pkmn.moves[2];
+                move4_id = pkmn.moves[3];
             }
 
-                uint8_t level = pkmn.raw.level;
+            team_pokemon::sptr t_pkmn = team_pokemon::make(species_id, Versions::RED,
+                                                           pkmn.level, move1_id, move2_id,
+                                                           move3_id, move4_id);
 
-                team_pokemon::sptr t_pkmn = team_pokemon::make(species_id, Versions::YELLOW, level,
-                                                               move1, move2, move3, move4);
+            //Nickname, trainer info
+            t_pkmn->set_nickname(import_gen1_text(nickname_buffer, 10));
+            t_pkmn->set_trainer_name(import_gen1_text(otname_buffer, 7));
+            t_pkmn->set_trainer_id(pkmn.ot_id);
+            t_pkmn->set_trainer_gender("Male");
 
-                t_pkmn->set_nickname(pkmn.get_nickname());
-                t_pkmn->set_trainer_name(pkmn.get_ot_name());
-                t_pkmn->set_trainer_id(pkmn.get_ot_id());
-                t_pkmn->set_trainer_gender("Male");
+            //Effort values
+            t_pkmn->set_EV("HP", pkmn.ev_hp);
+            t_pkmn->set_EV("Attack", pkmn.ev_atk);
+            t_pkmn->set_EV("Defense", pkmn.ev_def);
+            t_pkmn->set_EV("Speed", pkmn.ev_spd);
+            t_pkmn->set_EV("Special", pkmn.ev_spcl);
 
-                //Effort values
-                t_pkmn->set_EV("HP", pkmn.raw.pc.ev_hp);
-                t_pkmn->set_EV("Attack", pkmn.raw.pc.ev_atk);
-                t_pkmn->set_EV("Defense", pkmn.raw.pc.ev_def);
-                t_pkmn->set_EV("Speed", pkmn.raw.pc.ev_spd);
-                t_pkmn->set_EV("Special", pkmn.raw.pc.ev_spcl);
+            //Individual values
+            t_pkmn->set_IV("HP", get_retro_IV(Stats::HP, pkmn.iv_data));
+            t_pkmn->set_IV("Attack", get_retro_IV(Stats::ATTACK, pkmn.iv_data));
+            t_pkmn->set_IV("Defense", get_retro_IV(Stats::DEFENSE, pkmn.iv_data));
+            t_pkmn->set_IV("Speed", get_retro_IV(Stats::SPEED, pkmn.iv_data));
+            t_pkmn->set_IV("Special", get_retro_IV(Stats::SPECIAL, pkmn.iv_data));
 
-                //Individual values
-                t_pkmn->set_EV("HP", pkmn.get_iv_hp());
-                t_pkmn->set_EV("Attack", pkmn.get_iv_attack());
-                t_pkmn->set_EV("Defense", pkmn.get_iv_defense());
-                t_pkmn->set_EV("Speed", pkmn.get_iv_speed());
-                t_pkmn->set_EV("Special", pkmn.get_iv_special());
+            //Move PP's
+            for(size_t i = 0; i < 4; i++) t_pkmn->set_move_PP(pkmn.move_pps[i], (i+1));
 
-                //Move PP's
-                t_pkmn->set_move_PP(pkmn.raw.pc.move_pps[0], 1);
-                t_pkmn->set_move_PP(pkmn.raw.pc.move_pps[1], 2);
-                t_pkmn->set_move_PP(pkmn.raw.pc.move_pps[2], 3);
-                t_pkmn->set_move_PP(pkmn.raw.pc.move_pps[3], 4);
-
-                return t_pkmn;
+            return t_pkmn;
         }
 
-        void export_gen1_pokemon(team_pokemon::sptr t_pkmn, rpokesav::gen1_pokemon pkmn)
+        void export_gen1_pokemon(team_pokemon::sptr t_pkmn, gen1_pc_pokemon_t &pkmn,
+                                 uint8_t* nickname_buffer, uint8_t* otname_buffer)
         {
             //Necessary values
             pkmn::dict<pkmn::pkstring, unsigned int> stats = t_pkmn->get_stats();
@@ -105,364 +102,434 @@ namespace pkmn
             pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
             pkmn::pkstring_pair_t types = t_pkmn->get_types();
             pkmn::moveset_t moves;
-            std::vector<unsigned int> move_PPs;
             t_pkmn->get_moves(moves);
+            std::vector<unsigned int> move_PPs;
             t_pkmn->get_move_PPs(move_PPs);
 
-            uint8_t rpokesav_species = database::get_pokemon_game_index(t_pkmn->get_pokemon_id(),
-                                                                        Versions::YELLOW);
+            export_gen1_text(t_pkmn->get_nickname(), nickname_buffer, 10);
+            export_gen1_text(t_pkmn->get_trainer_name(), otname_buffer, 10);
 
-            pkmn = rpokesav::gen1_pokemon(rpokesav_species);
+            pkmn.species = database::get_pokemon_game_index(t_pkmn->get_species_id(), Versions::RED);
+            pkmn.current_hp = t_pkmn->get_stats()["HP"];
+            pkmn.level = t_pkmn->get_level();
+            pkmn.status = 0;
 
-            pkmn.raw.pc.current_hp = stats["HP"]; //TODO: actual current HP
-            pkmn.raw.pc.level = t_pkmn->get_level();
-            pkmn.raw.pc.status_ailment = rpokesav::statuses::OK; //TODO: link between LibPKMN and rpokesav
-            pkmn.raw.pc.types[0] = database::get_type_id(types.first);
-            pkmn.raw.pc.types[1] = database::get_type_id(types.second);
-            pkmn.raw.pc.catch_rate = rpokesav::gen1_catch_rates[pkmn.raw.pc.species_index];
-            for(size_t i = 0; i < 4; i++) pkmn.raw.pc.moves[i] = moves[i]->get_move_id();
-            //TODO: experience
-            pkmn.raw.pc.ev_hp = EVs["HP"];
-            pkmn.raw.pc.ev_atk = EVs["Attack"];
-            pkmn.raw.pc.ev_def = EVs["Defense"];
-            pkmn.raw.pc.ev_spd = EVs["Speed"];
-            pkmn.raw.pc.ev_spcl = EVs["Special"];
-            pkmn.set_iv_hp(IVs["HP"]);
-            pkmn.set_iv_attack(IVs["Attack"]);
-            pkmn.set_iv_defense(IVs["Defense"]);
-            pkmn.set_iv_speed(IVs["Speed"]);
-            pkmn.set_iv_special(IVs["Special"]);
-            for(size_t i = 0; i < 4; i++) pkmn.raw.pc.move_pps[i] = move_PPs[i];
+            pkmn.types[0] = database::get_type_id(types.first);
+            pkmn.types[1] = database::get_type_id(types.second);
 
-            rpokesav::gen1_pc_to_party(pkmn.raw, pkmn.raw.pc);
-        }
+            pkmn.catch_rate = gen1_catch_rates[t_pkmn->get_species_id()];
+            for(size_t i = 0; i < 4; i++) pkmn.moves[i] = moves[i]->get_move_id();
+            pkmn.ot_id = t_pkmn->get_trainer_id();
 
-//Conversions from SQLite database values for growth ID's to LibSPEC's enums
-        stat_growth_rate_t libspec_growth_rates[6] = {STAT_GROWTH_RATE_ERRATIC, STAT_GROWTH_RATE_FAST,
-                                                      STAT_GROWTH_RATE_MEDIUM_FAST, STAT_GROWTH_RATE_MEDIUM_SLOW,
-                                                      STAT_GROWTH_RATE_SLOW, STAT_GROWTH_RATE_FLUCTUATING};
-
-        //Used with item index functions
-        uint8_t gen3_game_ids[] = {Versions::NONE, Versions::RUBY, Versions::EMERALD, Versions::FIRERED};
-
-        team_pokemon::sptr import_gen3_pokemon(pk3_box_t* pkmn, gba_savetype_t save_type)
-        {
-            pk3_decrypt(pkmn);
-            //Avoiding bitfields and structs
-            uint16_t* met_int = reinterpret_cast<uint16_t*>(&(pkmn->met_loc)+1);
-            uint32_t* IV_int = reinterpret_cast<uint32_t*>(&(pkmn->iv));
-            uint8_t* marking_int = reinterpret_cast<uint8_t*>(&(pkmn->markings));
-            uint32_t* ribbon_int = reinterpret_cast<uint32_t*>(&(pkmn->ribbon));
-
-            uint16_t game_id = hometown_to_libpkmn_game((*met_int & 0x780) >> 7);
-
-            //Check for invalid values
-            if(pkmn->species == 0 or
-               (pkmn->species > 251 and pkmn->species < 277) or
-               pkmn->species == 412) //TODO: investigate how egg works
-            {
-                return team_pokemon::make(Species::INVALID, game_id, 0,
-                                          Moves::NONE, Moves::NONE, Moves::NONE, Moves::NONE);
-            }
-
-            uint16_t species_id = database::get_species_id(database::get_pokemon_id(pkmn->species, game_id));
-
-            //LibSPEC has no way to link Pokemon to growth rates, so use database
-            SQLite::Database db(get_database_path().c_str());
-            std::string query_string(str(boost::format("SELECT growth_rate_id FROM pokemon_species WHERE id=%d")
-                                         % pkmn->species));
-            uint8_t growth_rate = int(db.execAndGet(query_string.c_str())) - 1;
-
-            uint8_t level = stat_get_level(stat_growth_rate_t(growth_rate), pkmn->exp);
-
-            team_pokemon::sptr t_pkmn = team_pokemon::make(species_id, game_id, level,
-                                                           pkmn->move[0], pkmn->move[1],
-                                                           pkmn->move[2], pkmn->move[3]);
-
-            //Convert nickname and trainer name
-            uint16_t nickname_arr[10];
-            gba_text_to_ucs2((char16_t*)nickname_arr, (char8_t*)pkmn->nickname, PK3_NICKNAME_LENGTH);
-            t_pkmn->set_nickname(boost::locale::conv::utf_to_utf<wchar_t>(nickname_arr));
-
-            uint16_t trainername_arr[10];
-            gba_text_to_ucs2((char16_t*)trainername_arr, (char8_t*)pkmn->ot_name, PK3_OT_NAME_LENGTH);
-            t_pkmn->set_trainer_name(boost::locale::conv::utf_to_utf<wchar_t>(trainername_arr));
-
-            //Item
-            uint16_t item_id = database::get_item_id(pkmn->held_item, gen3_game_ids[save_type]);
-            t_pkmn->set_held_item(database::get_item_name(item_id));
-
-            //ID's
-            t_pkmn->set_personality(pkmn->pid);
-            t_pkmn->set_trainer_id(pkmn->ot_fid);
-
-            //Move PP's
-            //TODO: take PP Ups into account
-            t_pkmn->set_move_PP(pkmn->move_pp[0], 1);
-            t_pkmn->set_move_PP(pkmn->move_pp[1], 2);
-            t_pkmn->set_move_PP(pkmn->move_pp[2], 3);
-            t_pkmn->set_move_PP(pkmn->move_pp[3], 4);
+            unsigned int experience = database::get_experience(t_pkmn->get_species_id(), pkmn.level);
+            memcpy(pkmn.exp, (&experience+1), 3);
 
             //Effort values
-            t_pkmn->set_EV("HP", pkmn->ev.hp);
-            t_pkmn->set_EV("Attack", pkmn->ev.atk);
-            t_pkmn->set_EV("Defense", pkmn->ev.def);
-            t_pkmn->set_EV("Speed", pkmn->ev.spd);
-            t_pkmn->set_EV("Special Attack", pkmn->ev.satk);
-            t_pkmn->set_EV("Special Defense", pkmn->ev.sdef);
+            pkmn.ev_hp = EVs["HP"];
+            pkmn.ev_atk = EVs["Attack"];
+            pkmn.ev_def = EVs["Defense"];
+            pkmn.ev_spd = EVs["Speed"];
+            pkmn.ev_spcl = EVs["Special"];
 
             //Individual values
-            t_pkmn->set_IV("HP", modern_get_IV(IV_int, Stats::HP));
-            t_pkmn->set_IV("Attack", modern_get_IV(IV_int, Stats::ATTACK));
-            t_pkmn->set_IV("Defense", modern_get_IV(IV_int, Stats::DEFENSE));
-            t_pkmn->set_IV("Speed", modern_get_IV(IV_int, Stats::SPEED));
-            t_pkmn->set_IV("Special Attack", modern_get_IV(IV_int, Stats::SPECIAL_ATTACK));
-            t_pkmn->set_IV("Special Defense", modern_get_IV(IV_int, Stats::SPECIAL_DEFENSE));
+            set_retro_IV(Stats::HP, pkmn.iv_data, IVs["HP"]);
+            set_retro_IV(Stats::ATTACK, pkmn.iv_data, IVs["Attack"]);
+            set_retro_IV(Stats::DEFENSE, pkmn.iv_data, IVs["Defense"]);
+            set_retro_IV(Stats::SPEED, pkmn.iv_data, IVs["Speed"]);
+            set_retro_IV(Stats::SPECIAL, pkmn.iv_data, IVs["Special"]);
 
-            t_pkmn->set_met_level(get_gen3_met_level(met_int));
-            t_pkmn->set_ball(ball_dict.at(game_ball_to_libpkmn_ball(get_gen3_ball(met_int)), "Poke Ball"));
-            if(get_gen3_otgender(met_int)) t_pkmn->set_trainer_gender("Female");
-            else t_pkmn->set_trainer_gender("Male");
+            for(size_t i = 0; i < 4; i++) pkmn.move_pps[i] = move_PPs[i];
+        }
 
-            //Attributes
-            t_pkmn->set_attribute("friendship", pkmn->friendship);
-            t_pkmn->set_attribute("circle", get_marking(marking_int, Markings::CIRCLE));
-            t_pkmn->set_attribute("triangle", get_marking(marking_int, Markings::TRIANGLE));
-            t_pkmn->set_attribute("square", get_marking(marking_int, Markings::SQUARE));
-            t_pkmn->set_attribute("heart", get_marking(marking_int, Markings::HEART));
-            t_pkmn->set_attribute("country", pkmn->language);
+        team_pokemon::sptr import_gen1_pokemon(const gen1_party_pokemon_t &pkmn,
+                                               const uint8_t* nickname_buffer,
+                                               const uint8_t* otname_buffer)
+        {
+            return import_gen1_pokemon(pkmn.pc, nickname_buffer, otname_buffer);
+        }
 
-            t_pkmn->set_attribute("cool", pkmn->contest.cool);
-            t_pkmn->set_attribute("beauty", pkmn->contest.beauty);
-            t_pkmn->set_attribute("cute", pkmn->contest.cute);
-            t_pkmn->set_attribute("smart", pkmn->contest.smart);
-            t_pkmn->set_attribute("tough", pkmn->contest.tough);
-            t_pkmn->set_attribute("sheen", pkmn->contest.sheen);
+        void export_gen1_pokemon(team_pokemon::sptr t_pkmn, gen1_party_pokemon_t &pkmn,
+                                 uint8_t* nickname_buffer, uint8_t* otname_buffer)
+        {
+            pkmn::dict<pkmn::pkstring, unsigned int> stats = t_pkmn->get_stats();
 
-            t_pkmn->set_attribute("hoenn_cool_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::COOL));
-            t_pkmn->set_attribute("hoenn_cool_super_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::COOL_SUPER));
-            t_pkmn->set_attribute("hoenn_cool_hyper_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::COOL_HYPER));
-            t_pkmn->set_attribute("hoenn_cool_master_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::COOL_MASTER));
-            t_pkmn->set_attribute("hoenn_beauty_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::BEAUTY));
-            t_pkmn->set_attribute("hoenn_beauty_super_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::BEAUTY_SUPER));
-            t_pkmn->set_attribute("hoenn_beauty_hyper_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::BEAUTY_HYPER));
-            t_pkmn->set_attribute("hoenn_beauty_master_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::BEAUTY_MASTER));
-            t_pkmn->set_attribute("hoenn_cute_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::CUTE));
-            t_pkmn->set_attribute("hoenn_cute_super_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::CUTE_SUPER));
-            t_pkmn->set_attribute("hoenn_cute_hyper_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::CUTE_HYPER));
-            t_pkmn->set_attribute("hoenn_cute_master_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::CUTE_MASTER));
-            t_pkmn->set_attribute("hoenn_smart_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::SMART));
-            t_pkmn->set_attribute("hoenn_smart_super_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::SMART_SUPER));
-            t_pkmn->set_attribute("hoenn_smart_hyper_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::SMART_HYPER));
-            t_pkmn->set_attribute("hoenn_smart_master_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::SMART_MASTER));
-            t_pkmn->set_attribute("hoenn_tough_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::TOUGH));
-            t_pkmn->set_attribute("hoenn_tough_super_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::TOUGH_SUPER));
-            t_pkmn->set_attribute("hoenn_tough_hyper_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::TOUGH_HYPER));
-            t_pkmn->set_attribute("hoenn_tough_master_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::TOUGH_MASTER));
+            export_gen1_pokemon(t_pkmn, pkmn.pc, nickname_buffer, otname_buffer);
+            pkmn.level = t_pkmn->get_level();
+            pkmn.max_hp = stats["HP"];
+            pkmn.atk = stats["Attack"];
+            pkmn.def = stats["Defense"];
+            pkmn.spd = stats["Speed"];
+            pkmn.spcl = stats["Special"];
+        }
 
-            t_pkmn->set_attribute("hoenn_champion_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::CHAMPION));
-            t_pkmn->set_attribute("hoenn_winning_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::WINNING));
-            t_pkmn->set_attribute("hoenn_victory_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::VICTORY));
-            t_pkmn->set_attribute("hoenn_artist_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::ARTIST));
-            t_pkmn->set_attribute("hoenn_effort_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::EFFORT));
-            t_pkmn->set_attribute("hoenn_marine_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::MARINE));
-            t_pkmn->set_attribute("hoenn_land_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::LAND));
-            t_pkmn->set_attribute("hoenn_sky_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::SKY));
-            t_pkmn->set_attribute("hoenn_country_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::COUNTRY));
-            t_pkmn->set_attribute("hoenn_national_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::NATIONAL));
-            t_pkmn->set_attribute("hoenn_earth_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::EARTH));
-            t_pkmn->set_attribute("hoenn_world_ribbon", get_ribbon(ribbon_int, Ribbons::Hoenn::WORLD));
-            pk3_encrypt(pkmn);
+        /*
+         * Generation II
+         */
+        team_pokemon::sptr import_gen2_pokemon(const gen2_pc_pokemon_t &pkmn,
+                                               const uint8_t* nickname_buffer,
+                                               const uint8_t* otname_buffer)
+        {
+            unsigned int species_id, move1_id, move2_id, move3_id, move4_id;
+
+            if(pkmn.species == 0 or pkmn.species > 251)
+            {
+                species_id = Species::INVALID;
+                move1_id = Moves::NONE;
+                move2_id = Moves::NONE;
+                move3_id = Moves::NONE;
+                move4_id = Moves::NONE;
+            }
+            else
+            {
+                species_id = database::get_pokemon_id(pkmn.species, Versions::RED);
+                move1_id = pkmn.moves[0];
+                move2_id = pkmn.moves[1];
+                move3_id = pkmn.moves[2];
+                move4_id = pkmn.moves[3];
+            }
+
+            team_pokemon::sptr t_pkmn = team_pokemon::make(species_id, Versions::CRYSTAL,
+                                                           pkmn.level, move1_id, move2_id,
+                                                           move3_id, move4_id);
+
+            //Nickname, trainer info
+            t_pkmn->set_nickname(import_gen2_text(nickname_buffer, 10));
+            t_pkmn->set_trainer_name(import_gen2_text(otname_buffer, 7));
+            t_pkmn->set_trainer_id(pkmn.ot_id);
+            t_pkmn->set_trainer_gender(crystal_get_otgender(pkmn.caught_data));
+            t_pkmn->set_met_level(crystal_get_metlevel(pkmn.caught_data));
+            t_pkmn->set_held_item(database::get_item_name(pkmn.held_item, Versions::CRYSTAL));
+            //TODO: friendship
+
+            //Effort values
+            t_pkmn->set_EV("HP", pkmn.ev_hp);
+            t_pkmn->set_EV("Attack", pkmn.ev_atk);
+            t_pkmn->set_EV("Defense", pkmn.ev_def);
+            t_pkmn->set_EV("Speed", pkmn.ev_spd);
+            t_pkmn->set_EV("Special", pkmn.ev_spcl);
+
+            //Individual values
+            t_pkmn->set_IV("HP", get_retro_IV(Stats::HP, pkmn.iv_data));
+            t_pkmn->set_IV("Attack", get_retro_IV(Stats::ATTACK, pkmn.iv_data));
+            t_pkmn->set_IV("Defense", get_retro_IV(Stats::DEFENSE, pkmn.iv_data));
+            t_pkmn->set_IV("Speed", get_retro_IV(Stats::SPEED, pkmn.iv_data));
+            t_pkmn->set_IV("Special", get_retro_IV(Stats::SPECIAL, pkmn.iv_data));
+
+            //Move PP's
+            for(size_t i = 0; i < 4; i++) t_pkmn->set_move_PP(pkmn.move_pps[i], (i+1));
 
             return t_pkmn;
         }
 
-        team_pokemon::sptr import_gen3_pokemon(pk3_t* pkmn, gba_savetype_t save_type)
+        void export_gen2_pokemon(team_pokemon::sptr t_pkmn, gen2_pc_pokemon_t &pkmn,
+                                 uint8_t* nickname_buffer, uint8_t* otname_buffer)
         {
-            return import_gen3_pokemon(&(pkmn->box), save_type);
-        }
-
-        void export_gen3_pokemon(team_pokemon::sptr t_pkmn, pk3_box_t* pkmn, gba_savetype_t save_type)
-        {
-            pk3_decrypt(pkmn);
-
-            //Avoiding bitfields and structs
-            uint8_t* ppup_int = reinterpret_cast<uint8_t*>(&(pkmn->pp_up));
-            uint8_t* marking_int = reinterpret_cast<uint8_t*>(&(pkmn->markings));
-            uint16_t* met_int = reinterpret_cast<uint16_t*>(&(pkmn->met_loc)+1);
-            uint32_t* IV_int = reinterpret_cast<uint32_t*>(&(pkmn->iv));
-            uint32_t* ribbon_int = reinterpret_cast<uint32_t*>(&(pkmn->ribbon));
-            pkmn::dict<pkmn::pkstring, int> attributes = t_pkmn->get_attributes();
+            SQLite::Database db(get_database_path().c_str());
             pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
             pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
-
-            //ID's
-            pkmn->pid = t_pkmn->get_personality();
-            pkmn->ot_fid = t_pkmn->get_trainer_id();
-
-            //Nickname
-            std::basic_string<uint16_t> nickname(boost::locale::conv::utf_to_utf<uint16_t>(t_pkmn->get_nickname().std_wstring()));
-            memset(pkmn->nickname, 0xFF, PK3_NICKNAME_LENGTH);
-            ucs2_to_gba_text((char8_t*)pkmn->nickname, (char16_t*)nickname.c_str(), nickname.size());
-
-            pkmn->language = 0x202; //Default to English
-
-            //Trainer Name
-            std::basic_string<uint16_t> trainer_name(boost::locale::conv::utf_to_utf<uint16_t>(t_pkmn->get_trainer_name().std_wstring()));
-            memset(pkmn->ot_name, 0xFF, PK3_OT_NAME_LENGTH);
-            ucs2_to_gba_text((char8_t*)pkmn->ot_name, (char16_t*)trainer_name.c_str(), trainer_name.size());
-
-            //Markings
-            set_marking(marking_int, Markings::CIRCLE, attributes.at("circle", 0));
-            set_marking(marking_int, Markings::TRIANGLE, attributes.at("triangle", 0));
-            set_marking(marking_int, Markings::SQUARE, attributes.at("square", 0));
-            set_marking(marking_int, Markings::HEART, attributes.at("heart", 0));
-
-            pkmn->species = t_pkmn->get_species_id();
-            pkmn->held_item = database::get_item_game_index(t_pkmn->get_held_item()->get_item_id(),
-                                                            t_pkmn->get_game_id());
-            //TODO: store actual experience, currently set it to what level needs
-            //LibSPEC has no way to link Pokemon to growth rates, so use database
-            SQLite::Database db(get_database_path().c_str());
-            std::string query_string(str(boost::format("SELECT growth_rate_id FROM pokemon_species WHERE id=%d")
-                                         % pkmn->species));
-            uint8_t growth_rate = int(db.execAndGet(query_string.c_str())) - 1;
-            switch(growth_rate)
-            {
-                case STAT_GROWTH_RATE_ERRATIC:
-                    pkmn->exp = STAT_TOTAL_EXP_ERRATIC[t_pkmn->get_level() - 1];
-                    break;
-
-                case STAT_GROWTH_RATE_FAST:
-                    pkmn->exp = STAT_TOTAL_EXP_FAST[t_pkmn->get_level() - 1];
-                    break;
-
-                case STAT_GROWTH_RATE_MEDIUM_FAST:
-                    pkmn->exp = STAT_TOTAL_EXP_MEDIUM_FAST[t_pkmn->get_level() - 1];
-                    break;
-
-                case STAT_GROWTH_RATE_MEDIUM_SLOW:
-                    pkmn->exp = STAT_TOTAL_EXP_MEDIUM_SLOW[t_pkmn->get_level() - 1];
-                    break;
-
-                case STAT_GROWTH_RATE_SLOW:
-                    pkmn->exp = STAT_TOTAL_EXP_SLOW[t_pkmn->get_level() - 1];
-                    break;
-
-                default:
-                    pkmn->exp = STAT_TOTAL_EXP_FLUCTUATING[t_pkmn->get_level() - 1];
-                    break;
-            }
-            *ppup_int = 0;
-            pkmn->friendship = attributes.at("friendship",70); //TODO: find base friendships for each species
-
-            //Moves
             moveset_t moves;
-            std::vector<unsigned int> move_PPs;
             t_pkmn->get_moves(moves);
+            std::vector<unsigned int> move_PPs;
             t_pkmn->get_move_PPs(move_PPs);
-            pkmn->move[0] = moves[0]->get_move_id();
-            pkmn->move[1] = moves[1]->get_move_id();
-            pkmn->move[2] = moves[2]->get_move_id();
-            pkmn->move[3] = moves[3]->get_move_id();
-            pkmn->move_pp[0] = move_PPs[0];
-            pkmn->move_pp[1] = move_PPs[1];
-            pkmn->move_pp[2] = move_PPs[2];
-            pkmn->move_pp[3] = move_PPs[3];
 
-            //EVs
-            pkmn->ev.hp = EVs["HP"];
-            pkmn->ev.atk = EVs["Attack"];
-            pkmn->ev.def = EVs["Defense"];
-            pkmn->ev.spd = EVs["Speed"];
-            pkmn->ev.satk = EVs["Special Attack"];
-            pkmn->ev.sdef = EVs["Special Defense"];
+            export_gen2_text(t_pkmn->get_nickname(), nickname_buffer, 10);
+            export_gen2_text(t_pkmn->get_trainer_name(), otname_buffer, 10);
 
-            //Contest
-            pkmn->contest.cool = attributes.at("cool",0);
-            pkmn->contest.beauty = attributes.at("beauty",0);
-            pkmn->contest.cute = attributes.at("cute",0);
-            pkmn->contest.smart = attributes.at("smart",0);
-            pkmn->contest.tough = attributes.at("tough",0);
-            pkmn->contest.sheen = attributes.at("sheen",0);
+            pkmn.species = database::get_pokemon_game_index(t_pkmn->get_species_id(), Versions::CRYSTAL);
+            pkmn.held_item = database::get_item_game_index(t_pkmn->get_item_id(), Versions::CRYSTAL);
+            for(size_t i = 0; i < 4; i++) pkmn.moves[i] = moves[0]->get_move_id();
+            pkmn.ot_id = t_pkmn->get_trainer_id();
 
-            //Origin Info
+            unsigned int experience = database::get_experience(t_pkmn->get_species_id(), pkmn.level);
+            memcpy(pkmn.exp, (&experience+1), 3);
 
-            //TODO: Pokerus
-            //TODO: Met location
-            set_gen3_met_level(met_int, t_pkmn->get_met_level());
-            //TODO: allow game_id to be different than met game
-            set_gen3_ball(met_int, reverse_ball_dict[t_pkmn->get_ball()]);
-            set_gen3_otgender(met_int, (t_pkmn->get_trainer_gender() == "Female"));
+            //Effort values
+            pkmn.ev_hp = EVs["HP"];
+            pkmn.ev_atk = EVs["Attack"];
+            pkmn.ev_def = EVs["Defense"];
+            pkmn.ev_spd = EVs["Speed"];
+            pkmn.ev_spcl = EVs["Special"];
 
-            //IVs
-            modern_set_IV(IV_int, Stats::HP, IVs["HP"]);
-            modern_set_IV(IV_int, Stats::ATTACK, IVs["Attack"]);
-            modern_set_IV(IV_int, Stats::DEFENSE, IVs["Defense"]);
-            modern_set_IV(IV_int, Stats::SPEED, IVs["Speed"]);
-            modern_set_IV(IV_int, Stats::SPECIAL_ATTACK, IVs["Special Attack"]);
-            modern_set_IV(IV_int, Stats::SPECIAL_DEFENSE, IVs["Special Defense"]);
+            //Individual values
+            set_retro_IV(Stats::HP, pkmn.iv_data, IVs["HP"]);
+            set_retro_IV(Stats::ATTACK, pkmn.iv_data, IVs["Attack"]);
+            set_retro_IV(Stats::DEFENSE, pkmn.iv_data, IVs["Defense"]);
+            set_retro_IV(Stats::SPEED, pkmn.iv_data, IVs["Speed"]);
+            set_retro_IV(Stats::SPECIAL, pkmn.iv_data, IVs["Special"]);
 
-            //Misc
-            query_string = str(boost::format("SELECT slot FROM pokemon_abilities WHERE pokemon_id=%d AND ability_id=%d")
-                               % t_pkmn->get_pokemon_id()
-                               % t_pkmn->get_ability_id());
-            *IV_int |= (int(db.execAndGet(query_string.c_str())) % 2) ? 0 : 1;
+            for(size_t i = 0; i < 4; i++) pkmn.move_pps[i] = move_PPs[i];
 
-            //Ribbons
-            set_ribbon(ribbon_int, Ribbons::Hoenn::COOL, attributes.at("hoenn_cool_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::COOL_SUPER, attributes.at("hoenn_cool_super_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::COOL_HYPER, attributes.at("hoenn_cool_hyper_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::COOL_MASTER, attributes.at("hoenn_cool_master_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::BEAUTY, attributes.at("hoenn_beauty_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::BEAUTY_SUPER, attributes.at("hoenn_beauty_super_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::BEAUTY_HYPER, attributes.at("hoenn_beauty_hyper_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::BEAUTY_MASTER, attributes.at("hoenn_beauty_master_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::CUTE, attributes.at("hoenn_cute_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::CUTE_SUPER, attributes.at("hoenn_cute_super_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::CUTE_HYPER, attributes.at("hoenn_cute_hyper_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::CUTE_MASTER, attributes.at("hoenn_cute_master_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::SMART, attributes.at("hoenn_smart_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::SMART_SUPER, attributes.at("hoenn_smart_super_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::SMART_HYPER, attributes.at("hoenn_smart_hyper_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::SMART_MASTER, attributes.at("hoenn_smart_master_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::TOUGH, attributes.at("hoenn_tough_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::TOUGH_SUPER, attributes.at("hoenn_tough_super_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::TOUGH_HYPER, attributes.at("hoenn_tough_hyper_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::TOUGH_MASTER, attributes.at("hoenn_tough_master_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::CHAMPION, attributes.at("hoenn_champion_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::WINNING, attributes.at("hoenn_winning_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::VICTORY, attributes.at("hoenn_victory_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::ARTIST, attributes.at("hoenn_artist_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::EFFORT, attributes.at("hoenn_effort_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::MARINE, attributes.at("hoenn_marine_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::LAND, attributes.at("hoenn_land_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::SKY, attributes.at("hoenn_sky_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::COUNTRY, attributes.at("hoenn_country_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::NATIONAL, attributes.at("hoenn_national_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::EARTH, attributes.at("hoenn_earth_ribbon",false));
-            set_ribbon(ribbon_int, Ribbons::Hoenn::WORLD, attributes.at("hoenn_world_ribbon",false));
-
-            pk3_encrypt(pkmn);
+            pkmn.pokerus = 0;
+            crystal_set_caughtdata(pkmn.caught_data, (t_pkmn->get_trainer_gender() == "Female"),
+                                                     (t_pkmn->get_met_level()));
+            pkmn.level = t_pkmn->get_level();
         }
 
-        void export_gen3_pokemon(team_pokemon::sptr t_pkmn, pk3_t* pkmn, gba_savetype_t save_type)
+        team_pokemon::sptr import_gen2_pokemon(const gen2_party_pokemon_t &pkmn,
+                                               const uint8_t* nickname_buffer,
+                                               const uint8_t* otname_buffer)
         {
-            uint8_t* status_int = reinterpret_cast<uint8_t*>(&(pkmn->party));
+            return import_gen2_pokemon(pkmn.pc, nickname_buffer, otname_buffer);
+        }
+
+        void export_gen2_pokemon(team_pokemon::sptr t_pkmn, gen2_party_pokemon_t &pkmn,
+                                 uint8_t* nickname_buffer, uint8_t* otname_buffer)
+        {
             pkmn::dict<pkmn::pkstring, unsigned int> stats = t_pkmn->get_stats();
 
-            export_gen3_pokemon(t_pkmn, &(pkmn->box), save_type);
-            *status_int = 0;
-            pkmn->party.level = t_pkmn->get_level();
-            pkmn->party.stats.hp = stats["HP"];
-            pkmn->party.stats.max_hp = stats["HP"];
-            pkmn->party.stats.atk = stats["Attack"];
-            pkmn->party.stats.def = stats["Defense"];
-            pkmn->party.stats.spd = stats["Speed"];
-            pkmn->party.stats.satk = stats["Special Attack"];
-            pkmn->party.stats.sdef = stats["Special Defense"];
+            export_gen2_pokemon(t_pkmn, pkmn.pc, nickname_buffer, otname_buffer);
+            pkmn.status = 0;
+            pkmn.current_hp = stats["HP"];
+            pkmn.max_hp = stats["HP"];
+            pkmn.atk = stats["Attack"];
+            pkmn.def = stats["Defense"];
+            pkmn.spd = stats["Speed"];
+            pkmn.spatk = stats["Special Attack"];
+            pkmn.spdef = stats["Special Defense"];
         }
 
+        /*
+         * Generation III
+         */
+        enum gen3_substructs
+        {
+            G, //Growth
+            A, //Attacks
+            E, //Effort
+            M  //Misc
+        };
+
+        static const uint8_t gen3_block_orders[24][4] =
+        {
+            {G,A,E,M},{G,A,M,E},{G,E,A,M},{G,M,A,E},{G,M,A,E},{G,M,E,A},
+            {A,G,E,M},{A,G,M,E},{E,G,A,M},{M,G,A,E},{A,M,G,E},{A,M,E,G},
+            {A,E,G,M},{E,G,M,A},{E,A,G,M},{E,A,M,G},{E,M,G,A},{E,M,A,G},
+            {M,G,A,E},{M,G,E,A},{E,A,G,M},{M,A,M,G},{M,E,G,A},{M,E,A,G}
+        };
+
+        //Never directly encrypt/decrypt the binary file itself
+        static void gen3_get_decrypted_blocks(const gen3_pc_pokemon_t &pkmn, gen3_pokemon_blocks_t &blocks)
+        {
+            uint8_t index = pkmn.personality % 24;
+
+            memcpy(&blocks.growth,  pkmn.blocks.blocks[gen3_block_orders[index][G]], 12);
+            memcpy(&blocks.attacks, pkmn.blocks.blocks[gen3_block_orders[index][A]], 12);
+            memcpy(&blocks.effort,  pkmn.blocks.blocks[gen3_block_orders[index][E]], 12);
+            memcpy(&blocks.misc,    pkmn.blocks.blocks[gen3_block_orders[index][M]], 12);
+
+            uint32_t security_key = pkmn.ot_id ^ pkmn.personality;
+            for(uint8_t i = 0; i < 12; i++) blocks.blocks32[i] ^= security_key;
+        }
+
+        //Returns checksum
+        static uint16_t gen3_set_encrypted_blocks(gen3_pokemon_blocks_t &blocks, gen3_pc_pokemon_t pkmn)
+        {
+            uint16_t checksum = 0;
+            uint8_t index = pkmn.personality % 24;
+
+            memcpy(pkmn.blocks.blocks[gen3_block_orders[index][G]],  &blocks.growth, 12);
+            memcpy(pkmn.blocks.blocks[gen3_block_orders[index][A]], &blocks.attacks, 12);
+            memcpy(pkmn.blocks.blocks[gen3_block_orders[index][E]],  &blocks.effort, 12);
+            memcpy(pkmn.blocks.blocks[gen3_block_orders[index][M]],    &blocks.misc, 12);
+
+            uint32_t security_key = pkmn.ot_id ^ pkmn.personality;
+            for(uint8_t i = 0; i < 48; i++) checksum += blocks.blocks8[i];
+            for(uint8_t i = 0; i < 12; i++) blocks.blocks32[i] ^= security_key;
+
+            return checksum;
+        }
+
+        team_pokemon::sptr import_gen3_pokemon(const gen3_pc_pokemon_t &pkmn,
+                                               unsigned int version_id, bool is_encrypted)
+        {
+            //Since version_id is given, make sure it's legit
+            if(database::get_generation(version_id) != 3){
+                throw std::runtime_error("import_gen3_pokemon: version_id must be from Generation III.");
+            }
+
+            gen3_pokemon_blocks_t blocks;
+            if(is_encrypted) gen3_get_decrypted_blocks(pkmn, blocks);
+            else memcpy(&blocks, &pkmn.blocks, sizeof(gen3_pokemon_blocks_t));
+
+            unsigned int species_id, move1_id, move2_id, move3_id, move4_id;
+
+            if(blocks.growth.species == 0 or (blocks.growth.species > 251 and blocks.growth.species < 277) or
+               blocks.growth.species == 412)
+            {
+                species_id = Species::INVALID;
+                move1_id = Moves::NONE;
+                move2_id = Moves::NONE;
+                move3_id = Moves::NONE;
+                move4_id = Moves::NONE;
+            }
+            else
+            {
+                species_id = database::get_pokemon_id(blocks.growth.species, version_id);
+                move1_id = blocks.attacks.moves[0];
+                move2_id = blocks.attacks.moves[1];
+                move3_id = blocks.attacks.moves[2];
+                move4_id = blocks.attacks.moves[3];
+            }
+
+            SQLite::Database db(get_database_path().c_str());
+            std::ostringstream query_stream;
+            unsigned int level = database::get_level(species_id, blocks.growth.exp);
+
+            team_pokemon::sptr t_pkmn = team_pokemon::make(species_id, version_id,
+                                                           level, move1_id, move2_id,
+                                                           move3_id, move4_id);
+
+            t_pkmn->set_personality(pkmn.personality);
+            t_pkmn->set_trainer_id(pkmn.ot_id);
+            t_pkmn->set_nickname(import_gen3_text(pkmn.nickname, 10));
+            t_pkmn->set_trainer_name(import_gen3_text(pkmn.otname, 7));
+            //TODO: markings
+
+            //Growth
+            t_pkmn->set_held_item(database::get_item_name(blocks.growth.held_item, version_id));
+            //TODO: PP Up, friendship
+
+            //Attacks
+            for(size_t i = 0; i < 4; i++) t_pkmn->set_move_PP(blocks.attacks.move_pps[i], (i+1));
+
+            //Effort
+            //TODO: contest stats
+            t_pkmn->set_EV("HP", blocks.effort.ev_hp);
+            t_pkmn->set_EV("Attack", blocks.effort.ev_atk);
+            t_pkmn->set_EV("Defense", blocks.effort.ev_def);
+            t_pkmn->set_EV("Speed", blocks.effort.ev_spd);
+            t_pkmn->set_EV("Special Attack", blocks.effort.ev_spatk);
+            t_pkmn->set_EV("Special Defense", blocks.effort.ev_spdef);
+
+            //Misc
+            //TODO: Pokerus, met location, Origin info, ribbons, obedience
+            t_pkmn->set_IV("HP", get_modern_IV(Stats::HP, blocks.misc.iv_egg_ability));
+            t_pkmn->set_IV("Attack", get_modern_IV(Stats::ATTACK, blocks.misc.iv_egg_ability));
+            t_pkmn->set_IV("Defense", get_modern_IV(Stats::DEFENSE, blocks.misc.iv_egg_ability));
+            t_pkmn->set_IV("Speed", get_modern_IV(Stats::SPEED, blocks.misc.iv_egg_ability));
+            t_pkmn->set_IV("Special Attack", get_modern_IV(Stats::SPECIAL_ATTACK, blocks.misc.iv_egg_ability));
+            t_pkmn->set_IV("Special Defense", get_modern_IV(Stats::SPECIAL_DEFENSE, blocks.misc.iv_egg_ability));
+
+            int ability_slot = get_gen3_ability_slot(blocks.misc.iv_egg_ability) + 1;
+            query_stream.str("");
+            query_stream << "SELECT ability_id FROM pokemon_abilities WHERE pokemon_id=" << t_pkmn->get_pokemon_id()
+                         << " AND is_hidden=0 AND slot=" << ability_slot;
+            SQLite::Statement query(db, query_stream.str().c_str());
+
+            unsigned int ability_id;
+            if((not query.executeStep()) and ability_slot == 2)
+            {
+                //Account for odd situation where slot=1 but there is no second ability
+                query_stream.str("");
+                query_stream << "SELECT ability_id FROM pokemon_abilities WHERE pokemon_id=" << t_pkmn->get_pokemon_id()
+                             << " AND is_hidden=0 AND slot=1";
+                ability_id = db.execAndGet(query_stream.str().c_str());
+            }
+            else ability_id = query.getColumn(0);
+            t_pkmn->set_ability(database::get_ability_name(ability_id));
+
+            return t_pkmn;
+        }
+
+        void export_gen3_pokemon(team_pokemon::sptr t_pkmn, gen3_pc_pokemon_t &pkmn, bool encrypt)
+        {
+            SQLite::Database db(get_database_path().c_str());
+            pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
+            pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
+            moveset_t moves;
+            t_pkmn->get_moves(moves);
+            std::vector<unsigned int> move_PPs;
+            t_pkmn->get_move_PPs(move_PPs);
+
+            gen3_pokemon_blocks_t blocks;
+
+            //Growth
+            blocks.growth.species = t_pkmn->get_species_id();
+            blocks.growth.held_item = database::get_item_game_index(t_pkmn->get_held_item()->get_item_id(),
+                                                                  Versions::FIRERED);
+
+            std::ostringstream query_stream;
+            blocks.growth.exp = database::get_experience(t_pkmn->get_species_id(), t_pkmn->get_level());
+            blocks.growth.pp_up = 0; //TODO
+            blocks.growth.friendship = 70; //Base
+
+            //Attacks
+            for(size_t i = 0; i < 4; i++)
+            {
+                blocks.attacks.moves[i] = moves[i]->get_move_id();
+                blocks.attacks.move_pps[i] = move_PPs[i];
+            }
+
+            //Effort
+            //TODO: contest stats
+            blocks.effort.ev_hp = EVs["HP"];
+            blocks.effort.ev_atk = EVs["Attack"];
+            blocks.effort.ev_def = EVs["Defense"];
+            blocks.effort.ev_spd = EVs["Speed"];
+            blocks.effort.ev_spatk = EVs["Special Attack"];
+            blocks.effort.ev_spdef = EVs["Special Defense"];
+
+            //Misc
+            blocks.misc.pokerus = 0; //TODO
+            blocks.misc.met_location = 0xFF; //TODO, "fateful encounter" for now
+            //TODO: origin info
+            set_modern_IV(Stats::HP, blocks.misc.iv_egg_ability, IVs["HP"]);
+            set_modern_IV(Stats::ATTACK, blocks.misc.iv_egg_ability, IVs["Attack"]);
+            set_modern_IV(Stats::DEFENSE, blocks.misc.iv_egg_ability, IVs["Defense"]);
+            set_modern_IV(Stats::SPEED, blocks.misc.iv_egg_ability, IVs["Speed"]);
+            set_modern_IV(Stats::SPECIAL_ATTACK, blocks.misc.iv_egg_ability, IVs["Special Attack"]);
+            set_modern_IV(Stats::SPECIAL_DEFENSE, blocks.misc.iv_egg_ability, IVs["Special Defense"]);
+
+            query_stream.str("");
+            query_stream << "SELECT slot FROM pokemon_abilities WHERE pokemon_id=" << t_pkmn->get_pokemon_id()
+                         << " AND is_hidden=0 AND ability_id=" << t_pkmn->get_ability_id();
+            unsigned int ability_slot = db.execAndGet(query_stream.str().c_str());
+            set_gen3_ability_slot(blocks.misc.iv_egg_ability, ability_slot);
+
+            //Outside of blocks
+            pkmn.personality = t_pkmn->get_personality();
+            pkmn.ot_id = t_pkmn->get_trainer_id();
+            export_gen3_text(t_pkmn->get_nickname(), pkmn.nickname, 10);
+            pkmn.language = 0x202; //English
+            export_gen3_text(t_pkmn->get_trainer_name(), pkmn.otname, 7);
+            pkmn.markings = 0; //TODO
+
+            if(encrypt) pkmn.checksum = gen3_set_encrypted_blocks(blocks, pkmn);
+            else
+            {
+                memcpy(&(pkmn.blocks), &blocks, sizeof(gen3_pokemon_blocks_t));
+                uint32_t security_key = pkmn.ot_id ^ pkmn.personality;
+                for(uint8_t i = 0; i < 48; i++) pkmn.checksum += pkmn.blocks.blocks8[i];
+                for(uint8_t i = 0; i < 12; i++) pkmn.blocks.blocks32[i] ^= security_key;
+            }
+        }
+
+        team_pokemon::sptr import_gen3_pokemon(const gen3_party_pokemon_t &pkmn, unsigned int version_id,
+                                               bool is_encrypted)
+        {
+            return import_gen3_pokemon(pkmn.pc, version_id, is_encrypted);
+        }
+
+        void export_gen3_pokemon(team_pokemon::sptr t_pkmn, gen3_party_pokemon_t &pkmn, bool encrypt)
+        {
+            pkmn::dict<pkmn::pkstring, unsigned int> stats = t_pkmn->get_stats();
+
+            export_gen3_pokemon(t_pkmn, pkmn.pc, encrypt);
+            pkmn.condition = 0;
+            pkmn.level = t_pkmn->get_level();
+            pkmn.pokerus_time = 0; //TODO
+            pkmn.current_hp = stats["HP"]; //TODO
+            pkmn.max_hp = stats["HP"];
+            pkmn.atk = stats["Attack"];
+            pkmn.def = stats["Defense"];
+            pkmn.spd = stats["Speed"];
+            pkmn.spatk = stats["Special Attack"];
+            pkmn.spdef = stats["Special Defense"];
+        }
+
+        /*
+         * Generation IV
+         */
         team_pokemon::sptr import_gen4_pokemon(const PokeLib::Pokemon &pokelib_pkmn)
         {
             unsigned int level, species_id;
@@ -801,6 +868,9 @@ namespace pkmn
             return pokelib_pkmn;
         }
 
+        /*
+         * Generation V
+         */
         team_pokemon::sptr import_gen5_pokemon(party_pkm* p_pkm)
         {
             ::opendb(get_database_path().c_str());
@@ -1156,6 +1226,9 @@ namespace pkmn
             p_pkm->metdate.day = attributes.at("met_day",0);
         }
 
+        /*
+         * Generation VI
+         */
         team_pokemon::sptr import_gen6_pokemon(party_pkx* p_pkx)
         {
             unsigned int level, from_game, species_id;

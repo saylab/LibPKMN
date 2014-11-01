@@ -14,8 +14,8 @@ namespace pkmn
 {
     namespace io
     {
-        void PKMN_API export_to_3gpkm(team_pokemon::sptr t_pkmn, std::string filename);
-        team_pokemon::sptr PKMN_API import_from_3gpkm(std::string filename);
+        void PKMN_API export_to_3gpkm(team_pokemon::sptr t_pkmn, const std::string &filename);
+        team_pokemon::sptr PKMN_API import_from_3gpkm(const std::string &filename);
 
         team_pokemon::sptr PKMN_API import_from_pkm(std::string filename);
 

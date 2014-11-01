@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(gen2_bag)
     BOOST_CHECK(pocket_dict.has_key("KeyItems"));
     BOOST_CHECK(pocket_dict["KeyItems"]->size() == 26);
     BOOST_CHECK(pocket_dict.has_key("TM/HM"));
-    BOOST_CHECK(pocket_dict["TM/HM"]->size() == 99);
+    BOOST_CHECK(pocket_dict["TM/HM"]->size() == 57);
     BOOST_CHECK(pocket_dict.size() == 4);
 }
 
@@ -66,7 +66,7 @@ BOOST_AUTO_TEST_CASE(emerald_bag)
     pkmn::bag::sptr item_bag = pkmn::bag::make("Emerald");
     pkmn::dict<pkmn::pkstring, pkmn::pocket::sptr> pocket_dict = item_bag->get_pockets();
     BOOST_CHECK(pocket_dict.has_key("Items"));
-    BOOST_CHECK(pocket_dict["Items"]->size() == 20);
+    BOOST_CHECK(pocket_dict["Items"]->size() == 30);
     BOOST_CHECK(pocket_dict.has_key("Poke Balls"));
     BOOST_CHECK(pocket_dict["Poke Balls"]->size() == 16);
     BOOST_CHECK(pocket_dict.has_key("TMs and HMs"));

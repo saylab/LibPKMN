@@ -9,6 +9,7 @@
 #include <fstream>
 #include <cstring>
 
+#include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 
 #include <pkmn/enums.hpp>
@@ -17,98 +18,55 @@
 #include <pkmds/pkmds_g5.h>
 #include <pkmds/pkmds_g5_sqlite.h>
 
-#include "libspec/game_gba.h"
 #include "library_bridge.hpp"
 #include "conversions/pokemon.hpp"
 
 #include "SQLiteCpp/SQLiteC++.h"
 
+namespace fs = boost::filesystem;
+
 namespace pkmn
 {
     namespace io
     {
-        static void get_gen3_savetype(unsigned int libpkmn_id, gba_savetype_t &save_type)
+        void export_to_3gpkm(team_pokemon::sptr t_pkmn, const std::string &filename)
         {
-            switch(libpkmn_id)
-            {
-                case Versions::RUBY:
-                case Versions::SAPPHIRE:
-                    save_type = GBA_TYPE_RS;
-                    break;
+            if(t_pkmn->get_generation() != 3)
+                throw std::runtime_error("The given Pokemon is not from Generation III.");
 
-                case Versions::EMERALD:
-                    save_type = GBA_TYPE_E;
-                    break;
+            gen3_party_pokemon_t pkmn;
+            conversions::export_gen3_pokemon(t_pkmn, pkmn, false);
 
-                case Versions::FIRERED:
-                case Versions::LEAFGREEN:
-                    save_type = GBA_TYPE_FRLG;
-                    break;
-
-                default:
-                    save_type = GBA_TYPE_RS;
-                    break;
-            }
+            std::ofstream ofile(filename.c_str(), std::ofstream::out | std::ofstream::binary);
+            ofile.write((char*)&pkmn, sizeof(gen3_party_pokemon_t));
+            ofile.close();
         }
 
-        void export_to_3gpkm(team_pokemon::sptr t_pkmn, std::string filename)
+        //For now, everything is Ruby until there's a better way
+        team_pokemon::sptr import_from_3gpkm(const std::string &filename)
         {
-            //Check to see if t_pkmn is compatible with the .3gpkm format
-            unsigned int generation = t_pkmn->get_generation();
-            if(generation != 3)
-            {
-                throw std::runtime_error("Only Pokemon of generation III can be exported to .3gpkm!");
-            }
-
-            pk3_t pk3;
-            uint8_t pk3_raw[sizeof(pk3_t)];
-            gba_savetype_t save_type;
-            get_gen3_savetype(t_pkmn->get_game_id(), save_type);
-            conversions::export_gen3_pokemon(t_pkmn, &pk3, save_type);
-        }
-
-        team_pokemon::sptr import_from_3gpkm(std::string filename)
-        {
+            uint32_t filesize = fs::file_size(fs::path(filename));
             std::ifstream ifile;
-            ifile.open(filename.c_str(), std::ifstream::in | std::ifstream::binary);
 
-            //Check to see if this is a valid .3gpkm file
-            ifile.seekg(0, std::ios::end);
-            unsigned int file_size = ifile.tellg();
-            if(file_size == sizeof(pk3_t))
+            if(filesize == sizeof(gen3_pc_pokemon_t))
             {
-                pk3_t pk3;
-
-                ifile.seekg(0, std::ios::beg);
-                ifile.read((char*)&pk3, sizeof(pk3_t));
+                gen3_pc_pokemon_t pkmn;
+                ifile.open(filename.c_str(), std::ifstream::in | std::ifstream::binary);
+                ifile.read((char*)&pkmn, sizeof(gen3_pc_pokemon_t));
                 ifile.close();
 
-                uint16_t* game_int = reinterpret_cast<uint16_t*>(&(pk3.box.met_loc)+1);
-                uint8_t libpkmn_id = hometown_to_libpkmn_game((*game_int & 0x1E) >> 1);
-                gba_savetype_t save_type;
-                get_gen3_savetype(libpkmn_id, save_type);
-                return conversions::import_gen3_pokemon(&pk3, save_type);
+                return conversions::import_gen3_pokemon(pkmn, Versions::RUBY, false);
             }
-            else if(file_size == sizeof(pk3_box_t))
+            else if(filesize == sizeof(gen3_party_pokemon_t))
             {
-                pk3_box_t pk3;
-
-                ifile.seekg(0, std::ios::beg);
-                ifile.read((char*)&pk3, sizeof(pk3_box_t));
+                gen3_party_pokemon_t pkmn;
+                ifile.open(filename.c_str(), std::ifstream::in | std::ifstream::binary);
+                ifile.read((char*)&pkmn, sizeof(gen3_party_pokemon_t));
                 ifile.close();
 
-                uint16_t* game_int = reinterpret_cast<uint16_t*>(&(pk3.met_loc)+1);
-                uint8_t libpkmn_id = hometown_to_libpkmn_game((*game_int & 0x1E) >> 1);
-                gba_savetype_t save_type;
-                get_gen3_savetype(libpkmn_id, save_type);
-                return conversions::import_gen3_pokemon(&pk3, save_type);
+                return conversions::import_gen3_pokemon(pkmn, Versions::RUBY, false);
             }
-            else
-            {
-                ifile.close();
-                throw std::runtime_error("This is not a valid .3gpkm file!");
-            }
-
+            else throw std::runtime_error("This is not a valid Generation III save.");
         }
 
         void export_to_pkm(team_pokemon::sptr t_pkmn, std::string filename)
@@ -121,7 +79,7 @@ namespace pkmn
 
             std::ofstream ofile;
             ofile.open(filename.c_str(), std::ofstream::out | std::ofstream::binary);
-            ofile.write((char*)pkm_contents, sizeof(pokemon_obj));
+            ofile.write((char*)p_pkm, sizeof(pokemon_obj));
             ofile.close();
         }
 

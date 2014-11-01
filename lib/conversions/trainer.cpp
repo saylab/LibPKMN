@@ -56,62 +56,6 @@ namespace pkmn
 {
     namespace conversions
     {
-        trainer::sptr import_gen1_trainer(rpokesav_gen1_sptr sav)
-        {
-            pkstring trainer_name = sav->get_trainer_name();
-
-            /*
-             * Generation I has no way to distinguish between games, so just
-             * use Yellow. There aren't enough differences to make a difference.
-             */
-            trainer::sptr libpkmn_trainer = trainer::make(Versions::YELLOW,
-                                                          sav->get_trainer_name(),
-                                                          Genders::MALE);
-
-            libpkmn_trainer->set_id(sav->get_trainer_id());
-            libpkmn_trainer->set_money(sav->get_money());
-            std::array<rpokesav::gen1_item_t,20> rpokesav_bag = sav->get_bag_items();
-
-            import_gen1_bag(rpokesav_bag, libpkmn_trainer->get_bag(),
-                            sav->get_bag_item_count());
-
-            std::array<rpokesav::gen1_pokemon,6> rpokesav_team = sav->get_team();
-            for(size_t i = 0; i < sav->get_team_size(); i++)
-            {
-                libpkmn_trainer->set_pokemon(i+1, import_gen1_pokemon(rpokesav_team[i]));
-            }
-
-            return libpkmn_trainer;
-        }
-
-        trainer::sptr import_gen3_trainer(gba_save_t* libspec_save)
-        {
-            unsigned int _game_ids[] = {Versions::NONE, Versions::RUBY,
-                                        Versions::EMERALD, Versions::FIRERED};
-
-            gba_trainer_t* libspec_trainer = gba_get_trainer(libspec_save);
-            gba_party_t* libspec_party = gba_get_party(libspec_save);
-
-            uint16_t name_arr[7];
-            gba_text_to_ucs2((char16_t*)name_arr, (char8_t*)libspec_trainer->name, 7);
-            pkstring trainer_name(boost::locale::conv::utf_to_utf<wchar_t>(name_arr));
-
-            unsigned int game_id = _game_ids[libspec_save->type];
-            unsigned int gender_id = (libspec_trainer->gender == 0) ? Genders::MALE : Genders::FEMALE;
-
-            trainer::sptr libpkmn_trainer = trainer::make(game_id, trainer_name, gender_id);
-            libpkmn_trainer->set_money(gba_get_money(libspec_save));
-
-            for(size_t i = 0; i < libspec_party->size; i++)
-            {
-                libpkmn_trainer->set_pokemon(i+1, conversions::import_gen3_pokemon(&(libspec_party->pokemon[i]),
-                                                                                   libspec_save->type));
-            }
-            conversions::import_gen3_items(libpkmn_trainer->get_bag(), libspec_save);
-
-            return libpkmn_trainer;
-        }
-
         trainer::sptr import_gen4_trainer(pokelib_sptr pokelib_save)
         {
             PokeLib::Trainer* pokelib_trainer = pokelib_save->getTrainer();
