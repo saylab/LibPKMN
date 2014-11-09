@@ -41,7 +41,9 @@ namespace pkmn
 
         private:
 
-            unsigned int _SPCL, _evSPCL, _ivSPCL;
+            uint16_t _iv_data;
+
+            unsigned int _SPCL, _evSPCL;
 
             unsigned int _get_hp() const;
             unsigned int _get_stat(const pkmn::pkstring &stat, unsigned int EV, unsigned int IV) const;

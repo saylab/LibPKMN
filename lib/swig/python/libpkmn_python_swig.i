@@ -93,10 +93,10 @@
 %template(pokemon_team) std::vector<pkmn::team_pokemon::sptr>;
 %template(pkstring_vec) std::vector<pkmn::pkstring>;
 
-LIBPKMN_PYTHON_DICT(string_int_dict, std::string, int)
-LIBPKMN_PYTHON_DICT(string_string_dict, std::string, std::string)
-LIBPKMN_PYTHON_DICT(string_uint_dict, std::string, unsigned int)
-LIBPKMN_PYTHON_DICT(pocket_dict, std::string, pkmn::pocket::sptr)
+LIBPKMN_PYTHON_DICT(string_int_dict, pkmn::pkstring, int)
+LIBPKMN_PYTHON_DICT(string_string_dict, pkmn::pkstring, pkmn::pkstring)
+LIBPKMN_PYTHON_DICT(string_uint_dict, pkmn::pkstring, unsigned int)
+LIBPKMN_PYTHON_DICT(pocket_dict, pkmn::pkstring, pkmn::pocket::sptr)
 
 LIBPKMN_PYTHON_SPTR(base_pokemon)
 LIBPKMN_PYTHON_SPTR(item)

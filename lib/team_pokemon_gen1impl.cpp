@@ -10,8 +10,10 @@
 
 #include <pkmn/enums.hpp>
 #include <pkmn/database/queries.hpp>
+#include <pkmn/types/prng.hpp>
 
 #include "team_pokemon_gen1impl.hpp"
+#include "conversions/utils.hpp"
 
 namespace pkmn
 {
@@ -20,21 +22,16 @@ namespace pkmn
                                                  unsigned int move3, unsigned int move4): team_pokemon_impl(base,game,level,
                                                                                           move1,move2,move3,move4)
     {
-        srand ( time(NULL) );
+        prng::sptr rng = prng::make(1);
 
-        //Random individual values
-        _ivHP = rand() % 16;
-        _ivATK = rand() % 16;
-        _ivDEF = rand() % 16;
-        _ivSPD = rand() % 16;
-        _ivSPCL = rand() % 16;
+        _iv_data = rng->lcrng();
 
         //Random effort values
-        _evHP = rand() % 65536;
-        _evATK = rand() % 65536;
-        _evDEF = rand() % 65536;
-        _evSPD = rand() % 65536;
-        _evSPCL = rand() % 65536;
+        _evHP = rng->lcrng() % 65536;
+        _evATK = rng->lcrng() % 65536;
+        _evDEF = rng->lcrng() % 65536;
+        _evSPD = rng->lcrng() % 65536;
+        _evSPCL = rng->lcrng() % 65536;
 
         _set_stats();
     }
@@ -43,7 +40,7 @@ namespace pkmn
     {
         _SPCL = other._SPCL;
         _evSPCL = other._evSPCL;
-        _ivSPCL = other._ivSPCL;
+        _iv_data = other._iv_data;
     }
 
     team_pokemon_gen1impl& team_pokemon_gen1impl::operator=(const team_pokemon_gen1impl &other)
@@ -51,7 +48,7 @@ namespace pkmn
         team_pokemon_impl::operator=(other);
         _SPCL = other._SPCL;
         _evSPCL = other._evSPCL;
-        _ivSPCL = other._ivSPCL;
+        _iv_data = other._iv_data;
 
         return (*this);
     }
@@ -91,11 +88,11 @@ namespace pkmn
     pkmn::dict<pkmn::pkstring, unsigned int> team_pokemon_gen1impl::get_IVs() const
     {
         pkmn::dict<pkmn::pkstring, unsigned int> IVs;
-        IVs["HP"] = _ivHP;
-        IVs["Attack"] = _ivATK;
-        IVs["Defense"] = _ivDEF;
-        IVs["Speed"] = _ivSPD;
-        IVs["Special"] = _ivSPCL;
+        IVs["HP"] = conversions::get_retro_IV(Stats::HP, _iv_data);
+        IVs["Attack"] = conversions::get_retro_IV(Stats::ATTACK, _iv_data);
+        IVs["Defense"] = conversions::get_retro_IV(Stats::DEFENSE, _iv_data);
+        IVs["Speed"] = conversions::get_retro_IV(Stats::SPEED, _iv_data);
+        IVs["Special"] = conversions::get_retro_IV(Stats::SPECIAL, _iv_data);
 
         return IVs;
     }
@@ -126,12 +123,7 @@ namespace pkmn
     {
         if(val > 15) throw std::runtime_error("Gen 1 IV's must be 0-15.");
 
-        if(stat_name == "HP") _ivHP = val;
-        else if(stat_name == "Attack") _ivATK = val;
-        else if(stat_name == "Defense") _ivDEF = val;
-        else if(stat_name == "Speed") _ivSPD = val;
-        else if(stat_name == "Special") _ivSPCL = val;
-
+        conversions::set_retro_IV(database::get_stat_id(stat_name), _iv_data, val);
         _set_stats();
     }
 
@@ -139,7 +131,9 @@ namespace pkmn
     {
         pkmn::dict<pkmn::pkstring, unsigned int> stats = _base_pkmn->get_base_stats();
 
-        unsigned int hp_val = int(floor((((double(_ivHP) + double(stats["HP"]) + (pow(double(_evHP),0.5)/8.0)
+        uint8_t iv_hp = conversions::get_retro_IV(Stats::HP, _iv_data);
+
+        unsigned int hp_val = int(floor((((double(iv_hp) + double(stats["HP"]) + (pow(double(_evHP),0.5)/8.0)
                             + 50.0) * double(_level))/50.0) + 10.0));
         return hp_val;
     }
@@ -148,7 +142,9 @@ namespace pkmn
     {
         pkmn::dict<pkmn::pkstring, unsigned int> stats = _base_pkmn->get_base_stats();
 
-        unsigned int stat_val = int(ceil((((double(IV) + double(stats[stat]) + (pow(double(EV),0.5)/8.0))
+        uint8_t iv = conversions::get_retro_IV(database::get_stat_id(stat), _iv_data);
+
+        unsigned int stat_val = int(ceil((((double(iv) + double(stats[stat]) + (pow(double(EV),0.5)/8.0))
                               * double(_level))/50.0) + 5.0));
         return stat_val;
     }
@@ -156,9 +152,9 @@ namespace pkmn
     void team_pokemon_gen1impl::_set_stats()
     {
         _HP = _get_hp();
-        _ATK = _get_stat("Attack", _evATK, _ivATK);
-        _DEF = _get_stat("Defense", _evDEF, _ivDEF);
-        _SPD = _get_stat("Speed", _evSPD, _ivSPD);
-        _SPCL = _get_stat("Special", _evSPCL, _ivSPCL);
+        _ATK = _get_stat("Attack", _evATK, conversions::get_retro_IV(Stats::ATTACK, _iv_data));
+        _DEF = _get_stat("Defense", _evDEF, conversions::get_retro_IV(Stats::DEFENSE, _iv_data));
+        _SPD = _get_stat("Speed", _evSPD, conversions::get_retro_IV(Stats::SPEED, _iv_data));
+        _SPCL = _get_stat("Special", _evSPCL, conversions::get_retro_IV(Stats::SPECIAL, _iv_data));
     }
 } /* namespace pkmn */
