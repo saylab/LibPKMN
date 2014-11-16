@@ -63,8 +63,11 @@ namespace pkmn
             pkmn::pkstring_pair_t get_types() const;
             double get_height() const;
             double get_weight() const;
+            virtual void get_egg_groups(pkmn::pkstring_vector_t& egg_group_vec) const;
             void get_evolutions(base_pokemon_vector& evolution_vec) const;
-			bool is_fully_evolved() const;
+    		bool is_fully_evolved() const;
+            virtual double get_chance_male() const;
+            virtual double get_chance_female() const;
 
             //Battle Stats
             unsigned int get_exp_yield() const;
@@ -77,6 +80,7 @@ namespace pkmn
             unsigned int get_species_id() const;
             unsigned int get_game_id() const;
             unsigned int get_form_id() const;
+            virtual void get_egg_group_ids(std::vector<unsigned int>& egg_group_id_vec) const;
 
         protected:
 

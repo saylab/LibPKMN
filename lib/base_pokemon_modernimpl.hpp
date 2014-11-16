@@ -16,9 +16,9 @@
 #include "team_pokemon_modernimpl.hpp"
 
 //For code cleanliness in source file
-#define HAS_DIFFERENT_FEMALE_ICON _species_id == Species::UNFEZANT \
-                                  or _species_id == Species::FRILLISH \
-                                  or _species_id == Species::JELLICENT
+#define HAS_DIFFERENT_FEMALE_ICON (_species_id == Species::UNFEZANT \
+                                   or _species_id == Species::FRILLISH \
+                                   or _species_id == Species::JELLICENT)
 
 namespace pkmn
 {
@@ -32,10 +32,7 @@ namespace pkmn
             ~base_pokemon_modernimpl() {};
 
             //Non-Battle Attributes            
-            void get_egg_groups(pkmn::pkstring_vector_t& egg_group_vec) const;
             bool has_gender_differences() const;
-            double get_chance_male() const;
-            double get_chance_female() const;
             pkmn::pkstring_pair_t get_abilities() const;
             pkmn::pkstring get_hidden_ability() const;
 
@@ -48,9 +45,6 @@ namespace pkmn
 
             std::string get_icon_path(bool is_male) const;
             std::string get_sprite_path(bool is_male, bool is_shiny) const;
-
-            //Database Info
-            void get_egg_group_ids(std::vector<unsigned int>& egg_group_id_vec) const;
 
             friend class team_pokemon_modernimpl;
 

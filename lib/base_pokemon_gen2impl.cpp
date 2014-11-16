@@ -5,8 +5,6 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <map>
-
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include <boost/algorithm/string.hpp>
@@ -18,12 +16,11 @@
 #include "base_pokemon_gen2impl.hpp"
 
 namespace fs = boost::filesystem;
-using namespace std;
 
 namespace pkmn
 {
     base_pokemon_gen2impl::base_pokemon_gen2impl(unsigned int id, unsigned int game):
-                                           base_pokemon_impl(id, game)
+        base_pokemon_impl(id, game)
     {
         //Get final part of images path
         switch(_game_id)
@@ -58,11 +55,14 @@ namespace pkmn
             default:
                 SET_IMAGES_PATHS(_images_default_basename);
 
-                //Even though most attributes are queried from the database when called, stats take a long time when
-                //doing a lot at once, so grab these upon instantiation
-                string query_string = "SELECT base_stat FROM pokemon_stats WHERE pokemon_id=" + to_string(_pokemon_id)
-                                    + " AND stat_id IN (3,5)";
-                SQLite::Statement query(*_db, query_string.c_str());
+                /*
+                 * Even though most attributes are queried from the database when called, stats take a long time when
+                 * doing a lot at once, so grab these upon instantiation
+                 */
+                std::ostringstream query_stream;
+                query_stream << "SELECT base_stat FROM pokemon_stats WHERE pokemon_id=" << _pokemon_id
+                             << " AND stat_id IN (3,5)";
+                SQLite::Statement query(*_db, query_stream.str().c_str());
                 query.executeStep();
                 _special_attack = int(query.getColumn(0));
                 query.executeStep();
@@ -75,77 +75,8 @@ namespace pkmn
         _form_id = _species_id;
     }
 
-    void base_pokemon_gen2impl::get_egg_groups(pkmn::pkstring_vector_t& egg_group_vec) const
-    {
-        std::vector<unsigned int> egg_group_ids;
-        get_egg_group_ids(egg_group_ids);
-
-        egg_group_vec.clear();
-        for(size_t i = 0; i < egg_group_ids.size(); i++) egg_group_vec.push_back(database::get_egg_group_name(egg_group_ids[i]));
-    }
-
     //No gender differences in Generation 2
     bool base_pokemon_gen2impl::has_gender_differences() const {return false;}
-
-    double base_pokemon_gen2impl::get_chance_male() const
-    {
-        switch(_species_id)
-        {
-            case Species::NONE:
-            case Species::INVALID:
-                return 0.0;
-
-            default:
-                /*
-                 * gender_val_map's keys correspond to how the different
-                 * gender rates are represented in the database. The values
-                 * are the actual decimal representations of the percentages.
-                 */
-                map<unsigned int, double> gender_val_map; //Double is percentage male
-                gender_val_map[0] = 1.0;
-                gender_val_map[1] = 0.875;
-                gender_val_map[2] = 0.75;
-                gender_val_map[4] = 0.5;
-                gender_val_map[6] = 0.25;
-                gender_val_map[8] = 0.0;
-
-                string query_string = "SELECT gender_rate FROM pokemon_species WHERE id=" + to_string(_species_id);
-                int gender_val = _db->execAndGet(query_string.c_str());
-
-                if(gender_val == -1) return 0.0;
-                else return gender_val_map[gender_val];
-        }
-    }
-
-    double base_pokemon_gen2impl::get_chance_female() const
-    {
-        switch(_species_id)
-        {
-            case Species::NONE:
-            case Species::INVALID:
-                return 0.0;
-
-            default:
-                /*
-                 * gender_val_map's keys correspond to how the different
-                 * gender rates are represented in the database. The values
-                 * are the actual decimal representations of the percentages.
-                 */
-                map<int, double> gender_val_map; //Double is percentage male
-                gender_val_map[0] = 1.0;
-                gender_val_map[1] = 0.875;
-                gender_val_map[2] = 0.75;
-                gender_val_map[4] = 0.5;
-                gender_val_map[6] = 0.25;
-                gender_val_map[8] = 0.0;
-
-                string query_string = "SELECT gender_rate FROM pokemon_species WHERE id=" + to_string(_species_id);
-                int gender_val = _db->execAndGet(query_string.c_str());
-
-                if(gender_val == -1) return 0.0;
-                else return (1.0 - gender_val_map[gender_val]);
-        }
-    }
 
     //No abilities in Generation 2
     pkmn::pkstring_pair_t base_pokemon_gen2impl::get_abilities() const
@@ -229,36 +160,15 @@ namespace pkmn
     }
 
     //Gender doesn't matter for icons in Generation 2
-    string base_pokemon_gen2impl::get_icon_path(bool is_male) const
+    std::string base_pokemon_gen2impl::get_icon_path(bool is_male) const
     {
         return _male_icon_path.string();
     }
 
     //Gender doesn't matter for sprites in Generation 2
-    string base_pokemon_gen2impl::get_sprite_path(bool is_male, bool is_shiny) const
+    std::string base_pokemon_gen2impl::get_sprite_path(bool is_male, bool is_shiny) const
     {
         if(is_shiny) return _male_shiny_sprite_path.string();
         else return _male_sprite_path.string();
-    }
-
-    void base_pokemon_gen2impl::get_egg_group_ids(std::vector<unsigned int>& egg_group_id_vec) const
-    {
-        egg_group_id_vec.clear();
-
-        switch(_species_id)
-        {
-            case Species::NONE:
-            case Species::INVALID:
-                egg_group_id_vec.push_back(pkmn::Species::NONE);
-                break;
-
-            default:
-                std::string query_string = "SELECT egg_group_id FROM pokemon_egg_groups WHERE species_id="
-                                         + to_string(_species_id);
-                SQLite::Statement query(*_db, query_string.c_str());
-
-                while(query.executeStep()) egg_group_id_vec.push_back(int(query.getColumn(0)));
-                break;
-        }
     }
 } /* namespace pkmn */

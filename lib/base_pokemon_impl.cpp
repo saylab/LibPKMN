@@ -53,104 +53,84 @@ namespace pkmn
     pkmn::shared_ptr<SQLite::Database> base_pokemon_impl::_db;
     boost::format base_pokemon_impl::_png_format = boost::format("%d.png");
 
-    base_pokemon_impl::base_pokemon_impl(unsigned int id, unsigned int game_id): base_pokemon()
+    base_pokemon_impl::base_pokemon_impl(unsigned int id, unsigned int game_id):
+        base_pokemon(),
+        _game_id(game_id),
+        _generation(database::get_generation(game_id)),
+        _pokemon_id(Species::NONE),
+        _form_id(0),
+        _species_id(Species::NONE),
+        _type1_id(Types::NONE), _type2_id(Types::NONE),
+        _hp(0), _attack(0), _defense(0), _speed(0),
+        _special(0), _special_attack(0), _special_defense(0)
     {
         //The first initialization will stick for all others
         if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
-        _game_id = game_id;
-        _generation = database::get_generation(_game_id);
 
-        switch(id)
+        if(id == Species::INVALID)
         {
-            case Species::NONE: //None
-                _pokemon_id = Species::NONE;
-                _species_id = Species::NONE;
-                _form_id = 0;
-                _pokemon_id = 0;
-                _species_id = 0;
-                _type1_id = 0;
-                _type2_id = 0;
-                _hp = 0;
-                _attack = 0;
-                _defense = 0;
-                _speed = 0;
-                _special = 0;
-                _special_attack = 0;
-                _special_defense = 0;
-                break;
+            _pokemon_id = Species::INVALID;
+            _species_id = Species::INVALID;
+            _form_id = Species::INVALID;
+        }
+        else if(id != Species::NONE)
+        {
+            _species_id = id;
+            _pokemon_id = id; //For all default forms, pokemon_id = species_id
+            _form_id = id; //For all default forms, form_id = species_id
+            std::ostringstream query_stream;
 
-            case Species::INVALID: //Invalid
-                _pokemon_id = Species::INVALID;
-                _species_id = Species::INVALID;
-                _form_id = 0;
-                _pokemon_id = 0;
-                _species_id = 0;
-                _type1_id = 0;
-                _type2_id = 0;
-                _hp = 0;
-                _attack = 0;
-                _defense = 0;
-                _speed = 0;
-                _special = 0;
-                _special_attack = 0;
-                _special_defense = 0;
-                break;
+            //Fail if this Pokemon didn't exist in this generation
+            query_stream << "SELECT generation_id FROM pokemon_species WHERE id=" << _species_id;
+            unsigned int gen_id = _db->execAndGet(query_stream.str().c_str());
+            if(gen_id > _generation)
+            {
+                std::string error_message = str(boost::format("base_pokemon: invalid generation (%d > %d)")
+                                                          % gen_id % _generation);
+                throw std::runtime_error(error_message.c_str());
+            }
 
-            default:
-                _species_id = id;
+            /*
+             * Even though most attributes are queried from the database when called, stats take a long time when
+             * doing a lot at once, so grab these upon instantiation
+             */
+            query_stream.str("");
+            query_stream << "SELECT base_stat FROM pokemon_stats WHERE pokemon_id=" << _pokemon_id
+                         << " AND stat_id IN (1,2,3,6)";
+            SQLite::Statement stats_query(*_db, query_stream.str().c_str());
 
-                //Get generation and name from specified game enum
-                std::string query_string = "SELECT name FROM version_names WHERE version_id=" + to_string(_game_id);
+            stats_query.executeStep();
+            _hp = stats_query.getColumn(0);
+            stats_query.executeStep();
+            _attack = stats_query.getColumn(0);
+            stats_query.executeStep();
+            _defense = stats_query.getColumn(0);
+            stats_query.executeStep();
+            _speed = stats_query.getColumn(0);
 
-                //Fail if Pokemon's generation_id > specified gen
-                query_string = "SELECT generation_id FROM pokemon_species WHERE id=" + to_string(_species_id);
-                unsigned int gen_id = _db->execAndGet(query_string.c_str());
-                if(gen_id > _generation)
-                {
-                    std::string error_message = to_string(gen_id) + " > " + to_string(_generation);
-                    throw std::runtime_error(error_message.c_str());
-                }
+            //Get first type
+            query_stream.str("");
+            query_stream << "SELECT type_id FROM pokemon_types WHERE pokemon_id=" << _pokemon_id << " AND slot=1";
+            _type1_id = _db->execAndGet(query_stream.str().c_str());
 
-                //Get Pokemon ID from database
-                query_string = "SELECT id FROM pokemon WHERE species_id=" + to_string(_species_id);
-                _pokemon_id = _db->execAndGet(query_string.c_str());
-
-                //Even though most attributes are queried from the database when called, stats take a long time when
-                //doing a lot at once, so grab these upon instantiation
-                query_string = "SELECT base_stat FROM pokemon_stats WHERE pokemon_id=" + to_string(_pokemon_id) +
-                               " AND stat_id IN (1,2,3,6)";
-                SQLite::Statement stats_query(*_db, query_string.c_str());
-
-                stats_query.executeStep();
-                _hp = stats_query.getColumn(0);
-                stats_query.executeStep();
-                _attack = stats_query.getColumn(0);
-                stats_query.executeStep();
-                _defense = stats_query.getColumn(0);
-                stats_query.executeStep();
-                _speed = stats_query.getColumn(0);
-
-                query_string = "SELECT type_id FROM pokemon_types WHERE slot=1 and pokemon_id=" + to_string(_pokemon_id);
-                _type1_id = _db->execAndGet(query_string.c_str());
-
-                //If there's only one type, this won't return anything
-                query_string = "SELECT type_id FROM pokemon_types WHERE slot=2 and pokemon_id=" + to_string(_pokemon_id);
-                SQLite::Statement query(*_db, query_string.c_str());
-                _type2_id = (query.executeStep()) ? int(query.getColumn(0)) : Types::NONE;
-                break;
+            //Get second type, if applicable
+            query_stream.str("");
+            query_stream << "SELECT type_id FROM pokemon_types WHERE pokemon_id=" << _pokemon_id << " AND slot=2";
+            SQLite::Statement type2_query(*_db, query_stream.str().c_str());
+            _type2_id = type2_query.executeStep() ? type2_query.getColumn(0) : int(Types::NONE);
         }
 
         _images_dir = fs::path(get_images_dir());
         _icon_dir = fs::path(_images_dir / "pokemon-icons");
-        _images_default_basename = to_string(_species_id) + ".png";
-        _images_gen_string = "generation-" + to_string(_generation);
+        _images_default_basename = str(_png_format % _species_id);
+        _images_gen_string = str(boost::format("generation-%d") % _generation);
     }
 
     pkmn::pkstring base_pokemon_impl::get_game() const
     {
-        std::string query_string = "SELECT name FROM version_names WHERE local_language_id=9 AND version_id="
-                                 + to_string(_game_id);
-        return (const char*)(_db->execAndGet(query_string.c_str()));
+        std::ostringstream query_stream;
+        query_stream << "SELECT name FROM version_names WHERE local_language_id=9 AND version_id=" << _game_id;
+        return (const char*)(_db->execAndGet(query_stream.str().c_str()));
     }
 
     unsigned int base_pokemon_impl::get_generation() const {return _generation;}
@@ -182,9 +162,10 @@ namespace pkmn
 
             default:
             {
-                std::string query_string = "SELECT genus FROM pokemon_species_names WHERE local_language_id=9 AND pokemon_species_id="
-                                         + to_string(_species_id);
-                return (const char*)(_db->execAndGet(query_string.c_str()));
+                std::ostringstream query_stream;
+                query_stream << "SELECT genus FROM pokemon_species_names WHERE local_language_id=9 AND pokemon_species_id="
+                             << _species_id;
+                return (const char*)(_db->execAndGet(query_stream.str().c_str()));
             }
         }
     }
@@ -210,8 +191,9 @@ namespace pkmn
                 return 0.0;
 
             default:
-                std::string query_string = "SELECT height FROM pokemon WHERE id=" + to_string(_pokemon_id);
-                return (double(_db->execAndGet(query_string.c_str())) / 10.0);
+                std::ostringstream query_stream;
+                query_stream << "SELECT height FROM pokemon WHERE id=" << _pokemon_id;
+                return double(_db->execAndGet(query_stream.str().c_str())) / 10.0;
         }
     }
 
@@ -224,9 +206,18 @@ namespace pkmn
                 return 0.0;
 
             default:
-                std::string query_string = "SELECT weight FROM pokemon WHERE id=" + to_string(_pokemon_id);
-                return (double(_db->execAndGet(query_string.c_str())) / 10.0);
+                std::ostringstream query_stream;
+                query_stream << "SELECT weight FROM pokemon WHERE id=" << _pokemon_id;
+                return double(_db->execAndGet(query_stream.str().c_str())) / 10.0;
         }
+    }
+
+    void base_pokemon_impl::get_egg_groups(pkmn::pkstring_vector_t& egg_group_vec) const
+    {    
+        std::vector<unsigned int> egg_group_ids;
+        get_egg_group_ids(egg_group_ids);
+
+        for(size_t i = 0; i < egg_group_ids.size(); i++) egg_group_vec.push_back(database::get_egg_group_name(egg_group_ids[i]));
     }
 
     void base_pokemon_impl::get_evolutions(base_pokemon_vector &evolution_vec) const
@@ -251,9 +242,76 @@ namespace pkmn
         return (id_vec.begin() == id_vec.end());
     }
 
+    double base_pokemon_impl::get_chance_male() const
+    {
+        switch(_species_id)
+        {
+            case Species::NONE:
+            case Species::INVALID:
+                return 0.0;
+
+            default:
+                /*
+                 * gender_val_dict's keys correspond to how the different
+                 * gender rates are represented in the database. The values
+                 * are the actual decimal representations of the percentages.
+                 */
+                pkmn::dict<unsigned int, double> gender_val_dict; //Double is percentage male
+                gender_val_dict[0] = 1.0;
+                gender_val_dict[1] = 0.875;
+                gender_val_dict[2] = 0.75;
+                gender_val_dict[4] = 0.5;
+                gender_val_dict[6] = 0.25;
+                gender_val_dict[8] = 0.0;
+
+                std::ostringstream query_stream;
+                query_stream << "SELECT gender_rate FROM pokemon_species WHERE id=" << _species_id;
+                int gender_val = _db->execAndGet(query_stream.str().c_str());
+
+                if(gender_val == -1) return 0.0;
+                else return gender_val_dict[gender_val];
+        }
+    }
+
+    double base_pokemon_impl::get_chance_female() const
+    {
+        switch(_species_id)
+        {
+            case Species::NONE:
+            case Species::INVALID:
+                return 0.0;
+
+            default:
+                /*
+                 * gender_val_dict's keys correspond to how the different
+                 * gender rates are represented in the database. The values
+                 * are the actual decimal representations of the percentages.
+                 */
+                pkmn::dict<unsigned int, double> gender_val_dict; //Double is percentage male
+                gender_val_dict[0] = 1.0;
+                gender_val_dict[1] = 0.875;
+                gender_val_dict[2] = 0.75;
+                gender_val_dict[4] = 0.5;
+                gender_val_dict[6] = 0.25;
+                gender_val_dict[8] = 0.0; 
+
+                std::ostringstream query_stream;
+                query_stream << "SELECT gender_rate FROM pokemon_species WHERE id=" << _species_id;
+                int gender_val = _db->execAndGet(query_stream.str().c_str());
+
+                if(gender_val == -1) return 0.0; 
+                else return (1.0 - gender_val_dict[gender_val]);
+        }
+    }
+
     unsigned int base_pokemon_impl::get_exp_yield() const
     {
-        //Check for exceptions not covered in database
+        /*
+         * The "old_exp_yields" table in libpkmn_db_additions covers the case
+         * where there the experience yield changed in Generation V. However,
+         * there are eleven cases where Generation IV has its own experience
+         * yield.
+         */
         if(_generation == 4 and _species_id == Species::ABRA) return 75;
         else if(_generation == 4 and _species_id == Species::MACHOP) return 75;
         else if(_generation == 4 and _species_id == Species::GEODUDE) return 73;
@@ -267,10 +325,11 @@ namespace pkmn
         else if(_generation == 4 and _species_id == Species::ARMALDO) return 199;
         else
         {
-            std::string query_string;
-            if(_generation < 4 and _species_id <= 439) query_string = "SELECT exp_yield FROM old_exp_yields WHERE species_id=" + to_string(_species_id);
-            else query_string = "SELECT base_experience FROM pokemon WHERE species_id=" + to_string(_species_id);
-            return int(_db->execAndGet(query_string.c_str()));
+            std::ostringstream query_stream;
+            if(_generation < 4 and _species_id <= 439) query_stream << "SELECT exp_yield FROM old_exp_yields WHERE species_id=" << _species_id;
+            else query_stream << "SELECT base_experience FROM pokemon WHERE species_id=" << _species_id;
+
+            return _db->execAndGet(query_stream.str().c_str());
         }
     }
 
@@ -279,9 +338,10 @@ namespace pkmn
         if(_form_id == _species_id) return "Standard";
         else
         {
-            std::string query_string = "SELECT form_name FROM pokemon_form_names WHERE local_language_id=9 AND pokemon_form_id="
-                                     + to_string(_form_id);
-            return (const char*)(_db->execAndGet(query_string.c_str()));
+            std::ostringstream query_stream;
+            query_stream << "SELECT form_name FROM pokemon_form_names WHERE local_language_id=9 AND pokemon_form_id="
+                         << _form_id;
+            return (const char*)(_db->execAndGet(query_stream.str().c_str()));
         }
     }
 
@@ -293,28 +353,46 @@ namespace pkmn
 
     unsigned int base_pokemon_impl::get_form_id() const {return _form_id;}
 
+    void base_pokemon_impl::get_egg_group_ids(std::vector<unsigned int>& egg_group_id_vec) const
+    {
+        egg_group_id_vec.clear();
+
+        switch(_species_id)
+        {
+            case Species::NONE:
+            case Species::INVALID:
+                egg_group_id_vec.push_back(pkmn::Species::NONE);
+                break;
+
+            default:
+                std::ostringstream query_stream;
+                query_stream << "SELECT egg_group_id FROM pokemon_egg_groups WHERE species_id="
+                             << _species_id;
+                SQLite::Statement query(*_db, query_stream.str().c_str());
+
+                while(query.executeStep()) egg_group_id_vec.push_back(query.getColumn(0));
+                break;
+        }
+    }
+
     void base_pokemon_impl::_get_evolution_ids(std::vector<unsigned int>& id_vec) const
     {
         id_vec.clear();
 
         if(_species_id != Species::NONE and _species_id != Species::INVALID)
         {
-            std::string query_string;
-
-            std::vector<int> to_erase;
-            query_string = "SELECT id FROM pokemon_species WHERE evolves_from_species_id=" + to_string(_species_id);
-            SQLite::Statement query(*_db, query_string.c_str());
-            while(query.executeStep())
-            {
-                int evol_id = query.getColumn(0); //id
-                id_vec.push_back(evol_id);
-            }
+            std::ostringstream query_stream;
+            query_stream << "SELECT id FROM pokemon_species WHERE evolves_from_species_id=" << _species_id;
+            SQLite::Statement query(*_db, query_stream.str().c_str());
+            while(query.executeStep()) id_vec.push_back(query.getColumn(0));
 
             //Evolutions may not be present in specified generation
+            std::vector<int> to_erase;
             for(unsigned int i = 0; i < id_vec.size(); i++)
             {
-                query_string = "SELECT generation_id FROM pokemon_species WHERE id=" + to_string(id_vec[i]);
-                unsigned int generation_id = _db->execAndGet(query_string.c_str());
+                query_stream.str("");
+                query_stream << "SELECT generation_id FROM pokemon_species WHERE id=" << id_vec[i];
+                unsigned int generation_id = _db->execAndGet(query_stream.str().c_str());
                 if(generation_id > _generation) to_erase.push_back(i);
             }
             for(int j = to_erase.size()-1; j >= 0; j--) id_vec.erase(id_vec.begin() + to_erase[j]);
