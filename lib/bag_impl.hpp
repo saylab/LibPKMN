@@ -43,7 +43,6 @@ namespace pkmn
         private:
 
             static pkmn::shared_ptr<SQLite::Database> _db;
-            static std::vector<std::vector<pkmn::pkstring> > _category_pockets;
 
             unsigned int _game_id, _generation;
             pkmn::dict<pkmn::pkstring, pocket::sptr> _pockets; 

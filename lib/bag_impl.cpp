@@ -6,8 +6,8 @@
  */
 
 #include <iostream>
+#include <sstream>
 
-#include <boost/assign.hpp>
 #include <boost/foreach.hpp>
 #include <boost/format.hpp>
 #include <boost/algorithm/string.hpp>
@@ -40,211 +40,6 @@ namespace pkmn
     }
 
     pkmn::shared_ptr<SQLite::Database> bag_impl::_db;
-
-    /*
-     * The underlying SQLite database can return item categories, which correspond to bag
-     * pockets, but these values are only guaranteed to be accurate for Generation VI.
-     * As ugly as this 2D vector is, it's the best way to determine the correct pocket for
-     * an item in earlier version groups.
-     *
-     * The outer vector corresponds to a game's version group, and the inner vector
-     * corresponds to the Generation VI item pocket ID.
-     */
-    std::vector<std::vector<pkmn::pkstring> > bag_impl::_category_pockets =
-        boost::assign::list_of<std::vector<pkmn::pkstring> >
-        (
-            boost::assign::list_of //Never used
-                ("Items") //Invalid
-                ("Items") //Misc
-                ("Items") //Medicine
-                ("Items") //Poke Balls
-                ("Items") //Machines
-                ("Items") //Berries
-                ("Items") //Mail
-                ("Items") //Battle
-                ("Items") //Key
-        )
-        (
-            boost::assign::list_of //RB
-                ("Items") //Invalid
-                ("Items") //Misc
-                ("Items") //Medicine
-                ("Items") //Poke Balls
-                ("Items") //Machines
-                ("Items") //Berries
-                ("Items") //Mail
-                ("Items") //Battle
-                ("Items") //Key
-        )
-        (
-            boost::assign::list_of //Yellow
-                ("Items") //Invalid
-                ("Items") //Misc
-                ("Items") //Medicine
-                ("Items") //Poke Balls
-                ("Items") //Machines
-                ("Items") //Berries
-                ("Items") //Mail
-                ("Items") //Battle
-                ("Items") //Key
-        )
-        (
-            boost::assign::list_of //GS
-                ("Items") //Invalid
-                ("Items") //Misc
-                ("Items") //Medicine
-                ("Balls") //Poke Balls
-                ("TM/HM") //Machines
-                ("Items") //Berries
-                ("Items") //Mail
-                ("Items") //Battle
-                ("KeyItems") //Key
-        )
-        (
-            boost::assign::list_of //Crystal
-                ("Items") //Invalid
-                ("Items") //Misc
-                ("Items") //Medicine
-                ("Balls") //Poke Balls
-                ("TM/HM") //Machines
-                ("Items") //Berries
-                ("Items") //Mail
-                ("Items") //Battle
-                ("KeyItems") //Key
-        )
-        (
-            boost::assign::list_of //RS
-                ("Items") //Invalid
-                ("Items") //Misc
-                ("Items") //Medicine
-                ("Poke Balls") //Poke Balls
-                ("TMs and HMs") //Machines
-                ("Berries") //Berries
-                ("Items") //Mail
-                ("Items") //Battle
-                ("Key Items") //Key
-        )
-        (
-            boost::assign::list_of //Emerald
-                ("Items") //Invalid
-                ("Items") //Misc
-                ("Items") //Medicine
-                ("Poke Balls") //Poke Balls
-                ("TMs and HMs") //Machines
-                ("Berries") //Berries
-                ("Items") //Mail
-                ("Items") //Battle
-                ("Key Items") //Key
-        )
-        (
-            boost::assign::list_of //FRLG
-                ("Items") //Invalid
-                ("Items") //Misc
-                ("Items") //Medicine
-                ("Poke Balls") //Poke Balls
-                ("TM Case") //Machines
-                ("Berry Pouch") //Berries
-                ("Items") //Mail
-                ("Items") //Battle
-                ("Key Items") //Key
-        )
-        (
-            boost::assign::list_of //DP
-                ("Items") //Invalid
-                ("Items") //Misc
-                ("Medicine") //Medicine
-                ("Poke Balls") //Poke Balls
-                ("TMs and HMs") //Machines
-                ("Berries") //Berries
-                ("Mail") //Mail
-                ("Battle Items") //Battle
-                ("Key Items") //Key
-        )
-        (
-            boost::assign::list_of //Platinum
-                ("Items") //Invalid
-                ("Items") //Misc
-                ("Medicine") //Medicine
-                ("Poke Balls") //Poke Balls
-                ("TMs and HMs") //Machines
-                ("Berries") //Berries
-                ("Mail") //Mail
-                ("Battle Items") //Battle
-                ("Key Items") //Key
-        )
-        (
-            boost::assign::list_of //HGSS
-                ("Items") //Invalid
-                ("Items") //Misc
-                ("Medicine") //Medicine
-                ("Poke Balls") //Poke Balls
-                ("TMs and HMs") //Machines
-                ("Berries") //Berries
-                ("Mail") //Mail
-                ("Battle Items") //Battle
-                ("Key Items") //Key
-        )
-        (
-            boost::assign::list_of //BW
-                ("Items") //Invalid
-                ("Items") //Misc
-                ("Medicine") //Medicine
-                ("Items") //Poke Balls
-                ("TMs and HMs") //Machines
-                ("Berries") //Berries
-                ("Items") //Mail
-                ("Items") //Battle
-                ("Key Items") //Key
-        )
-        (
-            boost::assign::list_of //Colosseum
-                ("Items") //Invalid
-                ("Items") //Misc
-                ("Items") //Medicine
-                ("Poke Balls") //Poke Balls
-                ("TMs and HMs") //Machines
-                ("Berries") //Berries
-                ("Items") //Mail
-                ("Items") //Battle
-                ("Key Items") //Key
-        )
-        (
-            boost::assign::list_of //XD
-                ("Items") //Invalid
-                ("Items") //Misc
-                ("Items") //Medicine
-                ("Poke Balls") //Poke Balls
-                ("TMs and HMs") //Machines
-                ("Berries") //Berries
-                ("Items") //Mail
-                ("Items") //Battle
-                ("Key Items") //Key
-        )
-        (
-            boost::assign::list_of //B2W2
-                ("Items") //Invalid
-                ("Items") //Misc
-                ("Medicine") //Medicine
-                ("Items") //Poke Balls
-                ("TMs and HMs") //Machines
-                ("Berries") //Berries
-                ("Items") //Mail
-                ("Items") //Battle
-                ("Key Items") //Key
-        )
-        (
-            boost::assign::list_of //XY
-                ("Items") //Invalid
-                ("Items") //Misc
-                ("Medicine") //Medicine
-                ("Items") //Poke Balls
-                ("TMs and HMs") //Machines
-                ("Berries") //Berries
-                ("Items") //Mail
-                ("Items") //Battle
-                ("Key Items") //Key
-        )
-    ;
 
     bag_impl::bag_impl(unsigned int game): bag()
     {
@@ -426,14 +221,13 @@ namespace pkmn
     //Determine correct pocket for given item
     pkmn::pkstring bag_impl::_get_pocket_name(unsigned int item_id) const
     {
-        unsigned int version_group = database::get_version_group_id(_game_id);
+        std::ostringstream query_stream;
+        query_stream << "SELECT name FROM pocket_names WHERE version_group_id="
+                     << database::get_version_group_id(_game_id) << " AND pocket_id="
+                     << "(SELECT pocket_id FROM item_categories WHERE id="
+                     << database::get_item_category_id(item_id) << ")";
 
-        std::string query_string(str(boost::format("SELECT pocket_id FROM item_categories WHERE id=%d")
-                                     % database::get_item_category_id(item_id)));
-        SQLite::Statement pocket_id_query(*_db, query_string.c_str());
-        unsigned int pocket_id = (pocket_id_query.executeStep()) ? int(pocket_id_query.getColumn(0)) : 0;
-
-        return _category_pockets[version_group][pocket_id];
+        return (const char*)(_db->execAndGet(query_stream.str().c_str()));
     }
 
     void bag_impl::_check() const
