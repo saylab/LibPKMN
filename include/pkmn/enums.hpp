@@ -4,7 +4,7 @@
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  *
- * This file was generated: 2014-07-09 20:44:30.941573
+ * This file was generated: 2014-11-16 19:11:57.442005
  */
 
 #ifndef INCLUDED_PKMN_ENUMS_HPP
@@ -1603,19 +1603,6 @@ namespace pkmn
             MUSIC_MAIL,
             MIRAGE_MAIL,
             INVALID = 100000,
-        };
-    }
-
-    namespace Markings
-    {
-        enum markings
-        {
-            CIRCLE,
-            TRIANGLE,
-            SQUARE,
-            HEART,
-            STAR,
-            DIAMOND,
         };
     }
 
@@ -3337,21 +3324,21 @@ namespace pkmn
         enum version_groups
         {
             NONE,
-            RED_BLUE,
-            YELLOW,
-            GOLD_SILVER,
-            CRYSTAL,
-            RUBY_SAPPHIRE,
-            EMERALD,
-            FIRERED_LEAFGREEN,
-            DIAMOND_PEARL,
-            PLATINUM,
-            HEARTGOLD_SOULSILVER,
+            BLACK_2_WHITE_2,
             BLACK_WHITE,
             COLOSSEUM,
-            XD,
-            BLACK_2_WHITE_2,
+            CRYSTAL,
+            DIAMOND_PEARL,
+            EMERALD,
+            FIRERED_LEAFGREEN,
+            GOLD_SILVER,
+            HEARTGOLD_SOULSILVER,
+            PLATINUM,
+            RED_BLUE,
+            RUBY_SAPPHIRE,
             X_Y,
+            XD,
+            YELLOW,
         };
     }
 }

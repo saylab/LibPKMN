@@ -383,7 +383,7 @@ namespace pkmn
             t_pkmn->set_trainer_id(pkmn.ot_id);
             t_pkmn->set_nickname(import_gen3_text(pkmn.nickname, 10));
             t_pkmn->set_trainer_name(import_gen3_text(pkmn.otname, 7));
-            //TODO: markings
+            t_pkmn->set_markings(pkmn.markings);
 
             //Growth
             t_pkmn->set_held_item(database::get_item_name(blocks.growth.held_item, version_id));
@@ -492,7 +492,7 @@ namespace pkmn
             export_gen3_text(t_pkmn->get_nickname(), pkmn.nickname, 10);
             pkmn.language = 0x202; //English
             export_gen3_text(t_pkmn->get_trainer_name(), pkmn.otname, 7);
-            pkmn.markings = 0; //TODO
+            pkmn.markings = t_pkmn->get_markings();
 
             if(encrypt) pkmn.checksum = gen3_set_encrypted_blocks(blocks, pkmn);
             else
@@ -578,18 +578,12 @@ namespace pkmn
             t_pkmn->set_IV("Special Defense", modern_get_IV(IVint, Stats::SPECIAL_ATTACK));
             t_pkmn->set_IV("Speed", modern_get_IV(IVint, Stats::SPEED));
 
+            t_pkmn->set_markings(pokelib_pkmn.pkm->pkm.markings);
+
             //TODO: use form data to set LibPKMN form, is fateful encounter
 
             //Attributes
-            uint8_t* markings = &(pokelib_pkmn.pkm->pkm.markings);
             t_pkmn->set_attribute("friendship", pokelib_pkmn.pkm->pkm.friendship);
-            t_pkmn->set_attribute("circle", get_marking(markings, Markings::CIRCLE));
-            t_pkmn->set_attribute("triangle", get_marking(markings, Markings::TRIANGLE));
-            t_pkmn->set_attribute("square", get_marking(markings, Markings::SQUARE));
-            t_pkmn->set_attribute("heart", get_marking(markings, Markings::HEART));
-            t_pkmn->set_attribute("star", get_marking(markings, Markings::STAR));
-            t_pkmn->set_attribute("diamond", get_marking(markings, Markings::DIAMOND));
-
             t_pkmn->set_attribute("country", pokelib_pkmn.pkm->pkm.country);
             t_pkmn->set_attribute("cool", pokelib_pkmn.pkm->pkm.contest_cool);
             t_pkmn->set_attribute("beauty", pokelib_pkmn.pkm->pkm.contest_beauty);
@@ -748,18 +742,11 @@ namespace pkmn
             pokelib_pkmn.updateBattleStats();
 
             pokelib_pkmn.pkm->pkm.hometown = libpkmn_game_to_hometown(t_pkmn->get_original_game_id());
+            pokelib_pkmn.pkm->pkm.markings = t_pkmn->get_markings();
 
             //Attributes
             pkmn::dict<pkmn::pkstring, int> attributes = t_pkmn->get_attributes();
-
-            uint8_t* markings = &(pokelib_pkmn.pkm->pkm.markings);
             pokelib_pkmn.pkm->pkm.friendship = attributes.at("friendship",0);
-            set_marking(markings, Markings::CIRCLE, attributes.at("circle",false));
-            set_marking(markings, Markings::TRIANGLE, attributes.at("triangle",false));
-            set_marking(markings, Markings::SQUARE, attributes.at("square",false));
-            set_marking(markings, Markings::HEART, attributes.at("heart",false));
-            set_marking(markings, Markings::STAR, attributes.at("star",false));
-            set_marking(markings, Markings::DIAMOND, attributes.at("diamond",false));
 
             pokelib_pkmn.pkm->pkm.country = attributes.at("country",2); //Default to English
             pokelib_pkmn.pkm->pkm.contest_cool = attributes.at("cool",false);
@@ -927,15 +914,9 @@ namespace pkmn
             t_pkmn->set_IV("Special Defense", modern_get_IV(ivs, Stats::SPECIAL_DEFENSE));
             t_pkmn->set_IV("Speed", modern_get_IV(ivs, Stats::SPEED));
 
-            //Attributes
-            uint8_t* markings = reinterpret_cast<uint8_t*>(&(p_pkm->markings));
-            t_pkmn->set_attribute("circle", get_marking(markings, Markings::CIRCLE));
-            t_pkmn->set_attribute("triangle", get_marking(markings, Markings::TRIANGLE));
-            t_pkmn->set_attribute("square", get_marking(markings, Markings::SQUARE));
-            t_pkmn->set_attribute("heart", get_marking(markings, Markings::HEART));
-            t_pkmn->set_attribute("star", get_marking(markings, Markings::STAR));
-            t_pkmn->set_attribute("diamond", get_marking(markings, Markings::DIAMOND));
+            t_pkmn->set_markings(p_pkm->markings_int);
 
+            //Attributes
             t_pkmn->set_attribute("country", p_pkm->country);
             t_pkmn->set_attribute("cool", p_pkm->contest.cool);
             t_pkmn->set_attribute("beauty", p_pkm->contest.beauty);
@@ -1112,19 +1093,12 @@ namespace pkmn
             p_pkm->evs.speed = EVs["Speed"];
 
             p_pkm->hometown = ::Hometowns::hometowns(libpkmn_game_to_hometown(t_pkmn->get_original_game_id()));
+            p_pkm->markings_int = t_pkmn->get_markings();
+
 
             //Attributes
             pkmn::dict<pkmn::pkstring, int> attributes = t_pkmn->get_attributes();
-
-            uint8_t* markings = reinterpret_cast<uint8_t*>(&(p_pkm->ability)+1);
             p_pkm->tameness = attributes.at("friendship",0);
-            set_marking(markings, Markings::CIRCLE, attributes.at("circle",false));
-            set_marking(markings, Markings::TRIANGLE, attributes.at("triangle",false));
-            set_marking(markings, Markings::SQUARE, attributes.at("square",false));
-            set_marking(markings, Markings::HEART, attributes.at("heart",false));
-            set_marking(markings, Markings::STAR, attributes.at("star",false));
-            set_marking(markings, Markings::DIAMOND, attributes.at("diamond",false));
-
             p_pkm->country = Countries::countries(attributes.at("country",2)); //Default to English
             p_pkm->contest.cool = attributes.at("cool",false);
             p_pkm->contest.beauty = attributes.at("beauty",false);

@@ -23,7 +23,6 @@ egg_groups = []
 forms = []
 genders = []
 items = []
-markings = []
 moves = []
 move_damage_classes = []
 natures = []
@@ -68,11 +67,6 @@ def get_items(c):
 
     for value in e["values"]:
         items += [(value["name"], value["value"])]
-
-def get_markings():
-    global markings
-
-    markings = [("CIRCLE",0),("TRIANGLE",1),("SQUARE",2),("HEART",3),("STAR",4),("DIAMOND",5)]
 
 def get_moves(c):
     global moves
@@ -223,14 +217,6 @@ def generate_python_files(output_dir, python_license):
 
     f.close()
 
-    f = open("Markings.py",'w')
-    f.write(python_license + "\n\n")
-
-    for marking in markings:
-        f.write("%s = %d\n" % (marking[0],marking[1]))
-
-    f.close()
-
     f = open("Moves.py",'w')
     f.write(python_license + "\n\n")
 
@@ -340,7 +326,6 @@ def generate_cs_files(output_dir, license):
     enums["Egg_Groups"] = egg_groups
     enums["Genders"] = genders
     enums["Items"] = items
-    enums["Markings"] = markings
     enums["Moves"] = moves
     enums["Move_Classes"] = move_damage_classes
     enums["Natures"] = natures
@@ -460,7 +445,6 @@ def generate_java_files(output_dir, license):
     enums["Egg_Groups"] = egg_groups
     enums["Genders"] = genders
     enums["Items"] = items
-    enums["Markings"] = markings
     enums["Moves"] = moves
     enums["Move_Classes"] = move_damage_classes
     enums["Natures"] = natures
@@ -637,7 +621,6 @@ if __name__ == "__main__":
 
     #These don't need the header file
     get_genders()
-    get_markings()
     get_pokeballs()
     get_ribbons()
 

@@ -62,6 +62,7 @@
     #include "pkmn/paths.hpp"
 
     #include "pkmn/types/dict.hpp"
+    #include "pkmn/types/markings.hpp"
     #include "pkmn/types/pkstring.hpp"
     #include "pkmn/types/prng.hpp"
 
@@ -81,6 +82,7 @@
 %include "pkmn/paths.hpp"
 
 %include "pkmn/types/dict.hpp"
+%include "pkmn/types/markings.hpp"
 %include "pkmn/types/prng.hpp"
 
 %include "pkmn/nature.hpp"

@@ -53,6 +53,7 @@ namespace std
  * Their functionality will be replicated in the other languages.
  */
 %ignore pkmn::dict::operator[];
+%ignore pkmn::markings::operator uint8_t;
 %ignore pkmn::pkstring::pkstring(const std::string&);
 %ignore pkmn::pkstring::pkstring(const uint16_t*);
 %ignore pkmn::pkstring::pkstring(const wchar_t*);

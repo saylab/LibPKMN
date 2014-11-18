@@ -24,7 +24,6 @@ egg_groups = []
 forms = []
 genders = []
 items = []
-markings = []
 moves = []
 move_damage_classes = []
 natures = []
@@ -106,11 +105,6 @@ def get_items(c):
         items += [(from_db[i][0], item_name)]
 
     items += [(100000, "INVALID")]
-
-def get_markings():
-    global markings
-
-    markings = [(0,"CIRCLE"),(1,"TRIANGLE"),(2,"SQUARE"),(3,"HEART"),(4,"STAR"),(5,"DIAMOND")]
 
 def get_moves(c):
     global moves
@@ -355,19 +349,6 @@ def generate_cpp_file(output_dir, license):
         };
     }
 
-    namespace Markings
-    {
-        enum markings
-        {"""
-
-    for i in range(len(markings)):
-        output += """
-            %s,""" % markings[i][1]
-
-    output += """
-        };
-    }
-
     namespace Moves
     {
         enum moves
@@ -586,7 +567,6 @@ if __name__ == "__main__":
     get_forms(c)
     get_genders()
     get_items(c)
-    get_markings()
     get_moves(c)
     get_move_damage_classes(c)
     get_natures(c)
@@ -598,6 +578,4 @@ if __name__ == "__main__":
     get_versions(c)
     get_version_groups(c)
 
-    print forms
-
-    #generate_cpp_file(options.output_dir, license)
+    generate_cpp_file(options.output_dir, license)

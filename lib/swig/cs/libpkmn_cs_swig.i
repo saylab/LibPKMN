@@ -96,6 +96,8 @@
 %include "cs_pkstring.i"
 %include "libpkmn.i"
 
+%include "cs_markings.i"
+
 %{
     #include "pkmn/build_info.hpp"
     #include "pkmn/paths.hpp"

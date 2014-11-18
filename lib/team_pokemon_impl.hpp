@@ -87,6 +87,9 @@ namespace pkmn
             void set_move_PP(unsigned int PP, unsigned int pos);
 
             //Misc
+            markings get_markings() const;
+            void set_marking(const uint16_t which, bool value);
+            void set_markings(const pkmn::markings &mark);
             int get_attribute(const pkmn::pkstring &attribute) const;
             pkmn::dict<pkmn::pkstring, int> get_attributes() const;
             bool has_attribute(const pkmn::pkstring &attribute) const;
@@ -133,6 +136,7 @@ namespace pkmn
             pkmn::pkstring _nonvolatile_status;
             moveset_t _moves;
             std::vector<unsigned int> _move_PPs;
+            pkmn::markings _markings;
             pkmn::pkstring _icon_path, _sprite_path;
             pkmn::dict<pkmn::pkstring, int> _attributes;
 

@@ -377,6 +377,21 @@ namespace pkmn
         }
     }
 
+    markings team_pokemon_impl::get_markings() const {return _markings;}
+
+    void team_pokemon_impl::set_marking(const uint16_t which, bool value)
+    {
+        if(which == pkmn::markings::CIRCLE) _markings.circle = value;
+        else if(which == pkmn::markings::TRIANGLE) _markings.triangle = value;
+        else if(which == pkmn::markings::SQUARE) _markings.square = value;
+        else if(which == pkmn::markings::HEART) _markings.heart = value;
+        else if(which == pkmn::markings::STAR) _markings.star = value;
+        else if(which == pkmn::markings::DIAMOND) _markings.diamond = value;
+        else throw std::runtime_error("Invalid marking specified.");
+    }
+
+    void team_pokemon_impl::set_markings(const pkmn::markings &mark) {_markings = mark;}
+
     int team_pokemon_impl::get_attribute(const pkmn::pkstring &attribute) const
     {
         return _attributes.at(attribute, 0);

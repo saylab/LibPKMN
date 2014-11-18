@@ -16,6 +16,7 @@
 #include <pkmn/move.hpp>
 #include <pkmn/nature.hpp>
 #include <pkmn/types/dict.hpp>
+#include <pkmn/types/markings.hpp>
 #include <pkmn/types/pkstring.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
@@ -110,6 +111,9 @@ namespace pkmn
             virtual void set_move_PP(unsigned int PP, unsigned int pos) = 0;
 
             //Misc
+            virtual pkmn::markings get_markings() const = 0;
+            virtual void set_marking(const uint16_t which, bool value) = 0;
+            virtual void set_markings(const pkmn::markings &mark) = 0;
             virtual int get_attribute(const pkmn::pkstring &attribute) const = 0;
             virtual pkmn::dict<pkmn::pkstring, int> get_attributes() const = 0;
             virtual bool has_attribute(const pkmn::pkstring &attribute) const = 0;

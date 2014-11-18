@@ -330,6 +330,11 @@
 %rename(getVersionGroup) pkmn::database::get_version_group;
 
 /*
+ * pkmn/types/markings.hpp
+ */
+%rename(Markings) pkmn::markings;
+
+/*
  * pkmn/types/pkstring.hpp
  */
 %rename(PKString) pkmn::pkstring;
