@@ -10,8 +10,10 @@ FILE(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${PKG_DATA_DIR} LIBPKMN_PKG_DATA_PAT
 
 IF(ENABLE_LIBPKMN)
     ADD_SUBDIRECTORY(SQLiteCpp)
-
-    FILE(GLOB database_sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "database/*.c*")
+    ADD_SUBDIRECTORY(conversions)
+    ADD_SUBDIRECTORY(database)
+    ADD_SUBDIRECTORY(qt4)
+    ADD_SUBDIRECTORY(types)
     
     #Build-time info
     CONFIGURE_FILE(
@@ -23,23 +25,39 @@ IF(ENABLE_LIBPKMN)
         ${CMAKE_CURRENT_BINARY_DIR}/paths.cpp
     @ONLY)
 
+    LIST(APPEND libpkmn_libs
+        ${Boost_LIBRARIES}
+        pokelib-nc
+        pkmds
+        SQLiteCpp
+        ${QT_LIBRARIES}
+        ${QT_QTMAIN_LIBRARY}
+    )
+
+    #
+    # The MOC generation must be done in this directory or CMake
+    # won't see it in this scope.
+    #
+    SET(qt4_headers
+        ${LIBPKMN_SOURCE_DIR}/include/pkmn/qt4/AbilityListComboBox.hpp
+        ${LIBPKMN_SOURCE_DIR}/include/pkmn/qt4/AboutMessageBox.hpp
+        ${LIBPKMN_SOURCE_DIR}/include/pkmn/qt4/NatureListComboBox.hpp
+        ${LIBPKMN_SOURCE_DIR}/include/pkmn/qt4/PokemonListComboBox.hpp
+        ${LIBPKMN_SOURCE_DIR}/include/pkmn/qt4/TypeListComboBox.hpp
+        ${LIBPKMN_SOURCE_DIR}/include/pkmn/qt4/VersionListComboBox.hpp
+    )
     INCLUDE(${QT_USE_FILE})
-    LIST(APPEND libpkmn_libs ${QT_LIBRARIES} ${QT_QTMAIN_LIBRARY})
-    LIST(APPEND libpkmn_libs ${Boost_LIBRARIES} pokelib-nc pkmds SQLiteCpp)
+    QT4_WRAP_CPP(qt4_moc_sources ${qt4_headers})
 
     LIST(APPEND libpkmn_sources
         ${CMAKE_CURRENT_BINARY_DIR}/build_info.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/paths.cpp
         library_bridge.cpp
-        pkstring.cpp
-        prng_impl.cpp
-        nature.cpp
         calculations.cpp
         base_pokemon_impl.cpp
         base_pokemon_gen1impl.cpp
         base_pokemon_gen2impl.cpp
         base_pokemon_modernimpl.cpp
-        lists.cpp
         team_pokemon_impl.cpp
         team_pokemon_gen1impl.cpp
         team_pokemon_gen2impl.cpp
@@ -57,32 +75,14 @@ IF(ENABLE_LIBPKMN)
         game_save_gen4impl.cpp
         game_save_gen5impl.cpp
         io.cpp
+        lists.cpp
         copy_sptrs.cpp
-        markings.cpp
-        conversions/items.cpp
-        conversions/pokemon.cpp
-        conversions/trainer.cpp
-        conversions/text.cpp
-        conversions/utils.cpp
-        ${analysis_sources}
         ${conversions_sources}
         ${database_sources}
+        ${qt4_sources}
+        ${qt4_moc_sources}
+        ${types_sources}
     )
-    
-    INCLUDE_DIRECTORIES(${LIBPKMN_BINARY_DIR}/include)
-
-    CONFIGURE_FILE(
-        ${CMAKE_CURRENT_SOURCE_DIR}/qt4/AboutMessageBox.cpp.in
-        ${CMAKE_CURRENT_BINARY_DIR}/qt4/AboutMessageBox.cpp
-    )
-    
-    FILE(GLOB libpkmn_qt4_headers "${LIBPKMN_SOURCE_DIR}/include/pkmn/qt4/*.hpp")
-    FILE(GLOB libpkmn_qt4_sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "qt4/*.cpp")
-    LIST(APPEND libpkmn_qt4_sources ${CMAKE_CURRENT_BINARY_DIR}/qt4/AboutMessageBox.cpp)
-
-    QT4_WRAP_CPP(MOCSrcs ${libpkmn_qt4_headers})
-
-    LIST(APPEND libpkmn_sources ${libpkmn_qt4_sources} ${MOCSrcs})
 
     ####################################################################
     # Add DLL resource file when using MSVC
