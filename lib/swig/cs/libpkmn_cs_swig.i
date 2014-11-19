@@ -97,6 +97,7 @@
 %include "libpkmn.i"
 
 %include "cs_markings.i"
+%include "cs_ribbons.i"
 
 %{
     #include "pkmn/build_info.hpp"

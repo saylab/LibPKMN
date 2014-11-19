@@ -79,39 +79,21 @@ namespace pkmn
         operator uint16_t();
     };
 
-    struct PKMN_API sinnoh2_unova_ribbons
+    struct PKMN_API sinnoh_ribbons2
     {
-        sinnoh2_unova_ribbons() {};
-        sinnoh2_unova_ribbons(const uint16_t ribbonint);
+        sinnoh_ribbons2() {};
+        sinnoh_ribbons2(const uint16_t ribbonint);
 
         bool gorgeous_royal;
         bool footprint;
         bool record;
-        union
-        {
-            bool history; //Sinnoh
-            bool event;   //Unova
-        };
+        bool history;
         bool legend;
-        union
-        {
-            struct
-            {
-                bool red;
-                bool green;
-                bool blue;
-                bool festival;
-                bool carnival;
-            }; //Sinnoh
-            struct
-            {
-                bool world_champion;
-                bool birthday;
-                bool special;
-                bool souvenir;
-                bool wishing;
-            }; //Unova
-        };
+        bool red;
+        bool green;
+        bool blue;
+        bool festival;
+        bool carnival;
         bool classic;
         bool premier;
 
@@ -145,6 +127,27 @@ namespace pkmn
         bool tough_master;
 
         operator uint32_t();
+    };
+
+    struct PKMN_API unova_ribbons
+    {
+        unova_ribbons() {};
+        unova_ribbons(const uint16_t ribbonint);
+
+        bool gorgeous_royal;
+        bool footprint;
+        bool record;
+        bool event;
+        bool legend;
+        bool world_champion;
+        bool birthday;
+        bool special;
+        bool souvenir;
+        bool wishing;
+        bool classic;
+        bool premier;
+
+        operator uint16_t();
     };
 
     struct PKMN_API kalos_ribbons

@@ -131,7 +131,7 @@ namespace pkmn
         return ribbonint;
     }
 
-    sinnoh2_unova_ribbons::sinnoh2_unova_ribbons(const uint16_t ribbonint)
+    sinnoh_ribbons2::sinnoh_ribbons2(const uint16_t ribbonint)
     {
         gorgeous_royal = ribbonint & 0x1;
         footprint      = ribbonint & 0x2;
@@ -147,7 +147,7 @@ namespace pkmn
         premier        = ribbonint & 0x800;
     }
 
-    sinnoh2_unova_ribbons::operator uint16_t()
+    sinnoh_ribbons2::operator uint16_t()
     {
         uint16_t ribbonint;
 
@@ -215,6 +215,42 @@ namespace pkmn
         if(tough_super)   ribbonint |= 0x20000;
         if(tough_hyper)   ribbonint |= 0x40000;
         if(tough_master)  ribbonint |= 0x80000;
+
+        return ribbonint;
+    }
+
+    unova_ribbons::unova_ribbons(const uint16_t ribbonint)
+    {
+        gorgeous_royal = ribbonint & 0x1;
+        footprint      = ribbonint & 0x2;
+        record         = ribbonint & 0x4;
+        event          = ribbonint & 0x8;
+        legend         = ribbonint & 0x10;
+        world_champion = ribbonint & 0x20;
+        birthday       = ribbonint & 0x40;
+        special        = ribbonint & 0x80;
+        souvenir       = ribbonint & 0x100;
+        wishing        = ribbonint & 0x200;
+        classic        = ribbonint & 0x400;
+        premier        = ribbonint & 0x800;
+    }
+
+    unova_ribbons::operator uint16_t()
+    {
+        uint16_t ribbonint;
+
+        if(gorgeous_royal) ribbonint |= 0x1;
+        if(footprint)      ribbonint |= 0x2;
+        if(record)         ribbonint |= 0x4;
+        if(event)          ribbonint |= 0x8;
+        if(legend)         ribbonint |= 0x10;
+        if(world_champion) ribbonint |= 0x20;
+        if(birthday)       ribbonint |= 0x40;
+        if(special)        ribbonint |= 0x80;
+        if(souvenir)       ribbonint |= 0x100;
+        if(wishing)        ribbonint |= 0x200;
+        if(classic)        ribbonint |= 0x400;
+        if(premier)        ribbonint |= 0x800;
 
         return ribbonint;
     }
