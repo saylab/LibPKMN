@@ -1,33 +1,16 @@
 @echo off
-IF NOT DEFINED ORIG_PATH (
-    SET ORIG_PATH="%PATH%"
-)
+SETLOCAL
 
 SET LIBPKMN_DATABASE_PATH=@DATABASE_PATH@
 SET LIBPKMN_IMAGES_DIR=@IMAGES_PATH@
-SET PATH=%PATH%;@LIBPKMN_BINARY_DIR@\lib\@CMAKE_BUILD_TYPE@;@LIBPKMN_BINARY_DIR@\rpokesav\lib\@CMAKE_BUILD_TYPE@;@LIBPKMN_BINARY_DIR@\PokeLib-NC\lib\@CMAKE_BUILD_TYPE@;@LIBPKMN_BINARY_DIR@\PKMDS\lib\@CMAKE_BUILD_TYPE@;@LIBPKMN_BINARY_DIR@\lib\swig\cs
+SET PATH=@LIBPKMN_BINARY_DIR@\lib\@CMAKE_BUILD_TYPE@;@LIBPKMN_BINARY_DIR@\PokeLib-NC\lib\@CMAKE_BUILD_TYPE@;@LIBPKMN_BINARY_DIR@\PKMDS\lib\@CMAKE_BUILD_TYPE@;@LIBPKMN_BINARY_DIR@\lib\swig\cs;@LIBPKMN_BINARY_DIR@\lib\swig\cs\@CMAKE_BUILD_TYPE@;%PATH%
 
 IF NOT EXIST @LIBPKMN_BINARY_DIR@\tests\libpkmn-cs.dll (
     COPY @LIBPKMN_BINARY_DIR@\lib\swig\cs\libpkmn-cs.dll @LIBPKMN_BINARY_DIR@\tests\libpkmn-cs.dll
 )
-IF NOT EXIST @LIBPKMN_BINARY_DIR@\tests\libpkmn_cs_swig.dll (
-    COPY @LIBPKMN_BINARY_DIR@\lib\swig\cs\@CMAKE_BUILD_TYPE@\libpkmn_cs_swig.dll @LIBPKMN_BINARY_DIR@\tests\libpkmn_cs_swig.dll
-)
-IF NOT EXIST @LIBPKMN_BINARY_DIR@\tests\analysis_cs_swig.dll (
-    COPY @LIBPKMN_BINARY_DIR@\lib\swig\cs\@CMAKE_BUILD_TYPE@\analysis_cs_swig.dll @LIBPKMN_BINARY_DIR@\tests\analysis_cs_swig.dll
-)
-IF NOT EXIST @LIBPKMN_BINARY_DIR@\tests\calculations_cs_swig.dll (
-    COPY @LIBPKMN_BINARY_DIR@\lib\swig\cs\@CMAKE_BUILD_TYPE@\calculations_cs_swig.dll @LIBPKMN_BINARY_DIR@\tests\calculations_cs_swig.dll
-)
-IF NOT EXIST @LIBPKMN_BINARY_DIR@\tests\database_cs_swig.dll (
-    COPY @LIBPKMN_BINARY_DIR@\lib\swig\cs\@CMAKE_BUILD_TYPE@\database_cs_swig.dll @LIBPKMN_BINARY_DIR@\tests\database_cs_swig.dll
-)
-IF NOT EXIST @LIBPKMN_BINARY_DIR@\tests\io_cs_swig.dll (
-    COPY @LIBPKMN_BINARY_DIR@\lib\swig\cs\@CMAKE_BUILD_TYPE@\io_cs_swig.dll @LIBPKMN_BINARY_DIR@\tests\io_cs_swig.dll
-)
 
-@CMAKE_CURRENT_BINARY_DIR@\@TEST_NAME@.exe
+"@TESTS_BINARY_DIR@\@TEST_NAME@.exe"
 
-SET LIBPKMN_DATABASE_PATH=
-SET LIBPKMN_IMAGES_DIR=
-SET PATH="%ORIG_PATH%"
+ENDLOCAL
+
+EXIT /B %ERRORLEVEL%

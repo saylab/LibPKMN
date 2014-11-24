@@ -1,35 +1,13 @@
 @echo off
-IF NOT DEFINED ORIG_PYTHONPATH (
-    SET ORIG_PYTHONPATH="%PYTHONPATH%"
-)
-IF NOT DEFINED ORIG_PATH (
-    SET ORIG_PATH="%PATH%"
-)
+SETLOCAL
 
 SET LIBPKMN_DATABASE_PATH=@DATABASE_PATH@
 SET LIBPKMN_IMAGES_DIR=@IMAGES_PATH@
 SET PYTHONPATH=%PYTHONPATH%;@PYTHON_PATH@
-SET PATH=%PATH%;@LIBPKMN_BINARY_DIR@\lib\@CMAKE_BUILD_TYPE@;@LIBPKMN_BINARY_DIR@\rpokesav\lib\@CMAKE_BUILD_TYPE@;@LIBPKMN_BINARY_DIR@\PokeLib-NC\lib\@CMAKE_BUILD_TYPE@;@LIBPKMN_BINARY_DIR@\PKMDS\lib\@CMAKE_BUILD_TYPE@;@LIBPKMN_BINARY_DIR@\lib\swig\cs
+SET PATH=%PATH%;@LIBPKMN_BINARY_DIR@\lib\@CMAKE_BUILD_TYPE@;@LIBPKMN_BINARY_DIR@\PokeLib-NC\lib\@CMAKE_BUILD_TYPE@;@LIBPKMN_BINARY_DIR@\PKMDS\lib\@CMAKE_BUILD_TYPE@
 
-IF NOT EXIST @LIBPKMN_BINARY_DIR@\lib\swig\python\_libpkmn_python_swig.pyd (
-    COPY @LIBPKMN_BINARY_DIR@\lib\swig\python\@CMAKE_BUILD_TYPE@\_libpkmn_python_swig.pyd @LIBPKMN_BINARY_DIR@\lib\swig\python\_libpkmn_python_swig.pyd
-)
-IF NOT EXIST @LIBPKMN_BINARY_DIR@\lib\swig\python\analysis\_analysis_swig.pyd (
-    COPY @LIBPKMN_BINARY_DIR@\lib\swig\python\analysis\@CMAKE_BUILD_TYPE@\_analysis_swig.pyd @LIBPKMN_BINARY_DIR@\lib\swig\python\analysis\_analysis_swig.pyd
-)
-IF NOT EXIST @LIBPKMN_BINARY_DIR@\lib\swig\python\calculations\_calculations_swig.pyd (
-    COPY @LIBPKMN_BINARY_DIR@\lib\swig\python\calculations\@CMAKE_BUILD_TYPE@\_calculations_swig.pyd @LIBPKMN_BINARY_DIR@\lib\swig\python\calculations\_calculations_swig.pyd
-)
-IF NOT EXIST @LIBPKMN_BINARY_DIR@\lib\swig\python\database\_database_swig.pyd (
-    COPY @LIBPKMN_BINARY_DIR@\lib\swig\python\database\@CMAKE_BUILD_TYPE@\_database_swig.pyd @LIBPKMN_BINARY_DIR@\lib\swig\python\database\_database_swig.pyd
-)
-IF NOT EXIST @LIBPKMN_BINARY_DIR@\lib\swig\python\io\_io_swig.pyd (
-    COPY @LIBPKMN_BINARY_DIR@\lib\swig\python\io\@CMAKE_BUILD_TYPE@\_io_swig.pyd @LIBPKMN_BINARY_DIR@\lib\swig\python\io\_io_swig.pyd
-)
+"@PYTHON_EXEC@" "@TESTS_SOURCE_DIR@\@TEST_NAME@.py"
 
-@TEST_CMD@
+ENDLOCAL
 
-SET LIBPKMN_DATABASE_PATH=
-SET LIBPKMN_IMAGES_DIR=
-SET PYTHONPATH=%ORIG_PYTHONPATH%
-SET PATH=%ORIG_PATH%
+EXIT /B %ERRORLEVEL%

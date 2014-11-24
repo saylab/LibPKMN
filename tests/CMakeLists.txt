@@ -15,17 +15,11 @@ FILE(TO_NATIVE_PATH ${IMAGES_PATH} IMAGES_PATH)
 SET(DATABASE_PATH ${LIBPKMN_BINARY_DIR}/share/libpkmn/libpkmn.db)
 FILE(TO_NATIVE_PATH ${DATABASE_PATH} DATABASE_PATH)
 
-SET(cpp_test_sources
-    old_values_test.cpp
-    dict_test.cpp
-    pkstring_test.cpp
-    bag_pocket_test.cpp
-    prng_test.cpp
-    copy_sptr_test.cpp
-)
+#Source/binary dirs
+FILE(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR} TESTS_SOURCE_DIR)
+FILE(TO_NATIVE_PATH ${CMAKE_CURRENT_BINARY_DIR} TESTS_BINARY_DIR)
 
 INCLUDE_DIRECTORIES(${LIBPKMN_SOURCE_DIR}/lib/conversions)
-INCLUDE_DIRECTORIES(${LIBPKMN_SOURCE_DIR}/rpokesav/include)
 INCLUDE_DIRECTORIES(${LIBPKMN_SOURCE_DIR}/PokeLib-NC/include)
 INCLUDE_DIRECTORIES(${LIBPKMN_SOURCE_DIR}/PKMDS/include)
 
@@ -48,22 +42,6 @@ MACRO(LIBPKMN_ADD_TEST test_name test_cmd)
         ADD_TEST(${test_name} ${CMAKE_CURRENT_BINARY_DIR}/${test_name}.sh)
     ENDIF(WIN32)
 ENDMACRO(LIBPKMN_ADD_TEST)
-
-MACRO(LIBPKMN_ADD_PYTHON_TEST test_name)
-    SET(TEST_CMD "${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/${python_test}.py")
-    FILE(TO_NATIVE_PATH "${LIBPKMN_BINARY_DIR}/lib/swig" LIBPKMN_SWIG_DIR)
-    SET(LIBPKMN_SWIG_DIR ${LIBPKMN_SWIG_DIR} CACHE FILEPATH "LibPKMN SWIG build directory")
-    SET(PYTHON_PATH "${LIBPKMN_SWIG_DIR}")
-    IF(WIN32)
-        CONFIGURE_FILE(
-            ${CMAKE_CURRENT_SOURCE_DIR}/python_unit_test_template.bat.in
-            ${CMAKE_CURRENT_BINARY_DIR}/${test_name}.bat
-        @ONLY)
-        ADD_TEST(${test_name} ${CMAKE_CURRENT_BINARY_DIR}/${test_name}.bat)
-    ELSE()
-        LIBPKMN_ADD_TEST(${python_test} "${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/${python_test}.py")
-    ENDIF(WIN32)
-ENDMACRO(LIBPKMN_ADD_PYTHON_TEST)
 
 MACRO(LIBPKMN_ADD_CS_TEST test_name)
     SET(TEST_NAME ${test_name})
@@ -99,9 +77,32 @@ MACRO(LIBPKMN_ADD_JAVA_TEST test_name)
     ENDIF(WIN32)
 ENDMACRO(LIBPKMN_ADD_JAVA_TEST)
 
+MACRO(LIBPKMN_ADD_PYTHON_TEST test_name)
+    SET(TEST_NAME ${test_name})
+
+    IF(WIN32)
+        CONFIGURE_FILE(
+            ${CMAKE_CURRENT_SOURCE_DIR}/python_unit_test_template.bat.in
+            ${CMAKE_CURRENT_BINARY_DIR}/${test_name}.bat
+        @ONLY)
+        ADD_TEST(${test_name} ${CMAKE_CURRENT_BINARY_DIR}/${test_name}.bat)
+    ELSE()
+        ADD_TEST(${test_name} ${CMAKE_CURRENT_BINARY_DIR}/${test_name}.sh)
+    ENDIF(WIN32)
+ENDMACRO(LIBPKMN_ADD_PYTHON_TEST)
+
 ##################################################
 # C++ tests
 ##################################################
+SET(cpp_test_sources
+    old_values_test.cpp
+    dict_test.cpp
+    pkstring_test.cpp
+    bag_pocket_test.cpp
+    prng_test.cpp
+    copy_sptr_test.cpp
+)
+
 FOREACH(cpp_test ${cpp_test_sources})
     GET_FILENAME_COMPONENT(cpp_test_name ${cpp_test} NAME_WE)
     ADD_EXECUTABLE(${cpp_test_name} ${cpp_test})
@@ -123,23 +124,6 @@ FOREACH(cpp_test ${cpp_test_sources})
         LIBPKMN_ADD_TEST(${cpp_test_name} "${CMAKE_CURRENT_BINARY_DIR}/${cpp_test_name}")
     ENDIF(WIN32)
 ENDFOREACH(cpp_test ${cpp_test_sources})
-
-##################################################
-# Python tests
-##################################################
-IF(ENABLE_PYTHON)
-    SET(python_test_names
-        python_dict_test
-        python_enum_test
-        python_pkstring_test
-        python_bag_pocket_test
-        python_copy_sptr_test
-    )
-
-    FOREACH(python_test ${python_test_names})
-        LIBPKMN_ADD_PYTHON_TEST(${python_test})
-    ENDFOREACH(python_test ${python_test_names})
-ENDIF(ENABLE_PYTHON)
 
 ##################################################
 # C# tests
@@ -172,6 +156,8 @@ ENDIF(ENABLE_CSHARP)
 IF(ENABLE_JAVA)
     FILE(TO_NATIVE_PATH "${LIBPKMN_BINARY_DIR}/lib/swig/java/LibPKMN.jar" LIBPKMN_JAR)
     SET(LIBPKMN_JAR ${LIBPKMN_JAR} CACHE FILEPATH "LibPKMN.jar location")
+    FILE(TO_NATIVE_PATH "${Java_JAVA_EXECUTABLE}" JAVA_EXEC)
+    SET(JAVA_EXEC ${JAVA_EXEC} CACHE FILEPATH "Java executable")
 
     SET(java_test_names
         JavaDictTest
@@ -196,3 +182,28 @@ IF(ENABLE_JAVA)
         LIBPKMN_ADD_JAVA_TEST(${java_test})
     ENDFOREACH(java_test ${java_test_names})
 ENDIF(ENABLE_JAVA)
+
+##################################################
+# Python tests
+##################################################
+IF(ENABLE_PYTHON)
+    SET(python_test_names
+        python_dict_test
+        python_enum_test
+        python_pkstring_test
+        python_bag_pocket_test
+        python_copy_sptr_test
+    )
+
+    FILE(TO_NATIVE_PATH "${LIBPKMN_BINARY_DIR}/lib/swig" LIBPKMN_SWIG_DIR)
+    SET(LIBPKMN_SWIG_DIR ${LIBPKMN_SWIG_DIR} CACHE FILEPATH "LibPKMN SWIG build directory")
+    SET(PYTHON_PATH "${LIBPKMN_SWIG_DIR}")
+    FILE(TO_NATIVE_PATH "${PYTHON_PATH}" PYTHON_PATH)
+
+    FILE(TO_NATIVE_PATH "${PYTHON_EXECUTABLE}" PYTHON_EXEC)
+    SET(PYTHON_EXEC ${PYTHON_EXEC} CACHE FILEPATH "Python executable")
+
+    FOREACH(python_test ${python_test_names})
+        LIBPKMN_ADD_PYTHON_TEST(${python_test})
+    ENDFOREACH(python_test ${python_test_names})
+ENDIF(ENABLE_PYTHON)
