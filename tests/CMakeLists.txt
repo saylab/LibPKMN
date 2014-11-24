@@ -19,6 +19,7 @@ FILE(TO_NATIVE_PATH ${DATABASE_PATH} DATABASE_PATH)
 FILE(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR} TESTS_SOURCE_DIR)
 FILE(TO_NATIVE_PATH ${CMAKE_CURRENT_BINARY_DIR} TESTS_BINARY_DIR)
 
+INCLUDE_DIRECTORIES(${LIBPKMN_SOURCE_DIR}/lib)
 INCLUDE_DIRECTORIES(${LIBPKMN_SOURCE_DIR}/lib/conversions)
 INCLUDE_DIRECTORIES(${LIBPKMN_SOURCE_DIR}/PokeLib-NC/include)
 INCLUDE_DIRECTORIES(${LIBPKMN_SOURCE_DIR}/PKMDS/include)
@@ -100,7 +101,7 @@ SET(cpp_test_sources
     pkstring_test.cpp
     bag_pocket_test.cpp
     prng_test.cpp
-    copy_sptr_test.cpp
+    sptr_test.cpp
 )
 
 FOREACH(cpp_test ${cpp_test_sources})
