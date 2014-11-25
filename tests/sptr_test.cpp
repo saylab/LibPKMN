@@ -8,8 +8,14 @@
 #include <boost/foreach.hpp>
 #include <boost/test/unit_test.hpp>
 
+#include <pkmn/bag.hpp>
+#include <pkmn/base_pokemon.hpp>
 #include <pkmn/enums.hpp>
+#include <pkmn/item.hpp>
+#include <pkmn/pocket.hpp>
 #include <pkmn/team_pokemon.hpp>
+#include <pkmn/trainer.hpp>
+#include <pkmn/types/prng.hpp>
 
 #include "copy_sptrs.hpp"
 
@@ -183,4 +189,20 @@ BOOST_AUTO_TEST_CASE(copy_trainer_test)
 
     // This should not match
     BOOST_CHECK(trainer1 != trainer3);
+}
+
+/*
+ * Make sure PRNG's copy correctly.
+ */
+BOOST_AUTO_TEST_CASE(copy_prng_test)
+{
+    pkmn::prng::sptr rng1 = pkmn::prng::make(3);
+    pkmn::prng::sptr rng2 = rng1;
+    pkmn::prng::sptr rng3 = pkmn::copy_prng(rng1);
+
+    // This should match
+    BOOST_CHECK_EQUAL(rng1, rng2);
+
+    // This should not match
+    BOOST_CHECK(rng1 != rng3);
 }
