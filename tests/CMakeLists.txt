@@ -99,7 +99,6 @@ SET(cpp_test_sources
     old_values_test.cpp
     dict_test.cpp
     pkstring_test.cpp
-    bag_pocket_test.cpp
     prng_test.cpp
     sptr_test.cpp
 )
