@@ -15,6 +15,7 @@
 #include <pkmn/move.hpp>
 #include <pkmn/pocket.hpp>
 #include <pkmn/trainer.hpp>
+#include <pkmn/types/prng.hpp>
 
 namespace pkmn
 {
@@ -31,6 +32,8 @@ namespace pkmn
     team_pokemon::sptr PKMN_API copy_team_pokemon(team_pokemon::sptr in);
 
     trainer::sptr PKMN_API copy_trainer(trainer::sptr in);
+
+    prng::sptr PKMN_API copy_prng(prng::sptr in);
 }
 
 #endif /* INCLUDED_COPY_SPTRS_HPP */

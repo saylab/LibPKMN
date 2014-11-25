@@ -19,6 +19,7 @@
 #include "item_machineimpl.hpp"
 #include "move_impl.hpp"
 #include "pocket_impl.hpp"
+#include "prng_impl.hpp"
 #include "team_pokemon_gen1impl.hpp"
 #include "team_pokemon_gen2impl.hpp"
 #include "team_pokemon_modernimpl.hpp"
@@ -113,5 +114,11 @@ namespace pkmn
     {
         trainer_impl actual = *pkmn::dynamic_pointer_cast<trainer_impl>(in);
         return pkmn::make_shared<trainer_impl>(actual);
+    }
+
+    prng::sptr copy_prng(prng::sptr in)
+    {
+        prng_impl actual = *pkmn::dynamic_pointer_cast<prng_impl>(in);
+        return pkmn::make_shared<prng_impl>(actual);
     }
 }
