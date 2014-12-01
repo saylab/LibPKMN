@@ -192,8 +192,7 @@ IF(ENABLE_PYTHON)
         python_dict_test
         python_enum_test
         python_pkstring_test
-        python_bag_pocket_test
-        python_copy_sptr_test
+        python_sptr_test
     )
 
     FILE(TO_NATIVE_PATH "${LIBPKMN_BINARY_DIR}/lib/swig" LIBPKMN_SWIG_DIR)

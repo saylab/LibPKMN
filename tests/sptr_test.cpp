@@ -117,6 +117,22 @@ BOOST_AUTO_TEST_CASE(copy_move_test)
 }
 
 /*
+ * Make sure PRNG's copy correctly.
+ */
+BOOST_AUTO_TEST_CASE(copy_prng_test)
+{
+    pkmn::prng::sptr rng1 = pkmn::prng::make(3);
+    pkmn::prng::sptr rng2 = rng1;
+    pkmn::prng::sptr rng3 = pkmn::copy_prng(rng1);
+
+    // This should match
+    BOOST_CHECK_EQUAL(rng1, rng2);
+
+    // This should not match
+    BOOST_CHECK(rng1 != rng3);
+}
+
+/*
  * Make sure all three team_pokemon implementations copy correctly.
  * Make sure team_pokemon_modernimpl's signals/slots don't copy.
  */
@@ -156,19 +172,19 @@ BOOST_AUTO_TEST_CASE(copy_team_pokemon_test)
                                                                "None", "None", "None", "None");
     pkmn::dict<pkmn::pkstring, unsigned int> deoxys_stats1 = deoxys->get_stats();
 
-    pkmn::base_pokemon::sptr deoxysbase1 = deoxys->get_base_pokemon(false); // Same as from deoxys
-    pkmn::base_pokemon::sptr deoxysbase2 = deoxys->get_base_pokemon(true);  // Copied from deoxys
+    pkmn::base_pokemon::sptr deoxys_base1 = deoxys->get_base_pokemon(false); // Same as from deoxys
+    pkmn::base_pokemon::sptr deoxys_base2 = deoxys->get_base_pokemon(true);  // Copied from deoxys
 
-    deoxysbase1->set_form("Attack");
-    deoxysbase2->set_form("Defense");
+    deoxys_base1->set_form("Attack");
+    deoxys_base2->set_form("Defense");
 
     pkmn::dict<pkmn::pkstring, unsigned int> deoxys_stats2 = deoxys->get_stats();
 
-    BOOST_CHECK(deoxysbase1 != deoxysbase2);
+    BOOST_CHECK(deoxys_base1 != deoxys_base2);
     BOOST_CHECK_EQUAL(deoxys->get_form_id(), pkmn::Forms::Deoxys::ATTACK);
-    BOOST_CHECK_EQUAL(deoxysbase1->get_form_id(), pkmn::Forms::Deoxys::ATTACK);
-    BOOST_CHECK_EQUAL(deoxys->get_form_id(), deoxysbase1->get_form_id());
-    BOOST_CHECK_EQUAL(deoxysbase2->get_form_id(), pkmn::Forms::Deoxys::DEFENSE);
+    BOOST_CHECK_EQUAL(deoxys_base1->get_form_id(), pkmn::Forms::Deoxys::ATTACK);
+    BOOST_CHECK_EQUAL(deoxys->get_form_id(), deoxys_base1->get_form_id());
+    BOOST_CHECK_EQUAL(deoxys_base2->get_form_id(), pkmn::Forms::Deoxys::DEFENSE);
     BOOST_CHECK(deoxys_stats1["Attack"] != deoxys_stats2["Attack"]);
     BOOST_CHECK(deoxys_stats1["Defense"] != deoxys_stats2["Defense"]);
     BOOST_CHECK(deoxys_stats1["Special Attack"] != deoxys_stats2["Special Attack"]);
@@ -189,20 +205,4 @@ BOOST_AUTO_TEST_CASE(copy_trainer_test)
 
     // This should not match
     BOOST_CHECK(trainer1 != trainer3);
-}
-
-/*
- * Make sure PRNG's copy correctly.
- */
-BOOST_AUTO_TEST_CASE(copy_prng_test)
-{
-    pkmn::prng::sptr rng1 = pkmn::prng::make(3);
-    pkmn::prng::sptr rng2 = rng1;
-    pkmn::prng::sptr rng3 = pkmn::copy_prng(rng1);
-
-    // This should match
-    BOOST_CHECK_EQUAL(rng1, rng2);
-
-    // This should not match
-    BOOST_CHECK(rng1 != rng3);
 }
