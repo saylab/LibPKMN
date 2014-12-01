@@ -96,11 +96,12 @@ ENDMACRO(LIBPKMN_ADD_PYTHON_TEST)
 # C++ tests
 ##################################################
 SET(cpp_test_sources
-    old_values_test.cpp
     dict_test.cpp
+    old_values_test.cpp
     pkstring_test.cpp
     prng_test.cpp
     sptr_test.cpp
+    text_conversion_test.cpp
 )
 
 FOREACH(cpp_test ${cpp_test_sources})
