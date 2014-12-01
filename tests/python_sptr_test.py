@@ -74,7 +74,7 @@ def prng_test():
 
 #
 # Make sure the team_pokemon shared_ptr copies correctly.
-# Make sure team_pokemon_modernimpl's signal/slots work correctly.
+# Make sure team_pokemon_modernimpl's signals/slots work correctly.
 #
 def team_pokemon_test():
     deoxys = LibPKMN.team_pokemon("Deoxys", "Diamond", 50, "None", "None", "None", "None")

@@ -135,9 +135,8 @@ IF(ENABLE_CSHARP)
 
     SET(cs_test_names
         CSharpDictTest
+        CSharpSPtrTest
         CSharpStringTest
-        CSharpBagPocketTest
-        CSharpCopySPtrTest
     )
 
     SET(CSHARP_PLATFORM "x86")
