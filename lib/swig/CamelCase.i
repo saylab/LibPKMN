@@ -366,7 +366,7 @@
 %rename(toughSuper) pkmn::hoenn_ribbons::tough_super;
 %rename(toughHyper) pkmn::hoenn_ribbons::tough_hyper;
 %rename(toughMaster) pkmn::hoenn_ribbons::tough_master;
-%rename(SinnohRibbons1) pkmn::sinnoh_ribbons1::sinnoh_ribbons1;
+%rename(SinnohRibbons1) pkmn::sinnoh_ribbons1;
 %rename(sinnohChamp) pkmn::sinnoh_ribbons1::sinnoh_champ;
 %rename(greatAbility) pkmn::sinnoh_ribbons1::great_ability;
 %rename(doubleAbility) pkmn::sinnoh_ribbons1::double_ability;
