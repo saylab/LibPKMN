@@ -21,8 +21,8 @@ BOOST_AUTO_TEST_CASE(pkstring_conversions)
     std::wstring test_stdwstring1 = L"Test string";
     pkmn::pkstring test_pkstring1 = test_stdstring1;
     pkmn::pkstring test_pkstring2 = test_stdwstring1;
-    std::basic_string<uint16_t> test_string16_1 = test_pkstring1;
-    std::basic_string<uint16_t> test_string16_2 = test_pkstring2;
+    std::basic_string<uint16_t> test_string16_1 = (const uint16_t*)test_pkstring1;
+    std::basic_string<uint16_t> test_string16_2 = (const uint16_t*)test_pkstring2;
 
     BOOST_CHECK(test_pkstring1 == test_stdstring1);
     BOOST_CHECK(test_pkstring1 == test_stdwstring1);
