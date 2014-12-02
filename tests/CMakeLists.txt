@@ -161,8 +161,7 @@ IF(ENABLE_JAVA)
 
     SET(java_test_names
         JavaDictTest
-        JavaBagPocketTest
-        JavaCopySPtrTest
+        JavaSPtrTest
         JavaStringTest
     )
 
