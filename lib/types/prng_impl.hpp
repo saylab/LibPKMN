@@ -23,6 +23,7 @@ namespace pkmn
         {
             srand(time(NULL));
             for(size_t i = 0; i < 624; i++) nums[i] = rand();
+            pos = 0;
         }
 
         uint16_t pos;

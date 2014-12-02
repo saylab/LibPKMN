@@ -10,6 +10,8 @@
 
 #include "text.hpp"
 
+#define INDEX_OF(arr, val) std::distance(arr, std::find(arr, arr+255, val))
+
 namespace pkmn
 {
     namespace conversions
@@ -17,7 +19,11 @@ namespace pkmn
         pkmn::pkstring import_gen1_text(const uint8_t* buffer, uint8_t max_len)
         {
             std::wstring str;
-            for(size_t i = 0; i < max_len; i++) str += gen1_char_map[buffer[i]];
+            for(size_t i = 0; i < max_len; i++)
+            {
+                if(!buffer or buffer[i] == 0x50) break;
+                else str += gen1_char_map[buffer[i]];
+            }
             return pkmn::pkstring(str);
         }
 
@@ -26,16 +32,20 @@ namespace pkmn
             std::wstring str = text.std_wstring();
             for(size_t i = 0; i < max_len; i++)
             {
-                if(i > str.size()) buffer[i] = 0x50;
+                if(i >= str.size()) buffer[i] = 0x50;
                 else if(str[i] == 0x20) buffer[i] = 0x7F;
-                else buffer[i] = *(std::find(gen1_char_vec.begin(), gen1_char_vec.end(), str[i]));
+                else buffer[i] = INDEX_OF(gen1_char_map, str[i]);
             }
         }
 
         pkmn::pkstring import_gen2_text(const uint8_t* buffer, uint8_t max_len)
         {
             std::wstring str;
-            for(size_t i = 0; i < max_len; i++) str += gen2_char_map[buffer[i]];
+            for(size_t i = 0; i < max_len; i++)
+            {
+                if(!buffer or buffer[i] == 0x50) break;
+                else str += gen2_char_map[buffer[i]];
+            }
             return pkmn::pkstring(str);
         }
 
@@ -44,9 +54,9 @@ namespace pkmn
             std::wstring str = text.std_wstring();
             for(size_t i = 0; i < max_len; i++)
             {
-                if(i > str.size()) buffer[i] = 0x50;
+                if(i >= str.size()) buffer[i] = 0x50;
                 else if(str[i] == 0x20) buffer[i] = 0x7F;
-                else buffer[i] = *(std::find(gen2_char_vec.begin(), gen2_char_vec.end(), str[i]));
+                else buffer[i] = INDEX_OF(gen2_char_map, str[i]);
             }
         }
 
@@ -55,7 +65,7 @@ namespace pkmn
             std::wstring str;
             for(size_t i = 0; i < max_len; i++)
             {
-                if(buffer[i] > 0xF9) break;
+                if(!buffer or buffer[i] > 0xF9) break;
                 else str += gen3_char_map[buffer[i]];
             }
             return pkmn::pkstring(str);
@@ -66,8 +76,8 @@ namespace pkmn
             std::wstring str = text.std_wstring();
             for(size_t i = 0; i < max_len; i++)
             {
-                if(i > str.size()) buffer[i] = 0xFF;
-                else buffer[i] = *(std::find(gen2_char_vec.begin(), gen2_char_vec.end(), str[i]));
+                if(i >= str.size()) buffer[i] = 0xFF;
+                else buffer[i] = INDEX_OF(gen3_char_map, str[i]);
             }
         }
     }

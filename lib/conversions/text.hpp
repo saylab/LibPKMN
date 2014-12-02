@@ -11,6 +11,8 @@
 #include <string>
 #include <vector>
 
+#include <pkmn/config.hpp>
+
 #include <pkmn/types/pkstring.hpp>
 
 namespace pkmn
@@ -43,8 +45,6 @@ namespace pkmn
         '\0',0xD7,'\0',0x2F,0x2C,0x2640,0x30,0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x39
     };
 
-    const std::vector<wchar_t> gen1_char_vec(gen1_char_map, gen1_char_map+255);
-
     /*
      * Character map for Generation II
      *
@@ -72,8 +72,6 @@ namespace pkmn
         '\0',0x3C,0x3E,0x2D,'\0','\0',0x3F,0x21,0x2E,'\0','\0','\0','\0','\0','\0','\0',
         '\0',0xD7,'\0',0x2F,0x2C,'\0',0x30,0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x39
     };
-
-    const std::vector<wchar_t> gen2_char_vec(gen2_char_map, gen2_char_map+255);
 
     /*
      * Character map for Generation III (English)
@@ -108,18 +106,16 @@ namespace pkmn
         0x3A,0xC4,0xD6,0xDC,0xE4,0xF6,0xF6,0x2B06,0x2B07,0x2B05,'\0','\0','\0','\0','\n','\0'
     };
 
-    const std::vector<wchar_t> gen3_char_vec(gen3_char_map, gen3_char_map+255);
-
     namespace conversions
     {
-        pkmn::pkstring import_gen1_text(const uint8_t* buffer, uint8_t max_len);
-        void export_gen1_text(const pkmn::pkstring &text, uint8_t* buffer, uint8_t max_len);
+        pkmn::pkstring PKMN_API import_gen1_text(const uint8_t* buffer, uint8_t max_len);
+        void PKMN_API export_gen1_text(const pkmn::pkstring &text, uint8_t* buffer, uint8_t max_len);
 
-        pkmn::pkstring import_gen2_text(const uint8_t* buffer, uint8_t max_len);
-        void export_gen2_text(const pkmn::pkstring &text, uint8_t* buffer, uint8_t max_len);
+        pkmn::pkstring PKMN_API import_gen2_text(const uint8_t* buffer, uint8_t max_len);
+        void PKMN_API export_gen2_text(const pkmn::pkstring &text, uint8_t* buffer, uint8_t max_len);
 
-        pkmn::pkstring import_gen3_text(const uint8_t* buffer, uint8_t max_len);
-        void export_gen3_text(const pkmn::pkstring &text, uint8_t* buffer, uint8_t max_len);
+        pkmn::pkstring PKMN_API import_gen3_text(const uint8_t* buffer, uint8_t max_len);
+        void PKMN_API export_gen3_text(const pkmn::pkstring &text, uint8_t* buffer, uint8_t max_len);
     }
 }
 #endif /* INCLUDED_PKMN_CONVERSIONS_TEXT_HPP */

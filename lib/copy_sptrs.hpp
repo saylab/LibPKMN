@@ -7,6 +7,8 @@
 #ifndef INCLUDED_COPY_SPTRS_HPP
 #define INCLUDED_COPY_SPTRS_HPP
 
+#include <pkmn/config.hpp>
+
 #include <pkmn/bag.hpp>
 #include <pkmn/base_pokemon.hpp>
 #include <pkmn/item.hpp>
@@ -17,21 +19,21 @@
 
 namespace pkmn
 {
-    bag::sptr copy_bag(bag::sptr in);
+    bag::sptr PKMN_API copy_bag(bag::sptr in);
 
-    base_pokemon::sptr copy_base_pokemon(base_pokemon::sptr in);
+    base_pokemon::sptr PKMN_API copy_base_pokemon(base_pokemon::sptr in);
 
-    item::sptr copy_item(item::sptr in);
+    item::sptr PKMN_API copy_item(item::sptr in);
 
-    move::sptr copy_move(move::sptr in);
+    move::sptr PKMN_API copy_move(move::sptr in);
 
-    pocket::sptr copy_pocket(pocket::sptr in);
+    pocket::sptr PKMN_API copy_pocket(pocket::sptr in);
 
-    team_pokemon::sptr copy_team_pokemon(team_pokemon::sptr in);
+    team_pokemon::sptr PKMN_API copy_team_pokemon(team_pokemon::sptr in);
 
-    trainer::sptr copy_trainer(trainer::sptr in);
+    trainer::sptr PKMN_API copy_trainer(trainer::sptr in);
 
-    prng::sptr copy_prng(prng::sptr in);
+    prng::sptr PKMN_API copy_prng(prng::sptr in);
 }
 
 #endif /* INCLUDED_COPY_SPTRS_HPP */
