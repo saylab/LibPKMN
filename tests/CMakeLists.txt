@@ -88,6 +88,10 @@ MACRO(LIBPKMN_ADD_PYTHON_TEST test_name)
         @ONLY)
         ADD_TEST(${test_name} ${CMAKE_CURRENT_BINARY_DIR}/${test_name}.bat)
     ELSE()
+        CONFIGURE_FILE(
+            ${CMAKE_CURRENT_SOURCE_DIR}/unit_test_template.sh.in
+            ${CMAKE_CURRENT_BINARY_DIR}/${test_name}.sh
+        @ONLY)
         ADD_TEST(${test_name} ${CMAKE_CURRENT_BINARY_DIR}/${test_name}.sh)
     ENDIF(WIN32)
 ENDMACRO(LIBPKMN_ADD_PYTHON_TEST)
