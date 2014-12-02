@@ -188,7 +188,6 @@ ENDIF(ENABLE_JAVA)
 IF(ENABLE_PYTHON)
     SET(python_test_names
         python_dict_test
-        python_enum_test
         python_pkstring_test
         python_sptr_test
     )

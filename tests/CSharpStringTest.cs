@@ -5,26 +5,41 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-using LibPKMN;
 using System;
 
 public class StringTest
 {
+    // Test database usage
+    public static void DatabaseUsageTest()
+    {
+        try
+        {
+            String testString = "Torrent";
+            String testString2 = LibPKMN.Database.getAbilityName(LibPKMN.Database.getAbilityID(testString));
+            if(testString != testString2)
+                throw new System.Exception("testString != testString2");
+
+            uint testUInt1 = LibPKMN.Database.getItemID(LibPKMN.Database.getItemName(LibPKMN.Items.POKE_BALL));
+            if(testUInt1 != LibPKMN.Items.POKE_BALL)
+                throw new System.Exception("testUInt1 != LibPKMN.Items.POKE_BALL");
+
+            uint testUInt2 = LibPKMN.Database.getSpeciesID(LibPKMN.Database.getSpeciesName(LibPKMN.Species.NIDORAN_M));
+            if(testUInt2 != LibPKMN.Species.NIDORAN_M)
+                throw new System.Exception("testUInt2 != LibPKMN.Species.NIDORAN_M");
+        }
+        catch(System.Exception ex)
+        {
+            System.Console.WriteLine("Caught exception:");
+            System.Console.WriteLine("   " + ex.Message);
+            System.Console.WriteLine(ex.StackTrace);
+            System.Environment.Exit(1);
+        }
+    }
+
     public static int Main(string[] args)
     {
-        string abilityFromDatabase = Database.getAbilityName(Abilities.TORRENT);
-        if(abilityFromDatabase != "Torrent")
-        {
-            throw new System.Exception("string -> pkmn::pkstring conversion failed.");
-        }
-
-        string_vec stringVector = new string_vec();
-        LibPKMN.LibPKMN.getPokemonList(stringVector, Versions.RED);
-        if(stringVector[3] != "Charmander")
-        {
-            throw new System.Exception("pkmn::pkstring -> string conversion failed.");
-        }
+        DatabaseUsageTest();
 
         return 0;
-    }    
+    }
 }
