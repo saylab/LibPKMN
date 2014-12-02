@@ -15,7 +15,6 @@ SET(py_enum_files
     ${CMAKE_CURRENT_BINARY_DIR}/Forms.py
     ${CMAKE_CURRENT_BINARY_DIR}/Genders.py
     ${CMAKE_CURRENT_BINARY_DIR}/Items.py
-    ${CMAKE_CURRENT_BINARY_DIR}/Markings.py
     ${CMAKE_CURRENT_BINARY_DIR}/Move_Classes.py
     ${CMAKE_CURRENT_BINARY_DIR}/Moves.py
     ${CMAKE_CURRENT_BINARY_DIR}/Natures.py
