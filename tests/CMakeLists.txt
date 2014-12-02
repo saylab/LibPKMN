@@ -101,6 +101,7 @@ ENDMACRO(LIBPKMN_ADD_PYTHON_TEST)
 ##################################################
 SET(cpp_test_sources
     dict_test.cpp
+    markings_test.cpp
     old_values_test.cpp
     pkstring_test.cpp
     prng_test.cpp
@@ -139,6 +140,7 @@ IF(ENABLE_CSHARP)
 
     SET(cs_test_names
         CSharpDictTest
+        CSharpMarkingsTest
         CSharpSPtrTest
         CSharpStringTest
     )
