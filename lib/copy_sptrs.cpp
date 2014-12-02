@@ -19,11 +19,11 @@
 #include "item_machineimpl.hpp"
 #include "move_impl.hpp"
 #include "pocket_impl.hpp"
-#include "prng_impl.hpp"
 #include "team_pokemon_gen1impl.hpp"
 #include "team_pokemon_gen2impl.hpp"
 #include "team_pokemon_modernimpl.hpp"
 #include "trainer_impl.hpp"
+#include "types/prng_impl.hpp"
 
 namespace pkmn
 {
