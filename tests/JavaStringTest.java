@@ -5,25 +5,40 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
+import java.lang.RuntimeException;
 import org.nc.LibPKMN.*;
 
 public class JavaStringTest
 {
+    // Test database usage
+    public static void DatabaseUsageTest()
+    {
+        try
+        {
+            String testString = "Torrent";
+            String testString2 = Database.getAbilityName(Database.getAbilityID(testString));
+            if(!testString.equals(testString2))
+                throw new RuntimeException("testString != testString2");
+
+            long testLong1 = Database.getItemID(Database.getItemName(Items.POKE_BALL));
+            if(testLong1 != Items.POKE_BALL)
+                throw new RuntimeException("testLong1 != Items.POKE_BALL");
+
+            long testLong2 = Database.getSpeciesID(Database.getSpeciesName(Species.NIDORAN_M));
+            if(testLong2 != Species.NIDORAN_M)
+                throw new RuntimeException("testLong2 != Species.NIDORAN_M");
+        }
+        catch(RuntimeException ex)
+        {
+            System.out.println("Caught exception:");
+            System.out.println("   " + ex.getMessage());
+            System.out.println(ex.getStackTrace());
+            System.exit(1);
+        }
+    }
+
     public static void main(String[] args)
     {
-        String abilityFromDatabase = Database.getAbilityName((short)(Abilities.TORRENT));
-        System.out.println(abilityFromDatabase);
-        if(!abilityFromDatabase.equals("Torrent"))
-        {
-            throw new RuntimeException("String -> pkmn::pkstring conversion failed.");
-        }
-
-        StringVector stringVector = new StringVector();
-        LibPKMN.getPokemonList(stringVector, (short)(Versions.RED));
-        System.out.println(stringVector.get(3));
-        if(!stringVector.get(3).equals("Charmander"))
-        {
-            throw new RuntimeException("pkmn::pkstring -> String conversion failed.");
-        }
+        DatabaseUsageTest();
     }
 }
