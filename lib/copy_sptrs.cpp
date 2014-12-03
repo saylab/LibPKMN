@@ -16,7 +16,6 @@
 #include "base_pokemon_gen2impl.hpp"
 #include "base_pokemon_modernimpl.hpp"
 #include "item_impl.hpp"
-#include "item_machineimpl.hpp"
 #include "move_impl.hpp"
 #include "pocket_impl.hpp"
 #include "team_pokemon_gen1impl.hpp"
@@ -59,19 +58,8 @@ namespace pkmn
 
     item::sptr copy_item(item::sptr in)
     {
-        unsigned int id = in->get_item_id();
-        if((id >= Items::TM01 and id <= Items::HM08)
-           or (id >= Items::TM93 and id <= Items::TM95)
-           or (id >= Items::TM96 and id <= Items::TM100))
-        {
-            item_machineimpl actual_machine = *pkmn::dynamic_pointer_cast<item_machineimpl>(in);
-            return pkmn::make_shared<item_machineimpl>(actual_machine);
-        }
-        else
-        {
-            item_impl actual = *pkmn::dynamic_pointer_cast<item_impl>(in);
-            return pkmn::make_shared<item_impl>(actual);
-        }
+        item_impl actual = *pkmn::dynamic_pointer_cast<item_impl>(in);
+        return pkmn::make_shared<item_impl>(actual);
     }
 
     move::sptr copy_move(move::sptr in)
