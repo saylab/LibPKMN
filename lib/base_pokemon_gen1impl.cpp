@@ -6,6 +6,7 @@
  */
 
 #include <cstdio>
+#include <sstream>
 
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
