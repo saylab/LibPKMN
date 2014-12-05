@@ -22,12 +22,12 @@ BOOST_AUTO_TEST_CASE(from_markings_test)
     mark.diamond = false;
 
     uint8_t mark_int = mark;
-    BOOST_CHECK_EQUAL(mark_int, 0b010101);
+    BOOST_CHECK_EQUAL(mark_int, 21); // 0b010101
 }
 
 BOOST_AUTO_TEST_CASE(to_markings_test)
 {
-    uint8_t mark_int = 0b010101;
+    uint8_t mark_int = 21; // 0b010101
     pkmn::markings mark = mark_int;
     BOOST_CHECK(mark.circle);
     BOOST_CHECK(!mark.triangle);
