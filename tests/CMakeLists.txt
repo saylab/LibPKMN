@@ -88,6 +88,7 @@ MACRO(LIBPKMN_ADD_PYTHON_TEST test_name)
         @ONLY)
         ADD_TEST(${test_name} ${CMAKE_CURRENT_BINARY_DIR}/${test_name}.bat)
     ELSE()
+        SET(TEST_CMD "${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/${test_name}.py")
         CONFIGURE_FILE(
             ${CMAKE_CURRENT_SOURCE_DIR}/unit_test_template.sh.in
             ${CMAKE_CURRENT_BINARY_DIR}/${test_name}.sh
