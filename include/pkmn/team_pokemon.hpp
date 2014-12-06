@@ -14,7 +14,7 @@
 #include <pkmn/config.hpp>
 #include <pkmn/item.hpp>
 #include <pkmn/move.hpp>
-#include <pkmn/nature.hpp>
+#include <pkmn/types/nature.hpp>
 #include <pkmn/types/dict.hpp>
 #include <pkmn/types/markings.hpp>
 #include <pkmn/types/pkstring.hpp>
