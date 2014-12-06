@@ -31,7 +31,6 @@
 %}
 
 %ignore pkmn::pkstring::const_char;
-%rename(__eq__) pkmn::operator==(const pkmn::pkstring&, const pkmn::pkstring&);
 %rename(__len__) pkmn::pkstring::length;
 %extend pkmn::pkstring {
     char* __repr__() {return (char*)((*self).const_char());}
