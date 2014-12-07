@@ -10,24 +10,18 @@
 #include <pkmn/config.hpp>
 
 #include <QMessageBox>
-#include <QLabel>
 
 namespace pkmn
 {
     namespace qt4
     {
+        //! An "About" MessageBox that can be used in LibPKMN's Qt4 applications.
         class PKMN_API AboutMessageBox: public QMessageBox
         {
             Q_OBJECT
 
             public:
                 AboutMessageBox(QWidget* parent = NULL);
-
-            /*signals:
-
-            slots:
-
-            private:*/
         };
     }
 }

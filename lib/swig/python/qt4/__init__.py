@@ -8,6 +8,7 @@
 
 from AbilityListComboBox import AbilityListComboBox
 from AboutMessageBox import AboutMessageBox
+from ItemListComboBox import ItemListComboBox
 from NatureListComboBox import NatureListComboBox
 from PokemonListComboBox import PokemonListComboBox
 from TypeListComboBox import TypeListComboBox

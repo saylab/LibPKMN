@@ -107,13 +107,14 @@ SET(cpp_test_sources
     pkstring_test.cpp
     prng_test.cpp
     sptr_test.cpp
+    qt4_test.cpp
     text_conversion_test.cpp
 )
 
 FOREACH(cpp_test ${cpp_test_sources})
     GET_FILENAME_COMPONENT(cpp_test_name ${cpp_test} NAME_WE)
     ADD_EXECUTABLE(${cpp_test_name} ${cpp_test})
-    TARGET_LINK_LIBRARIES(${cpp_test_name} pkmn)
+    TARGET_LINK_LIBRARIES(${cpp_test_name} pkmn ${QT_LIBRARIES} ${QT_QTMAIN_LIBRARY})
 
     IF(CMAKE_COMPILER_IS_GNUCXX)
         IF(UNIX)
@@ -150,7 +151,7 @@ IF(ENABLE_CSHARP)
     SET(CSHARP_BINARY_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
     FOREACH(cs_test ${cs_test_names})
         CSHARP_ADD_EXECUTABLE(
-            ${cs_test} "${LIBPKMN_CS_DLL}" "${CMAKE_CURRENT_SOURCE_DIR}/${cs_test}.cs"
+            ${cs_test} "${LIBPKMN_CS_DLL}" "System.Windows.Forms.dll" "${CMAKE_CURRENT_SOURCE_DIR}/${cs_test}.cs"
         )
         ADD_DEPENDENCIES(${cs_test} libpkmn-cs)
         LIBPKMN_ADD_CS_TEST(${cs_test})
@@ -196,6 +197,7 @@ IF(ENABLE_PYTHON)
     SET(python_test_names
         python_dict_test
         python_pkstring_test
+        python_pyqt4_test
         python_sptr_test
     )
 

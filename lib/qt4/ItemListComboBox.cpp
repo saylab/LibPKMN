@@ -11,20 +11,20 @@
 
 #include <pkmn/lists.hpp>
 #include <pkmn/database/queries.hpp>
-#include <pkmn/qt4/PokemonListComboBox.hpp>
+#include <pkmn/qt4/ItemListComboBox.hpp>
 
 namespace pkmn
 {
     namespace qt4
     {
-        PokemonListComboBox::PokemonListComboBox(const unsigned int version_id, QWidget* parent):
+        ItemListComboBox::ItemListComboBox(const unsigned int version_id, QWidget* parent):
             QComboBox(parent)
         {
-            std::vector<pkstring> pokemon_vec;
-            get_pokemon_list(pokemon_vec, version_id);
+            std::vector<pkstring> item_vec;
+            get_item_list(item_vec, version_id);
 
-            for(unsigned int i = 0; i < pokemon_vec.size(); i++)
-                addItem(QString::fromUtf16(pokemon_vec[i]), QVariant(i));
+            for(unsigned int i = 0; i < item_vec.size(); i++)
+                addItem(QString::fromUtf16(item_vec[i]), QVariant(i));
         }
     } /* namespace qt4 */
 } /* namespace pkmn */

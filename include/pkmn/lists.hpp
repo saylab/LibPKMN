@@ -18,9 +18,9 @@
 
 namespace pkmn
 {
-    void PKMN_API get_game_list(std::vector<pkmn::pkstring> &game_vec);
+    void PKMN_API get_version_list(std::vector<pkmn::pkstring> &game_vec);
 
-    void PKMN_API get_game_group_list(std::vector<pkmn::pkstring> &game_group_vec);
+    void PKMN_API get_version_group_list(std::vector<pkmn::pkstring> &game_group_vec);
 
     void PKMN_API get_item_list(std::vector<pkmn::pkstring> &item_vec, unsigned int game);
 

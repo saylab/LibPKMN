@@ -41,6 +41,7 @@ IF(ENABLE_LIBPKMN)
     SET(qt4_headers
         ${LIBPKMN_SOURCE_DIR}/include/pkmn/qt4/AbilityListComboBox.hpp
         ${LIBPKMN_SOURCE_DIR}/include/pkmn/qt4/AboutMessageBox.hpp
+        ${LIBPKMN_SOURCE_DIR}/include/pkmn/qt4/ItemListComboBox.hpp
         ${LIBPKMN_SOURCE_DIR}/include/pkmn/qt4/NatureListComboBox.hpp
         ${LIBPKMN_SOURCE_DIR}/include/pkmn/qt4/PokemonListComboBox.hpp
         ${LIBPKMN_SOURCE_DIR}/include/pkmn/qt4/TypeListComboBox.hpp

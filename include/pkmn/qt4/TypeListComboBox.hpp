@@ -15,12 +15,13 @@ namespace pkmn
 {
     namespace qt4
     {
+        //! A ComboBox that lists all types present in the given generation.
         class PKMN_API TypeListComboBox: public QComboBox
         {
             Q_OBJECT
 
             public:
-                TypeListComboBox(unsigned int gen, QWidget* parent = NULL);
+                TypeListComboBox(const unsigned int gen, QWidget* parent = NULL);
         };
     }
 }

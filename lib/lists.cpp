@@ -25,17 +25,17 @@ namespace pkmn
 {
     pkmn::shared_ptr<SQLite::Database> db;
 
-    void get_game_list(std::vector<pkmn::pkstring> &game_vec)
+    void get_version_list(std::vector<pkmn::pkstring> &game_vec)
     {
         if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
         game_vec.clear();
 
-        SQLite::Statement query(*db, "SELECT name FROM version_names");
+        SQLite::Statement query(*db, "SELECT name FROM version_names WHERE local_language_id=9");
 
         while(query.executeStep()) game_vec.push_back((const char*)query.getColumn(0));
     }
 
-    void get_game_group_list(std::vector<pkmn::pkstring> &game_group_vec)
+    void get_version_group_list(std::vector<pkmn::pkstring> &game_group_vec)
     {
         //Must be done manually, only really used for GamesComboBox
         game_group_vec.clear();

@@ -128,8 +128,8 @@
 /*
  * pkmn/lists.hpp
  */
-%rename(getGameList) pkmn::get_game_list;
-%rename(getGameGroupList) pkmn::get_game_group_list;
+%rename(getVersionList) pkmn::get_version_list;
+%rename(getVersionGroupList) pkmn::get_version_group_list;
 %rename(getItemList) pkmn::get_item_list;
 %rename(getPokemonList) pkmn::get_pokemon_list;
 %rename(getTypeList) pkmn::get_type_list;
