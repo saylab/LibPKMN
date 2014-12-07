@@ -22,7 +22,8 @@
 #include <pkmn/qt4/VersionListComboBox.hpp>
 #include <pkmn/types/pkstring.hpp>
 
-QApplication app(0,0);
+int argc = 0;
+QApplication app(argc,0);
 
 /*
  * Make sure all abilities are accounted for and that and
