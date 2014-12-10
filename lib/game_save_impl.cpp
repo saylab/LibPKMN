@@ -47,9 +47,9 @@ namespace pkmn
             else
             {
                 //Check to see if PKMDS accepts this as a proper Gen V save
-                pkmds_g5_sptr sav = pkmds_g5_sptr(new bw2sav_obj);
-                ::read(filename.c_str(), sav.get());
-                if(::savisbw2(sav.get())) return sptr(new game_save_gen5impl(sav, filename));
+                pkmds_g5_sptr sav = pkmds_g5_sptr(new pkmds::bw2sav_obj);
+                pkmds::read(filename.c_str(), sav.get());
+                if(pkmds::savisbw2(sav.get())) return sptr(new game_save_gen5impl(sav, filename));
             }
         }
         else if(size >= 0x40000)

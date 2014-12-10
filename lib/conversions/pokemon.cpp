@@ -858,9 +858,9 @@ namespace pkmn
         /*
          * Generation V
          */
-        team_pokemon::sptr import_gen5_pokemon(party_pkm* p_pkm)
+        team_pokemon::sptr import_gen5_pokemon(pkmds::party_pkm* p_pkm)
         {
-            ::opendb(get_database_path().c_str());
+            pkmds::opendb(get_database_path().c_str());
 
             unsigned int species_id = database::get_species_id(database::get_pokemon_id(p_pkm->species_int,
                                                                                         Versions::BLACK));
@@ -870,18 +870,8 @@ namespace pkmn
                                         p_pkm->moves[2], p_pkm->moves[3]);
 
             t_pkmn->set_original_game(hometown_to_libpkmn_game(p_pkm->hometown));
-            #ifdef _MSC_VER
-                t_pkmn->set_nickname(getpkmnickname(p_pkm));
-                t_pkmn->set_trainer_name(getpkmotname(p_pkm));
-            #else
-                //Testing new pkstring class, need to get around PKMDS's use of chars for Linux
-                wchar_t nickname[11];
-                wchar_t otname[8];
-                memcpy(nickname, p_pkm->nickname, 22);
-                memcpy(otname, p_pkm->otname, 16);
-                t_pkmn->set_nickname(nickname);
-                t_pkmn->set_trainer_name(otname);
-            #endif
+            t_pkmn->set_nickname(import_modern_text(p_pkm->nickname, 11));
+            t_pkmn->set_trainer_name(import_modern_text(p_pkm->otname, 8));
 
             t_pkmn->set_move_PP(p_pkm->pp[0], 1);
             t_pkmn->set_move_PP(p_pkm->pp[1], 2);
@@ -1018,23 +1008,23 @@ namespace pkmn
             t_pkmn->set_attribute("met_month", p_pkm->metdate.month);
             t_pkmn->set_attribute("met_day", p_pkm->metdate.day);
 
-            closedb();
+            pkmds::closedb();
 
             return t_pkmn;
         }
 
-        void export_gen5_pokemon(team_pokemon::sptr t_pkmn, party_pkm* p_pkm)
+        void export_gen5_pokemon(team_pokemon::sptr t_pkmn, pkmds::party_pkm* p_pkm)
         {
-            p_pkm->species = ::Species::species(
-                                 database::get_pokemon_game_index(t_pkmn->get_pokemon_id(),
-                                 t_pkmn->get_game_id()));
+            p_pkm->species = pkmds::Species::species(
+                             database::get_pokemon_game_index(t_pkmn->get_pokemon_id(),
+                             t_pkmn->get_game_id()));
 
             moveset_t moves;
             t_pkmn->get_moves(moves);
-            p_pkm->moves[0] = ::Moves::moves(moves[0]->get_move_id());
-            p_pkm->moves[1] = ::Moves::moves(moves[1]->get_move_id());
-            p_pkm->moves[2] = ::Moves::moves(moves[2]->get_move_id());
-            p_pkm->moves[3] = ::Moves::moves(moves[3]->get_move_id());
+            p_pkm->moves[0] = pkmds::Moves::moves(moves[0]->get_move_id());
+            p_pkm->moves[1] = pkmds::Moves::moves(moves[1]->get_move_id());
+            p_pkm->moves[2] = pkmds::Moves::moves(moves[2]->get_move_id());
+            p_pkm->moves[3] = pkmds::Moves::moves(moves[3]->get_move_id());
 
             std::vector<unsigned int> move_PPs;
             t_pkmn->get_move_PPs(move_PPs);
@@ -1043,25 +1033,17 @@ namespace pkmn
             p_pkm->pp[2] = move_PPs[2];
             p_pkm->pp[3] = move_PPs[3];
 
-            ::setlevel(p_pkm, t_pkmn->get_level());
+            pkmds::setlevel(p_pkm, t_pkmn->get_level());
 
-            std::wstring nickname_wide = t_pkmn->get_nickname();
-            std::wstring trainer_name_wide = t_pkmn->get_trainer_name();
-            #ifdef PKMN_PLATFORM_LINUX
-                ::setpkmnickname(p_pkm, (wchar_t*)(nickname_wide.c_str()), nickname_wide.size());
-                ::setpkmotname(p_pkm, (wchar_t*)(trainer_name_wide.c_str()), trainer_name_wide.size());
-            #else
-                //TODO: clean up when using Windows
-                ::setpkmnickname(p_pkm, (wchar_t*)(nickname_wide.c_str()), nickname_wide.size());
-                ::setpkmotname(p_pkm, (wchar_t*)(trainer_name_wide.c_str()), trainer_name_wide.size());
-            #endif
+            export_modern_text(t_pkmn->get_nickname(), p_pkm->nickname, 11);
+            export_modern_text(t_pkmn->get_nickname(), p_pkm->otname, 8);
 
             unsigned int raw_held = t_pkmn->get_held_item()->get_item_id();
-            p_pkm->item = ::Items::items(database::get_item_game_index(raw_held, t_pkmn->get_game_id()));
+            p_pkm->item = pkmds::Items::items(database::get_item_game_index(raw_held, t_pkmn->get_game_id()));
 
             uint8_t* metlevel_int = reinterpret_cast<uint8_t*>(&(p_pkm->ball)+1);
             set_gen_456_met_level(metlevel_int, t_pkmn->get_met_level());
-            p_pkm->ball = ::Balls::balls(libpkmn_ball_to_game_ball(reverse_ball_dict.at(t_pkmn->get_ball(), PokeBalls::POKE_BALL)));
+            p_pkm->ball = pkmds::Balls::balls(libpkmn_ball_to_game_ball(reverse_ball_dict.at(t_pkmn->get_ball(), PokeBalls::POKE_BALL)));
             set_gen_456_otgender(metlevel_int, (t_pkmn->get_trainer_gender().std_string() == "Female"));
             p_pkm->pid = t_pkmn->get_personality();
             p_pkm->tid = t_pkmn->get_trainer_public_id();
@@ -1092,14 +1074,13 @@ namespace pkmn
             p_pkm->evs.spdef = EVs["Special Defense"];
             p_pkm->evs.speed = EVs["Speed"];
 
-            p_pkm->hometown = ::Hometowns::hometowns(libpkmn_game_to_hometown(t_pkmn->get_original_game_id()));
+            p_pkm->hometown = pkmds::Hometowns::hometowns(libpkmn_game_to_hometown(t_pkmn->get_original_game_id()));
             p_pkm->markings_int = t_pkmn->get_markings();
-
 
             //Attributes
             pkmn::dict<pkmn::pkstring, int> attributes = t_pkmn->get_attributes();
             p_pkm->tameness = attributes.at("friendship",0);
-            p_pkm->country = Countries::countries(attributes.at("country",2)); //Default to English
+            p_pkm->country = pkmds::Countries::countries(attributes.at("country",2)); //Default to English
             p_pkm->contest.cool = attributes.at("cool",false);
             p_pkm->contest.beauty = attributes.at("beauty",false);
             p_pkm->contest.cute = attributes.at("cute",false);

@@ -5,6 +5,9 @@
 #include "sqlite3.h"
 #include "pkmds_g5.h"
 
+namespace pkmds
+{
+
 #ifndef __cplusplus_cli
 extern sqlite3 *imgdatabase;
 extern sqlite3_stmt *imgstatement;
@@ -139,3 +142,5 @@ item_obj * getpocket(bw2sav_obj * sav, ItemPockets::itempockets pocket);
 void tossitem(bw2sav_obj * sav, item_obj * item);
 void giveitem(bw2sav_obj * sav, item_obj * item, pokemon_obj * pkm);
 void insertitem(bw2sav_obj * sav, item_obj * item, int slot);
+
+}

@@ -1,5 +1,9 @@
 #include "pkmds_sql.h"
 using namespace std;
+
+namespace pkmds
+{
+
 #ifndef __cplusplus_cli
 sqlite3 *database;
 sqlite3_stmt *statement;
@@ -1737,4 +1741,6 @@ void insertitem(bw2sav_obj * sav, item_obj * item, int slot)
 string lookupitemflavortext(const int itemid, const int generation, const int langid, const int versiongroup)
 {
 	return getastring(lookupitemflavortextsql(itemid, generation, langid, versiongroup));
+}
+
 }

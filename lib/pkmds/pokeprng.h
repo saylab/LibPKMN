@@ -1,9 +1,8 @@
 #pragma once
-#ifdef PKMDS_CMAKE_USED
-#include <pkmds/stdafx.h>
-#else
 #include "stdafx.h"
-#endif
+
+namespace pkmds
+{
 struct pkmprng
 {
     uint32 mseed;
@@ -26,3 +25,4 @@ struct pkmprng
 		return mseed;
 	}
 };
+}

@@ -35,8 +35,8 @@ namespace pkmn
         void import_gen4_items(bag::sptr item_bag, PokeLib::Trainer pokelib_trainer);
         void export_gen4_items(bag::sptr item_bag, PokeLib::Trainer* pokelib_trainer);
 
-        void import_gen5_items(bag::sptr item_bag, ::bag_obj* pkmds_bag);
-        void export_gen5_items(bag::sptr item_bag, ::bag_obj* pkmds_bag);
+        void import_gen5_items(bag::sptr item_bag, pkmds::bag_obj* pkmds_bag);
+        void export_gen5_items(bag::sptr item_bag, pkmds::bag_obj* pkmds_bag);
     }
 }
 

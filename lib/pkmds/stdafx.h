@@ -29,18 +29,18 @@ static const int BUFF_SIZE = 955;
 static const int NICKLENGTH = 11;
 static const int OTLENGTH = 8;
 static const int BOXNAMELENGTH = 20;
-/*
-static const int NICKLENGTH_G6 = 12;
-static const int OTLENGTH_G6 = 11;
-*/
-std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems);
-std::vector<std::string> split(const std::string &s, char delim);
-byte getbit(byte & input, byte n);
-byte getbit(uint16 & input, byte n);
-byte getbit(uint32 & input, byte n);
-void setbit(byte & input, byte n, byte val);
-void setbit(uint16 & input, byte n, byte val);
-void setbit(uint32 & input, byte n, byte val);
-void togglebit(byte & input, byte n);
-void togglebit(uint16 & input, byte n);
-void togglebit(uint32 & input, byte n);
+
+namespace pkmds
+{
+    std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems);
+    std::vector<std::string> split(const std::string &s, char delim);
+    byte getbit(byte & input, byte n);
+    byte getbit(uint16 & input, byte n);
+    byte getbit(uint32 & input, byte n);
+    void setbit(byte & input, byte n, byte val);
+    void setbit(uint16 & input, byte n, byte val);
+    void setbit(uint32 & input, byte n, byte val);
+    void togglebit(byte & input, byte n);
+    void togglebit(uint16 & input, byte n);
+    void togglebit(uint32 & input, byte n);
+}

@@ -160,15 +160,15 @@ namespace pkmn
         *metlevelint = (*metlevelint & 0xFE) | ((is_female) ? 1 : 0);
     }
 
-    uint8_t libpkmn_getpkmstat(pokemon_obj* pkm, unsigned int stat_id)
+    uint8_t libpkmn_getpkmstat(pkmds::pokemon_obj* pkm, unsigned int stat_id)
     {
         SQLite::Database db(get_database_path().c_str());
-        std::string pkmstatsql = getpkmstatsql(pkm, ::Stat_IDs::stat_ids(stat_id));
-        unsigned int basestat = int(db.execAndGet(pkmstatsql.c_str()));
+        std::string pkmstatsql = pkmds::getpkmstatsql(pkm, pkmds::Stat_IDs::stat_ids(stat_id));
+        unsigned int basestat = db.execAndGet(pkmstatsql.c_str());
 
-        std::string pkmlevelsql = getpkmlevelsql(int(pkm->species),
-                                                 int(pkm->exp));
-        unsigned int level = int(db.execAndGet(pkmlevelsql.c_str()));
+        std::string pkmlevelsql = pkmds::getpkmlevelsql(int(pkm->species),
+                                                        int(pkm->exp));
+        unsigned int level = db.execAndGet(pkmlevelsql.c_str());
         unsigned int ev = 0;
         unsigned int iv = 0;
 
@@ -208,7 +208,7 @@ namespace pkmn
                + floor((double)(ev/4))) * level) / 100)) + 5)) * naturemod));
     }
 
-    void libpkmn_pctoparty(party_pkm* p_pkm, pokemon_obj* pkm)
+    void libpkmn_pctoparty(pkmds::party_pkm* p_pkm, pkmds::pokemon_obj* pkm)
     {
         memcpy(p_pkm, pkm, sizeof(*pkm));
         p_pkm->party_data.maxhp = libpkmn_getpkmstat(pkm, Stats::HP);
@@ -220,8 +220,8 @@ namespace pkmn
         p_pkm->party_data.speed = libpkmn_getpkmstat(pkm, Stats::SPEED);
 
         SQLite::Database db(get_database_path().c_str());
-        std::string pkxlevelsql = getpkmlevelsql(int(pkm->species),
-                                                 int(pkm->exp));
+        std::string pkxlevelsql = pkmds::getpkmlevelsql(int(pkm->species),
+                                                        int(pkm->exp));
         p_pkm->party_data.level = int(db.execAndGet(pkxlevelsql.c_str()));
     }
 
@@ -342,88 +342,88 @@ namespace pkmn
         switch(ball)
         {
             case PokeBalls::UNKNOWN:
-                return ::Balls::pokeball_;
+                return pkmds::Balls::pokeball_;
 
             case PokeBalls::POKE_BALL:
-                return ::Balls::pokeball;
+                return pkmds::Balls::pokeball;
 
             case PokeBalls::GREAT_BALL:
-                return ::Balls::greatball;
+                return pkmds::Balls::greatball;
 
             case PokeBalls::ULTRA_BALL:
-                return ::Balls::ultraball;
+                return pkmds::Balls::ultraball;
 
             case PokeBalls::MASTER_BALL:
-                return ::Balls::masterball;
+                return pkmds::Balls::masterball;
 
             case PokeBalls::SAFARI_BALL:
-                return ::Balls::safariball;
+                return pkmds::Balls::safariball;
 
             case PokeBalls::LEVEL_BALL:
-                return ::Balls::levelball;
+                return pkmds::Balls::levelball;
 
             case PokeBalls::LURE_BALL:
-                return ::Balls::lureball;
+                return pkmds::Balls::lureball;
 
             case PokeBalls::MOON_BALL:
-                return ::Balls::moonball;
+                return pkmds::Balls::moonball;
 
             case PokeBalls::FRIEND_BALL:
-                return ::Balls::friendball;
+                return pkmds::Balls::friendball;
 
             case PokeBalls::LOVE_BALL:
-                return ::Balls::loveball;
+                return pkmds::Balls::loveball;
 
             case PokeBalls::HEAVY_BALL:
-                return ::Balls::heavyball;
+                return pkmds::Balls::heavyball;
 
             case PokeBalls::FAST_BALL:
-                return ::Balls::fastball;
+                return pkmds::Balls::fastball;
 
             case PokeBalls::SPORT_BALL:
-                return ::Balls::sportball;
+                return pkmds::Balls::sportball;
 
             case PokeBalls::PREMIER_BALL:
-                return ::Balls::premierball;
+                return pkmds::Balls::premierball;
 
             case PokeBalls::REPEAT_BALL:
-                return ::Balls::repeatball;
+                return pkmds::Balls::repeatball;
 
             case PokeBalls::TIMER_BALL:
-                return ::Balls::timerball;
+                return pkmds::Balls::timerball;
 
             case PokeBalls::NEST_BALL:
-                return ::Balls::nestball;
+                return pkmds::Balls::nestball;
 
             case PokeBalls::NET_BALL:
-                return ::Balls::netball;
+                return pkmds::Balls::netball;
 
             case PokeBalls::DIVE_BALL:
-                return ::Balls::diveball;
+                return pkmds::Balls::diveball;
 
             case PokeBalls::LUXURY_BALL:
-                return ::Balls::luxuryball;
+                return pkmds::Balls::luxuryball;
 
             case PokeBalls::HEAL_BALL:
-                return ::Balls::healball;
+                return pkmds::Balls::healball;
 
             case PokeBalls::QUICK_BALL:
-                return ::Balls::quickball;
+                return pkmds::Balls::quickball;
 
             case PokeBalls::DUSK_BALL:
-                return ::Balls::duskball;
+                return pkmds::Balls::duskball;
 
             case PokeBalls::CHERISH_BALL:
-                return ::Balls::cherishball;
+                return pkmds::Balls::cherishball;
 
             case PokeBalls::PARK_BALL:
-                return ::Balls::pokeball; //This should never be set, this ball is for Pal Park
+                return pkmds::Balls::pokeball; //This should never be set, this ball is for Pal Park
 
             case PokeBalls::DREAM_BALL:
-                return ::Balls::dreamball;
+                return pkmds::Balls::dreamball;
 
             default:
-                return ::Balls::pokeball;
+                return pkmds::Balls::pokeball;
         }
     }
 
@@ -431,82 +431,82 @@ namespace pkmn
     {
         switch(game_ball)
         {
-            case ::Balls::pokeball_:
+            case pkmds::Balls::pokeball_:
                 return PokeBalls::UNKNOWN;
 
-            case ::Balls::masterball:
+            case pkmds::Balls::masterball:
                 return PokeBalls::MASTER_BALL;
 
-            case ::Balls::ultraball:
+            case pkmds::Balls::ultraball:
                 return PokeBalls::ULTRA_BALL;
 
-            case ::Balls::greatball:
+            case pkmds::Balls::greatball:
                 return PokeBalls::GREAT_BALL;
 
-            case ::Balls::pokeball:
+            case pkmds::Balls::pokeball:
                 return PokeBalls::POKE_BALL;
 
-            case ::Balls::safariball:
+            case pkmds::Balls::safariball:
                 return PokeBalls::SAFARI_BALL;
 
-            case ::Balls::netball:
+            case pkmds::Balls::netball:
                 return PokeBalls::NET_BALL;
 
-            case ::Balls::diveball:
+            case pkmds::Balls::diveball:
                 return PokeBalls::DIVE_BALL;
 
-            case ::Balls::nestball:
+            case pkmds::Balls::nestball:
                 return PokeBalls::NEST_BALL;
 
-            case ::Balls::repeatball:
+            case pkmds::Balls::repeatball:
                 return PokeBalls::REPEAT_BALL;
 
-            case ::Balls::timerball:
+            case pkmds::Balls::timerball:
                 return PokeBalls::TIMER_BALL;
 
-            case ::Balls::luxuryball:
+            case pkmds::Balls::luxuryball:
                 return PokeBalls::LUXURY_BALL;
 
-            case ::Balls::premierball:
+            case pkmds::Balls::premierball:
                 return PokeBalls::PREMIER_BALL;
 
-            case ::Balls::duskball:
+            case pkmds::Balls::duskball:
                 return PokeBalls::DUSK_BALL;
 
-            case ::Balls::healball:
+            case pkmds::Balls::healball:
                 return PokeBalls::HEAL_BALL;
 
-            case ::Balls::quickball:
+            case pkmds::Balls::quickball:
                 return PokeBalls::QUICK_BALL;
 
-            case ::Balls::cherishball:
+            case pkmds::Balls::cherishball:
                 return PokeBalls::CHERISH_BALL;
 
-            case ::Balls::fastball:
+            case pkmds::Balls::fastball:
                 return PokeBalls::FAST_BALL;
 
-            case ::Balls::levelball:
+            case pkmds::Balls::levelball:
                 return PokeBalls::LEVEL_BALL;
 
-            case ::Balls::lureball:
+            case pkmds::Balls::lureball:
                 return PokeBalls::LURE_BALL;
 
-            case ::Balls::heavyball:
+            case pkmds::Balls::heavyball:
                 return PokeBalls::HEAVY_BALL;
 
-            case ::Balls::loveball:
+            case pkmds::Balls::loveball:
                 return PokeBalls::LOVE_BALL;
 
-            case ::Balls::friendball:
+            case pkmds::Balls::friendball:
                 return PokeBalls::FRIEND_BALL;
 
-            case ::Balls::moonball:
+            case pkmds::Balls::moonball:
                 return PokeBalls::MOON_BALL;
 
-            case ::Balls::sportball:
+            case pkmds::Balls::sportball:
                 return PokeBalls::SPORT_BALL;
 
-            case ::Balls::dreamball:
+            case pkmds::Balls::dreamball:
                 return PokeBalls::DREAM_BALL;
 
             default:

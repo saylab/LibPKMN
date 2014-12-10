@@ -112,9 +112,9 @@ namespace pkmn
 
     void set_gen_456_otgender(uint8_t* metlevelint, bool is_female);
 
-    uint8_t libpkmn_getpkmstat(pokemon_obj* pkm);
+    uint8_t libpkmn_getpkmstat(pkmds::pokemon_obj* pkm);
 
-    void libpkmn_pctoparty(party_pkm* p_pkm, pokemon_obj* pkm);
+    void libpkmn_pctoparty(pkmds::party_pkm* p_pkm, pkmds::pokemon_obj* pkm);
 
     uint8_t libpkmn_game_to_hometown(uint8_t game);
 

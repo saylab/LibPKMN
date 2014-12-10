@@ -71,31 +71,31 @@ namespace pkmn
 
         void export_to_pkm(team_pokemon::sptr t_pkmn, const std::string &filename)
         {
-            party_pkm* p_pkm = new party_pkm;
+            pkmds::party_pkm* p_pkm = new pkmds::party_pkm;
             conversions::export_gen5_pokemon(t_pkmn, p_pkm);
 
-            uint8_t pkm_contents[sizeof(pokemon_obj)];
-            memcpy(&pkm_contents, p_pkm, sizeof(pokemon_obj));
+            uint8_t pkm_contents[sizeof(pkmds::pokemon_obj)];
+            memcpy(&pkm_contents, p_pkm, sizeof(pkmds::pokemon_obj));
 
             std::ofstream ofile;
             ofile.open(filename.c_str(), std::ofstream::out | std::ofstream::binary);
-            ofile.write((char*)p_pkm, sizeof(pokemon_obj));
+            ofile.write((char*)p_pkm, sizeof(pkmds::pokemon_obj));
             ofile.close();
         }
 
         team_pokemon::sptr import_from_pkm(const std::string &filename)
         {
-            party_pkm* p_pkm = new party_pkm;
-            pokemon_obj* pkmn_obj = new pokemon_obj;
+            pkmds::party_pkm* p_pkm = new pkmds::party_pkm;
+            pkmds::pokemon_obj* pkmn_obj = new pkmds::pokemon_obj;
 
-            uint8_t pkm_contents[sizeof(pokemon_obj)];
-            memset(pkm_contents, 0, sizeof(pokemon_obj));
+            uint8_t pkm_contents[sizeof(pkmds::pokemon_obj)];
+            memset(pkm_contents, 0, sizeof(pkmds::pokemon_obj));
 
             std::ifstream ifile;
             ifile.open(filename.c_str(), std::ifstream::in | std::ifstream::binary);
-            ifile.read((char*)pkm_contents, sizeof(pokemon_obj));
+            ifile.read((char*)pkm_contents, sizeof(pkmds::pokemon_obj));
             ifile.close();
-            memcpy(pkmn_obj, pkm_contents, sizeof(pokemon_obj));
+            memcpy(pkmn_obj, pkm_contents, sizeof(pkmds::pokemon_obj));
 
             libpkmn_pctoparty(p_pkm, pkmn_obj);
             return conversions::import_gen5_pokemon(p_pkm);

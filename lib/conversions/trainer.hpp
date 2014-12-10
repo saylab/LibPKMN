@@ -15,7 +15,7 @@
 #include <pkmds/pkmds_g5.h>
 
 typedef pkmn::shared_ptr<PokeLib::Save> pokelib_sptr;
-typedef pkmn::shared_ptr<bw2sav_obj> pkmds_g5_sptr;
+typedef pkmn::shared_ptr<pkmds::bw2sav_obj> pkmds_g5_sptr;
 
 namespace pkmn
 {

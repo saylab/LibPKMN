@@ -527,7 +527,7 @@ namespace pkmn
             }
         }
 
-        void import_gen5_items(bag::sptr item_bag, ::bag_obj* pkmds_bag)
+        void import_gen5_items(bag::sptr item_bag, pkmds::bag_obj* pkmds_bag)
         {
             unsigned int game_id = item_bag->get_game_id();
 
@@ -537,52 +537,52 @@ namespace pkmn
             pocket::sptr berry_pocket = item_bag->get_pocket("Berries");
             pocket::sptr key_item_pocket = item_bag->get_pocket("Key Items");
 
-            for(size_t i = 0; i < ITEMS_POCKET_SIZE; i++)
+            for(size_t i = 0; i < pkmds::ITEMS_POCKET_SIZE; i++)
             {
-                ::item_obj pkmds_item = pkmds_bag->items_pocket[i];
+                pkmds::item_obj pkmds_item = pkmds_bag->items_pocket[i];
 
-                if(pkmds_item.id == ::Items::NOTHING) break;
+                if(pkmds_item.id == pkmds::Items::NOTHING) break;
                 else item_pocket->add_item(database::get_item_id(pkmds_item.id, game_id),
                                            pkmds_item.quantity);
             }
-            for(size_t i = 0; i < MEDICINE_POCKET_SIZE; i++)
+            for(size_t i = 0; i < pkmds::MEDICINE_POCKET_SIZE; i++)
             {
-                ::item_obj pkmds_item = pkmds_bag->medicine_pocket[i];
+                pkmds::item_obj pkmds_item = pkmds_bag->medicine_pocket[i];
 
-                if(pkmds_item.id == ::Items::NOTHING) break;
+                if(pkmds_item.id == pkmds::Items::NOTHING) break;
                 else medicine_pocket->add_item(item::make(pkmds_item.id, game_id),
                                                pkmds_item.quantity);
             }
-            for(size_t i = 0; i < TMS_POCKET_SIZE; i++)
+            for(size_t i = 0; i < pkmds::TMS_POCKET_SIZE; i++)
             {
-                ::item_obj pkmds_item = pkmds_bag->tms_pocket[i];
+                pkmds::item_obj pkmds_item = pkmds_bag->tms_pocket[i];
 
-                if(pkmds_item.id == ::Items::NOTHING) break;
+                if(pkmds_item.id == pkmds::Items::NOTHING) break;
                 else tm_pocket->add_item(database::get_item_id(pkmds_item.id, game_id),
                                          pkmds_item.quantity);
             }
-            for(size_t i = 0; i < BERRIES_POCKET_SIZE; i++)
+            for(size_t i = 0; i < pkmds::BERRIES_POCKET_SIZE; i++)
             {
-                ::item_obj pkmds_item = pkmds_bag->berries_pocket[i];
+                pkmds::item_obj pkmds_item = pkmds_bag->berries_pocket[i];
 
-                if(pkmds_item.id == ::Items::NOTHING) break;
+                if(pkmds_item.id == pkmds::Items::NOTHING) break;
                 else berry_pocket->add_item(database::get_item_id(pkmds_item.id, game_id),
                                             pkmds_item.quantity);
             }
-            for(size_t i = 0; i < KEYITEMS_POCKET_SIZE; i++)
+            for(size_t i = 0; i < pkmds::KEYITEMS_POCKET_SIZE; i++)
             {
-                ::item_obj pkmds_item = pkmds_bag->keyitems_pocket[i];
+                pkmds::item_obj pkmds_item = pkmds_bag->keyitems_pocket[i];
 
                 //Get around "Dropped Item" issue
-                if(pkmds_item.id == ::Items::droppeditem2) pkmds_item.id = ::Items::droppeditem;
+                if(pkmds_item.id == pkmds::Items::droppeditem2) pkmds_item.id = pkmds::Items::droppeditem;
 
-                if(pkmds_item.id == ::Items::NOTHING) break;
+                if(pkmds_item.id == pkmds::Items::NOTHING) break;
                 else key_item_pocket->add_item(database::get_item_id(pkmds_item.id, game_id),
                                                1);
             }
         }
 
-        void export_gen5_items(bag::sptr item_bag, ::bag_obj* pkmds_bag)
+        void export_gen5_items(bag::sptr item_bag, pkmds::bag_obj* pkmds_bag)
         {
             unsigned int game_id = item_bag->get_game_id();
 
@@ -602,7 +602,7 @@ namespace pkmn
                 if(item_id == Items::NONE) break;
                 else
                 {
-                    pkmds_bag->items_pocket[i].id = ::Items::items(item_id);
+                    pkmds_bag->items_pocket[i].id = pkmds::Items::items(item_id);
                     pkmds_bag->items_pocket[i].quantity = amount;
                 }
             }
@@ -617,7 +617,7 @@ namespace pkmn
                 if(item_id == Items::NONE) break;
                 else
                 {
-                    pkmds_bag->medicine_pocket[i].id = ::Items::items(item_id);
+                    pkmds_bag->medicine_pocket[i].id = pkmds::Items::items(item_id);
                     pkmds_bag->medicine_pocket[i].quantity = amount;
                 }
             }
@@ -632,7 +632,7 @@ namespace pkmn
                 if(item_id == Items::NONE) break;
                 else
                 {
-                    pkmds_bag->tms_pocket[i].id = ::Items::items(item_id);
+                    pkmds_bag->tms_pocket[i].id = pkmds::Items::items(item_id);
                     pkmds_bag->tms_pocket[i].quantity = amount;
                 }
             }
@@ -647,7 +647,7 @@ namespace pkmn
                 if(item_id == Items::NONE) break;
                 else
                 {
-                    pkmds_bag->berries_pocket[i].id = ::Items::items(item_id);
+                    pkmds_bag->berries_pocket[i].id = pkmds::Items::items(item_id);
                     pkmds_bag->berries_pocket[i].quantity = amount;
                 }
             }
@@ -664,7 +664,7 @@ namespace pkmn
                 if(item_id == Items::NONE) break;
                 else
                 {
-                    pkmds_bag->keyitems_pocket[i].id = ::Items::items(item_id);
+                    pkmds_bag->keyitems_pocket[i].id = pkmds::Items::items(item_id);
                     pkmds_bag->keyitems_pocket[i].quantity = 1;
                 }
             }

@@ -1,4 +1,8 @@
 #include "pkmds_g5.h"
+
+namespace pkmds
+{
+
 int balltoitem(int ball)
 {
 	int item = 0;
@@ -1097,41 +1101,24 @@ std::string getballname(const pokemon_obj *pkm)
 }
 std::wstring getboxname(const bw2savblock_obj *block, int boxnum)
 {
-	std::wstring name;
-#if ! defined(MARKUP_SIZEOFWCHAR)
-#if __SIZEOF_WCHAR_T__ == 4 || __WCHAR_MAX__ > 0x10000
-	std::string str_name = block->boxnames[boxnum];
-	wchar_t boxname_buffer[11];
-	memset(boxname_buffer, 0, 11);
-	mbstowcs(boxname_buffer, str_name.c_str(), 11);
-#else
-	name = block->boxnames[boxnum];
-#endif
-#endif
-	if (name.find((wchar_t)0xffff))
-	{
-		name = name.substr(0, name.find((wchar_t)0xffff));
-	}
+	std::basic_string<uint16_t> name16(block->boxnames[boxnum], 20);
+    std::wstring name;
+    for(size_t i = 0; i < 20; i++)
+    {
+        if(name16[i] == 0xffff) break;
+        else name += (wchar_t)name16[i];
+    }
 	return name;
 }
 std::wstring getboxname(const bw2savblock_obj &block, int boxnum)
 {
-	std::wstring name;
-#if ! defined(MARKUP_SIZEOFWCHAR)
-#if __SIZEOF_WCHAR_T__ == 4 || __WCHAR_MAX__ > 0x10000
-	std::string str_name = block.boxnames[boxnum];
-	wchar_t boxname_buffer[11];
-	memset(boxname_buffer, 0, 11);
-	mbstowcs(boxname_buffer, str_name.c_str(), 11);
-#else
-	name = block.boxnames[boxnum];
-#endif
-#endif
-
-	if (name.find((wchar_t)0xffff))
-	{
-		name = name.substr(0, name.find((wchar_t)0xffff));
-	}
+	std::basic_string<uint16_t> name16(block.boxnames[boxnum], 20);
+    std::wstring name;
+    for(size_t i = 0; i < 20; i++)
+    {
+        if(name16[i] == 0xffff) break;
+        else name += (wchar_t)name16[i];
+    }
 	return name;
 }
 time_t * advstrttime(const bw2savblock_obj &block)
@@ -1531,4 +1518,6 @@ void deletehms(pokemon_obj * pkm)
 	{
 		pkm->moves[0] = Moves::return_;
 	}
+}
+
 }
