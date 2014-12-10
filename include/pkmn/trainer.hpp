@@ -55,7 +55,8 @@ namespace pkmn
              * \return shared pointer to instance of pkmn::trainer with described parameters
              */
             static sptr make(const pkmn::pkstring &game, const pkmn::pkstring &name, const pkmn::pkstring &gender);
-            
+
+            //! Class constructor (use factory function instead)
             trainer() {};
             virtual ~trainer() {};
 

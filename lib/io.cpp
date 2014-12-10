@@ -66,10 +66,10 @@ namespace pkmn
 
                 return conversions::import_gen3_pokemon(pkmn, Versions::RUBY, false);
             }
-            else throw std::runtime_error("This is not a valid Generation III save.");
+            else throw std::runtime_error("This is not a valid .3gpkm file.");
         }
 
-        void export_to_pkm(team_pokemon::sptr t_pkmn, std::string filename)
+        void export_to_pkm(team_pokemon::sptr t_pkmn, const std::string &filename)
         {
             party_pkm* p_pkm = new party_pkm;
             conversions::export_gen5_pokemon(t_pkmn, p_pkm);
@@ -83,7 +83,7 @@ namespace pkmn
             ofile.close();
         }
 
-        team_pokemon::sptr import_from_pkm(std::string filename)
+        team_pokemon::sptr import_from_pkm(const std::string &filename)
         {
             party_pkm* p_pkm = new party_pkm;
             pokemon_obj* pkmn_obj = new pokemon_obj;
@@ -99,38 +99,6 @@ namespace pkmn
 
             libpkmn_pctoparty(p_pkm, pkmn_obj);
             return conversions::import_gen5_pokemon(p_pkm);
-        }
-
-        void export_to_pkx(team_pokemon::sptr t_pkmn, std::string filename)
-        {
-            party_pkx* p_pkx = new party_pkx;
-            conversions::export_gen6_pokemon(t_pkmn, p_pkx);
-
-            uint8_t pkx_contents[sizeof(pokemonx_obj)];
-            memcpy(&pkx_contents, p_pkx, sizeof(pokemonx_obj));
-
-            std::ofstream ofile;
-            ofile.open(filename.c_str(), std::ofstream::out | std::ofstream::binary);
-            ofile.write((char*)pkx_contents, sizeof(pokemonx_obj));
-            ofile.close();
-        }
-
-        team_pokemon::sptr import_from_pkx(std::string filename)
-        {
-            party_pkx* p_pkm = new party_pkx;
-            pokemonx_obj* pkmn_obj = new pokemonx_obj;
-
-            uint8_t pkx_contents[sizeof(pokemonx_obj)];
-            memset(pkx_contents, 0, sizeof(pokemonx_obj));
-
-            std::ifstream ifile;
-            ifile.open(filename.c_str(), std::ifstream::in | std::ifstream::binary);
-            ifile.read((char*)pkx_contents, sizeof(pokemonx_obj));
-            ifile.close();
-            memcpy(pkmn_obj, pkx_contents, sizeof(pokemonx_obj));
-
-            libpkmn_pctopartyx(p_pkm, pkmn_obj);
-            return conversions::import_gen6_pokemon(p_pkm);
         }
     }
 }

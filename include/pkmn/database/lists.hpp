@@ -17,9 +17,22 @@ namespace pkmn
 {
     namespace database
     {
+        //! Return a list of the tables in LibPKMN's database.
+        /*!
+         * Runs the SQLite query: "SELECT name FROM sqlite_master WHERE type='table'"
+         *
+         * \param vec vector in which to place the list table list
+         */
         void PKMN_API get_table_list(std::vector<std::string> &vec);
 
-        void PKMN_API get_column_list(std::vector<std::string> &vec, std::string table_name);
+        //! Return a list of columns in the given table in LibPKMN's database.
+        /*!
+         * Runs the SQLite query: "PRAGMA table_info(table_name)"
+         *
+         * \param vec vector in which to place the column list
+         * \param table_name name of table whose columns to list
+         */
+        void PKMN_API get_column_list(std::vector<std::string> &vec, const std::string &table_name);
     }
 }
 

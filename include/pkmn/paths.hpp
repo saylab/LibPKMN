@@ -14,19 +14,19 @@
 
 namespace pkmn
 {
+    //! Return the path to the user's local application data directory.
     /*!
-     * Return path to user's local application data directory. In UNIX-like systems,
-     * this is the user's home directory, while in Windows systems, this is the AppData
-     * directory in the user's home directory. If, somehow, neither of these are true,
-     * the function returns "/tmp".
+     * In UNIX-like systems,this is the user's home directory, while in Windows systems,
+     * this is the AppData directory in the user's home directory. If, somehow, neither
+     * of these are true, the function returns "/tmp".
      *
      * \return user's application data directory
      */
     std::string PKMN_API get_appdata_path();
 
+    //! Return the path to LibPKMN's underlying SQLite database.
     /*!
-     * Return the path to LibPKMN's underlying SQLite database. Under default conditions,
-     * this path is:
+     * Under default conditions, this path is:
      * <pre>
      * (INSTALL PREFIX)/share/libpkmn/libpkmn.db
      * </pre>
@@ -38,9 +38,9 @@ namespace pkmn
      */
     std::string PKMN_API get_database_path();
 
+    //! Return the path to the top-level directory of LibPKMN's images.
     /*!
-     * Return the path to the top-level directory of LibPKMN's images. Under default conditions,
-     * this path is:
+     * Under default conditions, this path is:
      * <pre>
      * (INSTALL PREFIX)/share/libpkmn/images
      * </pre>
@@ -49,9 +49,8 @@ namespace pkmn
      */
     std::string PKMN_API get_images_dir();
 
+    //! Return the system's temporary directory.
     /*!
-     * Return the system's temporary directory.
-     *
      * \return system's temp directory
      */
     std::string PKMN_API get_tmp_dir();

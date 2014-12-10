@@ -26,7 +26,7 @@
 namespace pkmn
 {
     template <typename Key, typename Val>
-    dict<Key, Val>::dict(void) {}
+    dict<Key, Val>::dict() {}
 
     template <typename Key, typename Val> template <typename InputIterator>
     dict<Key, Val>::dict(InputIterator first, InputIterator last):
@@ -150,7 +150,7 @@ namespace pkmn
     }
 
     template <typename Key, typename Val>
-    std::vector<Key> dict<Key, Val>::keys(void) const
+    std::vector<Key> dict<Key, Val>::keys() const
     {
         std::vector<Key> keys;
         DICT_FOREACH(const dict_pair &p, _map.begin(), _map.end())
@@ -161,7 +161,7 @@ namespace pkmn
     }
 
     template <typename Key, typename Val>
-    std::vector<Val> dict<Key, Val>::vals(void) const
+    std::vector<Val> dict<Key, Val>::vals() const
     {
         std::vector<Val> vals;
         DICT_FOREACH(const dict_pair &p, _map.begin(), _map.end())

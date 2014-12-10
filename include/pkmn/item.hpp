@@ -56,28 +56,34 @@ namespace pkmn
             item() {};
             virtual ~item() {};
 
-            //! Return the name of the item from which this item was created (ex. "Red", "Diamond").
+            //! Return the name of the game from which this item was created (ex. "Red", "Diamond").
             virtual pkmn::pkstring get_game() const = 0;
 
-            //! Return the generation of the item from which this item was created (1-6).
+            //! Return the generation of the game from which this item was created (1-6).
             virtual unsigned int get_generation() const = 0;
 
             //! Return the item's name.
+            /*!
+             * If the item is a TM or HM, the name includes the move's name as well.
+             */
             virtual pkmn::pkstring get_name() const = 0;
 
             //! Return the item's description (varies between games).
+            /*!
+             * If the item is a TM or HM, the description includes the move's description as well.
+             */
             virtual pkmn::pkstring get_description() const = 0;
 
             //! Return the item's category (ex. "Medicine", "Key Items").
             virtual pkmn::pkstring get_category() const = 0;
 
-            //! Return the items in-game index value (varies between version groups).
+            //! Return the item's in-game index value (varies between version groups).
             virtual unsigned int get_game_index() const = 0;
             
-            //! Return item's SQLite database ID.
+            //! Return the item's SQLite database ID.
             virtual unsigned int get_item_id() const = 0;
 
-            //! Return item category's SQLite database ID.
+            //! Return the item category's SQLite database ID.
             virtual unsigned int get_category_id() const = 0;
 
             //! Return SQLite Database ID of game used to create this item instance.

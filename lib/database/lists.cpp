@@ -34,7 +34,7 @@ namespace pkmn
             }
         }
 
-        void get_column_list(std::vector<std::string> &vec, std::string table_name)
+        void get_column_list(std::vector<std::string> &vec, const std::string &table_name)
         {
             vec.clear();
 

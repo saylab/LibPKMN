@@ -112,7 +112,6 @@ namespace pkmn
 
             //Misc
             virtual pkmn::markings get_markings() const = 0;
-            virtual void set_marking(const uint16_t which, bool value) = 0;
             virtual void set_markings(const pkmn::markings &mark) = 0;
             virtual int get_attribute(const pkmn::pkstring &attribute) const = 0;
             virtual pkmn::dict<pkmn::pkstring, int> get_attributes() const = 0;
