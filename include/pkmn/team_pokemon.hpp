@@ -18,6 +18,7 @@
 #include <pkmn/types/dict.hpp>
 #include <pkmn/types/markings.hpp>
 #include <pkmn/types/pkstring.hpp>
+#include <pkmn/types/ribbons.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
 namespace pkmn
@@ -113,6 +114,8 @@ namespace pkmn
             //Misc
             virtual pkmn::markings get_markings() const = 0;
             virtual void set_markings(const pkmn::markings &mark) = 0;
+            virtual pkmn::ribbons get_ribbons() const = 0;
+            virtual void set_ribbons(const pkmn::ribbons &ribbons) = 0;
             virtual int get_attribute(const pkmn::pkstring &attribute) const = 0;
             virtual pkmn::dict<pkmn::pkstring, int> get_attributes() const = 0;
             virtual bool has_attribute(const pkmn::pkstring &attribute) const = 0;

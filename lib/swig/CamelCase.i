@@ -245,6 +245,8 @@
 %rename(getMovePPs) pkmn::team_pokemon::get_move_PPs;
 %rename(setMove) pkmn::team_pokemon::set_move;
 %rename(setMovePP) pkmn::team_pokemon::set_move_PP;
+%rename(getRibbons) pkmn::team_pokemon::get_ribbons;
+%rename(setRibbons) pkmn::team_pokemon::set_ribbons;
 %rename(getAttribute) pkmn::team_pokemon::get_attribute;
 %rename(getAttributes) pkmn::team_pokemon::get_attributes;
 %rename(hasAttribute) pkmn::team_pokemon::has_attribute;

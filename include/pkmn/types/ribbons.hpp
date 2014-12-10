@@ -209,6 +209,14 @@ namespace pkmn
 
         operator uint64_t();
     };
+
+    struct ribbons
+    {
+        struct hoenn_ribbons  hoenn;
+        struct sinnoh_ribbons sinnoh;
+        struct unova_ribbons  unova;
+        struct kalos_ribbons  kalos;
+    };
 }
 
 #endif /* INCLUDED_PKMN_TYPES_RIBBONS_HPP */
