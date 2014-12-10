@@ -129,6 +129,13 @@ namespace pkmn
         operator uint32_t();
     };
 
+    struct sinnoh_ribbons
+    {
+        struct sinnoh_ribbons1 ribbons1;
+        struct sinnoh_ribbons2 ribbons2;
+        struct sinnoh_ribbons3 ribbons3;
+    };
+
     struct PKMN_API unova_ribbons
     {
         unova_ribbons() {};
