@@ -17,7 +17,7 @@
 #define BOX_H_
 
 namespace PokeLib {
-class DLL_EXPORT Box {
+class Box {
     widetext name;
     uint8_t wallpaper;
 public:

@@ -12,7 +12,7 @@
 #define POKEDEX_H_
 
 namespace PokeLib {
-class DLL_EXPORT Pokedex {
+class Pokedex {
 public:
     Pokedex(Save *sav);
     virtual ~Pokedex();

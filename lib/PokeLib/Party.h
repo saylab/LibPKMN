@@ -17,7 +17,7 @@
 
 namespace PokeLib {
 
-class DLL_EXPORT Party {
+class Party {
 public:
     Party();
     virtual ~Party();

@@ -289,7 +289,7 @@ enum Gender {
     MALE=0,FEMALE=1,GENDERLESS=3
 };
 
-class DLL_EXPORT Pokemon {
+class Pokemon {
 public:
     Pokemon();
     Pokemon(uint8_t* data, uint8_t length);

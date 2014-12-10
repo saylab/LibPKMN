@@ -51,7 +51,7 @@ struct Badge {
 };
 #pragma pack()
 
-class DLL_EXPORT Trainer {
+class Trainer {
     poketext trainer;
     poketext rival;
     bool isFemale;

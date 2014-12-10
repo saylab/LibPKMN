@@ -41,7 +41,7 @@ class Party;
 class Trainer;
 class Pokedex;
 
-class DLL_EXPORT Save {
+class Save {
     //these are internal for safety reasons
     SaveType type;
     SaveFormat format;

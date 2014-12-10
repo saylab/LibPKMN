@@ -40,7 +40,7 @@ public:
 #pragma pack(pop)
 };
 
-class DLL_EXPORT Toolkit {
+class Toolkit {
 private:
     static uint8_t* _shuffle(uint8_t*, bool);
     static uint8_t* _crypt(uint8_t*, bool);
