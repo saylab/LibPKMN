@@ -10,6 +10,7 @@ FILE(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${PKG_DATA_DIR} LIBPKMN_PKG_DATA_PAT
 
 IF(ENABLE_LIBPKMN)
     ADD_SUBDIRECTORY(SQLiteCpp)
+    ADD_SUBDIRECTORY(pkmds)
     ADD_SUBDIRECTORY(conversions)
     ADD_SUBDIRECTORY(database)
     ADD_SUBDIRECTORY(qt4)
@@ -77,6 +78,7 @@ IF(ENABLE_LIBPKMN)
         io.cpp
         lists.cpp
         copy_sptrs.cpp
+        ${pkmds_sources}
         ${conversions_sources}
         ${database_sources}
         ${qt4_sources}
@@ -97,7 +99,6 @@ IF(ENABLE_LIBPKMN)
 
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
     INCLUDE_DIRECTORIES(${LIBPKMN_SOURCE_DIR}/PokeLib-NC/include)
-    INCLUDE_DIRECTORIES(${LIBPKMN_SOURCE_DIR}/PKMDS/include)
     ADD_LIBRARY(pkmn SHARED ${libpkmn_sources})
     TARGET_LINK_LIBRARIES(pkmn ${libpkmn_libs})
 

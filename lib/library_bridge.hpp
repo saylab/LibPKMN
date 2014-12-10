@@ -17,7 +17,6 @@
 #include <pkmn/types/pkstring.hpp>
 
 #include <pkmds/pkmds_g5.h>
-#include <pkmds/pkmds_g6.h>
 
 namespace pkmn
 {
@@ -116,14 +115,6 @@ namespace pkmn
     uint8_t libpkmn_getpkmstat(pokemon_obj* pkm);
 
     void libpkmn_pctoparty(party_pkm* p_pkm, pokemon_obj* pkm);
-
-    std::string libpkmn_getpkxformnamesql(pokemonx_obj *pkx);
-
-    uint16_t getpkxstat(pokemonx_obj *pkx, unsigned int stat_id);
-
-    uint8_t libpkmn_pkxstat(pokemonx_obj* pkx);
-
-    void libpkmn_pctopartyx(party_pkx* p_pkx, pokemonx_obj* pkx);
 
     uint8_t libpkmn_game_to_hometown(uint8_t game);
 

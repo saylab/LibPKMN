@@ -1045,9 +1045,9 @@ namespace pkmn
 
             ::setlevel(p_pkm, t_pkmn->get_level());
 
-            wstring nickname_wide = t_pkmn->get_nickname();
-            wstring trainer_name_wide = t_pkmn->get_trainer_name();
-            #ifdef LIBPKMN_PLATFORM_LINUX
+            std::wstring nickname_wide = t_pkmn->get_nickname();
+            std::wstring trainer_name_wide = t_pkmn->get_trainer_name();
+            #ifdef PKMN_PLATFORM_LINUX
                 ::setpkmnickname(p_pkm, (wchar_t*)(nickname_wide.c_str()), nickname_wide.size());
                 ::setpkmotname(p_pkm, (wchar_t*)(trainer_name_wide.c_str()), trainer_name_wide.size());
             #else
@@ -1198,121 +1198,6 @@ namespace pkmn
             p_pkm->metdate.year = attributes.at("met_year",0);
             p_pkm->metdate.month = attributes.at("met_month",0);
             p_pkm->metdate.day = attributes.at("met_day",0);
-        }
-
-        /*
-         * Generation VI
-         */
-        team_pokemon::sptr import_gen6_pokemon(party_pkx* p_pkx)
-        {
-            unsigned int level, from_game, species_id;
-
-            level = p_pkx->party_data.level;
-            from_game = hometown_to_libpkmn_game(p_pkx->hometown);
-            species_id = database::get_species_id(database::get_pokemon_id(p_pkx->species, from_game));
-
-            team_pokemon::sptr t_pkmn = team_pokemon::make(species_id, from_game, level,
-                                        p_pkx->moves[0], p_pkx->moves[1],
-                                        p_pkx->moves[2], p_pkx->moves[3]);
-
-            t_pkmn->set_nickname(p_pkx->nickname);
-            t_pkmn->set_trainer_name(p_pkx->otname);
-
-            t_pkmn->set_move_PP(p_pkx->pp[0], 1);
-            t_pkmn->set_move_PP(p_pkx->pp[1], 2);
-            t_pkmn->set_move_PP(p_pkx->pp[2], 3);
-            t_pkmn->set_move_PP(p_pkx->pp[3], 4);
-
-            uint8_t* metlevel_int = reinterpret_cast<uint8_t*>(&(p_pkx->ball)+1);
-            t_pkmn->set_met_level(get_gen_456_met_level(metlevel_int));
-            t_pkmn->set_ball(ball_dict.at(game_ball_to_libpkmn_ball(p_pkx->ball), "Poke Ball"));
-            if(get_gen_456_otgender(metlevel_int)) t_pkmn->set_trainer_gender("Female");
-            else t_pkmn->set_trainer_gender("Male");
-
-            t_pkmn->set_held_item(item::make(database::get_item_id(p_pkx->item, from_game), from_game));
-            t_pkmn->set_personality(p_pkx->pid);
-            t_pkmn->set_trainer_public_id(p_pkx->tid);
-            t_pkmn->set_trainer_secret_id(p_pkx->sid);
-
-            t_pkmn->set_EV("HP", p_pkx->evs.hp);
-            t_pkmn->set_EV("Attack", p_pkx->evs.attack);
-            t_pkmn->set_EV("Defense", p_pkx->evs.defense);
-            t_pkmn->set_EV("Special Attack", p_pkx->evs.spatk);
-            t_pkmn->set_EV("Special Defense", p_pkx->evs.spdef);
-            t_pkmn->set_EV("Speed", p_pkx->evs.speed);
-
-            uint32_t* ivs = reinterpret_cast<uint32_t*>(&(p_pkx->ivs));
-            t_pkmn->set_IV("HP", modern_get_IV(ivs, Stats::HP));
-            t_pkmn->set_IV("Attack", modern_get_IV(ivs, Stats::ATTACK));
-            t_pkmn->set_IV("Defense", modern_get_IV(ivs, Stats::DEFENSE));
-            t_pkmn->set_IV("Special Attack", modern_get_IV(ivs, Stats::SPECIAL_ATTACK));
-            t_pkmn->set_IV("Special Defense", modern_get_IV(ivs, Stats::SPECIAL_DEFENSE));
-            t_pkmn->set_IV("Speed", modern_get_IV(ivs, Stats::SPEED));
-
-            return t_pkmn; 
-        }
-
-        void export_gen6_pokemon(team_pokemon::sptr t_pkmn, party_pkx* p_pkx)
-        {
-            p_pkx->species = ::Species_g6::species(
-                                 database::get_pokemon_game_index(t_pkmn->get_pokemon_id(),
-                                 t_pkmn->get_game_id()));
-
-            moveset_t moves;
-            t_pkmn->get_moves(moves);
-            p_pkx->moves[0] = ::Moves_g6::moves(moves[0]->get_move_id());
-            p_pkx->moves[1] = ::Moves_g6::moves(moves[1]->get_move_id());
-            p_pkx->moves[2] = ::Moves_g6::moves(moves[2]->get_move_id());
-            p_pkx->moves[3] = ::Moves_g6::moves(moves[3]->get_move_id());
-
-            std::vector<unsigned int> move_PPs;
-            t_pkmn->get_move_PPs(move_PPs);
-            p_pkx->pp[0] = move_PPs[0];
-            p_pkx->pp[1] = move_PPs[1];
-            p_pkx->pp[2] = move_PPs[2];
-            p_pkx->pp[3] = move_PPs[3];
-
-            p_pkx->party_data.level = t_pkmn->get_level();
-
-            //TODO: setting nicknames and trainer names
-
-            unsigned int raw_held = t_pkmn->get_held_item()->get_item_id();
-            p_pkx->item = ::Items_g6::items(database::get_item_game_index(raw_held, t_pkmn->get_game_id()));
-
-            uint8_t* metlevel_int = reinterpret_cast<uint8_t*>(&(p_pkx->ball)+1);
-            set_gen_456_met_level(metlevel_int, t_pkmn->get_met_level());
-            p_pkx->ball = Balls::balls(libpkmn_ball_to_game_ball(reverse_ball_dict[t_pkmn->get_ball()]));
-            set_gen_456_otgender(metlevel_int, (t_pkmn->get_trainer_gender().std_string() == "Female"));
-            p_pkx->pid = t_pkmn->get_personality();
-            p_pkx->tid = t_pkmn->get_trainer_public_id();
-            p_pkx->sid = t_pkmn->get_trainer_secret_id();
-
-            pkmn::dict<pkmn::pkstring, unsigned int> stats = t_pkmn->get_stats();
-            p_pkx->party_data.maxhp = stats["HP"];
-            p_pkx->party_data.attack = stats["Attack"];
-            p_pkx->party_data.defense = stats["Defense"];
-            p_pkx->party_data.spatk = stats["Special Attack"];
-            p_pkx->party_data.spdef = stats["Special Defense"];
-            p_pkx->party_data.speed = stats["Speed"];
-
-            pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
-            uint32_t* IVint = reinterpret_cast<uint32_t*>(&(p_pkx->ppup[3])+1);
-            modern_set_IV(IVint, Stats::HP, IVs["HP"]);
-            modern_set_IV(IVint, Stats::ATTACK, IVs["Attack"]);
-            modern_set_IV(IVint, Stats::DEFENSE, IVs["Defense"]);
-            modern_set_IV(IVint, Stats::SPECIAL_ATTACK, IVs["Special Attack"]);
-            modern_set_IV(IVint, Stats::SPECIAL_DEFENSE, IVs["Special Defense"]);
-            modern_set_IV(IVint, Stats::SPEED, IVs["Speed"]);
-
-            pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
-            p_pkx->evs.hp = EVs["HP"];
-            p_pkx->evs.attack = EVs["Attack"];
-            p_pkx->evs.defense = EVs["Defense"];
-            p_pkx->evs.spatk = EVs["Special Attack"];
-            p_pkx->evs.spdef = EVs["Special Defense"];
-            p_pkx->evs.speed = EVs["Speed"];
-
-            p_pkx->hometown = ::Hometowns::hometowns(libpkmn_game_to_hometown(t_pkmn->get_game_id()));
         }
     } /* namespace conversions */
 } /* namespace pkmn */

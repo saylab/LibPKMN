@@ -13,7 +13,7 @@
 #include <pkmn/paths.hpp>
 #include <pkmn/database/queries.hpp>
 
-#include <pkmds/pkmds_sql.h>
+#include "pkmds/pkmds_sql.h"
 
 #include "library_bridge.hpp"
 #include "SQLiteCpp/SQLiteC++.h"
@@ -223,123 +223,6 @@ namespace pkmn
         std::string pkxlevelsql = getpkmlevelsql(int(pkm->species),
                                                  int(pkm->exp));
         p_pkm->party_data.level = int(db.execAndGet(pkxlevelsql.c_str()));
-    }
-
-    string libpkmn_getpkxformnamesql(pokemonx_obj *pkx)
-    {
-        ostringstream o;
-        o << ""
-          << "SELECT pokemon_form_names.form_name "
-          << "FROM   pokemon_forms "
-          << "       INNER JOIN pokemon_form_names "
-          << "               ON pokemon_forms.id = pokemon_form_names.pokemon_form_id "
-          << "       INNER JOIN pokemon "
-          << "               ON pokemon_forms.pokemon_id = pokemon.id "
-          << "       INNER JOIN pokemon_species "
-          << "               ON pokemon.species_id = pokemon_species.id "
-          << "       INNER JOIN pokemon_species_names "
-          << "               ON pokemon_species.id = pokemon_species_names.pokemon_species_id "
-          << "WHERE  ( pokemon_form_names.local_language_id = 9 ) "
-          << "       AND ( pokemon_species_names.local_language_id = 9 ) "
-          << "       AND ( pokemon.species_id = " << (uint16)(pkx->species) << " ) "
-          << "       AND ( pokemon_forms.form_order = " << (int)(pkx->form_int) << " + 1 ) ";
-        return o.str();
-    }
-
-    std::string libpkmn_getpkxstatsql(pokemonx_obj *pkx, unsigned int stat_id)
-    {
-        ostringstream o;
-        o << ""
-          << "SELECT pokemon_stats.base_stat "
-          << "FROM   pokemon_stats "
-          << "       INNER JOIN pokemon_forms "
-          << "               ON pokemon_stats.pokemon_id = pokemon_forms.pokemon_id "
-          << "       INNER JOIN stats "
-          << "               ON pokemon_stats.stat_id = stats.id "
-          << "       INNER JOIN stat_names "
-          << "               ON stats.id = stat_names.stat_id "
-          << "       INNER JOIN pokemon_species_names "
-          << "               ON stat_names.local_language_id = "
-          << "                  pokemon_species_names.local_language_id "
-          << "       INNER JOIN pokemon "
-          << "               ON pokemon_stats.pokemon_id = pokemon.id "
-          << "                  AND pokemon_forms.pokemon_id = pokemon.id "
-          << "                  AND pokemon_species_names.pokemon_species_id = "
-          << "                      pokemon.species_id "
-          << "WHERE  ( pokemon_species_names.local_language_id = 9 ) "
-          << "       AND ( stat_names.local_language_id = 9 ) "
-          << "       AND ( pokemon_species_names.pokemon_species_id = " << (uint16)pkx->species << " ) ";
-        if(libpkmn_getpkxformnamesql(pkx) != "")
-        {
-            o << "       AND ( pokemon_forms.form_order = " << (int)(pkx->form_int) << " + 1 ) ";
-        }
-        o << "       AND ( stat_names.stat_id = " << (int)stat_id << " ) ";
-        return o.str();
-    }
-
-    uint8_t libpkmn_getpkxstat(pokemonx_obj* pkx, unsigned int stat_id)
-    {
-        SQLite::Database db(get_database_path().c_str());
-        std::string pkxstatsql = libpkmn_getpkxstatsql(pkx, stat_id);
-        unsigned int basestat = int(db.execAndGet(pkxstatsql.c_str()));
-
-        std::string pkxlevelsql = getpkmlevelsql(int(pkx->species),
-                                                 int(pkx->exp));
-        unsigned int level = int(db.execAndGet(pkxlevelsql.c_str()));
-        unsigned int ev = 0;
-        unsigned int iv = 0;
-
-        uint32_t* IVint = reinterpret_cast<uint32_t*>(&(pkx->ppup[3])+1);
-        switch(stat_id)
-        {
-            case Stats::HP:
-                ev = pkx->evs.hp;
-                iv = modern_get_IV(IVint, Stats::HP);
-                return (int)((floor((double)(floor((double)(((iv +
-                       (2 * basestat) + floor((double)(ev/4))+100)
-                       * level) / 100)) + 10))));
-
-            case Stats::ATTACK:
-                ev = pkx->evs.attack;
-                break;
-
-            case Stats::DEFENSE:
-                ev = pkx->evs.defense;
-                break;
-
-            case Stats::SPECIAL_ATTACK:
-                ev = pkx->evs.spatk;
-                break;
-
-            case Stats::SPECIAL_DEFENSE:
-                ev = pkx->evs.spdef;
-                break;
-
-            default:
-                ev = pkx->evs.speed;
-        }
-        iv = modern_get_IV(IVint, stat_id);
-        double naturemod = database::get_nature_stat_mod(
-                           (unsigned int)(pkx->nature), stat_id);
-        return (int)((floor((double)(floor((double)(((iv + (2 * basestat)
-               + floor((double)(ev/4))) * level) / 100)) + 5)) * naturemod));
-    }
-
-    void libpkmn_pctopartyx(party_pkx* p_pkx, pokemonx_obj* pkx)
-    {
-        memcpy(p_pkx, pkx, sizeof(*pkx));
-        p_pkx->party_data.maxhp = libpkmn_getpkxstat(pkx, Stats::HP);
-        p_pkx->party_data.hp = p_pkx->party_data.maxhp;
-        p_pkx->party_data.attack = libpkmn_getpkxstat(pkx, Stats::ATTACK);
-        p_pkx->party_data.defense = libpkmn_getpkxstat(pkx, Stats::DEFENSE);
-        p_pkx->party_data.spatk = libpkmn_getpkxstat(pkx, Stats::SPECIAL_ATTACK);
-        p_pkx->party_data.spdef = libpkmn_getpkxstat(pkx, Stats::SPECIAL_DEFENSE);
-        p_pkx->party_data.speed = libpkmn_getpkxstat(pkx, Stats::SPEED);
-
-        SQLite::Database db(get_database_path().c_str());
-        std::string pkxlevelsql = getpkmlevelsql(int(pkx->species),
-                                                 int(pkx->exp));
-        p_pkx->party_data.level = int(db.execAndGet(pkxlevelsql.c_str()));
     }
 
     uint8_t libpkmn_game_to_hometown(uint8_t game)

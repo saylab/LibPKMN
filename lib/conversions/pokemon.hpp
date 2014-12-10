@@ -16,8 +16,7 @@
 #include "structs/pokemon.hpp"
 
 #include <PokeLib/PokeLib.h>
-#include <pkmds/pkmds_g5.h>
-#include <pkmds/pkmds_g6.h>
+#include "../pkmds/pkmds_g5.h"
 
 namespace pkmn
 {
@@ -79,12 +78,6 @@ namespace pkmn
          */
         team_pokemon::sptr import_gen5_pokemon(party_pkm* p_pkm);
         void export_gen5_pokemon(team_pokemon::sptr t_pkmn, party_pkm* p_pkm);
-
-        /*
-         * Generation VI
-         */
-        team_pokemon::sptr import_gen6_pokemon(party_pkx* p_pkx);
-        void export_gen6_pokemon(team_pokemon::sptr t_pkmn, party_pkx* p_pkx);
     }
 }
 
