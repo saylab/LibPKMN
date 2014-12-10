@@ -8,7 +8,7 @@
 #define INCLUDED_PKMN_TYPES_DICT_IPP
 
 #include <cstdlib>
-#include <iostream>
+#include <sstream>
 #include <stdexcept>
 
 #include <pkmn/config.hpp>
@@ -26,7 +26,7 @@
 namespace pkmn
 {
     template <typename Key, typename Val>
-    dict<Key, Val>::dict(void) {}
+    dict<Key, Val>::dict() {}
 
     template <typename Key, typename Val> template <typename InputIterator>
     dict<Key, Val>::dict(InputIterator first, InputIterator last):
@@ -45,8 +45,9 @@ namespace pkmn
         {
             if(p.first == key) return p.second;
         }
-        std::string err_msg = "Key '" + to_string(key) + "' not found.";
-        throw std::runtime_error(err_msg.c_str());
+        std::ostringstream err;
+        err << "Key '" << key << "' not found.";
+        throw std::runtime_error(err.str());
     }
 
     template <typename Key, typename Val>
@@ -67,8 +68,9 @@ namespace pkmn
         {
             if(p.first == key) return p.second;
         }
-        std::string err_msg = "Key '" + to_string(key) + "' not found.";
-        throw std::runtime_error(err_msg.c_str());
+        std::ostringstream err;
+        err << "Key '" << key << "' not found.";
+        throw std::runtime_error(err.str());
     }
 
     template <typename Key, typename Val>
@@ -88,8 +90,9 @@ namespace pkmn
         {
             if(p.first == key)
             {
-                std::string err_msg = "Key '" + to_string(key) + "' already exists.";
-                throw std::runtime_error(err_msg.c_str());
+                std::ostringstream err;
+                err << "Key '" << key << "' already exists.";
+                throw std::runtime_error(err.str());
             }
         }
         _map.push_back(std::make_pair(key, val));
@@ -107,8 +110,9 @@ namespace pkmn
                 return;
             }
         }
-        std::string err_msg = "Key '" + to_string(key) + "' not found.";
-        throw std::runtime_error(err_msg.c_str());
+        std::ostringstream err;
+        err << "Key '" << key << "' not found.";
+        throw std::runtime_error(err.str());
     }
 
     template <typename Key, typename Val>
@@ -117,17 +121,19 @@ namespace pkmn
         std::string err_msg;
         if(not has_key(key1))
         {
-            err_msg = "Key '" + to_string(key1) + "' not found.";
-            throw std::runtime_error(err_msg.c_str());
+            std::ostringstream err;
+            err << "Key '" << key1 << "' not found.";
+            throw std::runtime_error(err.str());
         }
         if(not has_key(key1))
         {
-            err_msg = "Key '" + to_string(key2) + "' not found.";
-            throw std::runtime_error(err_msg.c_str());
+            std::ostringstream err;
+            err << "Key '" << key2 << "' not found.";
+            throw std::runtime_error(err.str());
         }
         Val temp = at(key1);
-        (*this)[key1] = (*this)[key2];//_map[key1] = _map[key2];
-        (*this)[key2] = temp;//_map[key2] = temp;
+        (*this)[key1] = (*this)[key2];
+        (*this)[key2] = temp;
     }
 
     template <typename Key, typename Val>
@@ -144,7 +150,7 @@ namespace pkmn
     }
 
     template <typename Key, typename Val>
-    std::vector<Key> dict<Key, Val>::keys(void) const
+    std::vector<Key> dict<Key, Val>::keys() const
     {
         std::vector<Key> keys;
         DICT_FOREACH(const dict_pair &p, _map.begin(), _map.end())
@@ -155,7 +161,7 @@ namespace pkmn
     }
 
     template <typename Key, typename Val>
-    std::vector<Val> dict<Key, Val>::vals(void) const
+    std::vector<Val> dict<Key, Val>::vals() const
     {
         std::vector<Val> vals;
         DICT_FOREACH(const dict_pair &p, _map.begin(), _map.end())

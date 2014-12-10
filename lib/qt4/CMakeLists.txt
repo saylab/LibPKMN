@@ -13,6 +13,7 @@ CONFIGURE_FILE(
 SET(qt4_sources
     ${CMAKE_CURRENT_SOURCE_DIR}/AbilityListComboBox.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/AboutMessageBox.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ItemListComboBox.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/NatureListComboBox.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PokemonListComboBox.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TypeListComboBox.cpp

@@ -52,7 +52,7 @@
     #include "pkmn/types/prng.hpp"
     #include "pkmn/types/ribbons.hpp"
 
-    #include "pkmn/nature.hpp"
+    #include "pkmn/types/nature.hpp"
     #include "pkmn/base_pokemon.hpp"
     #include "pkmn/item.hpp"
     #include "pkmn/pocket.hpp"
@@ -74,7 +74,7 @@
 %include "pkmn/types/prng.hpp"
 %include "pkmn/types/ribbons.hpp"
 
-%include "pkmn/nature.hpp"
+%include "pkmn/types/nature.hpp"
 %include "pkmn/base_pokemon.hpp"
 %include "pkmn/item.hpp"
 %include "pkmn/pocket.hpp"

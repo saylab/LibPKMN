@@ -179,7 +179,7 @@ if __name__ == "__main__":
 
     os.chdir(options.qt4_include_dir)
     for header in os.listdir(os.getcwd()):
-        if header != "CMakeLists.txt":
+        if (header != "CMakeLists.txt") and ("swp" not in header) and ("~" not in header):
             headers += [header]
 
     for header in headers:

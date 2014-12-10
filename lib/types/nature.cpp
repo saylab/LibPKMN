@@ -8,7 +8,7 @@
 #include <sstream>
 
 #include <pkmn/enums.hpp>
-#include <pkmn/nature.hpp>
+#include <pkmn/types/nature.hpp>
 #include <pkmn/database/queries.hpp>
 
 namespace pkmn

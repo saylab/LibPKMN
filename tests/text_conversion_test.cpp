@@ -10,6 +10,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <PokeLib/PokeLib.h>
+
 #include "conversions/text.hpp"
 
 BOOST_AUTO_TEST_CASE(gen1_test)
@@ -69,4 +71,31 @@ BOOST_AUTO_TEST_CASE(gen3_test)
     std::wstring genders_str = pkmn::conversions::import_gen3_text(gen3_genders, 2);
     BOOST_CHECK_EQUAL(genders_str[0], 0x2642);
     BOOST_CHECK_EQUAL(genders_str[1], 0x2640);
+}
+
+// This unit test is different because it uses PokeLib's classes
+BOOST_AUTO_TEST_CASE(gen4_test)
+{
+    pkmn::pkstring gen4_pkstring1("LiBpKmN12345");
+    uint16_t gen4_output[15];
+    memset(gen4_output, 0xFFFF, 30);
+    pkmn::conversions::export_gen4_text(gen4_pkstring1, gen4_output, 15);
+    pkmn::pkstring gen4_pkstring2 = pkmn::conversions::import_gen4_text(gen4_output, 15);
+    BOOST_CHECK_EQUAL(gen4_pkstring1.length(), gen4_pkstring2.length());
+    BOOST_CHECK_EQUAL(gen4_pkstring1, gen4_pkstring2);
+}
+
+BOOST_AUTO_TEST_CASE(modern_test)
+{
+    // Make sure import/export functions match
+    uint16_t modern_input[15] = {0x004C,0x0069,0x0042,0x0070,0x004B,0x006D,0x004E,
+                                 0x0031,0x0032,0x0033,0x0034,0x0035,
+                                 0xFFFF,0xFFFF,0xFFFF};
+    uint16_t modern_output[15];
+
+    pkmn::pkstring modern_pkstring = pkmn::conversions::import_modern_text(modern_input, 15);
+    BOOST_CHECK_EQUAL(modern_pkstring.length(), 12);
+    BOOST_CHECK(modern_pkstring.std_string() == "LiBpKmN12345");
+    pkmn::conversions::export_modern_text(modern_pkstring, modern_output, 15);
+    BOOST_CHECK(!memcmp(modern_input, modern_output, 15));
 }

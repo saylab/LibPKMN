@@ -88,7 +88,6 @@ namespace pkmn
 
             //Misc
             markings get_markings() const;
-            void set_marking(const uint16_t which, bool value);
             void set_markings(const pkmn::markings &mark);
             int get_attribute(const pkmn::pkstring &attribute) const;
             pkmn::dict<pkmn::pkstring, int> get_attributes() const;

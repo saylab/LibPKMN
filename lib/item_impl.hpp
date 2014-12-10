@@ -36,8 +36,8 @@ namespace pkmn
 
         protected:
 
-            unsigned int _item_id, _game_id, _category_id, _game_index, _generation;
-            pkmn::pkstring _category_name, _description, _item_name;
+            unsigned int _item_id, _game_id, _game_index, _generation;
+            bool _valid, _tmhm;
 
             static pkmn::shared_ptr<SQLite::Database> _db;
     };

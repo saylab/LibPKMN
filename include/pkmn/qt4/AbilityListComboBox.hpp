@@ -15,12 +15,13 @@ namespace pkmn
 {
     namespace qt4
     {
+        //! A ComboBox that lists all abilities available in the given generation.
         class PKMN_API AbilityListComboBox: public QComboBox
         {
             Q_OBJECT
 
             public:
-                AbilityListComboBox(unsigned int gen, QWidget* parent = NULL);
+                AbilityListComboBox(const unsigned int gen, QWidget* parent = NULL);
         };
     }
 }

@@ -55,10 +55,10 @@ namespace pkmn
             move() {};
             virtual ~move() {};
 
-            //! Return the name of the item from which this move was created (ex. "Red", "Diamond").
+            //! Return the name of the game from which this move was created (ex. "Red", "Diamond").
             virtual pkmn::pkstring get_game() const = 0;
 
-            //! Return the generation of the item from which this move was created (1-6).
+            //! Return the generation of the game from which this move was created (1-6).
             virtual unsigned int get_generation() const = 0;
 
             //! Return the move's name.

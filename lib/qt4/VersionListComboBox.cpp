@@ -15,15 +15,14 @@ namespace pkmn
 {
     namespace qt4
     {
-        VersionListComboBox::VersionListComboBox(unsigned int gen, QWidget* parent): QComboBox(parent)
+        VersionListComboBox::VersionListComboBox(QWidget* parent):
+            QComboBox(parent)
         {
             std::vector<pkstring> games_vec;
-            get_game_list(games_vec);
+            get_version_list(games_vec);
 
             for(unsigned int i = 0; i < games_vec.size(); i++)
-            {
-                addItem(tr(games_vec[i].const_char()), QVariant(i));
-            }
+                addItem(QString::fromUtf16(games_vec[i]), QVariant(i));
         }
     } /* namespace qt4 */
 } /* namespace pkmn */

@@ -15,7 +15,8 @@ namespace pkmn
 {
     namespace qt4
     {
-        NatureListComboBox::NatureListComboBox(QWidget* parent): QComboBox(parent)
+        NatureListComboBox::NatureListComboBox(QWidget* parent):
+            QComboBox(parent)
         {
             std::vector<pkstring> natures_vec;
             get_nature_list(natures_vec);

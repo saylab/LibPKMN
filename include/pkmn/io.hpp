@@ -14,21 +14,51 @@ namespace pkmn
 {
     namespace io
     {
+        //! Exports a LibPKMN-format Pokémon to a .3gpkm file.
+        /*!
+         * The .3gpkm file format corresponds to a decrypted Generation III Pokémon.
+         *
+         * This function takes in a team_pokemon and saves it as a .3gpkm file at the
+         * given filename.
+         *
+         * \param t_pkmn LibPKMN-format Pokémon to export
+         * \param filename where to save the .3gpkm file
+         */
         void PKMN_API export_to_3gpkm(team_pokemon::sptr t_pkmn, const std::string &filename);
+
+        //! Imports a .3gpkm file into LibPKMN.
+        /*!
+         * The .3gpkm file format corresponds to a decrypted Generation III Pokémon.
+         *
+         * This function takes in a .3gpkm file and converts it into a team_pokemon.
+         *
+         * \param filename the .3gpkm file to import
+         * \return imported LibPKMN-format Pokémon
+         */
         team_pokemon::sptr PKMN_API import_from_3gpkm(const std::string &filename);
 
-        team_pokemon::sptr PKMN_API import_from_pkm(std::string filename);
+        //! Imports a .pkm file into LibPKMN.
+        /*!
+         * The .pkm file format corresponds to a decrypted Generation IV-V Pokémon.
+         *
+         * This function takes in a team_pokemon and saves it as a .pkm file at the
+         * given filename.
+         *
+         * \param t_pkmn LibPKMN-format Pokémon to export
+         * \param filename where to save the .pkm file
+         */
+        void PKMN_API export_to_pkm(team_pokemon::sptr t_pkmn, const std::string &filename);
 
-        void PKMN_API export_to_pkm(team_pokemon::sptr t_pkmn, std::string filename);
-        team_pokemon::sptr PKMN_API import_from_pkm(std::string filename);
-
-        void PKMN_API export_to_pkx(team_pokemon::sptr t_pkmn, std::string filename);
-        team_pokemon::sptr PKMN_API import_from_pkx(std::string filename);
-        
-        void PKMN_API export_to_pksql(team_pokemon::sptr t_pkmn, std::string filename,
-                                         std::string title = "");
-
-        team_pokemon::sptr PKMN_API import_from_pksql(std::string filename);
+        //! Imports a .pkm file into LibPKMN.
+        /*!
+         * The .pkm file format corresponds to a decrypted Generation IV-V Pokémon.
+         *
+         * This function takes in a .pkm file and converts it into a team_pokemon.
+         *
+         * \param filename the .pkm file to import
+         * \return imported LibPKMN-format Pokémon
+         */
+        team_pokemon::sptr PKMN_API import_from_pkm(const std::string &filename);
     }
 }
 

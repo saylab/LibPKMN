@@ -13,20 +13,16 @@
 
 namespace pkmn
 {
+    /*!
+     * This class represents a Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_Storage_System#Markings">markings</a>.
+     * In Generation III onward, these markings are used to organize Pokémon within the PC.
+     */
     struct PKMN_API markings
     {
         markings() {};
-        markings(const uint8_t markint);
 
-        enum
-        {
-            CIRCLE,
-            TRIANGLE,
-            SQUARE,
-            HEART,
-            STAR,
-            DIAMOND
-        };
+        //! Instantiate the class with the in-game marking storage method.
+        markings(const uint8_t markint);
 
         bool circle;
         bool triangle;
@@ -35,6 +31,7 @@ namespace pkmn
         bool star;
         bool diamond;
 
+        //! Convert this struct to its in-game storage method.
         operator uint8_t();
     };
 }

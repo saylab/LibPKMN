@@ -13,18 +13,25 @@
 
 namespace pkmn
 {
+    //! Return version of SQLite used in build
     std::string PKMN_API get_sqlite3_version();
 
+    //! Return version of SQLiteC++ used in build
     std::string PKMN_API get_sqlitecpp_version();
 
+    //! Return version of Boost used in build
     std::string PKMN_API get_boost_version();
 
+    //! Return version of Qt4 used in build
     std::string PKMN_API get_qt4_version();
 
+    //! Return LibPKMN commit used in build
     std::string PKMN_API get_libpkmn_commit();
 
+    //! Return PokeLib-NC commit used in build
     std::string PKMN_API get_pokelib_nc_commit();
 
+    //! Return PKMDS commit used in build
     std::string PKMN_API get_pkmds_commit();
 }
 

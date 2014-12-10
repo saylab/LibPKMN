@@ -15,12 +15,13 @@ namespace pkmn
 {
     namespace qt4
     {
+        //! A ComboBox that lists all versions.
         class PKMN_API VersionListComboBox: public QComboBox
         {
             Q_OBJECT
 
             public:
-                VersionListComboBox(unsigned int gen, QWidget* parent = NULL);
+                VersionListComboBox(QWidget* parent = NULL);
         };
     }
 }

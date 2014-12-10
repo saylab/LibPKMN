@@ -15,6 +15,7 @@ namespace pkmn
 {
     namespace qt4
     {
+        //! A ComboBox that lists all 25 natures.
         class PKMN_API NatureListComboBox: public QComboBox
         {
             Q_OBJECT

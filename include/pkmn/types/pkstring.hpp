@@ -84,6 +84,9 @@ namespace pkmn
             //! Return the character at the given value (returned as a char).
             const char& operator[](size_t pos) const;
 
+            //! Equality check between two pkmn::pkstrings
+            bool operator==(const pkmn::pkstring &r) const;
+
         private:
 
             std::string stdstring;
@@ -95,8 +98,6 @@ namespace pkmn
     typedef std::pair<pkmn::pkstring, pkmn::pkstring> pkstring_pair_t;
     typedef std::vector<pkmn::pkstring> pkstring_vector_t;
 
-    //! Equality check between two pkmn::pkstrings
-    PKMN_API bool operator==(const pkmn::pkstring& l, const pkmn::pkstring& r);
 #ifndef SWIG
     //! Use pkmn::pkstring in std::cin or std::istringstream
     PKMN_API std::istream& operator>>(std::istream& stream, pkstring& text);

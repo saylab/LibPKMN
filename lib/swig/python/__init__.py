@@ -11,7 +11,6 @@ import Egg_Groups
 import Forms
 import Genders
 import Items
-import Markings
 import Move_Classes
 import Moves
 import Natures

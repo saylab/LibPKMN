@@ -5,6 +5,7 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
+#include <sstream>
 #include <stdexcept>
 #include <string>
 
@@ -84,10 +85,9 @@ namespace pkmn
         else return stdstring[pos];
     }
 
-    bool operator==(const pkstring& l, const pkstring& r)
+    bool pkstring::operator==(const pkstring &r) const
     {
-        return (l.std_string() == r.std_string()
-               and (l.std_wstring() == r.std_wstring()));
+        return this->std_wstring() == r.std_wstring();
     }
 
     std::istream& operator>>(std::istream& stream, pkstring& text)
