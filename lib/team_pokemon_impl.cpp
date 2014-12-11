@@ -80,6 +80,7 @@ namespace pkmn
         _trainer_name = "Ash";
         _trainer_gender = "Male";
         _level = level;
+        _experience = database::get_experience(_base_pkmn->get_species_id(), _level);
         _game_id = game;
         _original_game_id = game;
         _generation = _base_pkmn->get_generation();
@@ -292,15 +293,25 @@ namespace pkmn
 
     unsigned int team_pokemon_impl::get_level() const {return _level;}
 
+    unsigned int team_pokemon_impl::get_experience() const {return _experience;}
+
     bool team_pokemon_impl::using_hidden_ability() const {return _has_hidden_ability;}
 
     void team_pokemon_impl::set_level(unsigned int level)
     {
         if(level > 0 and level <= 100)
         {
-            level = _level;
+            _level = level;
+            _experience = database::get_experience(_base_pkmn->get_species_id(), level);
             _set_stats();
         }
+    }
+
+    void team_pokemon_impl::set_experience(unsigned int experience)
+    {
+        _experience = experience;
+        _level = database::get_level(_base_pkmn->get_species_id(), _experience);
+        _set_stats();
     }
 
     void team_pokemon_impl::set_using_hidden_ability(bool value) {_has_hidden_ability = value;}

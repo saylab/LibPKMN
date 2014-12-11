@@ -74,6 +74,7 @@ namespace pkmn
             //Getting Individual Stat Info
             virtual unsigned int get_personality() const = 0;
             virtual unsigned int get_level() const = 0;
+            virtual unsigned int get_experience() const = 0;
             virtual pkmn::pkstring get_gender() const = 0;
             virtual pkmn::nature get_nature() const = 0;
             virtual pkmn::pkstring get_ability() const = 0;
@@ -86,6 +87,7 @@ namespace pkmn
             //Setting Individual Stat Info
             virtual void set_personality(unsigned int personality) = 0;
             virtual void set_level(unsigned int level) = 0;
+            virtual void set_experience(unsigned int experience) = 0;
             virtual void set_nature(const pkmn::pkstring &nature_name) = 0;
             virtual void set_ability(const pkmn::pkstring &ability) = 0;
             virtual void set_using_hidden_ability(bool value) = 0;
