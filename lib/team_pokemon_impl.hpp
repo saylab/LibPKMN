@@ -61,10 +61,12 @@ namespace pkmn
             //Getting Individual Stat Info
             unsigned int get_personality() const;
             unsigned int get_level() const;
+            unsigned int get_experience() const;
             bool using_hidden_ability() const;
 
             //Setting Individual Stat Info
             void set_level(unsigned int level);
+            void set_experience(unsigned int experience);
             virtual void set_using_hidden_ability(bool value);
 
             //Battle Stat Info
@@ -116,7 +118,7 @@ namespace pkmn
             pkmn::pkstring _trainer_gender;
             unsigned int _held_item;
             unsigned int _game_id, _original_game_id, _generation;
-            unsigned int _level, _met_level;
+            unsigned int _level, _experience, _met_level;
             unsigned int _personality;
 
             union

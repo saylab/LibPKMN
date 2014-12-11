@@ -71,7 +71,7 @@ namespace pkmn
             t_pkmn->set_nickname(import_gen1_text(nickname_buffer, 10));
             t_pkmn->set_trainer_name(import_gen1_text(otname_buffer, 7));
             t_pkmn->set_trainer_id(pkmn.ot_id);
-            t_pkmn->set_trainer_gender("Male");
+            t_pkmn->set_experience((65536*pkmn.exp[0]) + (256*pkmn.exp[1]) * pkmn.exp[2]);
 
             //Effort values
             t_pkmn->set_EV("HP", pkmn.ev_hp);
@@ -121,8 +121,10 @@ namespace pkmn
             for(size_t i = 0; i < 4; i++) pkmn.moves[i] = moves[i]->get_move_id();
             pkmn.ot_id = t_pkmn->get_trainer_id();
 
-            unsigned int experience = database::get_experience(t_pkmn->get_species_id(), pkmn.level);
-            memcpy(pkmn.exp, (&experience+1), 3);
+            unsigned int experience = t_pkmn->get_experience();
+            pkmn.exp[0] = (experience /= 65536);
+            pkmn.exp[1] = (experience /= 256);
+            pkmn.exp[2] = experience;
 
             //Effort values
             pkmn.ev_hp = EVs["HP"];
@@ -199,6 +201,7 @@ namespace pkmn
             t_pkmn->set_trainer_gender(crystal_get_otgender(pkmn.caught_data));
             t_pkmn->set_met_level(crystal_get_metlevel(pkmn.caught_data));
             t_pkmn->set_held_item(database::get_item_name(pkmn.held_item, Versions::CRYSTAL));
+            t_pkmn->set_experience((65536*pkmn.exp[0]) + (256*pkmn.exp[1]) * pkmn.exp[2]);
             //TODO: friendship
 
             //Effort values
@@ -240,8 +243,10 @@ namespace pkmn
             for(size_t i = 0; i < 4; i++) pkmn.moves[i] = moves[0]->get_move_id();
             pkmn.ot_id = t_pkmn->get_trainer_id();
 
-            unsigned int experience = database::get_experience(t_pkmn->get_species_id(), pkmn.level);
-            memcpy(pkmn.exp, (&experience+1), 3);
+            unsigned int experience = t_pkmn->get_experience();
+            pkmn.exp[0] = (experience /= 65536);
+            pkmn.exp[1] = (experience /= 256);
+            pkmn.exp[2] = experience;
 
             //Effort values
             pkmn.ev_hp = EVs["HP"];
@@ -387,6 +392,7 @@ namespace pkmn
 
             //Growth
             t_pkmn->set_held_item(database::get_item_name(blocks.growth.held_item, version_id));
+            t_pkmn->set_experience(blocks.growth.exp);
             //TODO: PP Up, friendship
 
             //Attacks
@@ -447,9 +453,10 @@ namespace pkmn
             blocks.growth.species = t_pkmn->get_species_id();
             blocks.growth.held_item = database::get_item_game_index(t_pkmn->get_held_item()->get_item_id(),
                                                                   Versions::FIRERED);
+            blocks.growth.exp = t_pkmn->get_experience();
 
             std::ostringstream query_stream;
-            blocks.growth.exp = database::get_experience(t_pkmn->get_species_id(), t_pkmn->get_level());
+            blocks.growth.exp = t_pkmn->get_experience();
             blocks.growth.pp_up = 0; //TODO
             blocks.growth.friendship = 70; //Base
 
@@ -562,6 +569,7 @@ namespace pkmn
             t_pkmn->set_personality(pokelib_pkmn.pkm->pkm.pid);
             t_pkmn->set_trainer_public_id(pokelib_pkmn.pkm->pkm.ot_id);
             t_pkmn->set_trainer_secret_id(pokelib_pkmn.pkm->pkm.ot_sid);
+            t_pkmn->set_experience(pokelib_pkmn.pkm->pkm.exp);
 
             t_pkmn->set_EV("HP", pokelib_pkmn.pkm->pkm.ev_hp);
             t_pkmn->set_EV("Attack", pokelib_pkmn.pkm->pkm.ev_atk);
@@ -699,6 +707,7 @@ namespace pkmn
             pokelib_pkmn.pkm->pkm.pid = t_pkmn->get_personality();
             pokelib_pkmn.pkm->pkm.ot_id = t_pkmn->get_trainer_public_id();
             pokelib_pkmn.pkm->pkm.ot_sid = t_pkmn->get_trainer_secret_id();
+            pokelib_pkmn.pkm->pkm.exp = t_pkmn->get_experience();
 
             unsigned int raw_held = t_pkmn->get_held_item()->get_item_id();
             pokelib_pkmn.pkm->pkm.held_item = database::get_item_game_index(raw_held, t_pkmn->get_game_id());
@@ -898,6 +907,7 @@ namespace pkmn
             t_pkmn->set_personality(p_pkm->pid);
             t_pkmn->set_trainer_public_id(p_pkm->tid);
             t_pkmn->set_trainer_secret_id(p_pkm->sid);
+            t_pkmn->set_experience(p_pkm->exp);
 
             t_pkmn->set_EV("HP", p_pkm->evs.hp);
             t_pkmn->set_EV("Attack", p_pkm->evs.attack);
@@ -1066,6 +1076,7 @@ namespace pkmn
             p_pkm->pid = t_pkmn->get_personality();
             p_pkm->tid = t_pkmn->get_trainer_public_id();
             p_pkm->sid = t_pkmn->get_trainer_secret_id();
+            p_pkm->exp = t_pkmn->get_experience();
 
             pkmn::dict<pkmn::pkstring, unsigned int> stats = t_pkmn->get_stats();
             p_pkm->party_data.maxhp = stats["HP"];
