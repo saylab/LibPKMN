@@ -50,6 +50,7 @@
     #include "pkmn/types/markings.hpp"
     #include "pkmn/types/pkstring.hpp"
     #include "pkmn/types/prng.hpp"
+    #include "pkmn/types/ribbons.hpp"
 
     #include "pkmn/types/nature.hpp"
     #include "pkmn/base_pokemon.hpp"
@@ -71,6 +72,7 @@
 %include "pkmn/types/markings.hpp"
 %include "pkmn/types/pkstring.hpp"
 %include "pkmn/types/prng.hpp"
+%include "pkmn/types/ribbons.hpp"
 
 %include "pkmn/types/nature.hpp"
 %include "pkmn/base_pokemon.hpp"

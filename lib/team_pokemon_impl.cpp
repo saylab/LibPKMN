@@ -377,9 +377,13 @@ namespace pkmn
         }
     }
 
-    markings team_pokemon_impl::get_markings() const {return _markings;}
+    pkmn::markings team_pokemon_impl::get_markings() const {return _markings;}
 
     void team_pokemon_impl::set_markings(const pkmn::markings &mark) {_markings = mark;}
+
+    pkmn::ribbons team_pokemon_impl::get_ribbons() const {return _ribbons;}
+
+    void team_pokemon_impl::set_ribbons(const pkmn::ribbons &ribbons) {_ribbons = ribbons;}
 
     int team_pokemon_impl::get_attribute(const pkmn::pkstring &attribute) const
     {
