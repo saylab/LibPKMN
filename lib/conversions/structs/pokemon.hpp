@@ -267,6 +267,7 @@ namespace pkmn
                 uint16_t ot_sid;
             };
         };
+        uint32_t exp;
         uint8_t friendship;
         uint8_t ability;
         uint8_t markings;
@@ -296,7 +297,7 @@ namespace pkmn
         uint16_t moves[4];
         uint8_t move_pps[4];
         uint8_t move_pp_ups[4];
-        uint8_t iv_isegg_isnicknamed;
+        uint32_t iv_isegg_isnicknamed;
         uint32_t hoenn_ribbons;
         uint8_t form_encounterinfo; // Fateful encounter, is female, is genderless
         union
@@ -324,7 +325,7 @@ namespace pkmn
 
     typedef struct
     {
-        uint16_t otname[11];
+        uint16_t otname[8];
         uint8_t eggmet_date[3];
         uint8_t met_date[3];
         uint8_t eggmet_dp;

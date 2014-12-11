@@ -541,6 +541,116 @@ namespace pkmn
         }
 
         /*
+         * Nintendo DS (Generation IV-V)
+         */
+        #define NDS_SPECIES_IS(x) (blocks.blockA.species == x)
+        #define NDS_SPECIES_GT(x) (blocks.blockA.species > x)
+        #define NDS_SPECIES_LT(x) (blocks.blockA.species < x)
+
+        team_pokemon::sptr import_nds_pokemon(const nds_pc_pokemon_t &pkmn, unsigned int version_id,
+                                              bool is_encrypted)
+        {
+            // Since version_id is given, make sure it's legit
+            unsigned int gen = database::get_generation(version_id);
+            if(gen < 4 or gen > 5)
+                throw std::runtime_error("import_nds_pokemon: version_id must be from Generation IV-V.");
+
+            nds_pokemon_blocks_t blocks;
+            // TODO: implement crypt functions
+            memcpy(&blocks, &pkmn.blocks, sizeof(nds_pokemon_blocks_t));
+
+            unsigned int species_id, move1_id, move2_id, move3_id, move4_id;
+
+            unsigned int version_group_id = database::get_version_group_id(version_id);
+            bool is_valid;
+            if(version_group_id == Version_Groups::DIAMOND_PEARL)
+                is_valid = !(NDS_SPECIES_IS(494)) and !(NDS_SPECIES_IS(495)) and NDS_SPECIES_LT(501);
+            else if(version_group_id == Version_Groups::PLATINUM)
+                is_valid = !(NDS_SPECIES_IS(494)) and !(NDS_SPECIES_IS(495)) and NDS_SPECIES_LT(508);
+            else
+                is_valid = NDS_SPECIES_LT(650);
+
+            if(!is_valid)
+            {
+                species_id = Species::INVALID;
+                move1_id = Moves::NONE;
+                move2_id = Moves::NONE;
+                move3_id = Moves::NONE;
+                move4_id = Moves::NONE;
+            }
+            else
+            {
+                species_id = database::get_pokemon_id(blocks.blockA.species, version_id);
+                move1_id = blocks.blockB.moves[0];
+                move2_id = blocks.blockB.moves[1];
+                move3_id = blocks.blockB.moves[2];
+                move4_id = blocks.blockB.moves[3];
+            }
+
+            SQLite::Database db(get_database_path().c_str());
+            std::ostringstream query_stream;
+            unsigned int level = database::get_level(species_id, blocks.blockA.exp);
+
+            team_pokemon::sptr t_pkmn = team_pokemon::make(species_id, version_id,
+                                                           level, move1_id, move2_id,
+                                                           move3_id, move4_id);
+
+            // Block A
+            t_pkmn->set_held_item(database::get_item_name(blocks.blockA.held_item, version_id));
+            t_pkmn->set_trainer_id(blocks.blockA.ot_id);
+            t_pkmn->set_experience(blocks.blockA.exp);
+            // TODO: friendship
+            t_pkmn->set_ability(database::get_ability_name(blocks.blockA.ability));
+            t_pkmn->set_markings(blocks.blockA.markings);
+            t_pkmn->set_EV("HP", blocks.blockA.ev_hp);
+            t_pkmn->set_EV("Attack", blocks.blockA.ev_atk);
+            t_pkmn->set_EV("Defense", blocks.blockA.ev_def);
+            t_pkmn->set_EV("Speed", blocks.blockA.ev_spd);
+            t_pkmn->set_EV("Special Attack", blocks.blockA.ev_spatk);
+            t_pkmn->set_EV("Special Defense", blocks.blockA.ev_spdef);
+            pkmn::ribbons rib;
+            rib.sinnoh.ribbons1 = blocks.blockA.sinnoh_ribbons1;
+            if(gen == 4) rib.sinnoh.ribbons2 = blocks.blockA.sinnoh_ribbons2;
+            else rib.unova = blocks.blockA.unova_ribbons;
+
+            // Block B
+            for(size_t i = 0; i < 4; i++) t_pkmn->set_move((i+1), blocks.blockB.moves[i]);
+            for(size_t i = 0; i < 4; i++) t_pkmn->set_move_PP((i+1), blocks.blockB.move_pps[i]);
+            t_pkmn->set_IV("HP", modern_get_IV(&blocks.blockB.iv_isegg_isnicknamed, Stats::HP));
+            t_pkmn->set_IV("Attack", modern_get_IV(&blocks.blockB.iv_isegg_isnicknamed, Stats::ATTACK));
+            t_pkmn->set_IV("Defense", modern_get_IV(&blocks.blockB.iv_isegg_isnicknamed, Stats::DEFENSE));
+            t_pkmn->set_IV("Speed", modern_get_IV(&blocks.blockB.iv_isegg_isnicknamed, Stats::SPEED));
+            t_pkmn->set_IV("Special Attack", modern_get_IV(&blocks.blockB.iv_isegg_isnicknamed, Stats::SPECIAL_ATTACK));
+            t_pkmn->set_IV("Special Defense", modern_get_IV(&blocks.blockB.iv_isegg_isnicknamed, Stats::SPECIAL_DEFENSE));
+            rib.hoenn = blocks.blockB.hoenn_ribbons;
+            // TODO: Form, encounter info
+            if(gen == 4) t_pkmn->set_attribute("shiny-leaf", blocks.blockB.shiny_leaf);
+            t_pkmn->set_nature(database::get_nature_name((gen == 4) ? (pkmn.personality % 24)
+                                                                    :  blocks.blockB.nature));
+            // TODO: Gen V info
+
+            // Block C
+            t_pkmn->set_nickname((gen == 4) ? import_gen4_text(blocks.blockC.nickname, 11)
+                                            : import_modern_text(blocks.blockC.nickname, 11));
+            // TODO: Hometown
+            rib.sinnoh.ribbons3 = blocks.blockC.sinnoh_ribbons3;
+            t_pkmn->set_ribbons(rib);
+
+            // Block D
+            t_pkmn->set_trainer_name((gen == 4) ? import_gen4_text(blocks.blockD.otname, 8)
+                                                : import_modern_text(blocks.blockD.otname, 8));
+            // TODO: met dates
+            // TODO: Pokerus
+            if(version_group_id == Version_Groups::HEARTGOLD_SOULSILVER)
+                t_pkmn->set_ball(ball_dict.at(game_ball_to_libpkmn_ball(blocks.blockD.ball_hgss), "Poke Ball"));
+            else
+                t_pkmn->set_ball(ball_dict.at(game_ball_to_libpkmn_ball(blocks.blockD.ball), "Poke Ball"));
+            t_pkmn->set_met_level(get_gen_456_met_level(&blocks.blockD.metlevel_otgender));
+            t_pkmn->set_trainer_gender((get_gen_456_otgender(&blocks.blockD.metlevel_otgender)) ? "Female" : "Male");
+            // TODO: encounter info
+        }
+
+        /*
          * Generation IV
          */
         team_pokemon::sptr import_gen4_pokemon(const PokeLib::Pokemon &pokelib_pkmn)

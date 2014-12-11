@@ -68,6 +68,15 @@ namespace pkmn
                                  bool encrypt = true);
 
         /*
+         * Nintendo DS (Generation IV-V)
+         */
+        team_pokemon::sptr import_nds_pokemon(const nds_pc_pokemon_t &pkmn,
+                                              unsigned int version_id,
+                                              bool is_encrypted = true);
+
+        // OLD BELOW
+
+        /*
          * Generation IV
          */
         team_pokemon::sptr import_gen4_pokemon(const PokeLib::Pokemon &pokelib_pkmn);
