@@ -22,12 +22,12 @@
     public static implicit operator Markings(byte markint) {
         Markings mark = new Markings();
 
-        mark.circle =   ((markint & 0x01) > 0) ? true : false;
-        mark.triangle = ((markint & 0x02) > 0) ? true : false;
-        mark.square =   ((markint & 0x04) > 0) ? true : false;
-        mark.heart =    ((markint & 0x08) > 0) ? true : false;
-        mark.star =     ((markint & 0x10) > 0) ? true : false;
-        mark.diamond =  ((markint & 0x20) > 0) ? true : false;
+        mark.circle =   (markint & 0x01) > 0;
+        mark.triangle = (markint & 0x02) > 0;
+        mark.square =   (markint & 0x04) > 0;
+        mark.heart =    (markint & 0x08) > 0;
+        mark.star =     (markint & 0x10) > 0;
+        mark.diamond =  (markint & 0x20) > 0;
 
         return mark;
     }
