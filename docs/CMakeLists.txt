@@ -53,10 +53,10 @@ IF(ENABLE_DOXYGEN)
             ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile_java
         @ONLY)
 
-        FILE(GLOB_RECURSE java_source_files ${LIBPKMN_BINARY_DIR}/lib/swig/java/org/nc/LibPKMN/*.java)
+        FILE(GLOB_RECURSE java_source_files ${LIBPKMN_BINARY_DIR}/lib/swig/java/org/nc/PKMN/*.java)
         ADD_CUSTOM_COMMAND(
             OUTPUT ${DOXYGEN_JAVA_OUTPUT_DIR}/html/index.html
-            DEPENDS LibPKMN_jar
+            DEPENDS PKMN_jar
             COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile_java
             COMMENT "Generating Java API documentation with Doxygen"
         )

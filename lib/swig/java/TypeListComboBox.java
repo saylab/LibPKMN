@@ -5,7 +5,7 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-package org.nc.LibPKMN;
+package org.nc.PKMN;
 
 import javax.swing.*;
 
@@ -16,7 +16,7 @@ public class TypeListComboBox extends JComboBox<String>
         super();
 
         StringVector typeVec = new StringVector();
-        LibPKMN.getTypeList(typeVec, gen);
+        Lists.getTypeList(typeVec, gen);
         for(int i = 0; i < typeVec.size(); i++)
         {
             addItem(typeVec.get(i));

@@ -8,9 +8,9 @@
 %pragma(java) jniclasscode=%{
   static {
     try {
-        System.loadLibrary("libpkmn_java_swig");
+        System.loadLibrary("pkmn_java");
     } catch (UnsatisfiedLinkError e) {
-      System.err.println("Failed to load libpkmn_java_swig with the following error:\n" + e);
+      System.err.println("Failed to load pkmn_java with the following error:\n" + e);
       System.exit(1);
     }
   }
@@ -58,9 +58,6 @@
 %include "libpkmn.i"
 
 %{
-    #include "pkmn/build_info.hpp"
-    #include "pkmn/paths.hpp"
-
     #include "pkmn/types/dict.hpp"
     #include "pkmn/types/markings.hpp"
     #include "pkmn/types/pkstring.hpp"
@@ -75,11 +72,7 @@
     #include "pkmn/team_pokemon.hpp"
     #include "pkmn/trainer.hpp"
     #include "pkmn/game_save.hpp"
-    #include "pkmn/lists.hpp"
 %}
-
-%include "pkmn/build_info.hpp"
-%include "pkmn/paths.hpp"
 
 %include "pkmn/types/dict.hpp"
 %include "pkmn/types/markings.hpp"
@@ -94,7 +87,6 @@
 %include "pkmn/team_pokemon.hpp"
 %include "pkmn/trainer.hpp"
 %include "pkmn/game_save.hpp"
-%include "pkmn/lists.hpp"
 
 //TODO: make C++ -> Java class name conversion function
 %template(BagSPtr)         pkmn::shared_ptr<pkmn::bag>;

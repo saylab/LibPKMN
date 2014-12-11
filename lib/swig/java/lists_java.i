@@ -8,20 +8,19 @@
 %pragma(java) jniclasscode=%{
   static {
     try {
-        System.loadLibrary("io_java_swig");
+        System.loadLibrary("lists_java");
     } catch (UnsatisfiedLinkError e) {
-      System.err.println("Failed to load io_java_swig with the following error:\n" + e);
+      System.err.println("Failed to load lists_java with the following error:\n" + e);
       System.exit(1);
     }
   }
 %}
 
 %include "exception.i"
-%include "CamelCase.i"
-%import "libpkmn_java_swig.i"
+%import "pkmn_java.i"
 
 %{
-    #include "pkmn/io.hpp"
+    #include "pkmn/lists.hpp"
 %}
 
-%include "pkmn/io.hpp"
+%include "pkmn/lists.hpp"

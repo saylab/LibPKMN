@@ -5,7 +5,7 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-package org.nc.LibPKMN;
+package org.nc.PKMN;
 
 import javax.swing.*;
 
@@ -16,7 +16,7 @@ public class NatureListComboBox extends JComboBox<String>
         super();
 
         StringVector natureVec = new StringVector();
-        LibPKMN.getNatureList(natureVec);
+        Lists.getNatureList(natureVec);
         for(int i = 0; i < natureVec.size(); i++)
         {
             addItem(natureVec.get(i));
