@@ -5,7 +5,7 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-import org.nc.PKMN.*;
+import nc.PKMN.*;
 import java.lang.RuntimeException;
 
 public class JavaSPtrTest

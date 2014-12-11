@@ -6,7 +6,7 @@
  */
 
 import java.lang.RuntimeException;
-import org.nc.PKMN.*;
+import nc.PKMN.*;
 
 public class JavaStringTest
 {

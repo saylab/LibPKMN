@@ -5,7 +5,7 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-package org.nc.PKMN;
+package nc.PKMN;
 
 import javax.swing.*;
 
