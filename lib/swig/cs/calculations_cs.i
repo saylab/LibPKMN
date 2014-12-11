@@ -10,7 +10,7 @@
 %include "std_pair.i"
 
 %include "CamelCase.i"
-%import "libpkmn_cs_swig.i"
+%import "pkmn_cs.i"
 
 %{
     #include "pkmn/config.hpp"

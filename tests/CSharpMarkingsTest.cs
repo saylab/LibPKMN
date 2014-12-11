@@ -11,7 +11,7 @@ public class DictTest
     {
         try
         {
-            LibPKMN.Markings mark = new LibPKMN.Markings();
+            PKMN.Markings mark = new PKMN.Markings();
             mark.circle = true;
             mark.triangle = false;
             mark.square = true;
@@ -37,7 +37,7 @@ public class DictTest
         try
         {
             byte markInt = 21;
-            LibPKMN.Markings mark = markInt;
+            PKMN.Markings mark = markInt;
 
             if(!mark.circle)
                 throw new System.Exception("mark.circle != true");

@@ -327,20 +327,20 @@ def generate_cs_files(output_dir, license):
     enums["Genders"] = genders
     enums["Items"] = items
     enums["Moves"] = moves
-    enums["Move_Classes"] = move_damage_classes
+    enums["MoveClasses"] = move_damage_classes
     enums["Natures"] = natures
     enums["Species"] = species
     enums["Stats"] = stats
     enums["PokeBalls"] = pokeballs
     enums["Types"] = types
     enums["Versions"] = versions
-    enums["Version_Groups"] = version_groups
+    enums["VersionGroups"] = version_groups
 
     for key in enums:
         f = open("%s.cs" % key,'w')
         f.write(license + "\n\n")
 
-        f.write("""namespace LibPKMN
+        f.write("""namespace PKMN
 {
     public static class %s
     {""" % key)
@@ -354,12 +354,12 @@ def generate_cs_files(output_dir, license):
 
         f.close()
 
-    f = open("Forms.cs",'w')
+    f = open("PokemonForms.cs",'w')
     f.write(license + "\n\n")
 
-    f.write("""namespace LibPKMN
+    f.write("""namespace PKMN
 {
-    namespace Forms
+    namespace PokemonForms
     {""")
 
     for i in range(len(forms)):
@@ -384,7 +384,7 @@ def generate_cs_files(output_dir, license):
     f = open("Ribbons.cs",'w')
     f.write(license + "\n\n")
 
-    f.write("""namespace LibPKMN
+    f.write("""namespace PKMN
 {
     namespace Ribbons
     {

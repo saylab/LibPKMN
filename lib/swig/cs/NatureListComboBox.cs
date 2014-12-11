@@ -7,17 +7,20 @@
 
 using System.Windows.Forms;
 
-namespace LibPKMN
+namespace PKMN
 {
-    public class NatureListComboBox: ComboBox
+    namespace Forms
     {
-        public NatureListComboBox(): base()
+        public class NatureListComboBox: ComboBox
         {
-            string_vec nature_vec = new string_vec();
-            LibPKMN.getNatureList(nature_vec);
-            for(int i = 0; i < nature_vec.Count; i++)
+            public NatureListComboBox(): base()
             {
-                Items.Add(nature_vec[i]);
+                string_vec nature_vec = new string_vec();
+                Lists.getNatureList(nature_vec);
+                for(int i = 0; i < nature_vec.Count; i++)
+                {
+                    Items.Add(nature_vec[i]);
+                }
             }
         }
     }

@@ -37,7 +37,7 @@ IF(ENABLE_DOXYGEN)
 
         ADD_CUSTOM_COMMAND(
             OUTPUT ${DOXYGEN_CS_OUTPUT_DIR}/html/index.html
-            DEPENDS libpkmn-cs
+            DEPENDS pkmn-cs
             COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile_cs
             COMMENT "Generating C# API documentation with Doxygen"
         )

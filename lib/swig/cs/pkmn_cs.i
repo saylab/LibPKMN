@@ -99,9 +99,6 @@
 %include "cs_markings.i"
 
 %{
-    #include "pkmn/build_info.hpp"
-    #include "pkmn/paths.hpp"
-
     #include "pkmn/types/dict.hpp"
     #include "pkmn/types/pkstring.hpp"
     #include "pkmn/types/prng.hpp"
@@ -115,13 +112,7 @@
     #include "pkmn/team_pokemon.hpp"
     #include "pkmn/trainer.hpp"
     #include "pkmn/game_save.hpp"
-
-    #include "pkmn/lists.hpp"
-
 %}
-
-%include "pkmn/build_info.hpp"
-%include "pkmn/paths.hpp"
 
 %include "pkmn/types/dict.hpp"
 %include "pkmn/types/prng.hpp"
@@ -135,8 +126,6 @@
 %include "pkmn/team_pokemon.hpp"
 %include "pkmn/trainer.hpp"
 %include "pkmn/game_save.hpp"
-
-%include "pkmn/lists.hpp"
 
 %template(BagSlot) std::pair<pkmn::item::sptr, unsigned int>;
 %template(ItemList) std::vector<std::pair<pkmn::item::sptr, unsigned int> >;

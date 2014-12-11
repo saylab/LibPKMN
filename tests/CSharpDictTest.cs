@@ -5,7 +5,6 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-using LibPKMN;
 using System;
 using System.Collections.Generic;
 
@@ -16,7 +15,7 @@ public class DictTest
         /*
          * pkmn::dict<std::string, int> tests
          */
-        StringIntDict test_dict1 = new StringIntDict();
+        PKMN.StringIntDict test_dict1 = new PKMN.StringIntDict();
         test_dict1.Add("TestKey1", -10);
         test_dict1["TestKey2"] = -5;
         test_dict1.Add("TestKey3", 0);
@@ -40,8 +39,8 @@ public class DictTest
         test_cs_dict2.Add("TestKey3", 0);
         test_cs_dict2["TestKey4"] = 5;
         test_cs_dict2.Add("TestKey5", 10);
-        StringIntDict test_dict2 = test_cs_dict2;
-        string_vec test_dict2_keys = test_dict2.Keys;
+        PKMN.StringIntDict test_dict2 = test_cs_dict2;
+        PKMN.string_vec test_dict2_keys = test_dict2.Keys;
         for(int i = 0; i < test_dict2_keys.Count; i++)
         {
             if(test_dict2[test_dict2_keys[i]] != test_cs_dict2[test_dict2_keys[i]])
@@ -53,7 +52,7 @@ public class DictTest
         /*
          * pkmn::dict<std::string, std::string> tests
          */
-        StringStringDict test_dict3 = new StringStringDict();
+        PKMN.StringStringDict test_dict3 = new PKMN.StringStringDict();
         test_dict3.Add("TestKey1", "TestValue1");
         test_dict3["TestKey2"] = "TestValue2";
         test_dict3.Add("TestKey3", "TestValue3");
@@ -77,8 +76,8 @@ public class DictTest
         test_cs_dict4.Add("TestKey3", "TestValue3");
         test_cs_dict4["TestKey4"] = "TestValue4";
         test_cs_dict4.Add("TestKey5", "TestValue5");
-        StringStringDict test_dict4 = test_cs_dict4;
-        string_vec test_dict4_keys = test_dict4.Keys;
+        PKMN.StringStringDict test_dict4 = test_cs_dict4;
+        PKMN.string_vec test_dict4_keys = test_dict4.Keys;
         for(int i = 0; i < test_dict4_keys.Count; i++)
         {
             if(test_dict4.at(test_dict4_keys[i]) != test_cs_dict4[test_dict4_keys[i]])
@@ -90,7 +89,7 @@ public class DictTest
         /*
          * pkmn::dict<std::string, uint> tests
          */
-        StringUIntDict test_dict5 = new StringUIntDict();
+        PKMN.StringUIntDict test_dict5 = new PKMN.StringUIntDict();
         test_dict5.Add("TestKey1", 0);
         test_dict5["TestKey2"] = 5;
         test_dict5.Add("TestKey3", 10);
@@ -114,8 +113,8 @@ public class DictTest
         test_cs_dict6.Add("TestKey3", 10);
         test_cs_dict6["TestKey4"] = 15;
         test_cs_dict6.Add("TestKey5", 20);
-        StringUIntDict test_dict6 = test_cs_dict6;
-        string_vec test_dict6_keys = test_dict6.Keys;
+        PKMN.StringUIntDict test_dict6 = test_cs_dict6;
+        PKMN.string_vec test_dict6_keys = test_dict6.Keys;
         for(int i = 0; i < test_dict6_keys.Count; i++)
         {
             if(test_dict6[test_dict6_keys[i]] != test_cs_dict6[test_dict6_keys[i]])

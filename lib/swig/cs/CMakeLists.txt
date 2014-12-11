@@ -26,9 +26,26 @@ SET(CSHARP_SOURCE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/CSharpSources CACHE INTE
 SET(CMAKE_SWIG_OUTDIR ${CSHARP_SOURCE_DIRECTORY})
 FILE(MAKE_DIRECTORY ${CSHARP_SOURCE_DIRECTORY})
 
+SET(CSHARP_ENUM_FILES
+    ${CSHARP_SOURCE_DIRECTORY}/Abilities.cs
+    ${CSHARP_SOURCE_DIRECTORY}/Egg_Groups.cs
+    ${CSHARP_SOURCE_DIRECTORY}/Genders.cs
+    ${CSHARP_SOURCE_DIRECTORY}/Items.cs
+    ${CSHARP_SOURCE_DIRECTORY}/Move_Classes.cs
+    ${CSHARP_SOURCE_DIRECTORY}/Moves.cs
+    ${CSHARP_SOURCE_DIRECTORY}/Natures.cs
+    ${CSHARP_SOURCE_DIRECTORY}/PokeBalls.cs
+    ${CSHARP_SOURCE_DIRECTORY}/Pokemon_Forms.cs
+    ${CSHARP_SOURCE_DIRECTORY}/Species.cs
+    ${CSHARP_SOURCE_DIRECTORY}/Stats.cs
+    ${CSHARP_SOURCE_DIRECTORY}/Types.cs
+    ${CSHARP_SOURCE_DIRECTORY}/Version_Groups.cs
+    ${CSHARP_SOURCE_DIRECTORY}/Versions.cs
+)
+
 #Generate enums
 ADD_CUSTOM_COMMAND(
-    OUTPUT ${CSHARP_SOURCE_DIRECTORY}/Forms.cs
+    OUTPUT ${CSHARP_ENUM_FILES}
     COMMAND ${PYTHON_EXECUTABLE} ${LIBPKMN_SOURCE_DIR}/tools/generate_enums.py --language=cs --include-path=${LIBPKMN_SOURCE_DIR}/include/pkmn/enums.hpp --output-dir=${CSHARP_SOURCE_DIRECTORY}
     WORKING_DIRECTORY ${LIBPKMN_SOURCE_DIR}/tools
     COMMENT "Generating C# enums"
@@ -36,7 +53,7 @@ ADD_CUSTOM_COMMAND(
 ADD_CUSTOM_TARGET(
     cs_enums ALL
     DEPENDS ${LIBPKMN_SOURCE_DIR}/include/pkmn/enums.hpp
-    DEPENDS ${CSHARP_SOURCE_DIRECTORY}/Forms.cs
+    DEPENDS ${CSHARP_ENUM_FILES}
 )
 
 ####################################################################
@@ -44,10 +61,13 @@ ADD_CUSTOM_TARGET(
 ####################################################################
 INCLUDE(UseSWIG)
 INCLUDE(LibPKMNCSharp)
-CSHARP_BUILD_SWIG_MODULE(libpkmn_cs_swig libpkmn_cs_swig LibPKMN)
-CSHARP_BUILD_SWIG_MODULE(calculations_cs_swig calculations_cs_swig Calculations)
-CSHARP_BUILD_SWIG_MODULE(database_cs_swig database_cs_swig Database)
-CSHARP_BUILD_SWIG_MODULE(io_cs_swig io_cs_swig IO)
+CSHARP_BUILD_SWIG_MODULE(pkmn_cs pkmn_cs PKMN)
+CSHARP_BUILD_SWIG_MODULE(buildinfo_cs buildinfo_cs BuildInfo)
+CSHARP_BUILD_SWIG_MODULE(calculations_cs calculations_cs Calculations)
+CSHARP_BUILD_SWIG_MODULE(database_cs database_cs Database)
+CSHARP_BUILD_SWIG_MODULE(io_cs io_cs IO)
+CSHARP_BUILD_SWIG_MODULE(lists_cs lists_cs Lists)
+CSHARP_BUILD_SWIG_MODULE(paths_cs paths_cs Paths)
 
 SET(cs_sources
     AbilityListComboBox.cs
@@ -67,17 +87,20 @@ ENDFOREACH(src ${cs_sources})
 SET(CSHARP_PLATFORM "x86")
 SET(CSHARP_BINARY_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 CSHARP_ADD_LIBRARY(
-    libpkmn-cs "System.Windows.Forms.dll" "${CMAKE_CURRENT_BINARY_DIR}/CSharpSources/*cs"
+    pkmn-cs "System.Windows.Forms.dll" "${CMAKE_CURRENT_BINARY_DIR}/CSharpSources/*cs"
 )
-ADD_DEPENDENCIES(libpkmn-cs
-    ${SWIG_MODULE_libpkmn_cs_swig_REAL_NAME}
-    ${SWIG_MODULE_calculations_cs_swig_REAL_NAME}
-    ${SWIG_MODULE_database_cs_swig_REAL_NAME}
-    ${SWIG_MODULE_io_cs_swig_REAL_NAME}
+ADD_DEPENDENCIES(pkmn-cs
+    ${SWIG_MODULE_pkmn_cs_REAL_NAME}
+    ${SWIG_MODULE_buildinfo_cs_REAL_NAME}
+    ${SWIG_MODULE_calculations_cs_REAL_NAME}
+    ${SWIG_MODULE_database_cs_REAL_NAME}
+    ${SWIG_MODULE_io_cs_REAL_NAME}
+    ${SWIG_MODULE_lists_cs_REAL_NAME}
+    ${SWIG_MODULE_paths_cs_REAL_NAME}
 )
 
 INSTALL(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/libpkmn-cs.dll
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/pkmn-cs.dll
     DESTINATION ${RUNTIME_DIR}
     COMPONENT "LibPKMN_CS"
 )

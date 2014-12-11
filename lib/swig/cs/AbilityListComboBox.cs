@@ -7,17 +7,20 @@
 
 using System.Windows.Forms;
 
-namespace LibPKMN
+namespace PKMN
 {
-    public class AbilityListComboBox: ComboBox
+    namespace Forms
     {
-        public AbilityListComboBox(uint gen): base()
+        public class AbilityListComboBox: ComboBox
         {
-            string_vec ability_vec = new string_vec();
-            LibPKMN.getAbilityList(ability_vec, gen);
-            for(int i = 0; i < ability_vec.Count; i++)
+            public AbilityListComboBox(uint gen): base()
             {
-                Items.Add(ability_vec[i]);
+                string_vec ability_vec = new string_vec();
+                Lists.getAbilityList(ability_vec, gen);
+                for(int i = 0; i < ability_vec.Count; i++)
+                {
+                    Items.Add(ability_vec[i]);
+                }
             }
         }
     }

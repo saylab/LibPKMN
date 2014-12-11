@@ -20,9 +20,9 @@ MACRO(CSHARP_BUILD_SWIG_MODULE swig_module_name dll_name cs_module_name)
 
     SET_SOURCE_FILES_PROPERTIES(${swig_module_name}.i PROPERTIES CPLUSPLUS ON)
     IF(UNIX)
-        SET(CMAKE_SWIG_FLAGS -module ${cs_module_name} -namespace \"LibPKMN\" -dllimport \"lib${dll_name}\" ${CMAKE_SWIG_GLOBAL_FLAGS} ${CMAKE_GLOBAL_FLAGS})
+        SET(CMAKE_SWIG_FLAGS -module ${cs_module_name} -namespace \"PKMN\" -dllimport \"lib${dll_name}\" ${CMAKE_SWIG_GLOBAL_FLAGS} ${CMAKE_GLOBAL_FLAGS})
     ELSEIF(WIN32)
-        SET(CMAKE_SWIG_FLAGS -module ${cs_module_name} -namespace \"LibPKMN\" -dllimport \"${dll_name}\" ${CMAKE_SWIG_GLOBAL_FLAGS} ${CMAKE_GLOBAL_FLAGS})
+        SET(CMAKE_SWIG_FLAGS -module ${cs_module_name} -namespace \"PKMN\" -dllimport \"${dll_name}\" ${CMAKE_SWIG_GLOBAL_FLAGS} ${CMAKE_GLOBAL_FLAGS})
     ENDIF(UNIX)
 
     SWIG_ADD_MODULE(${swig_module_name} csharp ${swig_module_name}.i)
