@@ -256,6 +256,8 @@ namespace pkmn
      */
     typedef struct
     {
+        uint16_t species;
+        uint16_t held_item;
         union
         {
             uint32_t ot_id;
