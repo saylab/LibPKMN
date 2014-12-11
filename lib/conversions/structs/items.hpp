@@ -137,6 +137,55 @@ namespace pkmn
         modern_item_t tms_hms[58];
         modern_item_t berries[43];
     } frlg_item_storage_t;
+
+    /*
+     * Generation IV
+     *
+     * Sources: http://projectpokemon.org/wiki/Pokémon_DP_Save_File_Structure
+     *          http://projectpokemon.org/wiki/Pokémon_Pt_Save_File_Structure
+     *          http://projectpokemon.org/wiki/Pokémon_HGSS_Save_File_Structure
+     */
+    typedef struct
+    {
+        modern_item_t items[165];
+        modern_item_t key_items[50];
+        modern_item_t tms_hms[100];
+        modern_item_t mail[12];
+        modern_item_t medicine[40];
+        modern_item_t berries[64];
+        modern_item_t balls[15];
+        modern_item_t battle_items[30];
+    } dppt_item_storage_t;
+
+    typedef struct
+    {
+        modern_item_t items[165];
+        modern_item_t key_items[43];
+        modern_item_t tms_hms[100];
+        modern_item_t mail[12];
+        modern_item_t medicine[40];
+        modern_item_t berries[64];
+        modern_item_t balls[24];
+        modern_item_t battle_items[30];
+    } hgss_item_storage_t;
+
+    /*
+     * Generation V-VI
+     *
+     * Sources: https://github.com/codemonkey85/PKMDS
+     *          http://projectpokemon.org/wiki/Pokémon_XY_Save_File_Structure
+     *          http://projectpokemon.org/wiki/Pokémon_ORAS_Save_File_Structure
+     */
+    typedef struct
+    {
+        modern_item_t items[310];
+        modern_item_t key_items[83];
+        modern_item_t tms_hms[109];
+        modern_item_t medicine[48];
+        modern_item_t berries[64];
+        uint8_t unknown[0x66];
+        uint16_t checksum;
+    } modern_item_storage_t;
     #pragma pack(pop)
 }
 

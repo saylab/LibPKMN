@@ -252,7 +252,7 @@ namespace pkmn
     /*
      * Nintendo DS (Generations IV-V)
      *
-     * Sources: http://projectpokemon.org/wiki/Pokemon_NDS_Structure
+     * Source: http://projectpokemon.org/wiki/Pokemon_NDS_Structure
      */
     typedef struct
     {
