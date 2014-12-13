@@ -10,7 +10,7 @@
 %include "exception.i"
 %include "stdint.i"
 %include "std_pair.i"
-%import "libpkmn_python_swig.i"
+%import "pkmn_python.i"
 
 %{
     #include "pkmn/calculations.hpp"

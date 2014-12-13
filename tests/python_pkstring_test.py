@@ -6,16 +6,16 @@
 # or copy at http://opensource.org/licenses/MIT)
 #
 
-import python as LibPKMN
+import python as pkmn
 
 if __name__ == "__main__":
 
     testString = "Torrent"
-    testString2 = LibPKMN.database.get_ability_name(LibPKMN.database.get_ability_id(testString))
+    testString2 = pkmn.database.get_ability_name(pkmn.database.get_ability_id(testString))
     assert(testString == testString2)
 
-    testnum1 = LibPKMN.database.get_item_id(LibPKMN.database.get_item_name(LibPKMN.Items.POKE_BALL))
-    assert(testnum1 == LibPKMN.Items.POKE_BALL)
+    testnum1 = pkmn.database.get_item_id(pkmn.database.get_item_name(pkmn.Items.POKE_BALL))
+    assert(testnum1 == pkmn.Items.POKE_BALL)
 
-    testnum2 = LibPKMN.database.get_species_id(LibPKMN.database.get_species_name(LibPKMN.Species.NIDORAN_M))
-    assert(testnum2 == LibPKMN.Species.NIDORAN_M)
+    testnum2 = pkmn.database.get_species_id(pkmn.database.get_species_name(pkmn.Species.NIDORAN_M))
+    assert(testnum2 == pkmn.Species.NIDORAN_M)

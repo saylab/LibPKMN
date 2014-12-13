@@ -35,7 +35,7 @@ SET(QT4_SWIG
 "%feature (\"autodoc\", \"1\");
 
 %include \"stl.i\"
-%import \"libpkmn_python_swig.i\"
+%import \"pkmn_python.i\"
 
 %{")
 FOREACH(header ${qt4proxy_headers})
@@ -77,10 +77,10 @@ IF(UNIX)
 ENDIF(UNIX)
 
 INCLUDE(LibPKMNPython)
-PYTHON_BUILD_SWIG_MODULE(qt4_swig LibPKMN/qt4)
+PYTHON_BUILD_SWIG_MODULE(qt4_swig pkmn/qt4)
 
 INSTALL(
     FILES ${qt4wrapper_sources}
-    DESTINATION ${LIBPKMN_PYTHON_DIR}/LibPKMN/qt4
+    DESTINATION ${LIBPKMN_PYTHON_DIR}/pkmn/qt4
     COMPONENT "LibPKMN_Python"
 )

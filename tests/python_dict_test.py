@@ -6,14 +6,14 @@
 # or copy at http://opensource.org/licenses/MIT)
 #
 
-import python as LibPKMN
+import python as pkmn
 
 if __name__ == "__main__":
 
     #########################################
     # pkmn::dict<std::string, int>
     #########################################
-    dict1 = LibPKMN.string_int_dict()
+    dict1 = pkmn.string_int_dict()
     dict1["abc"] = -1
     dict1["def"] = 5
     dict1["ghi"] = 57
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     #########################################
     # pkmn::dict<std::string, std::string>
     #########################################
-    dict2 = LibPKMN.string_string_dict()
+    dict2 = pkmn.string_string_dict()
     dict2["abc"] = "def"
     dict2["ghi"] = "jkl"
     dict2["mno"] = "pqr"
@@ -45,8 +45,8 @@ if __name__ == "__main__":
     #########################################
     # pkmn::dict<std::string, unsigned int>
     #########################################
-    dict3 = LibPKMN.string_uint_dict()
-    dict1 = LibPKMN.string_int_dict()
+    dict3 = pkmn.string_uint_dict()
+    dict1 = pkmn.string_int_dict()
     dict1["abc"] = 10
     dict1["def"] = 5
     dict1["ghi"] = 57
