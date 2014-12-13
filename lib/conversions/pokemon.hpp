@@ -73,6 +73,14 @@ namespace pkmn
         team_pokemon::sptr import_nds_pokemon(const nds_pc_pokemon_t &pkmn,
                                               unsigned int version_id,
                                               bool is_encrypted = true);
+        team_pokemon::sptr import_nds_pokemon(const nds_party_pokemon_t &pkmn,
+                                              unsigned int version_id,
+                                              bool is_encrypted = true);
+
+        void export_nds_pokemon(team_pokemon::sptr t_pkmn, nds_pc_pokemon_t &pkmn,
+                                bool encrypt = true);
+        void export_nds_pokemon(team_pokemon::sptr t_pkmn, nds_party_pokemon_t &pkmn,
+                                bool encrypt = true);
 
         // OLD BELOW
 

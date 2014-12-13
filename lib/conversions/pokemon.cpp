@@ -650,6 +650,22 @@ namespace pkmn
             // TODO: encounter info
         }
 
+        team_pokemon::sptr import_nds_pokemon(const nds_party_pokemon_t &pkmn, unsigned int version_id,
+                                              bool is_encrypted)
+        {
+            return import_nds_pokemon(pkmn.pc, version_id, is_encrypted);
+        }
+
+        void export_nds_pokemon(team_pokemon::sptr t_pkmn, nds_pc_pokemon_t &pkmn,
+                                bool encrypt)
+        {
+        }
+
+        void export_nds_pokemon(team_pokemon::sptr t_pkmn, nds_party_pokemon_t &pkmn,
+                                bool encrypt)
+        {
+        }
+
         /*
          * Generation IV
          */
