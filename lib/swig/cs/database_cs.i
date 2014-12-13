@@ -48,7 +48,7 @@
 %include "stdint.i"
 %include "exception.i"
 %include "CamelCase.i"
-%import "libpkmn_cs_swig.i"
+%import "pkmn_cs.i"
 
 %{
     #include "pkmn/database/lists.hpp"

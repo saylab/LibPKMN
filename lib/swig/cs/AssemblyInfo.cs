@@ -20,7 +20,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDescription("LibPKMN")]
 [assembly: AssemblyConfiguration("Retail")]
 [assembly: AssemblyCompany("Nicholas Corgan")]
-[assembly: AssemblyProduct("libpkmn-cs.dll")]
+[assembly: AssemblyProduct("pkmn-cs.dll")]
 [assembly: AssemblyDefaultAlias("libpkmn-cs")]
 [assembly: AssemblyCopyright("Copyright © 2013-2014 Nicholas Corgan. All rights reserved.")]
 [assembly: AssemblyTrademark("LibPKMN - https://github.com/ncorgan/LibPKMN")]

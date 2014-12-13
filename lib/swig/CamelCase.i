@@ -61,7 +61,7 @@
 /*
  * pkmn/build_info.hpp
  */
-%rename(getSQLiteVersion) pkmn::get_sqlite_version;
+%rename(getSQLite3Version) pkmn::get_sqlite3_version;
 %rename(getSQLiteCppVersion) pkmn::get_sqlitecpp_version;
 %rename(getBoostVersion) pkmn::get_boost_version;
 %rename(getQt4Version) pkmn::get_qt4_version;
@@ -131,6 +131,7 @@
 %rename(getVersionList) pkmn::get_version_list;
 %rename(getVersionGroupList) pkmn::get_version_group_list;
 %rename(getItemList) pkmn::get_item_list;
+%rename(getPokedexOrder) pkmn::get_pokedex_order;
 %rename(getPokemonList) pkmn::get_pokemon_list;
 %rename(getTypeList) pkmn::get_type_list;
 %rename(getAbilityList) pkmn::get_ability_list;

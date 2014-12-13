@@ -6,7 +6,7 @@
 # or copy at http://opensource.org/licenses/MIT)
 #
 
-import python as LibPKMN
+import python as pkmn
 
 import sys
 
@@ -19,37 +19,37 @@ if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
 
     # Test AbilityListComboBox
-    abilities = LibPKMN.pkstring_vec()
-    LibPKMN.get_ability_list(abilities, 6)
-    abilityBox = LibPKMN.qt4.AbilityListComboBox(6)
+    abilities = pkmn.pkstring_vec()
+    pkmn.get_ability_list(abilities, 6)
+    abilityBox = pkmn.qt4.AbilityListComboBox(6)
     assert(len(abilities) == abilityBox.count())
 
     # Test ItemListComboBox
-    items = LibPKMN.pkstring_vec()
-    LibPKMN.get_item_list(items, LibPKMN.Versions.Y)
-    itemBox = LibPKMN.qt4.ItemListComboBox(LibPKMN.Versions.Y)
+    items = pkmn.pkstring_vec()
+    pkmn.get_item_list(items, pkmn.Versions.Y)
+    itemBox = pkmn.qt4.ItemListComboBox(pkmn.Versions.Y)
     assert(len(items) == itemBox.count())
 
     # Test NatureListComboBox
-    natures = LibPKMN.pkstring_vec()
-    LibPKMN.get_nature_list(natures)
-    natureBox = LibPKMN.qt4.NatureListComboBox()
+    natures = pkmn.pkstring_vec()
+    pkmn.get_nature_list(natures)
+    natureBox = pkmn.qt4.NatureListComboBox()
     assert(len(natures) == natureBox.count())
 
     # Test PokemonListComboBox
-    pokemons = LibPKMN.pkstring_vec()
-    LibPKMN.get_pokemon_list(pokemons, LibPKMN.Versions.Y)
-    pokemonBox = LibPKMN.qt4.PokemonListComboBox(LibPKMN.Versions.Y)
+    pokemons = pkmn.pkstring_vec()
+    pkmn.get_pokemon_list(pokemons, pkmn.Versions.Y)
+    pokemonBox = pkmn.qt4.PokemonListComboBox(pkmn.Versions.Y)
     assert(len(pokemons) == pokemonBox.count())
 
     # Test TypeListComboBox
-    types = LibPKMN.pkstring_vec()
-    LibPKMN.get_type_list(types, LibPKMN.Versions.Y)
-    typeBox = LibPKMN.qt4.TypeListComboBox(LibPKMN.Versions.Y)
+    types = pkmn.pkstring_vec()
+    pkmn.get_type_list(types, pkmn.Versions.Y)
+    typeBox = pkmn.qt4.TypeListComboBox(pkmn.Versions.Y)
     assert(len(types) == typeBox.count())
 
     # Test VersionListComboBox
-    versions = LibPKMN.pkstring_vec()
-    LibPKMN.get_version_list(versions)
-    versionBox = LibPKMN.qt4.VersionListComboBox()
+    versions = pkmn.pkstring_vec()
+    pkmn.get_version_list(versions)
+    versionBox = pkmn.qt4.VersionListComboBox()
     assert(len(versions) == versionBox.count())

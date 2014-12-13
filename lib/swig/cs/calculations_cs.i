@@ -5,15 +5,16 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-%feature("autodoc", "1");
-
 %include "exception.i"
 %include "stdint.i"
 %include "std_pair.i"
-%import "libpkmn_python_swig.i"
+
+%include "CamelCase.i"
+%import "pkmn_cs.i"
 
 %{
+    #include "pkmn/config.hpp"
     #include "pkmn/calculations.hpp"
-%} 
+%}
 
 %include "pkmn/calculations.hpp"

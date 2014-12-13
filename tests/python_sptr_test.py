@@ -6,7 +6,7 @@
 # or copy at http://opensource.org/licenses/MIT)
 #
 
-import python as LibPKMN
+import python as pkmn
 
 #
 # Compare the reported pointer values from the SWIG proxies.
@@ -20,7 +20,7 @@ def compare_ptrs(obj1, obj2):
 # Make sure the bag shared_ptr copies correctly.
 #
 def bag_pocket_test():
-    bag1 = LibPKMN.bag("Gold")
+    bag1 = pkmn.bag("Gold")
     bag2 = bag1
     assert compare_ptrs(bag1, bag2)
 
@@ -44,7 +44,7 @@ def bag_pocket_test():
 # Make sure the base_pokemon shared_ptr copies correctly.
 #
 def base_pokemon_test():
-    base_pokemon1 = LibPKMN.base_pokemon("Bulbasaur", "Ruby")
+    base_pokemon1 = pkmn.base_pokemon("Bulbasaur", "Ruby")
     base_pokemon2 = base_pokemon1
     assert compare_ptrs(base_pokemon1, base_pokemon2)
 
@@ -52,7 +52,7 @@ def base_pokemon_test():
 # Make sure the item shared_ptr copies correctly.
 #
 def item_test():
-    item1 = LibPKMN.item("Potion", "Diamond")
+    item1 = pkmn.item("Potion", "Diamond")
     item2 = item1
     assert compare_ptrs(item1, item2)
 
@@ -60,7 +60,7 @@ def item_test():
 # Make sure the move shared_ptr copies correctly.
 #
 def move_test():
-    move1 = LibPKMN.move("Tackle", "Diamond")
+    move1 = pkmn.move("Tackle", "Diamond")
     move2 = move1
     assert compare_ptrs(move1, move2)
 
@@ -68,7 +68,7 @@ def move_test():
 # Make sure the prng shared_ptr copies correctly.
 #
 def prng_test():
-    prng1 = LibPKMN.prng(3)
+    prng1 = pkmn.prng(3)
     prng2 = prng1
     assert compare_ptrs(prng1, prng2)
 
@@ -77,7 +77,7 @@ def prng_test():
 # Make sure team_pokemon_modernimpl's signals/slots work correctly.
 #
 def team_pokemon_test():
-    deoxys = LibPKMN.team_pokemon("Deoxys", "Diamond", 50, "None", "None", "None", "None")
+    deoxys = pkmn.team_pokemon("Deoxys", "Diamond", 50, "None", "None", "None", "None")
     deoxys2 = deoxys
     assert compare_ptrs(deoxys, deoxys2)
 
@@ -92,10 +92,10 @@ def team_pokemon_test():
     deoxys_stats2 = deoxys.get_stats()
 
     assert (not compare_ptrs(deoxys_base1, deoxys_base2))
-    assert deoxys.get_form_id() == LibPKMN.Forms.Deoxys.ATTACK
-    assert deoxys_base1.get_form_id() == LibPKMN.Forms.Deoxys.ATTACK
+    assert deoxys.get_form_id() == pkmn.Forms.Deoxys.ATTACK
+    assert deoxys_base1.get_form_id() == pkmn.Forms.Deoxys.ATTACK
     assert deoxys.get_form_id() == deoxys_base1.get_form_id()
-    assert deoxys_base2.get_form_id() == LibPKMN.Forms.Deoxys.DEFENSE
+    assert deoxys_base2.get_form_id() == pkmn.Forms.Deoxys.DEFENSE
     assert deoxys_stats1["Attack"] != deoxys_stats2["Attack"]
     assert deoxys_stats1["Defense"] != deoxys_stats2["Defense"]
     assert deoxys_stats1["Special Attack"] != deoxys_stats2["Special Attack"]
@@ -105,7 +105,7 @@ def team_pokemon_test():
 # Make sure the trainer shared_ptr copies correctly.
 #
 def trainer_test():
-    trainer1 = LibPKMN.trainer("Red", "Red", "Male")
+    trainer1 = pkmn.trainer("Red", "Red", "Male")
     trainer2 = trainer1
     assert compare_ptrs(trainer1, trainer2)
 

@@ -8,7 +8,7 @@
 %feature("autodoc", "1");
 
 %include "std_vector.i"
-%import "libpkmn_python_swig.i"
+%import "pkmn_python.i"
 
 %{
     #include "pkmn/io.hpp"

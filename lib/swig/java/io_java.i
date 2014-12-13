@@ -8,23 +8,20 @@
 %pragma(java) jniclasscode=%{
   static {
     try {
-        System.loadLibrary("calculations_java_swig");
+        System.loadLibrary("io_java");
     } catch (UnsatisfiedLinkError e) {
-      System.err.println("Failed to load calculations_java_swig with the following error:\n" + e);
+      System.err.println("Failed to load io_java with the following error:\n" + e);
       System.exit(1);
     }
   }
 %}
 
 %include "exception.i"
-%include "stdint.i"
-%include "std_pair.i"
-
-%import "libpkmn_java_swig.i"
+%include "CamelCase.i"
+%import "pkmn_java.i"
 
 %{
-    #include "pkmn/calculations.hpp"
-    #include "java_calculationswrapper.hpp"
+    #include "pkmn/io.hpp"
 %}
 
-%include "java_calculationswrapper.hpp"
+%include "pkmn/io.hpp"

@@ -5,7 +5,7 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-package org.nc.LibPKMN;
+package nc.PKMN;
 
 import javax.swing.*;
 
@@ -16,7 +16,7 @@ public class AbilityListComboBox extends JComboBox<String>
         super();
 
         StringVector abilityVec = new StringVector();
-        LibPKMN.getAbilityList(abilityVec, gen);
+        Lists.getAbilityList(abilityVec, gen);
         for(int i = 0; i < abilityVec.size(); i++)
         {
             addItem(abilityVec.get(i));

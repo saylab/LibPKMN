@@ -15,17 +15,17 @@ public class StringTest
         try
         {
             String testString = "Torrent";
-            String testString2 = LibPKMN.Database.getAbilityName(LibPKMN.Database.getAbilityID(testString));
+            String testString2 = PKMN.Database.getAbilityName(PKMN.Database.getAbilityID(testString));
             if(testString != testString2)
                 throw new System.Exception("testString != testString2");
 
-            uint testUInt1 = LibPKMN.Database.getItemID(LibPKMN.Database.getItemName(LibPKMN.Items.POKE_BALL));
-            if(testUInt1 != LibPKMN.Items.POKE_BALL)
-                throw new System.Exception("testUInt1 != LibPKMN.Items.POKE_BALL");
+            uint testUInt1 = PKMN.Database.getItemID(PKMN.Database.getItemName(PKMN.Items.POKE_BALL));
+            if(testUInt1 != PKMN.Items.POKE_BALL)
+                throw new System.Exception("testUInt1 != PKMN.Items.POKE_BALL");
 
-            uint testUInt2 = LibPKMN.Database.getSpeciesID(LibPKMN.Database.getSpeciesName(LibPKMN.Species.NIDORAN_M));
-            if(testUInt2 != LibPKMN.Species.NIDORAN_M)
-                throw new System.Exception("testUInt2 != LibPKMN.Species.NIDORAN_M");
+            uint testUInt2 = PKMN.Database.getSpeciesID(PKMN.Database.getSpeciesName(PKMN.Species.NIDORAN_M));
+            if(testUInt2 != PKMN.Species.NIDORAN_M)
+                throw new System.Exception("testUInt2 != PKMN.Species.NIDORAN_M");
         }
         catch(System.Exception ex)
         {

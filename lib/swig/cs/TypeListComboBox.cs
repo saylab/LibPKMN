@@ -7,17 +7,20 @@
 
 using System.Windows.Forms;
 
-namespace LibPKMN
+namespace PKMN
 {
-    public class TypeListComboBox: ComboBox
+    namespace Forms
     {
-        public TypeListComboBox(uint gen): base()
+        public class TypeListComboBox: ComboBox
         {
-            string_vec type_vec = new string_vec();
-            LibPKMN.getTypeList(type_vec, gen);
-            for(int i = 0; i < type_vec.Count; i++)
+            public TypeListComboBox(uint gen): base()
             {
-                Items.Add(type_vec[i]);
+                string_vec type_vec = new string_vec();
+                Lists.getTypeList(type_vec, gen);
+                for(int i = 0; i < type_vec.Count; i++)
+                {
+                    Items.Add(type_vec[i]);
+                }
             }
         }
     }

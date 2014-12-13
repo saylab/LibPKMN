@@ -323,24 +323,24 @@ def generate_cs_files(output_dir, license):
     #Non-nested enums can be done in a loop
     enums = dict()
     enums["Abilities"] = abilities
-    enums["Egg_Groups"] = egg_groups
+    enums["EggGroups"] = egg_groups
     enums["Genders"] = genders
     enums["Items"] = items
     enums["Moves"] = moves
-    enums["Move_Classes"] = move_damage_classes
+    enums["MoveClasses"] = move_damage_classes
     enums["Natures"] = natures
     enums["Species"] = species
     enums["Stats"] = stats
     enums["PokeBalls"] = pokeballs
     enums["Types"] = types
     enums["Versions"] = versions
-    enums["Version_Groups"] = version_groups
+    enums["VersionGroups"] = version_groups
 
     for key in enums:
         f = open("%s.cs" % key,'w')
         f.write(license + "\n\n")
 
-        f.write("""namespace LibPKMN
+        f.write("""namespace PKMN
 {
     public static class %s
     {""" % key)
@@ -354,12 +354,12 @@ def generate_cs_files(output_dir, license):
 
         f.close()
 
-    f = open("Forms.cs",'w')
+    f = open("PokemonForms.cs",'w')
     f.write(license + "\n\n")
 
-    f.write("""namespace LibPKMN
+    f.write("""namespace PKMN
 {
-    namespace Forms
+    namespace PokemonForms
     {""")
 
     for i in range(len(forms)):
@@ -384,7 +384,7 @@ def generate_cs_files(output_dir, license):
     f = open("Ribbons.cs",'w')
     f.write(license + "\n\n")
 
-    f.write("""namespace LibPKMN
+    f.write("""namespace PKMN
 {
     namespace Ribbons
     {
@@ -442,24 +442,24 @@ def generate_java_files(output_dir, license):
     #Non-nested enums can be done in a loop
     enums = dict()
     enums["Abilities"] = abilities
-    enums["Egg_Groups"] = egg_groups
+    enums["EggGroups"] = egg_groups
     enums["Genders"] = genders
     enums["Items"] = items
     enums["Moves"] = moves
-    enums["Move_Classes"] = move_damage_classes
+    enums["MoveClasses"] = move_damage_classes
     enums["Natures"] = natures
     enums["Species"] = species
     enums["Stats"] = stats
     enums["PokeBalls"] = pokeballs
     enums["Types"] = types
     enums["Versions"] = versions
-    enums["Version_Groups"] = version_groups
+    enums["VersionGroups"] = version_groups
 
     for key in enums:
         f = open("%s.java" % key,'w')
         f.write(license + "\n\n")
 
-        f.write("package org.nc.LibPKMN;\n\n");
+        f.write("package nc.PKMN;\n\n");
 
         f.write("""public class %s
 {""" % key)
@@ -474,12 +474,12 @@ def generate_java_files(output_dir, license):
         f.close()
 
     for i in range(len(forms)):
-        f = open("%s_Forms.java" % forms[i][0],'w')
+        f = open("%sForms.java" % forms[i][0],'w')
         f.write(license + "\n\n")
 
-        f.write("package org.nc.LibPKMN;\n\n");
+        f.write("package nc.PKMN;\n\n");
 
-        f.write("""public class %s_Forms
+        f.write("""public class %sForms
 {""" % forms[i][0])
 
         for j in range(1,len(forms[i])):
@@ -494,7 +494,7 @@ def generate_java_files(output_dir, license):
     f = open("Hoenn_Ribbons.java",'w')
     f.write(license + "\n\n")
 
-    f.write("package org.nc.LibPKMN;\n\n")
+    f.write("package nc.PKMN;\n\n")
 
     f.write("""public class Hoenn_Ribbons
 {""")
@@ -511,7 +511,7 @@ def generate_java_files(output_dir, license):
     f = open("Sinnoh_Ribbons.java",'w')
     f.write(license + "\n\n")
 
-    f.write("package org.nc.LibPKMN;\n\n")
+    f.write("package nc.PKMN;\n\n")
 
     f.write("""public class Sinnoh_Ribbons
 {""")
@@ -529,7 +529,7 @@ def generate_java_files(output_dir, license):
     f = open("Unova_Ribbons.java",'w')
     f.write(license + "\n\n")
 
-    f.write("package org.nc.LibPKMN;\n\n")
+    f.write("package nc.PKMN;\n\n")
 
     f.write("""public class Unova_Ribbons
 {""")
@@ -547,7 +547,7 @@ def generate_java_files(output_dir, license):
     f = open("Kalos_Ribbons.java",'w')
     f.write(license + "\n\n")
 
-    f.write("package org.nc.LibPKMN;\n\n")
+    f.write("package nc.PKMN;\n\n")
 
     f.write("""public class Kalos_Ribbons
 {""")

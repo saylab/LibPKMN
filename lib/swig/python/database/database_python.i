@@ -8,7 +8,7 @@
 %feature("autodoc", "1");
 
 %include "std_vector.i"
-%import "libpkmn_python_swig.i"
+%import "pkmn_python.i"
 
 %typemap(in) pkmn::pkstring* (std::string temp) %{
     temp = PyString_AsString($input);

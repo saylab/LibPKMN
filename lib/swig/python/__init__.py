@@ -22,7 +22,7 @@ import Types
 import Versions
 import Version_Groups
 
-from libpkmn_python_swig import *
+from pkmn_python import *
 import calculations
 import database
 import io

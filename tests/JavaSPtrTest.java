@@ -5,7 +5,7 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-import org.nc.LibPKMN.*;
+import nc.PKMN.*;
 import java.lang.RuntimeException;
 
 public class JavaSPtrTest
@@ -161,14 +161,14 @@ public class JavaSPtrTest
 
             if(deoxysBase1 == deoxysBase2)
                 throw new RuntimeException("deoxysBase1 == deoxysBase2");
-            if(deoxys.getFormID() != Deoxys_Forms.ATTACK)
-                throw new RuntimeException("deoxys.getFormID() != Deoxys_Forms.ATTACK");
-            if(deoxysBase1.getFormID() != Deoxys_Forms.ATTACK)
-                throw new RuntimeException("deoxysBase1.getFormID() != Deoxys_Forms.ATTACK");
+            if(deoxys.getFormID() != DeoxysForms.ATTACK)
+                throw new RuntimeException("deoxys.getFormID() != DeoxysForms.ATTACK");
+            if(deoxysBase1.getFormID() != DeoxysForms.ATTACK)
+                throw new RuntimeException("deoxysBase1.getFormID() != DeoxysForms.ATTACK");
             if(deoxys.getFormID() != deoxysBase1.getFormID())
                 throw new RuntimeException("deoxys.getFormID() != deoxysBase1.getFormID()");
-            if(deoxysBase2.getFormID() != Deoxys_Forms.DEFENSE)
-                throw new RuntimeException("deoxysBase2.getFormID() != Deoxys_Forms.DEFENSE");
+            if(deoxysBase2.getFormID() != DeoxysForms.DEFENSE)
+                throw new RuntimeException("deoxysBase2.getFormID() != DeoxysForms.DEFENSE");
             if(deoxysStats1.at("Attack") == deoxysStats2.at("Attack"))
                 throw new RuntimeException("deoxysStats1.at(\"Attack\") == deoxysStats2.at(\"Attack\")");
             if(deoxysStats1.at("Defense") == deoxysStats2.at("Defense"))

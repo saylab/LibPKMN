@@ -7,17 +7,20 @@
 
 using System.Windows.Forms;
 
-namespace LibPKMN
+namespace PKMN
 {
-    public class VersionListComboBox: ComboBox
+    namespace Forms
     {
-        public VersionListComboBox(): base()
+        public class VersionListComboBox: ComboBox
         {
-            string_vec version_vec = new string_vec();
-            LibPKMN.getVersionList(version_vec);
-            for(int i = 0; i < version_vec.Count; i++)
+            public VersionListComboBox(): base()
             {
-                Items.Add(version_vec[i]);
+                string_vec version_vec = new string_vec();
+                Lists.getVersionList(version_vec);
+                for(int i = 0; i < version_vec.Count; i++)
+                {
+                    Items.Add(version_vec[i]);
+                }
             }
         }
     }

@@ -7,17 +7,20 @@
 
 using System.Windows.Forms;
 
-namespace LibPKMN
+namespace PKMN
 {
-    public class PokemonListComboBox: ComboBox
+    namespace Forms
     {
-        public PokemonListComboBox(uint version_id): base()
+        public class PokemonListComboBox: ComboBox
         {
-            string_vec pokemon_vec = new string_vec();
-            LibPKMN.getPokemonList(pokemon_vec, version_id);
-            for(int i = 0; i < pokemon_vec.Count; i++)
+            public PokemonListComboBox(uint version_id): base()
             {
-                Items.Add(pokemon_vec[i]);
+                string_vec pokemon_vec = new string_vec();
+                Lists.getPokemonList(pokemon_vec, version_id);
+                for(int i = 0; i < pokemon_vec.Count; i++)
+                {
+                    Items.Add(pokemon_vec[i]);
+                }
             }
         }
     }

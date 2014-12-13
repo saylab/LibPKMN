@@ -14,8 +14,8 @@ public class CopySPtrTest
     {
         try
         {
-            LibPKMN.BagSPtr bag1 = LibPKMN.Bag.make("Gold");
-            LibPKMN.BagSPtr bag2 = bag1;
+            PKMN.BagSPtr bag1 = PKMN.Bag.make("Gold");
+            PKMN.BagSPtr bag2 = bag1;
             if(bag1 != bag2)
                 throw new System.Exception("bag1 != bag2");
 
@@ -23,8 +23,8 @@ public class CopySPtrTest
              * SWIG + C# reports pockets from bags from the same pointer having
              * different values, so check equality through item additions.
              */
-            LibPKMN.PocketDict bag1Pockets = bag1.getPockets();
-            LibPKMN.PocketDict bag2Pockets = bag2.getPockets();
+            PKMN.PocketDict bag1Pockets = bag1.getPockets();
+            PKMN.PocketDict bag2Pockets = bag2.getPockets();
 
             bag1Pockets["Items"].addItem("Potion", 10);
             bag1Pockets["Balls"].addItem("Master Ball", 10);
@@ -55,8 +55,8 @@ public class CopySPtrTest
     {
         try
         {
-            LibPKMN.BasePokemonSPtr basePokemon1 = LibPKMN.BasePokemon.make("Bulbasaur", "Ruby");
-            LibPKMN.BasePokemonSPtr basePokemon2 = basePokemon1;
+            PKMN.BasePokemonSPtr basePokemon1 = PKMN.BasePokemon.make("Bulbasaur", "Ruby");
+            PKMN.BasePokemonSPtr basePokemon2 = basePokemon1;
             if(basePokemon1 != basePokemon2)
                 throw new System.Exception("basePokemon1 != basePokemon2");
         }
@@ -76,8 +76,8 @@ public class CopySPtrTest
     {
         try
         {
-            LibPKMN.ItemSPtr item1 = LibPKMN.Item.make("Potion", "Diamond");
-            LibPKMN.ItemSPtr item2 = item1;
+            PKMN.ItemSPtr item1 = PKMN.Item.make("Potion", "Diamond");
+            PKMN.ItemSPtr item2 = item1;
             if(item1 != item2)
                 throw new System.Exception("item1 != item2");
         }
@@ -97,8 +97,8 @@ public class CopySPtrTest
     {
         try
         {
-            LibPKMN.MoveSPtr move1 = LibPKMN.Move.make("Tackle", "Diamond");
-            LibPKMN.MoveSPtr move2 = move1;
+            PKMN.MoveSPtr move1 = PKMN.Move.make("Tackle", "Diamond");
+            PKMN.MoveSPtr move2 = move1;
             if(move1 != move2)
                 throw new System.Exception("move1 != move2");
         }
@@ -118,8 +118,8 @@ public class CopySPtrTest
     {
         try
         {
-            LibPKMN.PRNGSPtr prng1 = LibPKMN.PRNG.make(3);
-            LibPKMN.PRNGSPtr prng2 = prng1;
+            PKMN.PRNGSPtr prng1 = PKMN.PRNG.make(3);
+            PKMN.PRNGSPtr prng2 = prng1;
             if(prng1 != prng2)
                 throw new System.Exception("prng1 != prng2");
         }
@@ -140,32 +140,32 @@ public class CopySPtrTest
     {
         try
         {
-            LibPKMN.TeamPokemonSPtr deoxys = LibPKMN.TeamPokemon.make("Deoxys", "Diamond", 50,
+            PKMN.TeamPokemonSPtr deoxys = PKMN.TeamPokemon.make("Deoxys", "Diamond", 50,
                                                                       "None", "None", "None", "None");
-            LibPKMN.TeamPokemonSPtr deoxys2 = deoxys;
+            PKMN.TeamPokemonSPtr deoxys2 = deoxys;
             if(deoxys != deoxys2)
                 throw new System.Exception("deoxys != deoxys2");
 
-            LibPKMN.StringUIntDict deoxysStats1 = deoxys.getStats();
+            PKMN.StringUIntDict deoxysStats1 = deoxys.getStats();
 
-            LibPKMN.BasePokemonSPtr deoxysBase1 = deoxys.getBasePokemon(false); // Same as deoxys
-            LibPKMN.BasePokemonSPtr deoxysBase2 = deoxys.getBasePokemon(true); // Copies from deoxys
+            PKMN.BasePokemonSPtr deoxysBase1 = deoxys.getBasePokemon(false); // Same as deoxys
+            PKMN.BasePokemonSPtr deoxysBase2 = deoxys.getBasePokemon(true); // Copies from deoxys
 
             deoxysBase1.setForm("Attack");
             deoxysBase2.setForm("Defense");
 
-            LibPKMN.StringUIntDict deoxysStats2 = deoxys.getStats();
+            PKMN.StringUIntDict deoxysStats2 = deoxys.getStats();
 
             if(deoxysBase1 == deoxysBase2)
                 throw new System.Exception("deoxysBase1 == deoxysBase2");
-            if(deoxys.getFormID() != LibPKMN.Forms.Deoxys.ATTACK)
-                throw new System.Exception("deoxys.getFormID() != LibPKMN.Forms.Deoxys.ATTACK");
-            if(deoxysBase1.getFormID() != LibPKMN.Forms.Deoxys.ATTACK)
-                throw new System.Exception("deoxysBase1.getFormID() != LibPKMN.Forms.Deoxys.ATTACK");
+            if(deoxys.getFormID() != PKMN.PokemonForms.Deoxys.ATTACK)
+                throw new System.Exception("deoxys.getFormID() != PKMN.PokemonForms.Deoxys.ATTACK");
+            if(deoxysBase1.getFormID() != PKMN.PokemonForms.Deoxys.ATTACK)
+                throw new System.Exception("deoxysBase1.getFormID() != PKMN.PokemonForms.Deoxys.ATTACK");
             if(deoxys.getFormID() != deoxysBase1.getFormID())
                 throw new System.Exception("deoxys.getFormID() != deoxysBase1.getFormID()");
-            if(deoxysBase2.getFormID() != LibPKMN.Forms.Deoxys.DEFENSE)
-                throw new System.Exception("deoxysBase2.getFormID() != LibPKMN.Forms.Deoxys.DEFENSE");
+            if(deoxysBase2.getFormID() != PKMN.PokemonForms.Deoxys.DEFENSE)
+                throw new System.Exception("deoxysBase2.getFormID() != PKMN.PokemonForms.Deoxys.DEFENSE");
             if(deoxysStats1["Attack"] == deoxysStats2["Attack"])
                 throw new System.Exception("deoxysStats1[\"Attack\"] == deoxysStats2[\"Attack\"]");
             if(deoxysStats1["Defense"] == deoxysStats2["Defense"])
@@ -191,8 +191,8 @@ public class CopySPtrTest
     {
         try
         {
-            LibPKMN.TrainerSPtr trainer1 = LibPKMN.Trainer.make("Red", "Red", "Gold");
-            LibPKMN.TrainerSPtr trainer2 = trainer1;
+            PKMN.TrainerSPtr trainer1 = PKMN.Trainer.make("Red", "Red", "Gold");
+            PKMN.TrainerSPtr trainer2 = trainer1;
             if(trainer1 != trainer2)
                 throw new System.Exception("trainer1 != trainer2");
         }
