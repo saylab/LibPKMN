@@ -30,11 +30,10 @@
 
 #define GET_PKSTRING(query) if(query.executeStep()) \
                             { \
-                                const uint16_t* entry = query.getColumn(0); \
-                                std::wstring intermediate = boost::locale::conv::utf_to_utf<wchar_t>(entry); \
-                                std::wstring s; \
-                                std::wistringstream iss(intermediate); \
-                                intermediate.clear(); \
+                                pkmn::pkstring entry = query.getColumn(0); \
+                                std::wstring intermediate, s; \
+                                std::wistringstream iss(entry.std_wstring()); \
+                                entry = ""; \
                                 while(iss >> s) \
                                 { \
                                     if(intermediate.size() > 0) intermediate += L" " + s; \

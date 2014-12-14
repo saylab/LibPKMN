@@ -18,6 +18,7 @@
 #include "Exception.h"
 #include "Statement.h"
 
+#include <pkmn/types/pkstring.hpp>
 
 namespace SQLite
 {
@@ -86,6 +87,17 @@ public:
      *          thus you must copy it before using it beyond its scope (to a std::string for instance).
      */
     const uint16_t* getText16(void) const throw(); // nothrow
+    /**
+     * @brief Return a pkmn::pkstring of the column.
+     *
+     * @warning The value pointed at is only valid while the statement is valid (ie. not finalized),
+     *          thus you must copy it before using it beyond its scope (to a std::string for instance).
+     */
+    inline pkmn::pkstring getPKString(void) const throw() // nothrow
+    {
+        return pkmn::pkstring(getText16());
+    }
+
     /**
      * @brief Return a pointer to the binary blob value of the column.
      *
@@ -184,6 +196,15 @@ public:
     inline operator const uint16_t*() const
     {
         return getText16();
+    }
+    /**
+     * @brief Inline cast operator to pkmn::pkstring
+     *
+     * @see getText
+     */
+    inline operator pkmn::pkstring() const
+    {
+        return getPKString();
     }
     /**
      * @brief Inline cast operator to void*
