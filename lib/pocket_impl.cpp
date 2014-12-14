@@ -13,7 +13,7 @@
 #include <pkmn/enums.hpp>
 #include <pkmn/paths.hpp>
 #include <pkmn/pocket.hpp>
-#include <pkmn/database/queries.hpp>
+#include <pkmn/database.hpp>
 
 namespace pkmn
 {

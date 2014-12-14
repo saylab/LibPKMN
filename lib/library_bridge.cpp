@@ -11,7 +11,7 @@
 
 #include <pkmn/enums.hpp>
 #include <pkmn/paths.hpp>
-#include <pkmn/database/queries.hpp>
+#include <pkmn/database.hpp>
 
 #include <pkmds/pkmds_sql.h>
 

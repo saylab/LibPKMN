@@ -11,7 +11,6 @@ FILE(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${PKG_DATA_DIR} LIBPKMN_PKG_DATA_PAT
 IF(ENABLE_LIBPKMN)
     ADD_SUBDIRECTORY(SQLiteCpp)
     ADD_SUBDIRECTORY(conversions)
-    ADD_SUBDIRECTORY(database)
     ADD_SUBDIRECTORY(qt4)
     ADD_SUBDIRECTORY(types)
     
@@ -55,6 +54,7 @@ IF(ENABLE_LIBPKMN)
         ${CMAKE_CURRENT_BINARY_DIR}/paths.cpp
         library_bridge.cpp
         calculations.cpp
+        database.cpp
         base_pokemon_impl.cpp
         base_pokemon_gen1impl.cpp
         base_pokemon_gen2impl.cpp
@@ -78,7 +78,6 @@ IF(ENABLE_LIBPKMN)
         lists.cpp
         copy_sptrs.cpp
         ${conversions_sources}
-        ${database_sources}
         ${qt4_sources}
         ${qt4_moc_sources}
         ${types_sources}

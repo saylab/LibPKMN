@@ -294,7 +294,7 @@
 %rename(getColumnList) pkmn::database::get_column_list;
 
 /*
- * pkmn/database/queries.hpp
+ * pkmn/database.hpp
  */
 %rename(toDatabaseFormat) pkmn::database::to_database_format;
 %rename(getAbilityID) pkmn::database::get_ability_id;

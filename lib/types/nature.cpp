@@ -9,7 +9,7 @@
 
 #include <pkmn/enums.hpp>
 #include <pkmn/types/nature.hpp>
-#include <pkmn/database/queries.hpp>
+#include <pkmn/database.hpp>
 
 namespace pkmn
 {

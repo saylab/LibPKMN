@@ -10,7 +10,7 @@
 #include <vector>
 
 #include <pkmn/lists.hpp>
-#include <pkmn/database/queries.hpp>
+#include <pkmn/database.hpp>
 #include <pkmn/qt4/PokemonListComboBox.hpp>
 
 namespace pkmn

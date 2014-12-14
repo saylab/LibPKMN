@@ -16,10 +16,10 @@
 
 #include <pkmn/enums.hpp>
 #include <pkmn/paths.hpp>
-#include <pkmn/database/queries.hpp>
+#include <pkmn/database.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
-#include "../SQLiteCpp/SQLiteC++.h"
+#include "SQLiteCpp/SQLiteC++.h"
 
 #define CONNECT_TO_DB() if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
 #define THROW_QUERY_ERROR() throw std::runtime_error(str(boost::format("%s: Invalid query \"%s\"") \

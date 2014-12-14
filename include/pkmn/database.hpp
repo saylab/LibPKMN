@@ -4,10 +4,8 @@
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  */
-#ifndef INCLUDED_PKMN_DATABASE_QUERIES_HPP
-#define INCLUDED_PKMN_DATABASE_QUERIES_HPP
-
-#include <string>
+#ifndef INCLUDED_PKMN_DATABASE_HPP
+#define INCLUDED_PKMN_DATABASE_HPP
 
 #include <pkmn/config.hpp>
 
@@ -92,4 +90,4 @@ namespace pkmn
     }
 }
 
-#endif /* INCLUDED_PKMN_DATABASE_QUERIES_HPP */
+#endif /* INCLUDED_PKMN_DATABASE_HPP */

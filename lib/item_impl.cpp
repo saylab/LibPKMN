@@ -15,7 +15,7 @@
 #include <pkmn/enums.hpp>
 #include <pkmn/item.hpp>
 #include <pkmn/paths.hpp>
-#include <pkmn/database/queries.hpp>
+#include <pkmn/database.hpp>
 
 #include "item_impl.hpp"
 

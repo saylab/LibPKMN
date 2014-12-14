@@ -16,7 +16,7 @@
 #include <pkmn/bag.hpp>
 #include <pkmn/item.hpp>
 #include <pkmn/pocket.hpp>
-#include <pkmn/database/queries.hpp>
+#include <pkmn/database.hpp>
 
 #include "items.hpp"
 #include "../library_bridge.hpp"

@@ -13,7 +13,7 @@
 
 #include <pkmn/enums.hpp>
 #include <pkmn/paths.hpp>
-#include <pkmn/database/queries.hpp>
+#include <pkmn/database.hpp>
 
 #include "base_pokemon_gen2impl.hpp"
 

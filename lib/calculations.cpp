@@ -11,7 +11,7 @@
 #include <pkmn/calculations.hpp>
 #include <pkmn/enums.hpp>
 #include <pkmn/paths.hpp>
-#include <pkmn/database/queries.hpp>
+#include <pkmn/database.hpp>
 #include <pkmn/types/dict.hpp>
 #include <pkmds/pkmds_g5_sqlite.h>
 

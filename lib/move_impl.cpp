@@ -12,7 +12,7 @@
 #include <pkmn/move.hpp>
 #include <pkmn/enums.hpp>
 #include <pkmn/paths.hpp>
-#include <pkmn/database/queries.hpp>
+#include <pkmn/database.hpp>
 
 #include "move_impl.hpp"
 

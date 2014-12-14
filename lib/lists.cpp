@@ -16,7 +16,7 @@
 #include <pkmn/enums.hpp>
 #include <pkmn/lists.hpp>
 #include <pkmn/paths.hpp>
-#include <pkmn/database/queries.hpp>
+#include <pkmn/database.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
 #include "SQLiteCpp/SQLiteC++.h"
