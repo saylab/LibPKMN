@@ -9,12 +9,12 @@
 #pragma warning(disable:4800) //Type-narrowing is inevitable
 #endif
 
-#include <string>
-#include <string.h>
+#include <cstring>
 #include <vector>
 
 #include <boost/assign.hpp>
 #include <boost/format.hpp>
+#include <boost/algorithm/string.hpp>
 #include <boost/locale/encoding_utf.hpp>
 
 #include <pkmn/enums.hpp>
@@ -454,7 +454,7 @@ namespace pkmn
             gen3_pokemon_blocks_t blocks;
 
             //Growth
-            blocks.growth.species = t_pkmn->get_species_id();
+            blocks.growth.species = database::get_pokemon_game_index(t_pkmn->get_species_id(), t_pkmn->get_game_id());
             blocks.growth.held_item = database::get_item_game_index(t_pkmn->get_held_item()->get_item_id(),
                                                                   Versions::FIRERED);
             blocks.growth.exp = t_pkmn->get_experience();
@@ -632,7 +632,7 @@ namespace pkmn
             // Block C
             t_pkmn->set_nickname((gen == 4) ? import_gen4_text(blocks.blockC.nickname, 11)
                                             : import_modern_text(blocks.blockC.nickname, 11));
-            // TODO: Hometown
+            t_pkmn->set_original_game(database::get_version_name(hometown_to_libpkmn_game(blocks.blockC.hometown)));
             rib.sinnoh.ribbons3 = blocks.blockC.sinnoh_ribbons3;
             t_pkmn->set_ribbons(rib);
 
@@ -659,11 +659,104 @@ namespace pkmn
         void export_nds_pokemon(team_pokemon::sptr t_pkmn, nds_pc_pokemon_t &pkmn,
                                 bool encrypt)
         {
+            pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
+            pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
+            pkmn::dict<pkmn::pkstring, int> attributes = t_pkmn->get_attributes();
+            pkmn::ribbons rib = t_pkmn->get_ribbons();
+            pkmn::moveset_t moves;
+            t_pkmn->get_moves(moves);
+            std::vector<unsigned int> move_PPs;
+            t_pkmn->get_move_PPs(move_PPs);
+            unsigned int generation = t_pkmn->get_generation();
+
+            // Pointers to blocks (for code cleanliness)
+            nds_pokemon_blockA_t* blockA = &pkmn.blocks.blockA;
+            nds_pokemon_blockB_t* blockB = &pkmn.blocks.blockB;
+            nds_pokemon_blockC_t* blockC = &pkmn.blocks.blockC;
+            nds_pokemon_blockD_t* blockD = &pkmn.blocks.blockD;
+
+            // Block A
+            blockA->species = database::get_pokemon_game_index(t_pkmn->get_species_id(), t_pkmn->get_game_id());
+            blockA->held_item = database::get_item_game_index(t_pkmn->get_item_id(), t_pkmn->get_game_id());
+            blockA->ot_id = t_pkmn->get_trainer_id();
+            blockA->exp = t_pkmn->get_experience();
+            blockA->friendship = 70; // TODO
+            blockA->ability = t_pkmn->get_ability_id();
+            blockA->markings = t_pkmn->get_markings();
+            blockA->country = 2; // English
+            blockA->ev_hp = EVs["HP"];
+            blockA->ev_atk = EVs["Attack"];
+            blockA->ev_def = EVs["Defense"];
+            blockA->ev_spd = EVs["Speed"];
+            blockA->ev_spatk = EVs["Special Attack"];
+            blockA->ev_spdef = EVs["Special Defense"];
+            // TODO: contest stats
+            blockA->coolness = 0;
+            blockA->beauty = 0;
+            blockA->cuteness = 0;
+            blockA->smartness = 0;
+            blockA->toughness = 0;
+            blockA->sheen = 0;
+            blockA->sinnoh_ribbons1 = rib.sinnoh.ribbons1;
+            if(generation == 4) blockA->sinnoh_ribbons2 = rib.sinnoh.ribbons2;
+            else blockA->unova_ribbons = rib.unova;
+
+            // Block B
+            for(size_t i = 0; i < 4; i++) blockB->moves[i] = moves[i]->get_move_id();
+            for(size_t i = 0; i < 4; i++) blockB->move_pps[i] = move_PPs[i];
+            for(size_t i = 0; i < 4; i++) blockB->move_pp_ups[i] = 0;
+            blockB->iv_isegg_isnicknamed = 0;
+            modern_set_IV(&blockB->iv_isegg_isnicknamed, Stats::HP, IVs["HP"]);
+            modern_set_IV(&blockB->iv_isegg_isnicknamed, Stats::ATTACK, IVs["Attack"]);
+            modern_set_IV(&blockB->iv_isegg_isnicknamed, Stats::DEFENSE, IVs["Defense"]);
+            modern_set_IV(&blockB->iv_isegg_isnicknamed, Stats::SPEED, IVs["Speed"]);
+            modern_set_IV(&blockB->iv_isegg_isnicknamed, Stats::SPECIAL_ATTACK, IVs["Special Attack"]);
+            modern_set_IV(&blockB->iv_isegg_isnicknamed, Stats::SPECIAL_DEFENSE, IVs["Special Defense"]);
+            if(t_pkmn->get_nickname() == boost::algorithm::to_upper_copy(t_pkmn->get_species_name().std_wstring()))
+                blockB->iv_isegg_isnicknamed |= (1<<31);
+            blockB->hoenn_ribbons = rib.hoenn;
+
+            if(t_pkmn->get_gender() == "Female") blockB->form_encounterinfo |= (1<<1);
+            else if(t_pkmn->get_gender() == "Genderless") blockB->form_encounterinfo |= (1<<2);
+            // TODO: forms
+
+            if(generation == 5) blockB->nature = t_pkmn->get_nature_id();
+            else blockB->shiny_leaf = attributes.at("shiny-leaf", 0);
+
+            blockB->gen5_info = 0;
+            if(generation == 5)
+            {
+                SQLite::Database db(get_database_path().c_str());
+                std::ostringstream query_stream;
+                query_stream << "SELECT ability_id FROM pokemon_abilities WHERE is_hidden=1 AND pokemon_id="
+                             << t_pkmn->get_pokemon_id();
+                unsigned int dw_ability_id = db.execAndGet(query_stream.str().c_str());
+                if(t_pkmn->get_ability_id() == dw_ability_id) blockB->gen5_info |= (1<<31);
+            }
+            // TODO: met
+
+            // Block C
+            if(generation == 4) export_gen4_text(t_pkmn->get_nickname(), blockC->nickname, 11);
+            else export_modern_text(t_pkmn->get_nickname(), blockC->nickname, 11);
+            blockC->hometown = libpkmn_game_to_hometown(t_pkmn->get_original_game_id());
+            blockC->sinnoh_ribbons3 = rib.sinnoh.ribbons3;
+
+            // Block D
+            if(generation == 4) export_gen4_text(t_pkmn->get_trainer_name(), blockD->otname, 8);
+            else export_modern_text(t_pkmn->get_trainer_name(), blockD->otname, 8);
+            // TODO: met, Pokerus
+            blockD->ball = libpkmn_ball_to_game_ball(reverse_ball_dict[t_pkmn->get_ball()]);
+            set_gen_456_met_level(&blockD->metlevel_otgender, t_pkmn->get_met_level());
+            set_gen_456_otgender(&blockD->metlevel_otgender, (t_pkmn->get_gender() == "Female"));
+
+            pkmn.personality = t_pkmn->get_personality();
+            // TODO: isdecrypted, checksum
         }
 
         void export_nds_pokemon(team_pokemon::sptr t_pkmn, nds_party_pokemon_t &pkmn,
                                 bool encrypt)
         {
+            export_nds_pokemon(t_pkmn, pkmn.pc, encrypt);
         }
 
         /*
