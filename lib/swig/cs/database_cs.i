@@ -51,9 +51,7 @@
 %import "pkmn_cs.i"
 
 %{
-    #include "pkmn/database/lists.hpp"
-    #include "pkmn/database/queries.hpp"
+    #include "pkmn/database.hpp"
 %}
 
-%include "pkmn/database/lists.hpp"
-%include "pkmn/database/queries.hpp"
+%include "pkmn/database.hpp"

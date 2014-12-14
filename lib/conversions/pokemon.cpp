@@ -22,7 +22,7 @@
 #include <pkmn/move.hpp>
 #include <pkmn/paths.hpp>
 #include <pkmn/team_pokemon.hpp>
-#include <pkmn/database/queries.hpp>
+#include <pkmn/database.hpp>
 #include <pkmn/types/pkstring.hpp>
 #include <pkmn/types/prng.hpp>
 

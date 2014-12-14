@@ -6,7 +6,6 @@
 #
 FILE(GLOB pkmn_headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.hpp")
 
-ADD_SUBDIRECTORY(database)
 ADD_SUBDIRECTORY(types)
 
 #####################################################################

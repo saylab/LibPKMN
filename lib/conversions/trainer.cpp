@@ -10,7 +10,7 @@
 #include <boost/locale/encoding_utf.hpp>
 
 #include <pkmn/enums.hpp>
-#include <pkmn/database/queries.hpp>
+#include <pkmn/database.hpp>
 #include <pkmn/types/pkstring.hpp>
 
 #include "../library_bridge.hpp"

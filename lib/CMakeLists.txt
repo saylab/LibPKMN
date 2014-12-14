@@ -16,7 +16,6 @@ IF(ENABLE_LIBPKMN)
     ADD_SUBDIRECTORY(PokeLib)
     ADD_SUBDIRECTORY(pkmds)
     ADD_SUBDIRECTORY(conversions)
-    ADD_SUBDIRECTORY(database)
     ADD_SUBDIRECTORY(qt4)
     ADD_SUBDIRECTORY(types)
     
@@ -60,6 +59,7 @@ IF(ENABLE_LIBPKMN)
         ${CMAKE_CURRENT_BINARY_DIR}/paths.cpp
         library_bridge.cpp
         calculations.cpp
+        database.cpp
         base_pokemon_impl.cpp
         base_pokemon_gen1impl.cpp
         base_pokemon_gen2impl.cpp
@@ -84,7 +84,6 @@ IF(ENABLE_LIBPKMN)
         copy_sptrs.cpp
         ${pkmds_sources}
         ${conversions_sources}
-        ${database_sources}
         ${qt4_sources}
         ${qt4_moc_sources}
         ${types_sources}

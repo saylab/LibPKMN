@@ -6,7 +6,7 @@
  */
 
 #include <pkmn/enums.hpp>
-#include <pkmn/database/queries.hpp>
+#include <pkmn/database.hpp>
 
 #include "game_save_gen1impl.hpp"
 

@@ -6,7 +6,7 @@
  */
 
 #include <pkmn/enums.hpp>
-#include <pkmn/database/queries.hpp>
+#include <pkmn/database.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
 #include "copy_sptrs.hpp"
