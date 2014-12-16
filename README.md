@@ -43,7 +43,6 @@ If CMake does not automatically find the dependencies, this means they are not i
 ## Git Submodules
 
  * LibPKMN Images (https://github.com/ncorgan/LibPKMN-images) - Pokemon sprites and icons
- * PokeLib-NC (https://github.com/ncorgan/PokeLib-NC) - Gen 4 save editing library
  * PKMDS (https://github.com/codemonkey85/PKMDS) - Gen 5-6 save editing library
 
 ## Tested With
@@ -75,4 +74,4 @@ SQLite Database used courtesy of Alex Munroe (http://www.veekun.com).
 
 Special thanks to Michael Bond (http://github.com/codemonkey85) for C# testing and consulting on game mechanics.
 
-README last updated: 2014-07-27
+README last updated: 2014-12-16
