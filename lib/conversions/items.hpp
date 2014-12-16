@@ -33,6 +33,7 @@ namespace pkmn
         void export_gen3_bag(bag::sptr libpkmn_bag, void* raw_bag, const uint16_t security_key);
 
         void import_gen4_bag(bag::sptr libpkmn_bag, const void* raw_bag);
+        void export_gen4_bag(bag::sptr libpkmn_bag, void* raw_bag);
 
         // OLD BELOW
 
