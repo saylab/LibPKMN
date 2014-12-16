@@ -32,6 +32,10 @@ namespace pkmn
         void import_gen3_bag(bag::sptr libpkmn_bag, const void* raw_bag, const uint16_t security_key);
         void export_gen3_bag(bag::sptr libpkmn_bag, void* raw_bag, const uint16_t security_key);
 
+        void import_gen4_bag(bag::sptr libpkmn_bag, const void* raw_bag);
+
+        // OLD BELOW
+
         void import_gen4_items(bag::sptr item_bag, PokeLib::Trainer pokelib_trainer);
         void export_gen4_items(bag::sptr item_bag, PokeLib::Trainer* pokelib_trainer);
 
