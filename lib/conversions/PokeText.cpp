@@ -5,8 +5,9 @@
  *      Author: Chase
  */
 
-#include "internal.h"
 #include <vector>
+
+#include "PokeText.h"
 
 namespace PokeLib {
 const uint16_t poketext_0x0000[485] = { //0x0000,

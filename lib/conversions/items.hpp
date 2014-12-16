@@ -14,7 +14,6 @@
 
 #include "structs/items.hpp"
 
-#include <PokeLib/PokeLib.h>
 #include <pkmds/pkmds_g5.h>
 
 #include "trainer.hpp"

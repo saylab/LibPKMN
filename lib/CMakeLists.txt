@@ -13,7 +13,6 @@ IF(ENABLE_LIBPKMN)
 
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
     ADD_SUBDIRECTORY(SQLiteCpp)
-    ADD_SUBDIRECTORY(PokeLib)
     ADD_SUBDIRECTORY(pkmds)
     ADD_SUBDIRECTORY(conversions)
     ADD_SUBDIRECTORY(qt4)
@@ -31,7 +30,6 @@ IF(ENABLE_LIBPKMN)
 
     LIST(APPEND libpkmn_libs
         ${Boost_LIBRARIES}
-        pokelib
         pkmds
         SQLiteCpp
         ${QT_LIBRARIES}

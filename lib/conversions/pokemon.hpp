@@ -15,7 +15,6 @@
 
 #include "structs/pokemon.hpp"
 
-#include <PokeLib/PokeLib.h>
 #include <pkmds/pkmds_g5.h>
 
 namespace pkmn

@@ -9,8 +9,7 @@
 #include <cstring>
 #include <string>
 
-#include <PokeLib/PokeLib.h>
-
+#include "PokeText.h"
 #include "text.hpp"
 
 #define INDEX_OF(arr, val) std::distance(arr, std::find(arr, arr+255, val))
