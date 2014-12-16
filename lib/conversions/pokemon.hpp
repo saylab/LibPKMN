@@ -85,12 +85,6 @@ namespace pkmn
         // OLD BELOW
 
         /*
-         * Generation IV
-         */
-        team_pokemon::sptr import_gen4_pokemon(const PokeLib::Pokemon &pokelib_pkmn);
-        PokeLib::Pokemon export_gen4_pokemon(team_pokemon::sptr t_pkmn);
-
-        /*
          * Generation V
          */
         team_pokemon::sptr import_gen5_pokemon(pkmds::party_pkm* p_pkm);

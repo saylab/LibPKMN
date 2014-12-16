@@ -27,6 +27,12 @@ namespace pkmn
 
     typedef enum
     {
+        MAIN,
+        BACKUP
+    } gen4_positions_t;
+
+    typedef enum
+    {
         A,
         B
     } gen4_blocks_t;
@@ -84,7 +90,7 @@ namespace pkmn
         Versions::HEARTGOLD
     };
 
-    gen4_games_t PKMN_INLINE get_gen4_game_type(std::vector<uint8_t> &data)
+    gen4_games_t PKMN_INLINE get_gen4_save_type(std::vector<uint8_t> &data)
     {
         uint32_t* data32 = reinterpret_cast<uint32_t*>(&data);
 
@@ -99,17 +105,17 @@ namespace pkmn
         public:
 
             game_save_gen4impl();
-            game_save_gen4impl(pokelib_sptr ptr, const std::string &filename);
-            game_save_gen4impl(const std::string &filename, gen4_games_t game);
+            game_save_gen4impl(const std::string &filename, gen4_games_t game, bool small);
 
             void load();
             void save_as(const std::string &filename);
 
         private:
 
-            uint8_t _game_id;
+            gen4_games_t _game_type;
+            uint8_t      _game_id;
+            bool         _small;
 
-            gen4_games_t   _game_type;
             uint8_t*       _blocks[2];
             gen4_footer_t* _footers[2];
 
