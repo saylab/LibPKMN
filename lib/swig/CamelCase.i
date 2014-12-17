@@ -76,6 +76,7 @@
 %rename(getGen2Gender) pkmn::calculations::get_gen2_gender;
 %rename(getModernGender) pkmn::calculations::get_modern_gender;
 %rename(getHiddenPower) pkmn::calculations::get_hidden_power;
+%rename(getStat) pkmn::calculations::get_stat;
 %rename(getNature) pkmn::calculations::get_nature;
 %rename(getGen2Shiny) pkmn::calculations::get_gen2_shiny;
 %rename(getModernShiny) pkmn::calculations::get_modern_shiny;

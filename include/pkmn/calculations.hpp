@@ -13,6 +13,7 @@
 #include <pkmn/config.hpp>
 #include <pkmn/base_pokemon.hpp>
 #include <pkmn/team_pokemon.hpp>
+#include <pkmn/types/nature.hpp>
 #include <pkmn/types/pkstring.hpp>
 
 namespace pkmn
@@ -27,6 +28,14 @@ namespace pkmn
 
         std::pair<uint8_t, uint8_t> PKMN_API get_hidden_power(uint8_t ivHP, uint8_t ivATK, uint8_t ivDEF,
                                                               uint8_t ivSATK, uint8_t ivSDEF, uint8_t ivSPD);
+
+        uint16_t PKMN_API get_retro_stat(unsigned int stat_id, uint16_t stat,
+                                         unsigned int level,
+                                         uint16_t EV, uint8_t IV);
+
+        uint16_t PKMN_API get_modern_stat(unsigned int stat_id, uint16_t stat,
+                                          unsigned int level, const nature &nat,
+                                          uint16_t EV, uint8_t IV);
 
         uint8_t PKMN_API get_nature(uint32_t personality);
 

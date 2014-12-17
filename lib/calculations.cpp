@@ -5,6 +5,8 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
+#include <cmath>
+
 #include <boost/format.hpp>
 #include <boost/assign/list_of.hpp>
 
@@ -114,6 +116,38 @@ namespace pkmn
                  + (ivSDEF & 1);
 
             return std::make_pair(power, type);
+        }
+
+        uint16_t get_retro_stat(unsigned int stat_id, uint16_t stat,
+                                unsigned int level,
+                                uint16_t EV, uint8_t IV)
+        {
+            if(stat == Stats::HP)
+            {
+                return int(floor((((double(IV) + double(stat) + (pow(double(EV),0.5)/8.0)
+                           + 50.0) * double(level))/50.0) + 10.0));
+            }
+            else
+            {
+                return int(ceil((((double(IV) + double(stat) + (pow(double(EV),0.5)/8.0))
+                           * double(level))/50.0) + 5.0));
+            }
+        }
+
+        uint16_t get_modern_stat(unsigned int stat_id, uint16_t stat,
+                                 unsigned int level, const pkmn::nature &nat,
+                                 uint16_t EV, uint8_t IV)
+        {
+            if(stat == Stats::HP)
+            {
+                return int(floor(((double(IV) + (2.0*double(stat)) + (0.25*double(EV)) + 100.0)
+                                 * double(level))/100.0 + 10.0));
+            }
+            else
+            {
+                return int(ceil(((((double(IV) + 2.0*double(stat) + 0.25*double(EV))
+                                * double(level))/100.0) + 5.0) * nat[stat_id]));
+            }
         }
 
         uint8_t get_nature(uint32_t personality) {return (personality % 24);}
