@@ -48,7 +48,7 @@ namespace pkmn
         query_stream << "SELECT game_index FROM item_game_indices WHERE item_id="
                      << _item_id << " AND generation_id=" << _generation;
         SQLite::Statement query(*_db, query_stream.str().c_str());
-        if(_valid = query.executeStep())
+        if((_valid = query.executeStep()))
         {
             _game_index = query.getColumn(0);
             _tmhm = ((id >= Items::TM01 and id <= Items::HM08)
