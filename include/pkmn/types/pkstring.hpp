@@ -81,9 +81,6 @@ namespace pkmn
             //! Implicit typecast between pkmn::pkstring and std::wstring.
             PKMN_INLINE operator std::wstring() const {return stdwstring;}
 
-            //! Return the character at the given value (returned as a char).
-            const char& operator[](size_t pos) const;
-
             //! Equality check between two pkmn::pkstrings
             bool operator==(const pkmn::pkstring &r) const;
 
