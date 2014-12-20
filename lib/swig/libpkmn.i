@@ -68,7 +68,7 @@ namespace std
 %ignore pkmn::pkstring::set(const std::string&);
 %ignore pkmn::pkstring::set(const wchar_t*);
 %ignore pkmn::pkstring::set(const std::wstring&);
-%ignore pkmn::nature::operator[];
+%ignore pkmn::nature_t::operator[];
 
 %{
     #include "pkmn/config.hpp"

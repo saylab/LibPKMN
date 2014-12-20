@@ -45,9 +45,9 @@
     %template(dict_name) pkmn::dict<ctype1, ctype2>;
 %enddef
 
-%extend pkmn::nature {
-    double at(std::string key) {return (*self)[key];}
-    double at(unsigned int key) {return (*self)[key];}
+%extend pkmn::nature_t {
+    float at(const pkmn::pkstring &key) {return (*self)[key];}
+    float at(unsigned int key) {return (*self)[key];}
 };
 
 %include "CamelCase.i"

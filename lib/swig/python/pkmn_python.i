@@ -33,9 +33,9 @@
     %template(python_name) pkmn::dict<type1, type2>;
 %enddef
 
-%extend pkmn::nature {
-    double __getitem__(std::string key) {return (*self)[key];}
-    double __getitem__(unsigned int key) {return (*self)[key];}
+%extend pkmn::nature_t {
+    float __getitem__(const pkmn::pkstring &key) {return (*self)[key];}
+    float __getitem__(unsigned int key) {return (*self)[key];}
 };
 
 /* Enough to warrant its own file */

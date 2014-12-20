@@ -5,15 +5,13 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <sstream>
-
 #include <pkmn/enums.hpp>
 #include <pkmn/types/nature.hpp>
 #include <pkmn/database.hpp>
 
 namespace pkmn
 {
-    nature::nature(unsigned int id)
+    nature_t::nature_t(unsigned int id)
     {
         _id = id;
         _name = database::get_nature_name(id);
@@ -21,7 +19,7 @@ namespace pkmn
         _populate_dict();
     }
 
-    nature::nature(const std::string &name)
+    nature_t::nature_t(const pkmn::pkstring &name)
     {
         _name = name;
         _id = database::get_nature_id(name);
@@ -29,21 +27,21 @@ namespace pkmn
         _populate_dict();
     }
 
-    std::string nature::get_name() {return _name;}
+    pkmn::pkstring nature_t::get_name() {return _name;}
 
-    const double& nature::operator[](const std::string &key) const
+    const float& nature_t::operator[](const pkmn::pkstring &key) const
     {
         return _modifiers[key];
     }    
 
-    const double& nature::operator[](const unsigned int &key) const
+    const float& nature_t::operator[](const unsigned int &key) const
     {
         return _modifiers[database::get_nature_name(key)];
     }    
 
-    unsigned int nature::get_nature_id() {return _id;}
+    unsigned int nature_t::get_nature_id() {return _id;}
 
-    void nature::_populate_dict()
+    void nature_t::_populate_dict()
     {
         _modifiers["Attack"] = database::get_nature_stat_mod(_id, Stats::ATTACK);
         _modifiers["Defense"] = database::get_nature_stat_mod(_id, Stats::DEFENSE);

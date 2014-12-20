@@ -26,7 +26,7 @@ namespace pkmn
 
             //Getting Individual Stat Info
             pkmn::pkstring get_gender() const;
-            nature get_nature() const;
+            pkmn::nature_t get_nature() const;
             pkmn::pkstring get_ability() const;
             bool is_shiny() const;
             pkmn::dict<pkmn::pkstring, unsigned int> get_stats() const;
@@ -51,7 +51,7 @@ namespace pkmn
             unsigned int _SATK, _SDEF;
             unsigned int _evSATK, _evSDEF;
             unsigned int _ivSATK, _ivSDEF;
-            pkmn::nature _nature;
+            pkmn::nature_t _nature;
 
             unsigned int _get_hp() const;
             unsigned int _get_stat(const pkmn::pkstring &stat, unsigned int EV, unsigned int IV) const;
@@ -59,7 +59,7 @@ namespace pkmn
 
             void _determine_ability();
             pkmn::pkstring _determine_gender() const;
-            pkmn::nature _determine_nature() const;
+            pkmn::nature_t _determine_nature() const;
     };
 }
 

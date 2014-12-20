@@ -75,7 +75,7 @@ namespace pkmn
             virtual unsigned int get_level() const = 0;
             virtual unsigned int get_experience() const = 0;
             virtual pkmn::pkstring get_gender() const = 0;
-            virtual pkmn::nature get_nature() const = 0;
+            virtual pkmn::nature_t get_nature() const = 0;
             virtual pkmn::pkstring get_ability() const = 0;
             virtual bool using_hidden_ability() const = 0;
             virtual bool is_shiny() const = 0;
