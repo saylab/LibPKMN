@@ -7,6 +7,7 @@
 #ifndef INCLUDED_PKMN_TYPES_DICT_HPP
 #define INCLUDED_PKMN_TYPES_DICT_HPP
 
+#include <cstdlib>
 #include <list>
 #include <vector>
 
