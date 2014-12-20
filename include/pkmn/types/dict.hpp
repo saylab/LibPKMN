@@ -38,9 +38,9 @@ namespace pkmn
             //! Return the number of key-value pairs.
             size_t size() const;
 
-            //! Return the value with the given key.
+            //! Return the value with the given key. Key-value pair is created if it does not exist.
             /*!
-             * Throws an exception if the key does not exist.
+             * Creates the key-value pair if it does not exist.
              *
              * \param key key whose value to query
              * \return key's value
