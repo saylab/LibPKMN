@@ -137,8 +137,10 @@ ENDFOREACH(cpp_test ${cpp_test_sources})
 # C# tests
 ##################################################
 IF(ENABLE_CSHARP)
+    SET(CSHARP_PLATFORM "x86")
+    SET(CSHARP_BINARY_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
     SET(LIBRARY_PATH "${LIBPKMN_BINARY_DIR}/lib/swig/cs" CACHE FILEPATH "C# library directory")
-    SET(PKMN_CS_DLL "${LIBRARY_PATH}/pkmn-cs.dll" CACHE FILEPATH "libpkmn-cs.dll location")
+    SET(PKMN_CS_DLL "${CSHARP_BINARY_DIRECTORY}/pkmn-cs.dll" CACHE FILEPATH "libpkmn-cs.dll location")
 
     SET(cs_test_names
         CSharpDictTest
@@ -147,8 +149,6 @@ IF(ENABLE_CSHARP)
         CSharpStringTest
     )
 
-    SET(CSHARP_PLATFORM "x86")
-    SET(CSHARP_BINARY_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
     FOREACH(cs_test ${cs_test_names})
         CSHARP_ADD_EXECUTABLE(
             ${cs_test} "${PKMN_CS_DLL}" "System.Windows.Forms.dll" "${CMAKE_CURRENT_SOURCE_DIR}/${cs_test}.cs"
