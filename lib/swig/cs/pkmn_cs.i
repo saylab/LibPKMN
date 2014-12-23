@@ -15,7 +15,13 @@
 
 %include "pkmn_dict.i"
 %include "pkmn_markings.i"
+
+#if SWIG_VERSION < 0x030000
 %include "pkmn_pkstring.i"
+#else
+%include "pkmn_pkstring3.i"
+#endif
+
 %include "pkmn_nature.i"
 %include "pkmn_shared_ptr.i"
 

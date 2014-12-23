@@ -5,7 +5,11 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
+#if SWIG_VERSION < 0x030000
 %include "pkmn_pkstring.i"
+#else
+%include "pkmn_pkstring3.i"
+#endif
 
 %extend pkmn::nature_t {
     float at(const pkmn::pkstring &key) {return (*self)[key];}
