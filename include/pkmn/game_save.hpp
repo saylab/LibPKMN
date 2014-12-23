@@ -7,7 +7,6 @@
 #ifndef INCLUDED_PKMN_GAME_SAVE_HPP
 #define INCLUDED_PKMN_GAME_SAVE_HPP
 
-#include <string>
 #include <vector>
 
 #include <pkmn/config.hpp>
@@ -21,7 +20,7 @@ namespace pkmn
         public:
 
             typedef pkmn::shared_ptr<game_save> sptr;
-            static sptr make(const std::string &filename);
+            static sptr make(const pkmn::pkstring &filename);
 
             //Class constructors (should never be called directly)
             game_save() {};
@@ -29,7 +28,7 @@ namespace pkmn
             
             virtual void load() = 0;
             virtual void save() = 0;
-            virtual void save_as(const std::string &filename) = 0;
+            virtual void save_as(const pkmn::pkstring &filename) = 0;
             //virtual bool check() = 0;
 
             virtual unsigned int get_game_id() const = 0;

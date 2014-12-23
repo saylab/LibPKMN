@@ -9,6 +9,7 @@ SET(LIBPKMN_JAVA_INCLUDE_DIRS
     ${LIBPKMN_SOURCE_DIR}/include
     ${LIBPKMN_SWIG_SOURCE_DIR}
     ${LIBPKMN_SWIG_SOURCE_DIR}/java
+    ${LIBPKMN_SWIG_SOURCE_DIR}/java/types
     ${JAVA_INCLUDE_PATH}
     ${JNI_INCLUDE_DIRS}
 )
@@ -23,11 +24,16 @@ MACRO(JAVA_BUILD_SWIG_MODULE swig_source java_module_name)
     FOREACH(dir ${LIBPKMN_JAVA_INCLUDE_DIRS})
         LIST(APPEND CMAKE_SWIG_FLAGS "-I${dir}")
     ENDFOREACH(dir ${LIBPKMN_JAVA_INCLUDE_DIRS})
-    SET_SOURCE_FILES_PROPERTIES(${swig_source}.i PROPERTIES CPLUSPLUS ON)
+
+    CONFIGURE_FILE(
+        ${CMAKE_CURRENT_SOURCE_DIR}/${swig_source}.i
+        ${CMAKE_CURRENT_BINARY_DIR}/${swig_source}.i
+    @ONLY)
+    SET_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_BINARY_DIR}/${swig_source}.i PROPERTIES CPLUSPLUS ON)
 
     SET(CMAKE_SWIG_OUTDIR ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN)
     SET(CMAKE_SWIG_FLAGS -module ${java_module_name} -package "nc.PKMN" ${CMAKE_GLOBAL_SWIG_FLAGS})
-    SWIG_ADD_MODULE(${swig_source} java ${swig_source}.i)
+    SWIG_ADD_MODULE(${swig_source} java ${CMAKE_CURRENT_BINARY_DIR}/${swig_source}.i)
     ADD_DEPENDENCIES(${SWIG_MODULE_${swig_source}_REAL_NAME} java_enums)
     IF(UNIX)
         SET_TARGET_PROPERTIES(${SWIG_MODULE_${swig_source}_REAL_NAME} PROPERTIES PREFIX "lib")

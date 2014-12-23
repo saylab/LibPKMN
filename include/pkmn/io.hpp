@@ -10,6 +10,8 @@
 #include <pkmn/config.hpp>
 #include <pkmn/team_pokemon.hpp>
 
+#include <pkmn/types/pkstring.hpp>
+
 namespace pkmn
 {
     namespace io
@@ -24,7 +26,7 @@ namespace pkmn
          * \param t_pkmn LibPKMN-format Pokémon to export
          * \param filename where to save the .3gpkm file
          */
-        void PKMN_API export_to_3gpkm(team_pokemon::sptr t_pkmn, const std::string &filename);
+        void PKMN_API export_to_3gpkm(team_pokemon::sptr t_pkmn, const pkmn::pkstring &filename);
 
         //! Imports a .3gpkm file into LibPKMN.
         /*!
@@ -35,7 +37,7 @@ namespace pkmn
          * \param filename the .3gpkm file to import
          * \return imported LibPKMN-format Pokémon
          */
-        team_pokemon::sptr PKMN_API import_from_3gpkm(const std::string &filename);
+        team_pokemon::sptr PKMN_API import_from_3gpkm(const pkmn::pkstring &filename);
 
         //! Imports a .pkm file into LibPKMN.
         /*!
@@ -47,7 +49,7 @@ namespace pkmn
          * \param t_pkmn LibPKMN-format Pokémon to export
          * \param filename where to save the .pkm file
          */
-        void PKMN_API export_to_pkm(team_pokemon::sptr t_pkmn, const std::string &filename);
+        void PKMN_API export_to_pkm(team_pokemon::sptr t_pkmn, const pkmn::pkstring &filename);
 
         //! Imports a .pkm file into LibPKMN.
         /*!
@@ -58,7 +60,7 @@ namespace pkmn
          * \param filename the .pkm file to import
          * \return imported LibPKMN-format Pokémon
          */
-        team_pokemon::sptr PKMN_API import_from_pkm(const std::string &filename);
+        team_pokemon::sptr PKMN_API import_from_pkm(const pkmn::pkstring &filename);
     }
 }
 

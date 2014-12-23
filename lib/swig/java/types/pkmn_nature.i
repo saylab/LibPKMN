@@ -5,19 +5,15 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-%include "exception.i"
-%include "CamelCase.i"
-
-#if SWIG_VERSION < 0x030000
 %include "pkmn_pkstring.i"
-#else
-%include "pkmn_pkstring3.i"
-#endif
 
-%import "pkmn_cs.i"
+%extend pkmn::nature_t {
+    float at(const pkmn::pkstring &key) {return (*self)[key];}
+    float at(unsigned int key) {return (*self)[key];}
+};
 
 %{
-    #include "pkmn/lists.hpp"
+    #include "pkmn/types/nature.hpp"
 %}
 
-%include "pkmn/lists.hpp"
+%include "pkmn/types/nature.hpp"

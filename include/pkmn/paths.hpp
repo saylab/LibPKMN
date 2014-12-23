@@ -7,10 +7,11 @@
 #ifndef INCLUDED_PKMN_PATHS_HPP
 #define INCLUDED_PKMN_PATHS_HPP
 
-#include <string>
 #include <vector>
 
 #include <pkmn/config.hpp>
+
+#include <pkmn/types/pkstring.hpp>
 
 namespace pkmn
 {
@@ -22,7 +23,7 @@ namespace pkmn
      *
      * \return user's application data directory
      */
-    std::string PKMN_API get_appdata_path();
+    pkmn::pkstring PKMN_API get_appdata_path();
 
     //! Return the path to LibPKMN's underlying SQLite database.
     /*!
@@ -36,7 +37,7 @@ namespace pkmn
      *
      * \return path to underlying SQLite database
      */
-    std::string PKMN_API get_database_path();
+    pkmn::pkstring PKMN_API get_database_path();
 
     //! Return the path to the top-level directory of LibPKMN's images.
     /*!
@@ -47,13 +48,13 @@ namespace pkmn
      *
      * \return path to LibPKMN's images directory
      */
-    std::string PKMN_API get_images_dir();
+    pkmn::pkstring PKMN_API get_images_dir();
 
     //! Return the system's temporary directory.
     /*!
      * \return system's temp directory
      */
-    std::string PKMN_API get_tmp_dir();
+    pkmn::pkstring PKMN_API get_tmp_dir();
 }
 
 #endif /* INCLUDED_PKMN_PATHS_HPP */

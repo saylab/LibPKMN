@@ -409,13 +409,13 @@ namespace pkmn
         _attributes[attribute] = value;
     }
 
-    std::string team_pokemon_impl::get_icon_path() const
+    pkmn::pkstring team_pokemon_impl::get_icon_path() const
     {
         _check();
         return _base_pkmn->get_icon_path((_gender == "Male"));
     }
 
-    std::string team_pokemon_impl::get_sprite_path() const
+    pkmn::pkstring team_pokemon_impl::get_sprite_path() const
     {
         _check();
         return _base_pkmn->get_sprite_path((_gender == "Male"), is_shiny());

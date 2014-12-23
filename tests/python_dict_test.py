@@ -10,9 +10,9 @@ import python as pkmn
 
 if __name__ == "__main__":
 
-    #########################################
-    # pkmn::dict<std::string, int>
-    #########################################
+    #############################################
+    # pkmn::dict<pkmn::pkstring, int>
+    #############################################
     dict1 = pkmn.string_int_dict()
     dict1["abc"] = -1
     dict1["def"] = 5
@@ -26,9 +26,9 @@ if __name__ == "__main__":
     assert(dict1["abc"] == 57)
     assert(dict1["ghi"] == -1)
 
-    #########################################
-    # pkmn::dict<std::string, std::string>
-    #########################################
+    #############################################
+    # pkmn::dict<pkmn::pkstring, pkmn::pkstring>
+    #############################################
     dict2 = pkmn.string_string_dict()
     dict2["abc"] = "def"
     dict2["ghi"] = "jkl"
@@ -42,19 +42,18 @@ if __name__ == "__main__":
     assert(dict2["abc"] == "pqr")
     assert(dict2["mno"] == "def")
 
-    #########################################
-    # pkmn::dict<std::string, unsigned int>
-    #########################################
+    #############################################
+    # pkmn::dict<pkmn::pkstring, unsigned int>
+    #############################################
     dict3 = pkmn.string_uint_dict()
-    dict1 = pkmn.string_int_dict()
-    dict1["abc"] = 10
-    dict1["def"] = 5
-    dict1["ghi"] = 57
-    assert(dict1["abc"] == 10)
-    assert(dict1["def"] == 5)
-    assert(dict1["ghi"] == 57)
-    assert(dict1.at("abc",5) == 10)
-    assert(dict1.at("ade",-10) == -10)
-    dict1.swap("abc","ghi")
-    assert(dict1["abc"] == 57)
-    assert(dict1["ghi"] == 10)
+    dict3["abc"] = 10
+    dict3["def"] = 5
+    dict3["ghi"] = 57
+    assert(dict3["abc"] == 10)
+    assert(dict3["def"] == 5)
+    assert(dict3["ghi"] == 57)
+    assert(dict3.at("abc",5) == 10)
+    assert(dict3.at("ade",2) == 2)
+    dict3.swap("abc","ghi")
+    assert(dict3["abc"] == 57)
+    assert(dict3["ghi"] == 10)

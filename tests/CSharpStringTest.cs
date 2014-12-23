@@ -36,9 +36,46 @@ public class StringTest
         }
     }
 
+    // Test StringPair workaround (using std::string instead of pkmn::pkstring)
+    public static void StringPairWorkaroundTest()
+    {
+        try
+        {
+            PKMN.BasePokemonSPtr bPKMN = PKMN.BasePokemon.make("Bulbasaur", "Diamond");
+            PKMN.TeamPokemonSPtr tPKMN = PKMN.TeamPokemon.make("Bulbasaur", "Diamond", 50,
+                                                               "None","None","None","None");
+
+            PKMN.StringPair abilities = bPKMN.getAbilities();
+            if(abilities.first != "Overgrow")
+                throw new System.Exception("abilities.first != \"Overgrow\"");
+            if(abilities.second != "None")
+                throw new System.Exception("abilities.second != \"None\"");
+
+            PKMN.StringPair types = bPKMN.getTypes();
+            if(types.first != "Grass")
+                throw new System.Exception("types.first != \"Grass\"");
+            if(types.second != "Poison")
+                throw new System.Exception("types.second != \"Poison\"");
+
+            PKMN.StringPair types2 = tPKMN.getTypes();
+            if(types2.first != "Grass")
+                throw new System.Exception("types2.first != \"Grass\"");
+            if(types2.second != "Poison")
+                throw new System.Exception("types2.second != \"Poison\"");
+        }
+        catch(System.Exception ex)
+        {
+            System.Console.WriteLine("Caught exception:");
+            System.Console.WriteLine("   " + ex.Message);
+            System.Console.WriteLine(ex.StackTrace);
+            System.Environment.Exit(1);
+        }
+    }
+
     public static int Main(string[] args)
     {
         DatabaseUsageTest();
+        StringPairWorkaroundTest();
 
         return 0;
     }

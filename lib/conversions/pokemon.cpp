@@ -869,7 +869,7 @@ namespace pkmn
          */
         team_pokemon::sptr import_gen5_pokemon(party_pkm* p_pkm)
         {
-            ::opendb(get_database_path().c_str());
+            ::opendb(get_database_path().const_char());
 
             unsigned int species_id = database::get_species_id(database::get_pokemon_id(p_pkm->species_int,
                                                                                         Versions::BLACK));

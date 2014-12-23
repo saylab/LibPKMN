@@ -15,7 +15,7 @@ namespace PKMN
         {
             public AbilityListComboBox(uint gen): base()
             {
-                string_vec ability_vec = new string_vec();
+                StringVector ability_vec = new StringVector();
                 Lists.getAbilityList(ability_vec, gen);
                 for(int i = 0; i < ability_vec.Count; i++)
                 {

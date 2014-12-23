@@ -16,7 +16,7 @@ namespace fs = boost::filesystem;
 namespace pkmn
 {
     game_save_gen4impl::game_save_gen4impl(pokelib_sptr ptr,
-                                           const std::string &filename): game_save_impl(filename)
+                                           const pkmn::pkstring &filename): game_save_impl(filename)
     {
         _pokelib_save = ptr;
         load();
@@ -28,7 +28,7 @@ namespace pkmn
         _game_id = _trainer->get_game_id();
     }
 
-    void game_save_gen4impl::save_as(const std::string &filename)
+    void game_save_gen4impl::save_as(const pkmn::pkstring &filename)
     {
         conversions::export_gen4_trainer(_trainer, _pokelib_save);
         //TODO: actual saving stuff
