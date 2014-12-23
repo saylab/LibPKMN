@@ -9,7 +9,9 @@
 
 %include "stdint.i"
 %include "std_pair.i"
+%include "std_string.i"
 %include "std_vector.i"
+%include "stl.i"
 
 %include "pkmn.i"
 
@@ -24,6 +26,8 @@
 
 %include "pkmn_nature.i"
 %include "pkmn_shared_ptr.i"
+
+%include "std_pair_bug_workaround.i"
 
 %{
     #include "pkmn/bag.hpp"
@@ -50,18 +54,13 @@
 %include "pkmn/trainer.hpp"
 %include "pkmn/game_save.hpp"
 
-namespace pkmn
-{
-    class pkstring;
-}
-
 /*
  * std::pair templates
  */
 %template(BytePair)          std::pair<uint8_t, uint8_t>;
 %template(UIntPair)          std::pair<unsigned int, unsigned int>;
 %template(BagSlot)           std::pair<pkmn::item::sptr, unsigned int>;
-%template(StringPair)        std::pair<pkmn::pkstring, pkmn::pkstring>;
+%template(StringPair)        std::pair<std::string, std::string>;
 
 /*
  * std::vector templates

@@ -16,13 +16,13 @@
     float at(unsigned int key) {return (*self)[key];}
 };
 %typemap(cscode) pkmn::nature_t %{
-    public double this[string key] {
+    public float this[string key] {
         get {
             return at(key);
         }
     }
 
-    public double this[uint key] {
+    public float this[uint key] {
         get {
             return at(key);
         }

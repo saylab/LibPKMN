@@ -50,18 +50,15 @@
 namespace pkmn {
 
 %{
-    #include <utility>
     #include <vector>
     #include "pkmn/types/pkstring.hpp"
 
     namespace pkmn
     {
-        typedef std::pair<pkmn::pkstring, pkmn::pkstring> pkstring_pair_t;
         typedef std::vector<pkmn::pkstring>               pkstring_vector_t;
     }
 %}
 
-typedef std::pair<pkmn::pkstring, pkmn::pkstring> pkstring_pair_t;
 typedef std::vector<pkmn::pkstring>               pkstring_vector_t;
 
 %naturalvar pkstring;

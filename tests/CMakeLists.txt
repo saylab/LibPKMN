@@ -143,7 +143,7 @@ IF(ENABLE_CSHARP)
     SET(PKMN_CS_DLL "${CSHARP_BINARY_DIRECTORY}/pkmn-cs.dll" CACHE FILEPATH "libpkmn-cs.dll location")
 
     SET(cs_test_names
-        CSharpDictTest
+        #CSharpDictTest
         CSharpMarkingsTest
         CSharpSPtrTest
         CSharpStringTest
