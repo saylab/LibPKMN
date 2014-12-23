@@ -21,7 +21,6 @@
 %{
     #include "pkmn/bag.hpp"
     #include "pkmn/base_pokemon.hpp"
-    #include "pkmn/build_info.hpp"
     #include "pkmn/game_save.hpp"
     #include "pkmn/lists.hpp"
     #include "pkmn/move.hpp"
@@ -47,7 +46,6 @@
 %include "pkmn/trainer.hpp"
 %include "pkmn/game_save.hpp"
 
-%include "pkmn/build_info.hpp"
 %include "pkmn/lists.hpp"
 %include "pkmn/paths.hpp"
 

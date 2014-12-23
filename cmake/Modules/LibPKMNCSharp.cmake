@@ -18,14 +18,18 @@ MACRO(CSHARP_BUILD_SWIG_MODULE swig_module_name dll_name cs_module_name)
             PROPERTIES RUNTIME_OUTPUT_DIRECTORY_${CMAKE_CONFIGURATION_TYPE} "${CSHARP_BINARY_DIRECTORY}")
     ENDFOREACH()
 
-    SET_SOURCE_FILES_PROPERTIES(${swig_module_name}.i PROPERTIES CPLUSPLUS ON)
+    CONFIGURE_FILE(
+        ${CMAKE_CURRENT_SOURCE_DIR}/${swig_module_name}.i
+        ${CMAKE_CURRENT_BINARY_DIR}/${swig_module_name}.i
+    @ONLY)
+    SET_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_BINARY_DIR}/${swig_module_name}.i PROPERTIES CPLUSPLUS ON)
     IF(UNIX)
         SET(CMAKE_SWIG_FLAGS -module ${cs_module_name} -namespace \"PKMN\" -dllimport \"lib${dll_name}\" ${CMAKE_SWIG_GLOBAL_FLAGS} ${CMAKE_GLOBAL_FLAGS})
     ELSEIF(WIN32)
         SET(CMAKE_SWIG_FLAGS -module ${cs_module_name} -namespace \"PKMN\" -dllimport \"${dll_name}\" ${CMAKE_SWIG_GLOBAL_FLAGS} ${CMAKE_GLOBAL_FLAGS})
     ENDIF(UNIX)
 
-    SWIG_ADD_MODULE(${swig_module_name} csharp ${swig_module_name}.i)
+    SWIG_ADD_MODULE(${swig_module_name} csharp ${CMAKE_CURRENT_BINARY_DIR}/${swig_module_name}.i)
     ADD_DEPENDENCIES(${SWIG_MODULE_${swig_module_name}_REAL_NAME} cs_enums)
     IF(UNIX)
         SET_TARGET_PROPERTIES(${SWIG_MODULE_${swig_module_name}_REAL_NAME} PROPERTIES PREFIX "lib")

@@ -17,3 +17,11 @@
 %}
 
 %include "pkmn/build_info.hpp"
+
+%{
+    pkmn::pkstring getSWIGVersion() {
+        return "@SWIG_VERSION@";
+    }   
+%}
+
+pkmn::pkstring getSWIGVersion();
