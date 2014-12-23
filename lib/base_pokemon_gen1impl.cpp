@@ -117,13 +117,13 @@ namespace pkmn
     void base_pokemon_gen1impl::set_form(const pkmn::pkstring &form) {};
 
     //No genders in Generation I
-    std::string base_pokemon_gen1impl::get_icon_path(bool is_male) const
+    pkmn::pkstring base_pokemon_gen1impl::get_icon_path(bool is_male) const
     {
         return _male_icon_path.string();
     }
 
     //No genders or shininess in Generation I
-    std::string base_pokemon_gen1impl::get_sprite_path(bool is_male, bool is_shiny) const
+    pkmn::pkstring base_pokemon_gen1impl::get_sprite_path(bool is_male, bool is_shiny) const
     {
         return _male_sprite_path.string();
     }

@@ -26,7 +26,7 @@ namespace pkmn
         uint8_t get_gen2_gender(uint16_t species_id, uint8_t ivATK)
         {
             //PKMDS has function to get gender rate
-            opendb(get_database_path().c_str());
+            opendb(get_database_path().const_char());
             int gender_rate = getpkmgenderrate(::Species::species(species_id));
             closedb();
 
@@ -59,7 +59,7 @@ namespace pkmn
             personality %= 256;
 
             //PKMDS has function to get gender rate
-            opendb(get_database_path().c_str());
+            opendb(get_database_path().const_char());
             int gender_rate = getpkmgenderrate(::Species::species(species_id));
             closedb();
 
@@ -248,7 +248,7 @@ namespace pkmn
         //TODO: Account for Gen V-VI differences
         double get_type_damage_mod(const pkmn::pkstring &type1, const pkmn::pkstring &type2, unsigned int gen)
         {
-            SQLite::Database db(get_database_path().c_str());
+            SQLite::Database db(get_database_path().const_char());
 
             unsigned int type1_id = database::get_type_id(type1);
             unsigned int type2_id = database::get_type_id(type2);

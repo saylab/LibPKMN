@@ -162,7 +162,7 @@ namespace pkmn
 
     uint8_t libpkmn_getpkmstat(pokemon_obj* pkm, unsigned int stat_id)
     {
-        SQLite::Database db(get_database_path().c_str());
+        SQLite::Database db(get_database_path().const_char());
         std::string pkmstatsql = getpkmstatsql(pkm, ::Stat_IDs::stat_ids(stat_id));
         unsigned int basestat = int(db.execAndGet(pkmstatsql.c_str()));
 
@@ -219,7 +219,7 @@ namespace pkmn
         p_pkm->party_data.spdef = libpkmn_getpkmstat(pkm, Stats::SPECIAL_DEFENSE);
         p_pkm->party_data.speed = libpkmn_getpkmstat(pkm, Stats::SPEED);
 
-        SQLite::Database db(get_database_path().c_str());
+        SQLite::Database db(get_database_path().const_char());
         std::string pkxlevelsql = getpkmlevelsql(int(pkm->species),
                                                  int(pkm->exp));
         p_pkm->party_data.level = int(db.execAndGet(pkxlevelsql.c_str()));
@@ -279,7 +279,7 @@ namespace pkmn
 
     uint8_t libpkmn_getpkxstat(pokemonx_obj* pkx, unsigned int stat_id)
     {
-        SQLite::Database db(get_database_path().c_str());
+        SQLite::Database db(get_database_path().const_char());
         std::string pkxstatsql = libpkmn_getpkxstatsql(pkx, stat_id);
         unsigned int basestat = int(db.execAndGet(pkxstatsql.c_str()));
 
@@ -336,7 +336,7 @@ namespace pkmn
         p_pkx->party_data.spdef = libpkmn_getpkxstat(pkx, Stats::SPECIAL_DEFENSE);
         p_pkx->party_data.speed = libpkmn_getpkxstat(pkx, Stats::SPEED);
 
-        SQLite::Database db(get_database_path().c_str());
+        SQLite::Database db(get_database_path().const_char());
         std::string pkxlevelsql = getpkmlevelsql(int(pkx->species),
                                                  int(pkx->exp));
         p_pkx->party_data.level = int(db.execAndGet(pkxlevelsql.c_str()));

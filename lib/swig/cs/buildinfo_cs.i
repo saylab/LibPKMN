@@ -7,6 +7,9 @@
 
 %include "exception.i"
 %include "CamelCase.i"
+
+%include "pkmn_pkstring.i"
+
 %import "pkmn_cs.i"
 
 %{

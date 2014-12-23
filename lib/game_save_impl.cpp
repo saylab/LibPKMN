@@ -28,10 +28,10 @@ namespace fs = boost::filesystem;
 
 namespace pkmn
 {
-    game_save::sptr game_save::make(const std::string &filename)
+    game_save::sptr game_save::make(const pkmn::pkstring &filename)
     {
-        std::vector<uint8_t> data(fs::file_size(fs::path(filename)));
-        std::ifstream ifile(filename.c_str(), std::ios::binary);
+        std::vector<uint8_t> data(fs::file_size(fs::path(filename.std_string())));
+        std::ifstream ifile(filename.const_char(), std::ios::binary);
         ifile.read((char*)&data[0], data.size());
         ifile.close();
 
@@ -39,7 +39,7 @@ namespace pkmn
         if(size >= 0x80000)
         {
             //Check to see if PokeLib-NC accepts this as a proper Gen IV save
-            pokelib_sptr pokelib_save(new PokeLib::Save(filename.c_str()));
+            pokelib_sptr pokelib_save(new PokeLib::Save(filename.const_char()));
             if(pokelib_save->parseRawSave())
             {
                 return sptr(new game_save_gen4impl(pokelib_save, filename));
@@ -48,14 +48,14 @@ namespace pkmn
             {
                 //Check to see if PKMDS accepts this as a proper Gen V save
                 pkmds_g5_sptr sav = pkmds_g5_sptr(new bw2sav_obj);
-                ::read(filename.c_str(), sav.get());
+                ::read(filename.const_char(), sav.get());
                 if(::savisbw2(sav.get())) return sptr(new game_save_gen5impl(sav, filename));
             }
         }
         else if(size >= 0x40000)
         {
             //Check to see if PokeLib-NC accepts this as a proper Gen IV save
-            pokelib_sptr pokelib_save(new PokeLib::Save(filename.c_str()));
+            pokelib_sptr pokelib_save(new PokeLib::Save(filename.const_char()));
             if(pokelib_save->parseRawSave())
             {
                 return sptr(new game_save_gen4impl(pokelib_save, filename));
@@ -95,13 +95,13 @@ namespace pkmn
         throw std::runtime_error("This is not a valid save file.");
     }
 
-    game_save_impl::game_save_impl(const std::string &filename)
+    game_save_impl::game_save_impl(const pkmn::pkstring &filename)
     {
         _filepath = fs::path(filename);
-        uint32_t file_size = fs::file_size(filename);
+        uint32_t file_size = fs::file_size(filename.std_string());
 
         _data = std::vector<uint8_t>(file_size);
-        std::ifstream ifile(filename.c_str(), std::ios::binary);
+        std::ifstream ifile(filename.const_char(), std::ios::binary);
         ifile.read((char*)&_data[0], file_size);
         ifile.close();
     }

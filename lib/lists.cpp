@@ -27,7 +27,7 @@ namespace pkmn
 
     void get_version_list(std::vector<pkmn::pkstring> &game_vec)
     {
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
+        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().const_char()));
         game_vec.clear();
 
         SQLite::Statement query(*db, "SELECT name FROM version_names WHERE local_language_id=9");
@@ -55,7 +55,7 @@ namespace pkmn
 
     void get_item_list(std::vector<pkmn::pkstring> &item_vec, unsigned int game)
     {
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
+        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().const_char()));
         item_vec.clear();
 
         unsigned int gen = database::get_generation(game);
@@ -149,7 +149,7 @@ namespace pkmn
 
     void get_pokedex_order(std::vector<std::pair<unsigned int, unsigned int> > &entry_list, unsigned int pokedex_id)
     {
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
+        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().const_char()));
         entry_list.clear();
         std::string query_string(str(boost::format("SELECT species_id,pokedex_number FROM pokemon_dex_numbers WHERE pokedex_id=%d")
                                      % pokedex_id));
@@ -160,7 +160,7 @@ namespace pkmn
 
     void get_pokemon_list(std::vector<pkmn::pkstring> &pokemon_vec, unsigned int game)
     {
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
+        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().const_char()));
         pokemon_vec.clear();
 
         unsigned int bounds[] = {0,151,251,386,493,649,719};
@@ -178,7 +178,7 @@ namespace pkmn
 
     void get_type_list(std::vector<pkmn::pkstring> &type_vec, unsigned int gen)
     {
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
+        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().const_char()));
         type_vec.clear();
 
         SQLite::Statement type_names_query(*db, "SELECT name FROM type_names WHERE local_language_id=9");
@@ -194,7 +194,7 @@ namespace pkmn
 
     void get_ability_list(std::vector<pkmn::pkstring> &ability_vec, unsigned int gen)
     {
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
+        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().const_char()));
         ability_vec.clear();
 
         SQLite::Statement query(*db, "SELECT name FROM ability_names WHERE local_language_id=9");
@@ -203,7 +203,7 @@ namespace pkmn
 
     void get_nature_list(std::vector<pkmn::pkstring> &nature_vec)
     {
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
+        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().const_char()));
         nature_vec.clear();
 
         SQLite::Statement query(*db, "SELECT name FROM nature_names WHERE local_language_id=9");
@@ -212,7 +212,7 @@ namespace pkmn
 
     void get_pokemon_of_type(base_pokemon_vector &pkmn_vector, pkmn::pkstring type1, pkmn::pkstring type2, unsigned int gen, bool lax)
     {
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
+        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().const_char()));
         pkmn_vector.clear();
 
         std::stringstream query_stream;

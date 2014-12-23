@@ -7,13 +7,13 @@
 
 %include "exception.i"
 %include "stdint.i"
-%include "std_pair.i"
-
 %include "CamelCase.i"
+
+%include "pkmn_pkstring.i"
+
 %import "pkmn_cs.i"
 
 %{
-    #include "pkmn/config.hpp"
     #include "pkmn/calculations.hpp"
 %}
 

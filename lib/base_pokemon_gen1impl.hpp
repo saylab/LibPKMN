@@ -33,8 +33,8 @@ namespace pkmn
             void set_form(unsigned int form);
             void set_form(const pkmn::pkstring &form);
 
-            std::string get_icon_path(bool is_male) const;
-            std::string get_sprite_path(bool is_male, bool is_shiny) const;
+            pkmn::pkstring get_icon_path(bool is_male) const;
+            pkmn::pkstring get_sprite_path(bool is_male, bool is_shiny) const;
 
             //Database Info
             void get_egg_group_ids(std::vector<unsigned int>& egg_group_id_vec) const;

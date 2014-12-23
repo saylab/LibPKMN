@@ -41,7 +41,7 @@ namespace pkmn
         _game_index(0),
         _tmhm(false)
     {
-        if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
+        if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().const_char()));
 
         // Confirm item exists in given generation
         std::ostringstream query_stream;

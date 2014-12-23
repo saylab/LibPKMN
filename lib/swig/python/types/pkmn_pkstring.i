@@ -36,3 +36,9 @@
     char* __repr__() {return (char*)((*self).const_char());}
     char* __str__() {return (char*)((*self).const_char());}
 };
+
+%{
+    #include "pkmn/types/pkstring.hpp"
+%}
+
+%include "pkmn/types/pkstring.hpp"

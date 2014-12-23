@@ -71,7 +71,7 @@ namespace pkmn
                                          unsigned int move1, unsigned int move2,
                                          unsigned int move3, unsigned int move4): team_pokemon()
     {    
-        if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
+        if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().const_char()));
 
         _base_pkmn = base;
         _pokemon_id = _base_pkmn->get_pokemon_id();
@@ -409,13 +409,13 @@ namespace pkmn
         _attributes[attribute] = value;
     }
 
-    std::string team_pokemon_impl::get_icon_path() const
+    pkmn::pkstring team_pokemon_impl::get_icon_path() const
     {
         _check();
         return _base_pkmn->get_icon_path((_gender == "Male"));
     }
 
-    std::string team_pokemon_impl::get_sprite_path() const
+    pkmn::pkstring team_pokemon_impl::get_sprite_path() const
     {
         _check();
         return _base_pkmn->get_sprite_path((_gender == "Male"), is_shiny());

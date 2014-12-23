@@ -7,7 +7,6 @@
 #ifndef INCLUDED_PKMN_BASE_POKEMON_HPP
 #define INCLUDED_PKMN_BASE_POKEMON_HPP
 
-#include <string>
 #include <vector>
 
 #include <pkmn/config.hpp>
@@ -59,8 +58,8 @@ namespace pkmn
             virtual void set_form(unsigned int form) = 0;
             virtual void set_form(const pkmn::pkstring &form) = 0;
 
-            virtual std::string get_icon_path(bool is_male) const = 0;
-            virtual std::string get_sprite_path(bool is_male, bool is_shiny) const = 0;
+            virtual pkmn::pkstring get_icon_path(bool is_male) const = 0;
+            virtual pkmn::pkstring get_sprite_path(bool is_male, bool is_shiny) const = 0;
 
             //Database Info
             virtual unsigned int get_pokemon_id() const = 0;

@@ -55,7 +55,7 @@
 %include "std_pair.i"
 
 %include "java_pkstring.i"
-%include "libpkmn.i"
+%include "pkmn.i"
 
 %{
     #include "pkmn/types/dict.hpp"

@@ -95,8 +95,8 @@ namespace pkmn
             pkmn::dict<pkmn::pkstring, int> get_attributes() const;
             bool has_attribute(const pkmn::pkstring &attribute) const;
 			void set_attribute(const pkmn::pkstring &attribute, int value);
-            std::string get_icon_path() const;
-            std::string get_sprite_path() const;
+            pkmn::pkstring get_icon_path() const;
+            pkmn::pkstring get_sprite_path() const;
             virtual void set_form(const pkmn::pkstring &form);
             virtual void set_form(unsigned int form);
 

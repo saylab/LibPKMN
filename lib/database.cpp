@@ -21,7 +21,7 @@
 
 #include "SQLiteCpp/SQLiteC++.h"
 
-#define CONNECT_TO_DB() if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
+#define CONNECT_TO_DB() if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().const_char()));
 #define THROW_QUERY_ERROR() throw std::runtime_error(str(boost::format("%s: Invalid query \"%s\"") \
                                                       % __FUNCTION__ % query_stream.str().c_str()));
 

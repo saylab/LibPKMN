@@ -58,10 +58,10 @@ namespace pkmn
         public:
 
             game_save_gen1impl();
-            game_save_gen1impl(const std::string &filename);
+            game_save_gen1impl(const pkmn::pkstring &filename);
 
             void load();
-            void save_as(const std::string &filename);
+            void save_as(const pkmn::pkstring &filename);
             bool check();
 
         private:
