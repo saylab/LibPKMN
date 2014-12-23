@@ -8,7 +8,7 @@
 /*
  * Macro for pkmn::shared_ptr templates
  */
-%define CS_PKMN_SPTR(class_name, sptr_name)
+%define JAVA_PKMN_SPTR(class_name, sptr_name)
     /*
      * Factory functions need to be associated with newobject
      * since they create a new instance of a type.

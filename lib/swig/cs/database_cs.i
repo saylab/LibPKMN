@@ -5,7 +5,6 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-%include "stdint.i"
 %include "exception.i"
 %include "CamelCase.i"
 

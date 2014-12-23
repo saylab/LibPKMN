@@ -18,13 +18,12 @@
 
 %include "exception.i"
 %include "stdint.i"
-%include "std_pair.i"
+%include "CamelCase.i"
 
 %import "pkmn_java.i"
 
 %{
     #include "pkmn/calculations.hpp"
-    #include "java_calculationswrapper.hpp"
 %}
 
-%include "java_calculationswrapper.hpp"
+%include "pkmn/calculations.hpp"
