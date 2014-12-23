@@ -248,7 +248,7 @@ namespace pkmn
         //TODO: Account for Gen V-VI differences
         double get_type_damage_mod(const pkmn::pkstring &type1, const pkmn::pkstring &type2, unsigned int gen)
         {
-            SQLite::Database db(get_database_path().c_str());
+            SQLite::Database db(get_database_path());
 
             unsigned int type1_id = database::get_type_id(type1);
             unsigned int type2_id = database::get_type_id(type2);

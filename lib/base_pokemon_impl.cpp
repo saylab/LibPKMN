@@ -66,7 +66,7 @@ namespace pkmn
         _special(0), _special_attack(0), _special_defense(0)
     {
         //The first initialization will stick for all others
-        if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
+        if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
 
         if(id == Species::INVALID)
         {

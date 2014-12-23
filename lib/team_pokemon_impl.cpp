@@ -71,7 +71,7 @@ namespace pkmn
                                          unsigned int move1, unsigned int move2,
                                          unsigned int move3, unsigned int move4): team_pokemon()
     {    
-        if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
+        if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
 
         _base_pkmn = base;
         _pokemon_id = _base_pkmn->get_pokemon_id();

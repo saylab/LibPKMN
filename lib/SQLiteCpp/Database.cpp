@@ -4,6 +4,7 @@
  * @brief   Management of a SQLite Database Connection.
  *
  * Copyright (c) 2012-2013 Sebastien Rombauts (sebastien.rombauts@gmail.com)
+ *               2014      Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -18,11 +19,11 @@ namespace SQLite
 
 
 // Open the provided database UTF-8 filename with SQLITE_OPEN_xxx provided flags.
-Database::Database(const char* apFilename, const int aFlags /*= SQLITE_OPEN_READONLY*/) : // throw(SQLite::Exception)
+Database::Database(const pkmn::pkstring &apFilename, const int aFlags /*= SQLITE_OPEN_READONLY*/) : // throw(SQLite::Exception)
     mpSQLite(NULL),
     mFilename(apFilename)
 {
-    int ret = sqlite3_open_v2(apFilename, &mpSQLite, aFlags, NULL);
+    int ret = sqlite3_open_v2(mFilename.c_str(), &mpSQLite, aFlags, NULL);
     if (SQLITE_OK != ret)
     {
         std::string strerr = sqlite3_errmsg(mpSQLite);

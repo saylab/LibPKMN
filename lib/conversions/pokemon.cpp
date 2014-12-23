@@ -227,7 +227,7 @@ namespace pkmn
         void export_gen2_pokemon(team_pokemon::sptr t_pkmn, gen2_pc_pokemon_t &pkmn,
                                  uint8_t* nickname_buffer, uint8_t* otname_buffer)
         {
-            SQLite::Database db(get_database_path().c_str());
+            SQLite::Database db(get_database_path());
             pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
             pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
             moveset_t moves;
@@ -376,7 +376,7 @@ namespace pkmn
                 move4_id = blocks.attacks.moves[3];
             }
 
-            SQLite::Database db(get_database_path().c_str());
+            SQLite::Database db(get_database_path());
             std::ostringstream query_stream;
             unsigned int level = database::get_level(species_id, blocks.growth.exp);
 
@@ -439,7 +439,7 @@ namespace pkmn
 
         void export_gen3_pokemon(team_pokemon::sptr t_pkmn, gen3_pc_pokemon_t &pkmn, bool encrypt)
         {
-            SQLite::Database db(get_database_path().c_str());
+            SQLite::Database db(get_database_path());
             pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
             pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
             moveset_t moves;
