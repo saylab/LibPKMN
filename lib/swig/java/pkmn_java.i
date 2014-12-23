@@ -18,16 +18,16 @@
 
 %include "CamelCase.i"
 
+%include "stdint.i"
+%include "std_pair.i"
+%include "std_vector.i"
+
 %include "pkmn.i"
 
 %include "pkmn_dict.i"
 %include "pkmn_pkstring.i"
 %include "pkmn_nature.i"
 %include "pkmn_shared_ptr.i"
-
-%include "stdint.i"
-%include "std_pair.i"
-%include "std_vector.i"
 
 %{
     #include "pkmn/bag.hpp"

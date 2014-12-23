@@ -7,6 +7,7 @@
 
 %feature("autodoc", "1");
 
+%include "stdint.i"
 %include "std_pair.i"
 %include "std_vector.i"
 

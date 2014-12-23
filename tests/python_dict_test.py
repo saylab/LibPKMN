@@ -53,7 +53,7 @@ if __name__ == "__main__":
     assert(dict3["def"] == 5)
     assert(dict3["ghi"] == 57)
     assert(dict3.at("abc",5) == 10)
-    assert(dict3.at("ade",-10) == -10)
+    assert(dict3.at("ade",2) == 2)
     dict3.swap("abc","ghi")
     assert(dict3["abc"] == 57)
     assert(dict3["ghi"] == 10)
