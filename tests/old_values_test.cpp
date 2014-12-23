@@ -17,7 +17,7 @@
 
 #include "../lib/SQLiteCpp/SQLiteC++.h"
 
-SQLite::Database db(pkmn::get_database_path().c_str());
+SQLite::Database db(pkmn::get_database_path().const_char());
 
 /*
  * This test makes sure that LibPKMN's build successfully added
