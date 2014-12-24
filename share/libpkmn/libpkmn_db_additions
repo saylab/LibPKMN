@@ -1435,4 +1435,16 @@ INSERT INTO "pocket_names" VALUES(15,5,"Berries");
 INSERT INTO "pocket_names" VALUES(15,6,"Items");
 INSERT INTO "pocket_names" VALUES(15,7,"Items");
 INSERT INTO "pocket_names" VALUES(15,8,"Key Items");
+CREATE TABLE game_languages (
+    id INTEGER NOT NULL,
+    name VARCHAR(20) NOT NULL
+);
+INSERT INTO "game_languages" VALUES(1,"Japanese");
+INSERT INTO "game_languages" VALUES(2,"English");
+INSERT INTO "game_languages" VALUES(3,"French");
+INSERT INTO "game_languages" VALUES(4,"Italian");
+INSERT INTO "game_languages" VALUES(5,"German");
+INSERT INTO "game_languages" VALUES(6,"Korean"); /* Gen III only, unused */
+INSERT INTO "game_languages" VALUES(7,"Spanish");
+INSERT INTO "game_languages" VALUES(7,"Korean");
 COMMIT;
