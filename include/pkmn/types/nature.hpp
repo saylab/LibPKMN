@@ -7,10 +7,9 @@
 #ifndef INCLUDED_PKMN_NATURE_HPP
 #define INCLUDED_PKMN_NATURE_HPP
 
-#include <string>
-
 #include <pkmn/config.hpp>
 #include <pkmn/types/dict.hpp>
+#include <pkmn/types/pkstring.hpp>
 
 namespace pkmn
 {
@@ -21,28 +20,28 @@ namespace pkmn
      *
      * There are 25 natures, each of which affects a different pair of stats.
      */
-    class PKMN_API nature
+    class PKMN_API nature_t
     {
         public:
 
-            nature() {};
+            nature_t() {};
 
             //! Constructor that uses the nature's SQLite ID.
-            nature(unsigned int id);
+            nature_t(unsigned int id);
 
             //! Constructor that uses the nature's name.
-            nature(const std::string &name);
+            nature_t(const pkmn::pkstring &name);
 
-            ~nature() {};
+            ~nature_t() {};
 
             //! Return the nature's name.
-            std::string get_name();
+            pkmn::pkstring get_name();
 
             //! Return the modifier (0.9, 1.0, or 1.1) for the given stat, using its name.
-            const double& operator[](const std::string &key) const;
+            const float& operator[](const pkmn::pkstring &key) const;
 
             //! Return the modifier (0.9, 1.0, or 1.1) for the given stat, using its SQLite ID.
-            const double& operator[](const unsigned int &key) const;
+            const float& operator[](const unsigned int &key) const;
 
             //! Return the nature's SQLite ID.
             unsigned int get_nature_id();
@@ -50,9 +49,9 @@ namespace pkmn
         private:
 
             unsigned int _id;
-            std::string _name;
+            pkmn::pkstring _name;
 
-            pkmn::dict<std::string, double> _modifiers;
+            pkmn::dict<pkmn::pkstring, float> _modifiers;
 
             void _populate_dict();
     };

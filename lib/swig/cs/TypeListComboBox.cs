@@ -15,7 +15,7 @@ namespace PKMN
         {
             public TypeListComboBox(uint gen): base()
             {
-                string_vec type_vec = new string_vec();
+                StringVector type_vec = new StringVector();
                 Lists.getTypeList(type_vec, gen);
                 for(int i = 0; i < type_vec.Count; i++)
                 {

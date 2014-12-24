@@ -29,18 +29,18 @@ public class JavaSPtrTest
             PocketDict bag1Pockets = bag1.getPockets();
             PocketDict bag2Pockets = bag2.getPockets();
 
-            bag1Pockets.at("Items").addItem("Potion", 10);
-            bag1Pockets.at("Balls").addItem("Master Ball", 10);
-            bag1Pockets.at("KeyItems").addItem("Bicycle", 1);
-            bag1Pockets.at("TM/HM").addItem("TM01", 10);
-            if(bag2Pockets.at("Items").getItemAmount("Potion") != 10)
-                throw new RuntimeException("bag2Pockets.at(\"Items\").getItemAmount(\"Potion\") != 10");
-            if(bag2Pockets.at("Balls").getItemAmount("Master Ball") != 10)
-                throw new RuntimeException("bag2Pockets.at(\"Balls\").getItemAmount(\"Master Ball\") != 10");
-            if(bag2Pockets.at("KeyItems").getItemAmount("Bicycle") != 1)
-                throw new RuntimeException("bag2Pockets.at(\"KeyItems\").getItemAmount(\"Bicycle\") != 1");
-            if(bag2Pockets.at("TM/HM").getItemAmount("TM01") != 10)
-                throw new RuntimeException("bag2Pockets.at(\"TM/HM\").getItemAmount(\"TM01\") != 10");
+            bag1Pockets.get("Items").addItem("Potion", 10);
+            bag1Pockets.get("Balls").addItem("Master Ball", 10);
+            bag1Pockets.get("KeyItems").addItem("Bicycle", 1);
+            bag1Pockets.get("TM/HM").addItem("TM01", 10);
+            if(bag2Pockets.get("Items").getItemAmount("Potion") != 10)
+                throw new RuntimeException("bag2Pockets.get(\"Items\").getItemAmount(\"Potion\") != 10");
+            if(bag2Pockets.get("Balls").getItemAmount("Master Ball") != 10)
+                throw new RuntimeException("bag2Pockets.get(\"Balls\").getItemAmount(\"Master Ball\") != 10");
+            if(bag2Pockets.get("KeyItems").getItemAmount("Bicycle") != 1)
+                throw new RuntimeException("bag2Pockets.get(\"KeyItems\").getItemAmount(\"Bicycle\") != 1");
+            if(bag2Pockets.get("TM/HM").getItemAmount("TM01") != 10)
+                throw new RuntimeException("bag2Pockets.get(\"TM/HM\").getItemAmount(\"TM01\") != 10");
         }
         catch(RuntimeException ex)
         {
@@ -149,7 +149,7 @@ public class JavaSPtrTest
             if(deoxys != deoxys2)
                 throw new RuntimeException("deoxys != deoxys2");
 
-            StringUIntDict deoxysStats1 = deoxys.getStats();
+            StringLongDict deoxysStats1 = deoxys.getStats();
 
             BasePokemonSPtr deoxysBase1 = deoxys.getBasePokemon(false); // Same as deoxys
             BasePokemonSPtr deoxysBase2 = deoxys.getBasePokemon(true); // Copies from deoxys
@@ -157,7 +157,7 @@ public class JavaSPtrTest
             deoxysBase1.setForm("Attack");
             deoxysBase2.setForm("Defense");
 
-            StringUIntDict deoxysStats2 = deoxys.getStats();
+            StringLongDict deoxysStats2 = deoxys.getStats();
 
             if(deoxysBase1 == deoxysBase2)
                 throw new RuntimeException("deoxysBase1 == deoxysBase2");
@@ -169,14 +169,14 @@ public class JavaSPtrTest
                 throw new RuntimeException("deoxys.getFormID() != deoxysBase1.getFormID()");
             if(deoxysBase2.getFormID() != DeoxysForms.DEFENSE)
                 throw new RuntimeException("deoxysBase2.getFormID() != DeoxysForms.DEFENSE");
-            if(deoxysStats1.at("Attack") == deoxysStats2.at("Attack"))
-                throw new RuntimeException("deoxysStats1.at(\"Attack\") == deoxysStats2.at(\"Attack\")");
-            if(deoxysStats1.at("Defense") == deoxysStats2.at("Defense"))
-                throw new RuntimeException("deoxysStats1.at(\"Defense\") == deoxysStats2.at(\"Defense\")");
-            if(deoxysStats1.at("Special Attack") == deoxysStats2.at("Special Attack"))
-                throw new RuntimeException("deoxysStats1.at(\"Special Attack\") == deoxysStats2.at(\"Special Attack\")");
-            if(deoxysStats1.at("Special Defense") == deoxysStats2.at("Special Defense"))
-                throw new RuntimeException("deoxysStats1.at(\"Special Defense\") == deoxysStats2.at(\"Special Defense\")");
+            if(deoxysStats1.get("Attack") == deoxysStats2.get("Attack"))
+                throw new RuntimeException("deoxysStats1.get(\"Attack\") == deoxysStats2.get(\"Attack\")");
+            if(deoxysStats1.get("Defense") == deoxysStats2.get("Defense"))
+                throw new RuntimeException("deoxysStats1.get(\"Defense\") == deoxysStats2.get(\"Defense\")");
+            if(deoxysStats1.get("Special Attack") == deoxysStats2.get("Special Attack"))
+                throw new RuntimeException("deoxysStats1.get(\"Special Attack\") == deoxysStats2.get(\"Special Attack\")");
+            if(deoxysStats1.get("Special Defense") == deoxysStats2.get("Special Defense"))
+                throw new RuntimeException("deoxysStats1.get(\"Special Defense\") == deoxysStats2.get(\"Special Defense\")");
         }
         catch(RuntimeException ex)
         {

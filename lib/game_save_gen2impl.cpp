@@ -13,7 +13,7 @@ namespace fs = boost::filesystem;
 
 namespace pkmn
 {
-    game_save_gen2impl::game_save_gen2impl(const std::string &filename, bool crystal): game_save_impl(filename)
+    game_save_gen2impl::game_save_gen2impl(const pkmn::pkstring &filename, bool crystal): game_save_impl(filename)
     {
         _game_id = crystal ? Versions::CRYSTAL : Versions::GOLD;
 
@@ -67,7 +67,7 @@ namespace pkmn
                             + ((raw_money[2] >> 0) & 0x0F));
     }
 
-    void game_save_gen2impl::save_as(const std::string &filename)
+    void game_save_gen2impl::save_as(const pkmn::pkstring &filename)
     {
         _filepath = fs::path(filename);
 
@@ -122,7 +122,7 @@ namespace pkmn
         _data[_checksum1_offset] = checksum1;
         _data[_checksum2_offset] = checksum2;
 
-        std::ofstream ofile(filename.c_str());
+        std::ofstream ofile(filename.const_char());
         ofile.write((char*)&_data, _data.size());
         ofile.close();
 

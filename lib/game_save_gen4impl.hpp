@@ -105,10 +105,10 @@ namespace pkmn
         public:
 
             game_save_gen4impl();
-            game_save_gen4impl(const std::string &filename, gen4_games_t game, bool small);
+            game_save_gen4impl(const pkmn::pkstring &filename, gen4_games_t game, bool small);
 
             void load();
-            void save_as(const std::string &filename);
+            void save_as(const pkmn::pkstring &filename);
 
         private:
 

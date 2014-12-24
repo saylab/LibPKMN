@@ -37,7 +37,7 @@ namespace pkmn
             );
 
             QImage spriteImage;
-            spriteImage.load(QString(pkmn->get_icon_path(true).c_str()));
+            spriteImage.load(QString(pkmn->get_icon_path(true).const_char()));
 
             leftLabel->setPixmap(QPixmap::fromImage(spriteImage));
             leftLabel->setFixedSize(spriteImage.size());

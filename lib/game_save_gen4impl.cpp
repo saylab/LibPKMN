@@ -16,7 +16,7 @@ namespace fs = boost::filesystem;
 
 namespace pkmn
 {
-    game_save_gen4impl::game_save_gen4impl(const std::string &filename,
+    game_save_gen4impl::game_save_gen4impl(const pkmn::pkstring &filename,
                                            gen4_games_t game,
                                            bool small):
         game_save_impl(filename),
@@ -123,7 +123,7 @@ namespace pkmn
         _trainer->set_money(*GEN4_DATA_CAST(_data, gen4_money, uint32_t));
     }
 
-    void game_save_gen4impl::save_as(const std::string &filename)
+    void game_save_gen4impl::save_as(const pkmn::pkstring &filename)
     {
         //TODO: actual saving stuff
         _filepath = fs::path(filename);

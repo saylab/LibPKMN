@@ -7,7 +7,6 @@
 #ifndef INCLUDED_PKMN_TEAM_POKEMON_HPP
 #define INCLUDED_PKMN_TEAM_POKEMON_HPP
 
-#include <string>
 #include <vector>
 
 #include <pkmn/base_pokemon.hpp>
@@ -76,7 +75,7 @@ namespace pkmn
             virtual unsigned int get_level() const = 0;
             virtual unsigned int get_experience() const = 0;
             virtual pkmn::pkstring get_gender() const = 0;
-            virtual pkmn::nature get_nature() const = 0;
+            virtual pkmn::nature_t get_nature() const = 0;
             virtual pkmn::pkstring get_ability() const = 0;
             virtual bool using_hidden_ability() const = 0;
             virtual bool is_shiny() const = 0;
@@ -122,8 +121,8 @@ namespace pkmn
             virtual pkmn::dict<pkmn::pkstring, int> get_attributes() const = 0;
             virtual bool has_attribute(const pkmn::pkstring &attribute) const = 0;
 			virtual void set_attribute(const pkmn::pkstring &attribute, int value) = 0;
-            virtual std::string get_icon_path() const = 0;
-            virtual std::string get_sprite_path() const = 0;
+            virtual pkmn::pkstring get_icon_path() const = 0;
+            virtual pkmn::pkstring get_sprite_path() const = 0;
             virtual void set_form(const pkmn::pkstring &form) = 0;
             virtual void set_form(unsigned int form) = 0;
 

@@ -49,8 +49,19 @@
 
 namespace pkmn {
 
-%naturalvar pkstring;
+%{
+    #include <vector>
+    #include "pkmn/types/pkstring.hpp"
 
+    namespace pkmn
+    {
+        typedef std::vector<pkmn::pkstring>               pkstring_vector_t;
+    }
+%}
+
+typedef std::vector<pkmn::pkstring>               pkstring_vector_t;
+
+%naturalvar pkstring;
 class pkstring;
 
 %typemap(ctype, out="void *") pkstring "uint16_t*"

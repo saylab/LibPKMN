@@ -25,7 +25,7 @@ namespace pkmn
 
             //Getting Individual Stat Info
             pkmn::pkstring get_gender() const;
-            pkmn::nature get_nature() const;
+            pkmn::nature_t get_nature() const;
             pkmn::pkstring get_ability() const;
             bool is_shiny() const;
             pkmn::dict<pkmn::pkstring, unsigned int> get_stats() const;

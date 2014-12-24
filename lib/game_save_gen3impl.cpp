@@ -18,7 +18,7 @@ namespace fs = boost::filesystem;
 
 namespace pkmn
 {
-    game_save_gen3impl::game_save_gen3impl(const std::string &filename, unsigned int game_id): game_save_impl(filename)
+    game_save_gen3impl::game_save_gen3impl(const pkmn::pkstring &filename, unsigned int game_id): game_save_impl(filename)
     {
         _game_id = game_id;
         if(game_id == Versions::RUBY) _game = RS;
@@ -57,9 +57,9 @@ namespace pkmn
         _trainer->set_money(_save->section1.data32[MONEY/4] ^ _security_key);
     }
 
-    void game_save_gen3impl::save_as(const std::string &filename)
+    void game_save_gen3impl::save_as(const pkmn::pkstring &filename)
     {
-        std::ofstream ofile(filename.c_str());
+        std::ofstream ofile(filename.const_char());
         ofile.write((char*)&_data, _data.size());
         ofile.close();
         

@@ -5,7 +5,7 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <boost/algorithm/string.hpp>
+#include <string>
 
 #include <pkmn/build_info.hpp>
 
@@ -14,32 +14,32 @@
 
 namespace pkmn
 {
-    std::string get_sqlite3_version()
+    pkmn::pkstring get_sqlite3_version()
     {
         return std::string(SQLITE_VERSION);
     }
 
-    std::string get_sqlitecpp_version()
+    pkmn::pkstring get_sqlitecpp_version()
     {
         return std::string(SQLITECPP_VERSION);
     }
 
-    std::string get_boost_version()
+    pkmn::pkstring get_boost_version()
     {
         return "@Boost_MAJOR_VERSION@.@Boost_MINOR_VERSION@.@Boost_SUBMINOR_VERSION@";
     }
 
-    std::string get_qt4_version()
+    pkmn::pkstring get_qt4_version()
     {
         return "@QT_VERSION_MAJOR@.@QT_VERSION_MINOR@.@QT_VERSION_PATCH@";
     }
 
-    std::string get_libpkmn_commit()
+    pkmn::pkstring get_libpkmn_commit()
     {
         return "@LIBPKMN_GIT_DESCRIBE@";
     }
 
-    std::string get_pkmds_commit()
+    pkmn::pkstring get_pkmds_commit()
     {
         return "@PKMDS_GIT_DESCRIBE@";
     }

@@ -171,11 +171,11 @@ namespace pkmn
     {
         public:
 
-            game_save_gen3impl(const std::string &filename, unsigned int game_id);
+            game_save_gen3impl(const pkmn::pkstring &filename, unsigned int game_id);
             ~game_save_gen3impl() {free(_save);}
             
             void load();
-            void save_as(const std::string &filename);
+            void save_as(const pkmn::pkstring &filename);
             bool check();
             
         private:

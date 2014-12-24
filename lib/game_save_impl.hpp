@@ -23,7 +23,7 @@ namespace pkmn
         public:
 
             game_save_impl() {};
-            game_save_impl(const std::string &filename);
+            game_save_impl(const pkmn::pkstring &filename);
 
             void save();
 

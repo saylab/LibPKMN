@@ -14,7 +14,7 @@ namespace fs = boost::filesystem;
 
 namespace pkmn
 {
-    game_save_gen1impl::game_save_gen1impl(const std::string &filename): game_save_impl(filename)
+    game_save_gen1impl::game_save_gen1impl(const pkmn::pkstring &filename): game_save_impl(filename)
     {
         /*
          * The only real distinction between the Generation I games is the introduction
@@ -63,7 +63,7 @@ namespace pkmn
                             + ((raw_money[2] >> 0) & 0x0F));
     }
 
-    void game_save_gen1impl::save_as(const std::string &filename)
+    void game_save_gen1impl::save_as(const pkmn::pkstring &filename)
     {
         _filepath = fs::path(filename);
 
@@ -97,7 +97,7 @@ namespace pkmn
         for(size_t i = 0x2598; i < gen1_offsets::CHECKSUM; i++) checksum -= _data[i];
         _data[gen1_offsets::CHECKSUM] = checksum;
 
-        std::ofstream ofile(filename.c_str());
+        std::ofstream ofile(filename.const_char());
         ofile.write((char*)&_data, _data.size());
         ofile.close();
         

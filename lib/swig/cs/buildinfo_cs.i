@@ -7,6 +7,13 @@
 
 %include "exception.i"
 %include "CamelCase.i"
+
+#if SWIG_VERSION < 0x030000
+%include "pkmn_pkstring.i"
+#else
+%include "pkmn_pkstring3.i"
+#endif
+
 %import "pkmn_cs.i"
 
 %{
@@ -14,3 +21,11 @@
 %}
 
 %include "pkmn/build_info.hpp"
+
+%{
+    pkmn::pkstring getSWIGVersion() {
+        return "@SWIG_VERSION@";
+    }   
+%}
+
+pkmn::pkstring getSWIGVersion();

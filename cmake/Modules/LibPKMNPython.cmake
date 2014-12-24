@@ -61,6 +61,7 @@ MACRO(PYTHON_BUILD_SWIG_MODULE module_name install_dir)
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${LIBPKMN_SWIG_SOURCE_DIR}
         ${LIBPKMN_SWIG_SOURCE_DIR}/python
+        ${LIBPKMN_SWIG_SOURCE_DIR}/python/types
         ${Boost_INCLUDE_DIRS}
         ${PYTHON_INCLUDE_DIRS}
     )

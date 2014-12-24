@@ -4,6 +4,7 @@
  * @brief   Management of a SQLite Database Connection.
  *
  * Copyright (c) 2012-2013 Sebastien Rombauts (sebastien.rombauts@gmail.com)
+ *               2014      Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -14,6 +15,7 @@
 
 #include "Column.h"
 
+#include <pkmn/types/pkstring.hpp>
 
 namespace SQLite
 {
@@ -54,7 +56,7 @@ public:
      * @param[in] apFilename    UTF-8 path/uri to the database file ("filename" sqlite3 parameter)
      * @param[in] aFlags        SQLITE_OPEN_READONLY/SQLITE_OPEN_READWRITE/SQLITE_OPEN_CREATE...
      */
-    Database(const char* apFilename, const int aFlags = SQLITE_OPEN_READONLY); // throw(SQLite::Exception);
+    Database(const pkmn::pkstring &apFilename, const int aFlags = SQLITE_OPEN_READONLY); // throw(SQLite::Exception);
 
     /**
      * @brief Close the SQLite database connection.

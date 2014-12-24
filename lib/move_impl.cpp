@@ -32,7 +32,7 @@ namespace pkmn
 
     move_impl::move_impl(unsigned int id, unsigned int game): move()
     {
-        if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
+        if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
 
         _game_id = game;
         _generation = database::get_generation(_game_id);

@@ -162,7 +162,7 @@ namespace pkmn
 
     uint8_t libpkmn_getpkmstat(pkmds::pokemon_obj* pkm, unsigned int stat_id)
     {
-        SQLite::Database db(get_database_path().c_str());
+        SQLite::Database db(get_database_path());
         std::string pkmstatsql = pkmds::getpkmstatsql(pkm, pkmds::Stat_IDs::stat_ids(stat_id));
         unsigned int basestat = db.execAndGet(pkmstatsql.c_str());
 
@@ -219,7 +219,7 @@ namespace pkmn
         p_pkm->party_data.spdef = libpkmn_getpkmstat(pkm, Stats::SPECIAL_DEFENSE);
         p_pkm->party_data.speed = libpkmn_getpkmstat(pkm, Stats::SPEED);
 
-        SQLite::Database db(get_database_path().c_str());
+        SQLite::Database db(get_database_path());
         std::string pkxlevelsql = pkmds::getpkmlevelsql(int(pkm->species),
                                                         int(pkm->exp));
         p_pkm->party_data.level = int(db.execAndGet(pkxlevelsql.c_str()));

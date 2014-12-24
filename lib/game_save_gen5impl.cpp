@@ -16,7 +16,7 @@ namespace fs = boost::filesystem;
 namespace pkmn
 {
     game_save_gen5impl::game_save_gen5impl(pkmds_g5_sptr ptr,
-                                           const std::string &filename): game_save_impl(filename)
+                                           const pkmn::pkstring &filename): game_save_impl(filename)
     {
         _sav = ptr;
         load();
@@ -28,7 +28,7 @@ namespace pkmn
         _game_id = _trainer->get_game_id();
     }
 
-    void game_save_gen5impl::save_as(const std::string &filename)
+    void game_save_gen5impl::save_as(const pkmn::pkstring &filename)
     {
         conversions::export_gen5_trainer(_trainer, _sav);
         //TODO: actual saving stuff

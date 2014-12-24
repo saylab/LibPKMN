@@ -162,13 +162,13 @@ namespace pkmn
     }
 
     //Gender doesn't matter for icons in Generation 2
-    std::string base_pokemon_gen2impl::get_icon_path(bool is_male) const
+    pkmn::pkstring base_pokemon_gen2impl::get_icon_path(bool is_male) const
     {
         return _male_icon_path.string();
     }
 
     //Gender doesn't matter for sprites in Generation 2
-    std::string base_pokemon_gen2impl::get_sprite_path(bool is_male, bool is_shiny) const
+    pkmn::pkstring base_pokemon_gen2impl::get_sprite_path(bool is_male, bool is_shiny) const
     {
         if(is_shiny) return _male_shiny_sprite_path.string();
         else return _male_sprite_path.string();

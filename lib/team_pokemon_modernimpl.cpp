@@ -58,7 +58,7 @@ namespace pkmn
         }
 
         _gender = _determine_gender();
-        _nature = nature(_determine_nature());
+        _nature = _determine_nature();
         _determine_ability();
 
         _set_stats();
@@ -109,7 +109,7 @@ namespace pkmn
 
     pkmn::pkstring team_pokemon_modernimpl::get_gender() const {return _gender;}
 
-    pkmn::nature team_pokemon_modernimpl::get_nature() const {return _nature;}
+    pkmn::nature_t team_pokemon_modernimpl::get_nature() const {return _nature;}
 
     pkmn::pkstring team_pokemon_modernimpl::get_ability() const {return _ability;}
 
@@ -184,7 +184,7 @@ namespace pkmn
         SQLite::Statement nature_names_query(*_db, query_string.c_str());
         if(nature_names_query.executeStep())
         {
-            _nature = nature(nature_name);
+            _nature = nature_t(nature_name);
             _set_stats();
             return;
         }
@@ -195,7 +195,7 @@ namespace pkmn
         SQLite::Statement natures_query(*_db, query_string.c_str());
         if(natures_query.executeStep())
         {
-            _nature = nature(nature_name);
+            _nature = nature_t(nature_name);
             _set_stats();
         }
     }
@@ -366,8 +366,8 @@ namespace pkmn
         return "Male";
     }
 
-    pkmn::nature team_pokemon_modernimpl::_determine_nature() const
+    pkmn::nature_t team_pokemon_modernimpl::_determine_nature() const
     {
-        return pkmn::nature(_personality % 24);
+        return pkmn::nature_t(_personality % 24);
     }
 } /* namespace pkmn */

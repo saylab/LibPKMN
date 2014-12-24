@@ -7,13 +7,17 @@
 
 %include "exception.i"
 %include "stdint.i"
-%include "std_pair.i"
-
 %include "CamelCase.i"
+
+#if SWIG_VERSION < 0x030000
+%include "pkmn_pkstring.i"
+#else
+%include "pkmn_pkstring3.i"
+#endif
+
 %import "pkmn_cs.i"
 
 %{
-    #include "pkmn/config.hpp"
     #include "pkmn/calculations.hpp"
 %}
 

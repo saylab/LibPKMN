@@ -18,6 +18,7 @@
 
 %include "exception.i"
 %include "CamelCase.i"
+
 %import "pkmn_java.i"
 
 %{

@@ -15,7 +15,7 @@ namespace PKMN
         {
             public VersionListComboBox(): base()
             {
-                string_vec version_vec = new string_vec();
+                StringVector version_vec = new StringVector();
                 Lists.getVersionList(version_vec);
                 for(int i = 0; i < version_vec.Count; i++)
                 {

@@ -55,7 +55,7 @@ namespace pkmn
 
     pkmn::pkstring team_pokemon_gen1impl::get_gender() const {return "Male";}
 
-    pkmn::nature team_pokemon_gen1impl::get_nature() const {return nature();}
+    pkmn::nature_t team_pokemon_gen1impl::get_nature() const {return nature_t();}
 
     pkmn::pkstring team_pokemon_gen1impl::get_ability() const {return "None";}
 

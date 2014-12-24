@@ -161,11 +161,11 @@
 %rename(getEffectID) pkmn::move::get_effect_id;
 
 /*
- * pkmn/nature.hpp
+ * pkmn/types/nature.hpp
  */
-%rename(Nature) pkmn::nature;
-%rename(getName) pkmn::nature::get_name;
-%rename(getNatureID) pkmn::nature::get_nature_id;
+%rename(Nature) pkmn::nature_t;
+%rename(getName) pkmn::nature_t::get_name;
+%rename(getNatureID) pkmn::nature_t::get_nature_id;
 
 /*
  * pkmn/paths.hpp

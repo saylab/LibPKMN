@@ -30,7 +30,7 @@ namespace pkmn
     namespace io
     {
         //For now, everything is Ruby until there's a better way
-        team_pokemon::sptr import_from_3gpkm(const std::string &filename)
+        team_pokemon::sptr import_from_3gpkm(const pkmn::pkstring &filename)
         {
             uint32_t filesize = fs::file_size(fs::path(filename));
             std::ifstream ifile;
@@ -38,7 +38,7 @@ namespace pkmn
             if(filesize == sizeof(gen3_pc_pokemon_t))
             {
                 gen3_pc_pokemon_t pkmn;
-                ifile.open(filename.c_str(), std::ifstream::in | std::ifstream::binary);
+                ifile.open(filename.const_char(), std::ifstream::in | std::ifstream::binary);
                 ifile.read((char*)&pkmn, sizeof(gen3_pc_pokemon_t));
                 ifile.close();
 
@@ -47,7 +47,7 @@ namespace pkmn
             else if(filesize == sizeof(gen3_party_pokemon_t))
             {
                 gen3_party_pokemon_t pkmn;
-                ifile.open(filename.c_str(), std::ifstream::in | std::ifstream::binary);
+                ifile.open(filename.const_char(), std::ifstream::in | std::ifstream::binary);
                 ifile.read((char*)&pkmn, sizeof(gen3_party_pokemon_t));
                 ifile.close();
 
@@ -56,7 +56,7 @@ namespace pkmn
             else throw std::runtime_error("This is not a valid .3gpkm file.");
         }
 
-        void export_to_3gpkm(team_pokemon::sptr t_pkmn, const std::string &filename)
+        void export_to_3gpkm(team_pokemon::sptr t_pkmn, const pkmn::pkstring &filename)
         {
             if(t_pkmn->get_generation() != 3)
                 throw std::runtime_error("The given Pokemon is not from Generation III.");
@@ -64,12 +64,12 @@ namespace pkmn
             gen3_party_pokemon_t pkmn;
             conversions::export_gen3_pokemon(t_pkmn, pkmn, false);
 
-            std::ofstream ofile(filename.c_str(), std::ofstream::out | std::ofstream::binary);
+            std::ofstream ofile(filename.const_char(), std::ofstream::out | std::ofstream::binary);
             ofile.write((char*)&pkmn, sizeof(gen3_party_pokemon_t));
             ofile.close();
         }
 
-        team_pokemon::sptr import_from_pkm(const std::string &filename)
+        team_pokemon::sptr import_from_pkm(const pkmn::pkstring &filename)
         {
             uint32_t filesize = fs::file_size(fs::path(filename));
             std::ifstream ifile;
@@ -78,7 +78,7 @@ namespace pkmn
             {
                 nds_pc_pokemon_t pkmn;
                 memset(&pkmn, 0xFF, sizeof(nds_pc_pokemon_t));
-                ifile.open(filename.c_str(), std::ifstream::in | std::ifstream::binary);
+                ifile.open(filename.const_char(), std::ifstream::in | std::ifstream::binary);
                 ifile.read((char*)&pkmn, sizeof(nds_pc_pokemon_t));
                 ifile.close();
 
@@ -88,7 +88,7 @@ namespace pkmn
             {
                 nds_party_pokemon_t pkmn;
                 memset(&pkmn, 0xFF, sizeof(nds_party_pokemon_t));
-                ifile.open(filename.c_str(), std::ifstream::in | std::ifstream::binary);
+                ifile.open(filename.const_char(), std::ifstream::in | std::ifstream::binary);
                 ifile.read((char*)&pkmn, sizeof(nds_party_pokemon_t));
                 ifile.close();
 
@@ -99,7 +99,7 @@ namespace pkmn
             {
                 nds_party_pokemon_t pkmn;
                 memset(&pkmn, 0xFF, sizeof(nds_party_pokemon_t));
-                ifile.open(filename.c_str(), std::ifstream::in | std::ifstream::binary);
+                ifile.open(filename.const_char(), std::ifstream::in | std::ifstream::binary);
                 ifile.read((char*)&pkmn, sizeof(nds_party_pokemon_t));
                 ifile.close();
 
@@ -109,7 +109,7 @@ namespace pkmn
             else throw std::runtime_error("This is not a valid .pkm file.");
         }
 
-        void export_to_pkm(team_pokemon::sptr t_pkmn, const std::string &filename)
+        void export_to_pkm(team_pokemon::sptr t_pkmn, const pkmn::pkstring &filename)
         {
             if(t_pkmn->get_generation() != 4 and t_pkmn->get_generation() != 5)
                 throw std::runtime_error("The given Pokemon is not from Generation IV-V.");
@@ -118,7 +118,7 @@ namespace pkmn
             nds_party_pokemon_t pkmn;
             conversions::export_nds_pokemon(t_pkmn, pkmn, false);
 
-            std::ofstream ofile(filename.c_str(), std::ofstream::out | std::ofstream::binary);
+            std::ofstream ofile(filename.const_char(), std::ofstream::out | std::ofstream::binary);
             ofile.write((char*)&pkmn, sizeof(nds_party_pokemon_t));
             ofile.close();
         }

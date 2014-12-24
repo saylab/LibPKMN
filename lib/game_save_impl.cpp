@@ -28,10 +28,10 @@ namespace fs = boost::filesystem;
 
 namespace pkmn
 {
-    game_save::sptr game_save::make(const std::string &filename)
+    game_save::sptr game_save::make(const pkmn::pkstring &filename)
     {
-        std::vector<uint8_t> data(fs::file_size(fs::path(filename)));
-        std::ifstream ifile(filename.c_str(), std::ios::binary);
+        std::vector<uint8_t> data(fs::file_size(fs::path(filename.std_string())));
+        std::ifstream ifile(filename.const_char(), std::ios::binary);
         ifile.read((char*)&data[0], data.size());
         ifile.close();
 
@@ -44,7 +44,7 @@ namespace pkmn
             {
                 //Check to see if PKMDS accepts this as a proper Gen V save
                 pkmds_g5_sptr sav = pkmds_g5_sptr(new pkmds::bw2sav_obj);
-                pkmds::read(filename.c_str(), sav.get());
+                pkmds::read(filename.const_char(), sav.get());
                 if(pkmds::savisbw2(sav.get())) return sptr(new game_save_gen5impl(sav, filename));
             }
         }
@@ -87,13 +87,13 @@ namespace pkmn
         throw std::runtime_error("This is not a valid save file.");
     }
 
-    game_save_impl::game_save_impl(const std::string &filename)
+    game_save_impl::game_save_impl(const pkmn::pkstring &filename)
     {
         _filepath = fs::path(filename);
-        uint32_t file_size = fs::file_size(filename);
+        uint32_t file_size = fs::file_size(filename.std_string());
 
         _data = std::vector<uint8_t>(file_size);
-        std::ifstream ifile(filename.c_str(), std::ios::binary);
+        std::ifstream ifile(filename.const_char(), std::ios::binary);
         ifile.read((char*)&_data[0], file_size);
         ifile.close();
     }

@@ -227,7 +227,7 @@ namespace pkmn
         void export_gen2_pokemon(team_pokemon::sptr t_pkmn, gen2_pc_pokemon_t &pkmn,
                                  uint8_t* nickname_buffer, uint8_t* otname_buffer)
         {
-            SQLite::Database db(get_database_path().c_str());
+            SQLite::Database db(get_database_path());
             pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
             pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
             moveset_t moves;
@@ -376,7 +376,7 @@ namespace pkmn
                 move4_id = blocks.attacks.moves[3];
             }
 
-            SQLite::Database db(get_database_path().c_str());
+            SQLite::Database db(get_database_path());
             std::ostringstream query_stream;
             unsigned int level = database::get_level(species_id, blocks.growth.exp);
 
@@ -443,7 +443,7 @@ namespace pkmn
 
         void export_gen3_pokemon(team_pokemon::sptr t_pkmn, gen3_pc_pokemon_t &pkmn, bool encrypt)
         {
-            SQLite::Database db(get_database_path().c_str());
+            SQLite::Database db(get_database_path());
             pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
             pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
             moveset_t moves;
@@ -587,7 +587,7 @@ namespace pkmn
                 move4_id = blocks.blockB.moves[3];
             }
 
-            SQLite::Database db(get_database_path().c_str());
+            SQLite::Database db(get_database_path());
             std::ostringstream query_stream;
             unsigned int level = database::get_level(species_id, blocks.blockA.exp);
 
@@ -726,7 +726,7 @@ namespace pkmn
             blockB->gen5_info = 0;
             if(generation == 5)
             {
-                SQLite::Database db(get_database_path().c_str());
+                SQLite::Database db(get_database_path());
                 std::ostringstream query_stream;
                 query_stream << "SELECT ability_id FROM pokemon_abilities WHERE is_hidden=1 AND pokemon_id="
                              << t_pkmn->get_pokemon_id();
@@ -764,7 +764,7 @@ namespace pkmn
          */
         team_pokemon::sptr import_gen5_pokemon(pkmds::party_pkm* p_pkm)
         {
-            pkmds::opendb(get_database_path().c_str());
+            pkmds::opendb(get_database_path().const_char());
 
             unsigned int species_id = database::get_species_id(database::get_pokemon_id(p_pkm->species_int,
                                                                                         Versions::BLACK));

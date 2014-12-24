@@ -17,7 +17,7 @@
 
 #include "../lib/SQLiteCpp/SQLiteC++.h"
 
-SQLite::Database db(pkmn::get_database_path().c_str());
+SQLite::Database db(pkmn::get_database_path());
 
 /*
  * This test makes sure that LibPKMN's build successfully added
@@ -25,62 +25,62 @@ SQLite::Database db(pkmn::get_database_path().c_str());
  */
 BOOST_AUTO_TEST_CASE(has_database_additions_test)
 {
-    std::string query1_string("SELECT identifier FROM items WHERE id=1013");
+    std::string query1_string = "SELECT identifier FROM items WHERE id=1013";
     SQLite::Statement query1(db, query1_string.c_str());
     BOOST_CHECK(query1.executeStep());
     BOOST_CHECK(std::string((const char*)query1.getColumn(0)) == "gs-ball");
 
-    std::string query2_string("SELECT name FROM stat_names WHERE stat_id=9");
+    std::string query2_string = "SELECT name FROM stat_names WHERE stat_id=9";
     SQLite::Statement query2(db, query2_string.c_str());
     BOOST_CHECK(query2.executeStep());
     BOOST_CHECK(std::string((const char*)query2.getColumn(0)) == "Special");
     
-    std::string query3_string("SELECT flavor_text FROM item_flavor_text WHERE item_id=1020");
+    std::string query3_string = "SELECT flavor_text FROM item_flavor_text WHERE item_id=1020";
     SQLite::Statement query3(db, query3_string.c_str());
     BOOST_CHECK(query3.executeStep());
     BOOST_CHECK(std::string((const char*)query3.getColumn(0)) == "Heart-print MAIL.");
     
-    std::string query4_string("SELECT game_index FROM item_game_indices WHERE item_id=48 AND generation_id=2");
+    std::string query4_string = "SELECT game_index FROM item_game_indices WHERE item_id=48 AND generation_id=2";
     SQLite::Statement query4(db, query4_string.c_str());
     BOOST_CHECK(query4.executeStep());
     BOOST_CHECK(int(query4.getColumn(0)) == 29);
     
-    std::string query5_string("SELECT name FROM item_names WHERE item_id=1007");
+    std::string query5_string = "SELECT name FROM item_names WHERE item_id=1007";
     SQLite::Statement query5(db, query5_string.c_str());
     BOOST_CHECK(query5.executeStep());
     BOOST_CHECK(std::string((const char*)query5.getColumn(0)) == "Mint Berry");
     
-    std::string query6_string("SELECT base_stat FROM pokemon_stats WHERE pokemon_id=92 AND stat_id=9");
+    std::string query6_string = "SELECT base_stat FROM pokemon_stats WHERE pokemon_id=92 AND stat_id=9";
     SQLite::Statement query6(db, query6_string.c_str());
     BOOST_CHECK(query6.executeStep());
     BOOST_CHECK(int(query6.getColumn(0)) == 100);
     
-    std::string query7_string("SELECT exp_yield FROM old_exp_yields WHERE species_id=40");
+    std::string query7_string = "SELECT exp_yield FROM old_exp_yields WHERE species_id=40";
     SQLite::Statement query7(db, query7_string.c_str());
     BOOST_CHECK(query7.executeStep());
     BOOST_CHECK(int(query7.getColumn(0)) == 109);
 
-    std::string query8_string("SELECT gen4_accuracy FROM old_move_accuracies WHERE move_id=50");
+    std::string query8_string = "SELECT gen4_accuracy FROM old_move_accuracies WHERE move_id=50";
     SQLite::Statement query8(db, query8_string.c_str());
     BOOST_CHECK(query8.executeStep());
     BOOST_CHECK(int(query8.getColumn(0)) == 80);
 
-    std::string query9_string("SELECT gen2_power FROM old_move_powers WHERE move_id=91");
+    std::string query9_string = "SELECT gen2_power FROM old_move_powers WHERE move_id=91";
     SQLite::Statement query9(db, query9_string.c_str());
     BOOST_CHECK(query9.executeStep());
     BOOST_CHECK(int(query9.getColumn(0)) == 60);
 
-    std::string query10_string("SELECT gen1_pp FROM old_move_pps WHERE move_id=202");
+    std::string query10_string = "SELECT gen1_pp FROM old_move_pps WHERE move_id=202";
     SQLite::Statement query10(db, query10_string.c_str());
     BOOST_CHECK(query10.executeStep());
     BOOST_CHECK(int(query10.getColumn(0)) == 5);
 
-    std::string query11_string("SELECT gen5_priority FROM old_move_priorities WHERE move_id=472");
+    std::string query11_string = "SELECT gen5_priority FROM old_move_priorities WHERE move_id=472";
     SQLite::Statement query11(db, query11_string.c_str());
     BOOST_CHECK(query11.executeStep());
     BOOST_CHECK(int(query11.getColumn(0)) == -7);
 
-    std::string query12_string("SELECT name FROM old_move_names WHERE move_id=(SELECT move_id FROM move_names WHERE name='Feather Dance')");
+    std::string query12_string = "SELECT name FROM old_move_names WHERE move_id=(SELECT move_id FROM move_names WHERE name='Feather Dance')";
     SQLite::Statement query12(db, query12_string.c_str());
     BOOST_CHECK(query12.executeStep());
     BOOST_CHECK(std::string((const char*)(query12.getColumn(0))) == "FeatherDance");

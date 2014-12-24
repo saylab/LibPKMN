@@ -1630,13 +1630,13 @@ namespace pkmn
         form_signal2();
     }
 
-    std::string base_pokemon_modernimpl::get_icon_path(bool is_male) const
+    pkmn::pkstring base_pokemon_modernimpl::get_icon_path(bool is_male) const
     {
         if(_generation > 3 and not is_male) return _female_icon_path.string();
         else return _male_icon_path.string();
     }
 
-    std::string base_pokemon_modernimpl::get_sprite_path(bool is_male, bool is_shiny) const
+    pkmn::pkstring base_pokemon_modernimpl::get_sprite_path(bool is_male, bool is_shiny) const
     {
         if(is_male)
         {

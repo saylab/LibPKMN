@@ -99,10 +99,10 @@ namespace pkmn
     {
         public:
 
-            game_save_gen2impl(const std::string &filename, bool crystal);
+            game_save_gen2impl(const pkmn::pkstring &filename, bool crystal);
 
             void load();
-            void save_as(const std::string &filename);
+            void save_as(const pkmn::pkstring &filename);
             bool check();
 
         private:

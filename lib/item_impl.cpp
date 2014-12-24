@@ -41,14 +41,14 @@ namespace pkmn
         _game_index(0),
         _tmhm(false)
     {
-        if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path().c_str()));
+        if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
 
         // Confirm item exists in given generation
         std::ostringstream query_stream;
         query_stream << "SELECT game_index FROM item_game_indices WHERE item_id="
                      << _item_id << " AND generation_id=" << _generation;
         SQLite::Statement query(*_db, query_stream.str().c_str());
-        if(_valid = query.executeStep())
+        if((_valid = query.executeStep()))
         {
             _game_index = query.getColumn(0);
             _tmhm = ((id >= Items::TM01 and id <= Items::HM08)

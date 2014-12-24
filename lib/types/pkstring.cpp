@@ -73,18 +73,6 @@ namespace pkmn
 
     size_t pkstring::length() const {return stdstring.length();}
 
-    const char& pkstring::operator[](size_t pos) const
-    {
-        size_t size = stdstring.size();
-        if(pos >= size)
-        {
-            std::stringstream err_stream;
-            err_stream << "Position must be 0'" << stdstring.size() << ".";
-            throw std::runtime_error(err_stream.str().c_str());
-        }
-        else return stdstring[pos];
-    }
-
     bool pkstring::operator==(const pkstring &r) const
     {
         return this->std_wstring() == r.std_wstring();

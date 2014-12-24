@@ -15,7 +15,7 @@ namespace PKMN
         {
             public NatureListComboBox(): base()
             {
-                string_vec nature_vec = new string_vec();
+                StringVector nature_vec = new StringVector();
                 Lists.getNatureList(nature_vec);
                 for(int i = 0; i < nature_vec.Count; i++)
                 {
