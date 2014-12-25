@@ -12,6 +12,11 @@ FIND_PACKAGE(SWIG)
 IF(SWIG_FOUND)
     FIND_PACKAGE(PythonLibs 2)
 
+    # If Python 3 is being used, make sure it's Python 3.3 or above.
+    IF(${PYTHON_VERSION_MAJOR} EQUAL 3 AND ${PYTHON_VERSION_MINOR} LESS 3)
+        MESSAGE(FATAL_ERROR "If you're using Python 3, you must use Python 3.3 or above.")
+    ENDIF(${PYTHON_VERSION_MAJOR} EQUAL 3 AND ${PYTHON_VERSION_MINOR} LESS 3)
+
     FIND_PACKAGE(CSharp)
     FIND_PACKAGE(Java)
     FIND_PACKAGE(JNI)
