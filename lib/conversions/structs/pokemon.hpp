@@ -243,11 +243,156 @@ namespace pkmn
 
     typedef struct
     {
-        uint32_t current_box_num;
+        uint32_t current_box;
         gen3_pokemon_box_t boxes[14];
         uint8_t box_names[14][9];
         uint8_t wallpapers[14];
     } gen3_pokemon_pc_t;
+
+    /*
+     * Nintendo DS (Generations IV-V)
+     *
+     * Source: http://projectpokemon.org/wiki/Pokemon_NDS_Structure
+     */
+    typedef struct
+    {
+        uint16_t species;
+        uint16_t held_item;
+        union
+        {
+            uint32_t ot_id;
+            struct
+            {
+                uint16_t ot_pid;
+                uint16_t ot_sid;
+            };
+        };
+        uint32_t exp;
+        uint8_t friendship;
+        uint8_t ability;
+        uint8_t markings;
+        uint8_t country;
+        uint8_t ev_hp;
+        uint8_t ev_atk;
+        uint8_t ev_def;
+        uint8_t ev_spd;
+        uint8_t ev_spatk;
+        uint8_t ev_spdef;
+        uint8_t coolness;
+        uint8_t beauty;
+        uint8_t cuteness;
+        uint8_t smartness;
+        uint8_t toughness;
+        uint8_t sheen;
+        uint16_t sinnoh_ribbons1;
+        union
+        {
+            uint16_t sinnoh_ribbons2; // Generation IV
+            uint16_t unova_ribbons;   // Generation V
+        };
+    } nds_pokemon_blockA_t;
+
+    typedef struct
+    {
+        uint16_t moves[4];
+        uint8_t move_pps[4];
+        uint8_t move_pp_ups[4];
+        uint32_t iv_isegg_isnicknamed;
+        uint32_t hoenn_ribbons;
+        uint8_t form_encounterinfo; // Fateful encounter, is female, is genderless
+        union
+        {
+            uint8_t shiny_leaf; // Generation IV
+            uint8_t nature;     // Generation V
+        };
+        uint8_t gen5_info; // Has Dream World ability, N's Pokemon flag
+        uint8_t unknown_0x43;
+        uint16_t eggmet_plat;
+        uint16_t met_plat;
+    } nds_pokemon_blockB_t;
+
+    typedef struct
+    {
+        uint16_t nickname[11];
+        uint8_t unknown_0x5E;
+        uint8_t hometown;
+        uint32_t sinnoh_ribbons3;
+        uint8_t unknown_0x64;
+        uint8_t unknown_0x65;
+        uint8_t unknown_0x66;
+        uint8_t unknown_0x67;
+    } nds_pokemon_blockC_t;
+
+    typedef struct
+    {
+        uint16_t otname[8];
+        uint8_t eggmet_date[3];
+        uint8_t met_date[3];
+        uint8_t eggmet_dp;
+        uint8_t met_dp;
+        uint8_t pokerus;
+        uint8_t ball;
+        uint8_t metlevel_otgender;
+        uint8_t encounter_info;
+        uint8_t ball_hgss;
+        uint8_t unknown_0x87;
+    } nds_pokemon_blockD_t;
+
+    typedef union
+    {
+        uint8_t blocks8[136];
+        uint32_t blocks16[68];
+        uint32_t blocks32[34];
+        struct
+        {
+            nds_pokemon_blockA_t blockA;
+            nds_pokemon_blockB_t blockB;
+            nds_pokemon_blockC_t blockC;
+            nds_pokemon_blockD_t blockD;
+        };
+    } nds_pokemon_blocks_t;
+
+    typedef struct
+    {
+        uint32_t personality;
+        uint8_t isdecrypted_isegg; // Is party data decrypted, is box data decrypted, is egg
+        uint8_t unknown_0x05;
+        uint16_t checksum;
+        nds_pokemon_blocks_t blocks;
+    } nds_pc_pokemon_t;
+
+    typedef struct
+    {
+        nds_pc_pokemon_t pc;
+        uint8_t status;
+        uint8_t unknown_x89;
+        uint8_t unknown_x8A;
+        uint8_t unknown_x8B;
+        uint8_t level;
+        uint8_t capsule;
+        uint16_t current_hp;
+        uint16_t max_hp;
+        uint16_t atk;
+        uint16_t def;
+        uint16_t spd;
+        uint16_t spatk;
+        uint16_t spdef;
+        uint8_t unknown_0x9C[80];
+    } nds_party_pokemon_t;
+
+    typedef struct
+    {
+        uint32_t count;
+        nds_party_pokemon_t party[6];
+        uint16_t checksum;
+    } nds_pokemon_party_t;
+
+    typedef struct
+    {
+        nds_pc_pokemon_t entries[30];
+        uint16_t checksum;
+        uint8_t unknown[12];
+    } nds_pokemon_box_t;
     #pragma pack(pop)
 }
 
