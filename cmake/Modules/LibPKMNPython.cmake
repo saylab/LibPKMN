@@ -15,7 +15,7 @@ SET(__INCLUDED_LIBPKMNPYTHON_CMAKE TRUE)
 ########################################################################
     EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "
 from distutils import sysconfig
-print sysconfig.get_python_lib(plat_specific=True, prefix='')
+print(sysconfig.get_python_lib(plat_specific=True, prefix=''))
     " OUTPUT_VARIABLE LIBPKMN_PYTHON_DIR OUTPUT_STRIP_TRAILING_WHITESPACE
     )
     FILE(TO_CMAKE_PATH ${LIBPKMN_PYTHON_DIR} LIBPKMN_PYTHON_DIR)
@@ -36,7 +36,7 @@ MACRO(PYTHON_CHECK_MODULE desc mod cmd have)
 try:
     import ${mod}
     assert ${cmd}
-except ImportError, AssertionError: exit(-1)
+except (ImportError, AssertionError): exit(-1)
 except: pass
 #########################################"
         RESULT_VARIABLE ${have}
@@ -104,11 +104,11 @@ MACRO(PYTHON_BUILD_SWIG_MODULE module_name install_dir)
     ENDIF(CMAKE_COMPILER_IS_GNUCXX)
     SWIG_LINK_LIBRARIES(${module_name} ${LIBPKMN_PYTHON_LIBRARIES})
     
-    # Copy __init__.py to binary directory for unit tests
+    # Copy init file to binary directory for unit tests
     CONFIGURE_FILE(
-        ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py
+        ${CMAKE_CURRENT_SOURCE_DIR}/init${PYTHON_VERSION_MAJOR}.py
         ${CMAKE_CURRENT_BINARY_DIR}/__init__.py
-    @ONLY)
+    )
 
     SET(py_files
         ${CMAKE_CURRENT_BINARY_DIR}/__init__.py
