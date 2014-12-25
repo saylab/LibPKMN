@@ -10,10 +10,13 @@
 %include "exception.i"
 %include "stdint.i"
 %include "std_pair.i"
-%import "pkmn_python.i"
 
 %{
+    #include <boost/locale/encoding_utf.hpp>
+
     #include "pkmn/calculations.hpp"
 %} 
+
+%import "pkmn_python.i"
 
 %include "pkmn/calculations.hpp"

@@ -59,6 +59,7 @@ MACRO(PYTHON_BUILD_SWIG_MODULE module_name install_dir)
 
     SET(LIBPKMN_PYTHON_INCLUDE_DIRS
         ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_BINARY_DIR}
         ${LIBPKMN_SWIG_SOURCE_DIR}
         ${LIBPKMN_SWIG_SOURCE_DIR}/python
         ${LIBPKMN_SWIG_SOURCE_DIR}/python/types
@@ -90,7 +91,6 @@ MACRO(PYTHON_BUILD_SWIG_MODULE module_name install_dir)
         ${CMAKE_CURRENT_BINARY_DIR}/${module_name}.i
     @ONLY)
     SET_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_BINARY_DIR}/${module_name}.i PROPERTIES CPLUSPLUS ON)
-    #SET(CMAKE_SWIG_FLAGS -E)
     SWIG_ADD_MODULE(${module_name} python ${CMAKE_CURRENT_BINARY_DIR}/${module_name}.i)
     ADD_DEPENDENCIES(${SWIG_MODULE_${module_name}_REAL_NAME} python_enums)
     IF(CMAKE_COMPILER_IS_GNUCXX)
