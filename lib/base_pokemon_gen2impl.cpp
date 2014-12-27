@@ -24,7 +24,7 @@ namespace pkmn
     base_pokemon_gen2impl::base_pokemon_gen2impl(unsigned int id, unsigned int game):
         base_pokemon_impl(id, game)
     {
-        //Get final part of images path
+        // Get final part of images path
         switch(_game_id)
         {
             case Versions::GOLD:
@@ -36,7 +36,7 @@ namespace pkmn
             case Versions::CRYSTAL:
                 _images_game_string = "crystal";
                 break;
-            default: //It should never get here
+            default: // It should never get here
                 _images_game_string = "crystal";
                 break;
         }
@@ -46,11 +46,11 @@ namespace pkmn
 
         switch(id)
         {
-            case Species::NONE: //None, should only be used for empty slots at end of party
+            case Species::NONE: // None, should only be used for empty slots at end of party
                 SET_POKEBALL_IMAGE();
                 break;
 
-            case Species::INVALID: //Invalid, aka Missingno. equivalents
+            case Species::INVALID: // Invalid, aka Missingno. equivalents
                 SET_SUBSTITUTE_IMAGE();
                 break;
 
@@ -77,10 +77,10 @@ namespace pkmn
         _form_id = _species_id;
     }
 
-    //No gender differences in Generation 2
+    // No gender differences in Generation 2
     bool base_pokemon_gen2impl::has_gender_differences() const {return false;}
 
-    //No abilities in Generation 2
+    // No abilities in Generation 2
     pkmn::pkstring_pair_t base_pokemon_gen2impl::get_abilities() const
     {
         pkmn::pkstring_pair_t abilities;
@@ -125,7 +125,7 @@ namespace pkmn
         return ev_yields;
     }
 
-    //No forms in Generation 2 
+    // No forms in Generation 2 
     void base_pokemon_gen2impl::set_form(unsigned int form)
     {
         if(_species_id == Species::UNOWN)
@@ -139,7 +139,7 @@ namespace pkmn
             {
                 _form_id = form;
                 std::string letter;
-                letter += (form - 9935); //Will become ASCII value for letter
+                letter += (form - 9935); // Will become ASCII value for letter
                 set_form(letter);
             }
             else throw std::runtime_error("Invalid form.");
@@ -152,25 +152,30 @@ namespace pkmn
         if(_species_id == Species::UNOWN)
         {
             char letter = boost::algorithm::to_lower_copy(form.std_string())[0];
-            if(letter >= 'a' and letter <= 'z')
+            if(letter >= 'A' and letter <= 'Z')
             {
                 SET_IMAGES_PATHS(str(boost::format("201-%c.png") % letter))
             }
             else throw std::runtime_error("Invalid form.");
         }
         else throw std::runtime_error("Invalid form.");
+
+        unown_signal();
     }
 
-    //Gender doesn't matter for icons in Generation 2
+    // Gender doesn't matter for icons in Generation 2
     pkmn::pkstring base_pokemon_gen2impl::get_icon_path(bool is_male) const
     {
         return _male_icon_path.string();
     }
 
-    //Gender doesn't matter for sprites in Generation 2
+    // Gender doesn't matter for sprites in Generation 2
     pkmn::pkstring base_pokemon_gen2impl::get_sprite_path(bool is_male, bool is_shiny) const
     {
         if(is_shiny) return _male_shiny_sprite_path.string();
         else return _male_sprite_path.string();
     }
+
+    // Set Unown's form without sending IV signal to team_pokemon_gen2impl
+    void base_pokemon_gen2impl::_set_unown_form()
 } /* namespace pkmn */

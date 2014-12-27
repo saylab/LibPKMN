@@ -1609,4 +1609,34 @@ INSERT INTO "location_game_indices" VALUES(10026,3,193);
 INSERT INTO "location_game_indices" VALUES(10027,3,194);
 INSERT INTO "location_game_indices" VALUES(10028,3,195);
 INSERT INTO "location_game_indices" VALUES(10029,3,196);
+CREATE TABLE balls (
+    id INTEGER NOT NULL,
+    name VARCHAR(20) NOT NULL
+);
+INSERT INTO "balls" VALUES(1,"Master Ball");
+INSERT INTO "balls" VALUES(2,"Ultra Ball");
+INSERT INTO "balls" VALUES(3,"Great Ball");
+INSERT INTO "balls" VALUES(4,"Poké Ball");
+INSERT INTO "balls" VALUES(5,"Safari Ball");
+INSERT INTO "balls" VALUES(6,"Net Ball");
+INSERT INTO "balls" VALUES(7,"Dive Ball");
+INSERT INTO "balls" VALUES(8,"Nest Ball");
+INSERT INTO "balls" VALUES(9,"Repeat Ball");
+INSERT INTO "balls" VALUES(10,"Timer Ball");
+INSERT INTO "balls" VALUES(11,"Luxury Ball");
+INSERT INTO "balls" VALUES(12,"Premier Ball");
+INSERT INTO "balls" VALUES(13,"Dusk Ball");
+INSERT INTO "balls" VALUES(14,"Heal Ball");
+INSERT INTO "balls" VALUES(15,"Quick Ball");
+INSERT INTO "balls" VALUES(16,"Cherish Ball");
+INSERT INTO "balls" VALUES(17,"Fast Ball");
+INSERT INTO "balls" VALUES(18,"Level Ball");
+INSERT INTO "balls" VALUES(19,"Lure Ball");
+INSERT INTO "balls" VALUES(20,"Heavy Ball");
+INSERT INTO "balls" VALUES(21,"Love Ball");
+INSERT INTO "balls" VALUES(22,"Friend Ball");
+INSERT INTO "balls" VALUES(23,"Moon Ball");
+INSERT INTO "balls" VALUES(24,"Sport Ball");
+INSERT INTO "balls" VALUES(25,"Park Ball");
+INSERT INTO "balls" VALUES(26,"Dream Ball");
 COMMIT;

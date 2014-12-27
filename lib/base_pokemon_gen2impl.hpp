@@ -7,9 +7,8 @@
 #ifndef INCLUDED_BASE_POKEMON_GEN2IMPL_HPP
 #define INCLUDED_BASE_POKEMON_GEN2IMPL_HPP
 
-#include <string>
-
 #include "base_pokemon_impl.hpp"
+#include "Signal.h"
 
 namespace pkmn
 {
@@ -32,6 +31,15 @@ namespace pkmn
 
             pkmn::pkstring get_icon_path(bool is_male) const;
             pkmn::pkstring get_sprite_path(bool is_male, bool is_shiny) const;
+
+        private:
+
+            friend class team_pokemon_gen2impl;
+
+            Gallant::Signal0<> _unown_signal;
+
+            // Set form without sending signal to team_pokemon_gen2impl
+            void _set_unown_form();
     };
 }
 

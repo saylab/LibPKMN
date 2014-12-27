@@ -4,23 +4,24 @@
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  */
-#ifndef INCLUDED_TEAM_POKEMON_GEN1IMPL_HPP
-#define INCLUDED_TEAM_POKEMON_GEN1IMPL_HPP
+#ifndef INCLUDED_TEAM_POKEMON_GEN3IMPL_HPP
+#define INCLUDED_TEAM_POKEMON_GEN3IMPL_HPP
 
 #include "team_pokemon_impl.hpp"
+#include "Signal.h"
 
 #include "conversions/structs/pokemon.hpp"
 
 namespace pkmn
 {
-    class team_pokemon_gen1impl
+    class team_pokemon_gen3impl
     {
         public:
 
-            team_pokemon_gen1impl(base_pokemon::sptr base, uint8_t level,
+            team_pokemon_gen3impl(base_pokemon::sptr base, uint8_t level,
                                   uint8_t move1, uint8_t move2,
                                   uint8_t move3, uint8_t move4);
-            ~team_pokemon_gen1impl() {};
+            ~team_pokemon_gen3impl() {};
 
             //Getting Trainer Info
             pkmn::pkstring get_trainer_name() const;
@@ -94,8 +95,13 @@ namespace pkmn
 
         private:
 
-            gen1_party_pokemon_t _raw;
-            pkmn::pkstring _nickname, _otname;
+            friend class base_pokemon_modernimpl;
+
+            gen3_party_pokemon_t _raw;
+            gen3_pokemon_growth_t* growth;
+            gen3_pokemon_attacks_t* attacks;
+            gen3_pokemon_effort_t* effort;
+            gen3_pokemon_misc_t* misc;
 
             void _set_experience(const uint32_t exp);
             void _set_level(const uint8_t level);
@@ -103,4 +109,4 @@ namespace pkmn
     };
 }
 
-#endif /* INCLUDED_TEAM_POKEMON_GEN1IMPL_HPP */
+#endif /* INCLUDED_TEAM_POKEMON_GEN3IMPL_HPP */

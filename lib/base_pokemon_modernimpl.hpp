@@ -46,6 +46,8 @@ namespace pkmn
             pkmn::pkstring get_icon_path(bool is_male) const;
             pkmn::pkstring get_sprite_path(bool is_male, bool is_shiny) const;
 
+        private:
+
             friend class team_pokemon_modernimpl;
 
             Gallant::Signal0<> form_signal1;

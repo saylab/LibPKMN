@@ -7,6 +7,10 @@
 #ifndef INCLUDED_PKMN_CONVERSIONS_UTILS_HPP
 #define INCLUDED_PKMN_CONVERSIONS_UTILS_HPP
 
+#include <boost/assign/list_of.hpp>
+
+#include <pkmn/types/dict.hpp>
+
 #include "structs/pokemon.hpp"
 
 namespace pkmn
@@ -31,6 +35,24 @@ namespace pkmn
             75,45,25,190,45,60,120,60,190,75,225,75,60,190,75,45,25,25,120,45,45,
             120,60,45,45,45,75,45,45,45,45,45,30,3,3,3,45,45,45,3,3,45
         };
+
+        static const pkmn::dict<uint8_t, pkmn::pkstring> retro_statuses = boost::assign::map_list_of
+            (0x00, "OK")
+            (0x04, "Asleep")
+            (0x08, "Poisoned")
+            (0x10, "Burned")
+            (0x20, "Frozen")
+            (0x40, "Paralyzed")
+        ;
+
+        static const pkmn::dict<pkmn::pkstring, uint8_t> reverse_retro_statuses = boost::assign::map_list_of
+            ("OK",        0x00)
+            ("Asleep",    0x04)
+            ("Poisoned",  0x08)
+            ("Burned",    0x10)
+            ("Frozen",    0x20)
+            ("Paralyzed", 0x40)
+        ;
 
         uint8_t get_retro_IV(uint8_t stat, const uint16_t iv_data);
 

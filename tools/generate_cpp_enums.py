@@ -20,6 +20,7 @@ import sqlite3
 from unidecode import unidecode
 
 abilities = []
+balls = []
 egg_groups = []
 forms = []
 genders = []
@@ -27,7 +28,6 @@ items = []
 moves = []
 move_damage_classes = []
 natures = []
-pokeballs = []
 ribbons = []
 species = []
 stats = []
@@ -45,6 +45,17 @@ def get_abilities(c):
     for i in range(len(from_db)):
         ability_name = str(from_db[i][1]).replace("-","_").replace(" ","_").upper()
         abilities += [(from_db[i][0], ability_name)]
+
+def get_balls(c):
+    global balls
+
+    c.execute("SELECT * FROM balls")
+    from_db = c.fetchall()
+    balls = [(0,"NONE")]
+
+    for i in range(len(from_db)):
+        ball_name = str(unidecode(from_db[i][1])).replace("-","_").replace(" ","_").replace(".","").replace("'","").upper()
+        balls += [(from_db[i][0], ball_name)]
 
 def get_egg_groups(c):
     global egg_groups
@@ -140,15 +151,6 @@ def get_natures(c):
     for i in range(len(from_db)):
         nature_name = str(from_db[i][1]).upper()
         natures += [(from_db[i][0], nature_name)]
-
-def get_pokeballs():
-    global pokeballs
-
-    pokeballs = [(0,"UNKNOWN"),(1,"POKE_BALL"),(2,"GREAT_BALL"),(3,"ULTRA_BALL"),(4,"MASTER_BALL"),(5,"SAFARI_BALL"),
-                 (6,"LEVEL_BALL"),(7,"LURE_BALL"),(8,"MOON_BALL"),(8,"FRIEND_BALL"),(9,"LOVE_BALL"),(10,"HEAVY_BALL"),
-                 (11,"FAST_BALL"),(12,"SPORT_BALL"),(13,"PREMIER_BALL"),(14,"REPEAT_BALL"),(15,"TIMER_BALL"),
-                 (16,"NEST_BALL"),(17,"NET_BALL"),(18,"DIVE_BALL"),(19,"LUXURY_BALL"),(20,"HEAL_BALL"),
-                 (21,"QUICK_BALL"),(22,"DUSK_BALL"),(23,"CHERISH_BALL"),(24,"PARK_BALL"),(25,"DREAM_BALL")]
 
 def get_ribbons():
     global ribbons
@@ -284,6 +286,19 @@ def generate_cpp_file(output_dir, license):
         };
     }
 
+    namespace Balls
+    {
+        enum balls
+        {"""
+
+    for i in range(len(balls)):
+        output += """
+            %s,""" % balls[i][1]
+
+    output += """
+        };
+    }
+
     namespace Egg_Groups
     {
         enum egg_groups
@@ -387,19 +402,6 @@ def generate_cpp_file(output_dir, license):
     for i in range(len(natures)):
         output += """
             %s,""" % natures[i][1]
-
-    output += """
-        };
-    }
-
-    namespace PokeBalls
-    {
-        enum pokeballs
-        {"""
-
-    for i in range(len(pokeballs)):
-        output += """
-            %s,""" % pokeballs[i][1]
 
     output += """
         };
@@ -545,7 +547,6 @@ if __name__ == "__main__":
     parser = OptionParser()
     parser.add_option("--database-path", type="string", help="LibPKMN database location")
     parser.add_option("--output-dir", type="string", help="Output directory")
-    parser.add_option("--language", type="string", help="cpp, python, cs, or java")
     (options,args) = parser.parse_args()
 
     conn = sqlite3.connect(options.database_path)
@@ -563,6 +564,7 @@ if __name__ == "__main__":
  */""" % time
 
     get_abilities(c)
+    get_balls(c)
     get_egg_groups(c)
     get_forms(c)
     get_genders()
@@ -573,7 +575,6 @@ if __name__ == "__main__":
     get_ribbons()
     get_species(c)
     get_stats(c)
-    get_pokeballs()
     get_types(c)
     get_versions(c)
     get_version_groups(c)

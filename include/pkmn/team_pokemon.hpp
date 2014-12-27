@@ -36,11 +36,11 @@ namespace pkmn
             team_pokemon() {};
             virtual ~team_pokemon() {};
 
-            //Game-specific Info
+            // Game-specific Info
             virtual pkmn::pkstring get_game() const = 0;
             virtual unsigned int get_generation() const = 0;
 
-            //Non-battle Stats
+            // Non-battle Stats
             virtual base_pokemon::sptr get_base_pokemon(bool copy = false) const = 0;
             virtual pkmn::pkstring get_species_name() const = 0;
             virtual pkmn::pkstring get_original_game() const = 0;
@@ -48,7 +48,7 @@ namespace pkmn
             virtual pkmn::pkstring_pair_t get_types() const = 0;
             virtual pkmn::dict<pkmn::pkstring, unsigned int> get_base_stats() const = 0;
 
-            //Getting Trainer Info
+            // Getting Trainer Info
             virtual pkmn::pkstring get_trainer_name() const = 0;
             virtual pkmn::pkstring get_trainer_gender() const = 0;
             virtual unsigned int get_trainer_id() const = 0;
@@ -57,7 +57,7 @@ namespace pkmn
             virtual pkmn::pkstring get_ball() const = 0;
             virtual unsigned int get_met_level() const = 0;
 
-            //Setting Trainer Info
+            // Setting Trainer Info
             virtual void set_original_game(unsigned int game) = 0;
             virtual void set_original_game(const pkmn::pkstring &game) = 0;
             virtual void set_nickname(const pkmn::pkstring &nickname) = 0;
@@ -69,7 +69,7 @@ namespace pkmn
             virtual void set_ball(const pkmn::pkstring &ball) = 0;
             virtual void set_met_level(unsigned int level) = 0;
 
-            //Getting Individual Stat Info
+            // Getting Individual Stat Info
             virtual unsigned int get_personality() const = 0;
             virtual unsigned int get_level() const = 0;
             virtual unsigned int get_experience() const = 0;
@@ -82,7 +82,7 @@ namespace pkmn
             virtual pkmn::dict<pkmn::pkstring, unsigned int> get_EVs() const = 0;
             virtual pkmn::dict<pkmn::pkstring, unsigned int> get_IVs() const = 0;
             
-            //Setting Individual Stat Info
+            // Setting Individual Stat Info
             virtual void set_personality(unsigned int personality) = 0;
             virtual void set_level(unsigned int level) = 0;
             virtual void set_experience(unsigned int experience) = 0;
@@ -92,26 +92,23 @@ namespace pkmn
             virtual void set_EV(const pkmn::pkstring &stat_name, unsigned int stat) = 0;
             virtual void set_IV(const pkmn::pkstring &stat_name, unsigned int stat) = 0;
 
-            //Battle Stat Info
+            // Battle Stat Info
             virtual pkmn::pkstring get_status() const = 0;
             virtual item::sptr get_held_item() const = 0;
             virtual void set_status(const pkmn::pkstring &status) = 0;
             virtual void set_held_item(const pkmn::pkstring &item_name) = 0;
-            virtual void set_held_item(item::sptr item_sptr) = 0;
 
-            //Getting Move Info
+            // Getting Move Info
             virtual move::sptr get_move(unsigned int pos) const = 0;
-            virtual void get_moves(moveset_t& moves) const = 0;
+            virtual void get_moves(pkmn::moveset_t &moves) const = 0;
             virtual unsigned int get_move_PP(unsigned int pos) const = 0;
-            virtual void get_move_PPs(std::vector<unsigned int>& move_PPs) const = 0;
+            virtual void get_move_PPs(std::vector<unsigned int> &move_PPs) const = 0;
 
-            //Setting Move Info
+            // Setting Move Info
             virtual void set_move(const pkmn::pkstring &move_name, unsigned int pos) = 0;
-            virtual void set_move(unsigned int move_id, unsigned int pos) = 0;
-            virtual void set_move(move::sptr move_sptr, unsigned int pos) = 0;
             virtual void set_move_PP(unsigned int PP, unsigned int pos) = 0;
 
-            //Misc
+            // Misc
             virtual pkmn::markings get_markings() const = 0;
             virtual void set_markings(const pkmn::markings &mark) = 0;
             virtual int get_attribute(const pkmn::pkstring &attribute) const = 0;
@@ -123,7 +120,7 @@ namespace pkmn
             virtual void set_form(const pkmn::pkstring &form) = 0;
             virtual void set_form(unsigned int form) = 0;
 
-            //Database Info
+            // Database Info
             virtual unsigned int get_form_id() const = 0;
             virtual unsigned int get_game_id() const = 0;
             virtual unsigned int get_original_game_id() const = 0;
@@ -134,7 +131,7 @@ namespace pkmn
             virtual unsigned int get_nature_id() const = 0;
     };
 
-    //Related typedefs
+    // Related typedefs
     typedef std::vector<team_pokemon::sptr> pokemon_team_t;
 }
 

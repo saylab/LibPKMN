@@ -88,6 +88,28 @@ namespace pkmn
             return get_ability_description(get_ability_id(ability_name), get_version_id(version_name));
         }
 
+        unsigned int get_ball_id(const pkmn::pkstring &ball_name)
+        {
+            CONNECT_TO_DB();
+            if(ball_name == "None") return Balls::NONE;
+
+            std::ostringstream query_stream;
+            query_stream << "SELECT id FROM balls WHERE name='" << ball_name << "'";
+            SQLite::Statement query(*db, query_stream.str().c_str());
+            GET_NUM(query);
+        }
+
+        pkmn::pkstring get_ball_name(const unsigned int ball_id)
+        {
+            CONNECT_TO_DB();
+            if(ball_id == Balls::NONE) return "None";
+
+            std::ostringstream query_stream;
+            query_stream << "SELECT name FROM balls WHERE id=" << ball_name;
+            SQLite::Statement query(*db, query_stream.str().c_str());
+            GET_PKSTRING(query);
+        }
+
         unsigned int get_egg_group_id(const pkmn::pkstring &egg_group_name)
         {
             CONNECT_TO_DB();

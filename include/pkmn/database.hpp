@@ -20,6 +20,9 @@ namespace pkmn
         pkmn::pkstring PKMN_API get_ability_description(const unsigned int ability_id, const unsigned int version_id);
         pkmn::pkstring PKMN_API get_ability_description(const pkmn::pkstring &ability_name, const pkmn::pkstring &version_name);
 
+        unsigned int PKMN_API get_ball_id(const pkmn::pkstring &ball_name);
+        pkmn::pkstring PKMN_API get_ball_name(const unsigned int ball_id);
+
         unsigned int PKMN_API get_egg_group_id(const pkmn::pkstring &egg_group_name);
         pkmn::pkstring PKMN_API get_egg_group_name(const unsigned int egg_group_id);
 

@@ -4,7 +4,7 @@
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  *
- * This file was generated: 2014-11-16 19:11:57.442005
+ * This file was generated: 2014-12-27 10:17:23.917730
  */
 
 #ifndef INCLUDED_PKMN_ENUMS_HPP
@@ -205,6 +205,40 @@ namespace pkmn
             DARK_AURA,
             FAIRY_AURA,
             AURA_BREAK,
+        };
+    }
+
+    namespace Balls
+    {
+        enum balls
+        {
+            NONE,
+            MASTER_BALL,
+            ULTRA_BALL,
+            GREAT_BALL,
+            POKE_BALL,
+            SAFARI_BALL,
+            NET_BALL,
+            DIVE_BALL,
+            NEST_BALL,
+            REPEAT_BALL,
+            TIMER_BALL,
+            LUXURY_BALL,
+            PREMIER_BALL,
+            DUSK_BALL,
+            HEAL_BALL,
+            QUICK_BALL,
+            CHERISH_BALL,
+            FAST_BALL,
+            LEVEL_BALL,
+            LURE_BALL,
+            HEAVY_BALL,
+            LOVE_BALL,
+            FRIEND_BALL,
+            MOON_BALL,
+            SPORT_BALL,
+            PARK_BALL,
+            DREAM_BALL,
         };
     }
 
@@ -2285,40 +2319,6 @@ namespace pkmn
             QUIET,
             SASSY,
             SERIOUS,
-        };
-    }
-
-    namespace PokeBalls
-    {
-        enum pokeballs
-        {
-            UNKNOWN,
-            POKE_BALL,
-            GREAT_BALL,
-            ULTRA_BALL,
-            MASTER_BALL,
-            SAFARI_BALL,
-            LEVEL_BALL,
-            LURE_BALL,
-            MOON_BALL,
-            FRIEND_BALL,
-            LOVE_BALL,
-            HEAVY_BALL,
-            FAST_BALL,
-            SPORT_BALL,
-            PREMIER_BALL,
-            REPEAT_BALL,
-            TIMER_BALL,
-            NEST_BALL,
-            NET_BALL,
-            DIVE_BALL,
-            LUXURY_BALL,
-            HEAL_BALL,
-            QUICK_BALL,
-            DUSK_BALL,
-            CHERISH_BALL,
-            PARK_BALL,
-            DREAM_BALL,
         };
     }
 

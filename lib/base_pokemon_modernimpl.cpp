@@ -1267,7 +1267,7 @@ namespace pkmn
             case Species::UNOWN:
             {
                 char letter = boost::algorithm::to_lower_copy(form.std_string())[0];
-                if(letter >= 'a' and letter <= 'z')
+                if(letter >= 'A' and letter <= 'Z')
                 {
                     SET_IMAGES_PATHS(str(boost::format("201-%c.png") % letter))
                 }
