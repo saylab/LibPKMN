@@ -97,11 +97,11 @@ namespace pkmn
 
             friend class base_pokemon_modernimpl;
 
-            gen3_party_pokemon_t _raw;
-            gen3_pokemon_growth_t* growth;
-            gen3_pokemon_attacks_t* attacks;
-            gen3_pokemon_effort_t* effort;
-            gen3_pokemon_misc_t* misc;
+            gen3_party_pokemon_t    _raw;
+            gen3_pokemon_growth_t*  _growth;
+            gen3_pokemon_attacks_t* _attacks;
+            gen3_pokemon_effort_t*  _effort;
+            gen3_pokemon_misc_t*    _misc;
 
             void _set_experience(const uint32_t exp);
             void _set_level(const uint8_t level);

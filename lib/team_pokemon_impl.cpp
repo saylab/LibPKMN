@@ -24,7 +24,7 @@
 #include "team_pokemon_impl.hpp"
 #include "team_pokemon_gen1impl.hpp"
 #include "team_pokemon_gen2impl.hpp"
-#include "team_pokemon_modernimpl.hpp"
+#include "team_pokemon_gen3impl.hpp"
 
 namespace pkmn
 {
@@ -46,8 +46,8 @@ namespace pkmn
                 return sptr(new team_pokemon_gen2impl(base, game, level,
                                                    move1, move2, move3, move4));
 
-            default:
-                return sptr(new team_pokemon_modernimpl(base, game, level,
+            case 3:
+                return sptr(new team_pokemon_gen3impl(base, game, level,
                                                    move1, move2, move3, move4));
         }
     }

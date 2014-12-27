@@ -481,10 +481,9 @@ namespace pkmn
         return Abilities::NONE;
     }
 
-    // No held items in Generation II
     unsigned int team_pokemon_gen2impl::get_item_id() const
     {
-        return Items::NONE;
+        return database::get_item_id(raw.pc.held_item, _game_id);
     }
 
     // No natures in Generation II
