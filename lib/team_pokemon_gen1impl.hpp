@@ -94,6 +94,8 @@ namespace pkmn
             unsigned int get_item_id() const;
             unsigned int get_nature_id() const;
 
+            void* get_native();
+
         private:
 
             gen1_party_pokemon_t _raw;

@@ -528,6 +528,11 @@ namespace pkmn
         return Natures::NONE;
     }
 
+    void* team_pokemon_gen2impl::get_native()
+    {
+        return &_raw;
+    }
+
     void team_pokemon_gen2impl::_set_experience(const uint32_t exp)
     {
         uint32_t e = exp;

@@ -95,6 +95,8 @@ namespace pkmn
             unsigned int get_item_id() const;
             unsigned int get_nature_id() const;
 
+            void* get_native();
+
         private:
 
             friend class base_pokemon_modernimpl;

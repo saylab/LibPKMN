@@ -582,6 +582,11 @@ namespace pkmn
         return (_raw.pc.personality % 24);
     }
 
+    void* team_pokemon_gen3impl::get_native()
+    {
+        return &_raw;
+    }
+
     void team_pokemon_gen3impl::_set_experience(const uint32_t exp)
     {
         _growth->exp = exp;
