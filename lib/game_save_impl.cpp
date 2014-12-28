@@ -38,28 +38,20 @@ namespace pkmn
         uint32_t size = data.size();
         if(size >= 0x80000)
         {
-            //Check to see if PokeLib-NC accepts this as a proper Gen IV save
-            pokelib_sptr pokelib_save(new PokeLib::Save(filename.const_char()));
-            if(pokelib_save->parseRawSave())
-            {
-                return sptr(new game_save_gen4impl(pokelib_save, filename));
-            }
+            gen4_games_t game_type = get_gen4_save_type(data);
+            if(game_type) return sptr(new game_save_gen4impl(filename, game_type, false));
             else
             {
                 //Check to see if PKMDS accepts this as a proper Gen V save
-                pkmds_g5_sptr sav = pkmds_g5_sptr(new bw2sav_obj);
-                ::read(filename.const_char(), sav.get());
-                if(::savisbw2(sav.get())) return sptr(new game_save_gen5impl(sav, filename));
+                pkmds_g5_sptr sav = pkmds_g5_sptr(new pkmds::bw2sav_obj);
+                pkmds::read(filename.const_char(), sav.get());
+                if(pkmds::savisbw2(sav.get())) return sptr(new game_save_gen5impl(sav, filename));
             }
         }
         else if(size >= 0x40000)
         {
-            //Check to see if PokeLib-NC accepts this as a proper Gen IV save
-            pokelib_sptr pokelib_save(new PokeLib::Save(filename.const_char()));
-            if(pokelib_save->parseRawSave())
-            {
-                return sptr(new game_save_gen4impl(pokelib_save, filename));
-            }
+            gen4_games_t game_type = get_gen4_save_type(data);
+            if(game_type) return sptr(new game_save_gen4impl(filename, game_type, true));
         }
         else if(size >= 0x20000)
         {

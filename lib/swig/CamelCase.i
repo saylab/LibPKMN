@@ -66,7 +66,6 @@
 %rename(getBoostVersion) pkmn::get_boost_version;
 %rename(getQt4Version) pkmn::get_qt4_version;
 %rename(getLibPKMNCommit) pkmn::get_libpkmn_commit;
-%rename(getPokeLibNCCommit) pkmn::get_pokelib_nc_commit;
 %rename(getPKMDSCommit) pkmn::get_pkmds_commit;
 
 /*
@@ -246,6 +245,8 @@
 %rename(getMovePPs) pkmn::team_pokemon::get_move_PPs;
 %rename(setMove) pkmn::team_pokemon::set_move;
 %rename(setMovePP) pkmn::team_pokemon::set_move_PP;
+%rename(getRibbons) pkmn::team_pokemon::get_ribbons;
+%rename(setRibbons) pkmn::team_pokemon::set_ribbons;
 %rename(getAttribute) pkmn::team_pokemon::get_attribute;
 %rename(getAttributes) pkmn::team_pokemon::get_attributes;
 %rename(hasAttribute) pkmn::team_pokemon::has_attribute;
@@ -345,3 +346,70 @@
 %rename(LCRNG) pkmn::prng::lcrng;
 %rename(ARNG) pkmn::prng::arng;
 %rename(MTRNG) pkmn::prng::mtrng;
+
+/*
+ * pkmn/types/ribbons.hpp
+ */
+%rename(HoennRibbons) pkmn::hoenn_ribbons;
+%rename(coolSuper) pkmn::hoenn_ribbons::cool_super;
+%rename(coolHyper) pkmn::hoenn_ribbons::cool_hyper;
+%rename(coolMaster) pkmn::hoenn_ribbons::cool_master;
+%rename(beautySuper) pkmn::hoenn_ribbons::beauty_super;
+%rename(beautyHyper) pkmn::hoenn_ribbons::beauty_hyper;
+%rename(beautyMaster) pkmn::hoenn_ribbons::beauty_master;
+%rename(cuteSuper) pkmn::hoenn_ribbons::cute_super;
+%rename(cuteHyper) pkmn::hoenn_ribbons::cute_hyper;
+%rename(cuteMaster) pkmn::hoenn_ribbons::cute_master;
+%rename(smartSuper) pkmn::hoenn_ribbons::smart_super;
+%rename(smartHyper) pkmn::hoenn_ribbons::smart_hyper;
+%rename(smartMaster) pkmn::hoenn_ribbons::smart_master;
+%rename(toughSuper) pkmn::hoenn_ribbons::tough_super;
+%rename(toughHyper) pkmn::hoenn_ribbons::tough_hyper;
+%rename(toughMaster) pkmn::hoenn_ribbons::tough_master;
+%rename(SinnohRibbons) pkmn::sinnoh_ribbons;
+%rename(SinnohRibbons1) pkmn::sinnoh_ribbons1;
+%rename(sinnohChamp) pkmn::sinnoh_ribbons1::sinnoh_champ;
+%rename(greatAbility) pkmn::sinnoh_ribbons1::great_ability;
+%rename(doubleAbility) pkmn::sinnoh_ribbons1::double_ability;
+%rename(multiAbility) pkmn::sinnoh_ribbons1::multi_ability;
+%rename(pairAbility) pkmn::sinnoh_ribbons1::pair_ability;
+%rename(worldAbility) pkmn::sinnoh_ribbons1::world_ability;
+%rename(SinnohRibbons2) pkmn::sinnoh_ribbons2;
+%rename(gorgeousRoyal) pkmn::sinnoh_ribbons2::gorgeous_royal;
+%rename(SinnohRibbons3) pkmn::sinnoh_ribbons3;
+%rename(coolSuper) pkmn::sinnoh_ribbons3::cool_super;
+%rename(coolHyper) pkmn::sinnoh_ribbons3::cool_hyper;
+%rename(coolMaster) pkmn::sinnoh_ribbons3::cool_master;
+%rename(beautySuper) pkmn::sinnoh_ribbons3::beauty_super;
+%rename(beautyHyper) pkmn::sinnoh_ribbons3::beauty_hyper;
+%rename(beautyMaster) pkmn::sinnoh_ribbons3::beauty_master;
+%rename(cuteSuper) pkmn::sinnoh_ribbons3::cute_super;
+%rename(cuteHyper) pkmn::sinnoh_ribbons3::cute_hyper;
+%rename(cuteMaster) pkmn::sinnoh_ribbons3::cute_master;
+%rename(smartSuper) pkmn::sinnoh_ribbons3::smart_super;
+%rename(smartHyper) pkmn::sinnoh_ribbons3::smart_hyper;
+%rename(smartMaster) pkmn::sinnoh_ribbons3::smart_master;
+%rename(toughSuper) pkmn::sinnoh_ribbons3::tough_super;
+%rename(toughHyper) pkmn::sinnoh_ribbons3::tough_hyper;
+%rename(toughMaster) pkmn::sinnoh_ribbons3::tough_master;
+%rename(UnovaRibbons) pkmn::unova_ribbons;
+%rename(gorgeousRoyal) pkmn::unova_ribbons::gorgeous_royal;
+%rename(worldChampion) pkmn::unova_ribbons::world_champion;
+%rename(KalosRibbons) pkmn::kalos_ribbons;
+%rename(kalosChamp) pkmn::kalos_ribbons::kalos_champ;
+%rename(sinnohChamp) pkmn::kalos_ribbons::sinnoh_champ;
+%rename(bestFriends) pkmn::kalos_ribbons::best_friends;
+%rename(skillfulBattler) pkmn::kalos_ribbons::skillful_battler;
+%rename(expertBattler) pkmn::kalos_ribbons::expert_battler;
+%rename(gorgeousRoyal) pkmn::kalos_ribbons::gorgeous_royal;
+%rename(battleChampion) pkmn::kalos_ribbons::battle_champion;
+%rename(regionalChampion) pkmn::kalos_ribbons::regional_champion;
+%rename(nationalChampion) pkmn::kalos_ribbons::national_champion;
+%rename(worldChampion) pkmn::kalos_ribbons::world_champion;
+%rename(hoennChampion) pkmn::kalos_ribbons::hoenn_champion;
+%rename(contestStar) pkmn::kalos_ribbons::contest_star;
+%rename(coolMaster) pkmn::kalos_ribbons::cool_master;
+%rename(beautyMaster) pkmn::kalos_ribbons::beauty_master;
+%rename(cuteMaster) pkmn::kalos_ribbons::cute_master;
+%rename(smartMaster) pkmn::kalos_ribbons::smart_master;
+%rename(toughMaster) pkmn::kalos_ribbons::tough_master;

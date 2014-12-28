@@ -387,6 +387,29 @@ namespace pkmn
         for(size_t i = 0; i < 4; i++) move_PPs.push_back(_raw.pc.move_pps[i+1]); 
     }
 
+    void team_pokemon_gen1impl::set_move(const pkmn::pkstring &move_name, unsigned int pos)
+    {
+        if(pos == 0 or pos > 4)
+            throw std::runtime_error("Move position must be 1-4.");
+
+        // Make sure move exists in given generation
+        std::ostringstream query_stream;
+        query_stream << "SELECT generation_id FROM moves WHERE id="
+                     << database::get_move_id(move_name);
+        SQLite::Statement query(*_db, query_stream.str().c_str());
+        if(query.executeStep()) _raw.pc.moves[pos-1] = int(query.getColumn(0));
+        else throw std::runtime_error("This move does not exist in Generation I.");
+    }
+
+    void team_pokemon_gen1impl::set_move_PP(unsigned int PP, unsigned int pos)
+    {
+        if(pos == 0 or pos > 4)
+            throw std::runtime_error("Move position must be 1-4.");
+
+        if(PP <= database::get_move_pp(_raw.pc.moves[pos-1])) _raw.pc.move_pps[pos-1] = PP;
+        else throw std::runtime_error("This move PP is invalid.");
+    }
+
     // No markings in Generation I
     pkmn::markings team_pokemon_gen1impl::get_markings() const
     {
@@ -395,6 +418,18 @@ namespace pkmn
 
     // No markings in Generation I
     void team_pokemon_gen1impl::set_markings(const pkmn::markings &mark)
+    {
+        /* NOP */
+    }
+
+    // No ribbons in Generation I
+    pkmn::ribbons team_pokemon_gen1impl::get_ribbons() const
+    {
+        return pkmn::ribbons();
+    }
+
+    // No ribbons in Generation I
+    void team_pokemon_gen1impl::set_ribbons(const pkmn::ribbons &rib)
     {
         /* NOP */
     }

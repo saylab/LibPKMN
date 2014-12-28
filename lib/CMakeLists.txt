@@ -9,7 +9,15 @@
 FILE(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${PKG_DATA_DIR} LIBPKMN_PKG_DATA_PATH)
 
 IF(ENABLE_LIBPKMN)
+    MESSAGE(STATUS "")
+
+    INCLUDE_DIRECTORIES(
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/SQLiteCpp
+    )
+
     ADD_SUBDIRECTORY(SQLiteCpp)
+    ADD_SUBDIRECTORY(pkmds)
     ADD_SUBDIRECTORY(conversions)
     ADD_SUBDIRECTORY(qt4)
     ADD_SUBDIRECTORY(types)
@@ -26,7 +34,6 @@ IF(ENABLE_LIBPKMN)
 
     LIST(APPEND libpkmn_libs
         ${Boost_LIBRARIES}
-        pokelib-nc
         pkmds
         SQLiteCpp
         ${QT_LIBRARIES}
@@ -77,6 +84,7 @@ IF(ENABLE_LIBPKMN)
         io.cpp
         lists.cpp
         copy_sptrs.cpp
+        ${pkmds_sources}
         ${conversions_sources}
         ${qt4_sources}
         ${qt4_moc_sources}
@@ -94,9 +102,6 @@ IF(ENABLE_LIBPKMN)
         LIST(APPEND libpkmn_sources ${CMAKE_CURRENT_BINARY_DIR}/pkmn.rc)
     ENDIF(MSVC)
 
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-    INCLUDE_DIRECTORIES(${LIBPKMN_SOURCE_DIR}/PokeLib-NC/include)
-    INCLUDE_DIRECTORIES(${LIBPKMN_SOURCE_DIR}/PKMDS/include)
     ADD_LIBRARY(pkmn SHARED ${libpkmn_sources})
     TARGET_LINK_LIBRARIES(pkmn ${libpkmn_libs})
 

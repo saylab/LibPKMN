@@ -127,6 +127,11 @@ namespace pkmn
         return _attributes;
     }
 
+    bool team_pokemon_impl::has_attribute(const pkmn::pkstring &attribute) const
+    {
+        return _attributes.has_key(attribute);
+    }
+
     void team_pokemon_impl::set_attribute(const pkmn::pkstring &attribute, int value)
     {
         _attributes[attribute] = value;

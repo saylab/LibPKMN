@@ -26,9 +26,9 @@ namespace pkmn
         uint8_t get_gen2_gender(uint16_t species_id, uint8_t ivATK)
         {
             //PKMDS has function to get gender rate
-            opendb(get_database_path().const_char());
-            int gender_rate = getpkmgenderrate(::Species::species(species_id));
-            closedb();
+            pkmds::opendb(get_database_path().const_char());
+            int gender_rate = pkmds::getpkmgenderrate(pkmds::Species::species(species_id));
+            pkmds::closedb();
 
             pkmn::dict<uint32_t, uint32_t> thresholds = boost::assign::map_list_of
                 (0,0)
@@ -59,9 +59,9 @@ namespace pkmn
             personality %= 256;
 
             //PKMDS has function to get gender rate
-            opendb(get_database_path().const_char());
-            int gender_rate = getpkmgenderrate(::Species::species(species_id));
-            closedb();
+            pkmds::opendb(get_database_path().const_char());
+            int gender_rate = pkmds::getpkmgenderrate(pkmds::Species::species(species_id));
+            pkmds::closedb();
 
             dict<uint32_t, uint32_t> ratios = boost::assign::map_list_of
                 (0,254)

@@ -41,10 +41,12 @@
     #include "pkmn/types/markings.hpp"
     #include "pkmn/types/pkstring.hpp"
     #include "pkmn/types/prng.hpp"
+    #include "pkmn/types/ribbons.hpp"
 %}
 
 %include "pkmn/types/markings.hpp"
 %include "pkmn/types/prng.hpp"
+%include "pkmn/types/ribbons.hpp"
 
 %include "pkmn/item.hpp"
 %include "pkmn/pocket.hpp"

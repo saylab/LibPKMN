@@ -28,9 +28,6 @@ namespace pkmn
     //! Return LibPKMN commit used in build
     pkmn::pkstring PKMN_API get_libpkmn_commit();
 
-    //! Return PokeLib-NC commit used in build
-    pkmn::pkstring PKMN_API get_pokelib_nc_commit();
-
     //! Return PKMDS commit used in build
     pkmn::pkstring PKMN_API get_pkmds_commit();
 }

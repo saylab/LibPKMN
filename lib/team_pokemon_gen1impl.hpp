@@ -85,6 +85,8 @@ namespace pkmn
             //Misc
             pkmn::markings get_markings() const;
             void set_markings(const pkmn::markings &mark);
+            pkmn::ribbons get_ribbons() const;
+            void set_ribbons(const pkmn::ribbons &rib);
 
             //Database Info
             unsigned int get_original_game_id() const;

@@ -15,9 +15,7 @@
 
 #include "structs/pokemon.hpp"
 
-#include <PokeLib/PokeLib.h>
 #include <pkmds/pkmds_g5.h>
-#include <pkmds/pkmds_g6.h>
 
 namespace pkmn
 {
@@ -69,22 +67,27 @@ namespace pkmn
                                  bool encrypt = true);
 
         /*
-         * Generation IV
+         * Nintendo DS (Generation IV-V)
          */
-        team_pokemon::sptr import_gen4_pokemon(const PokeLib::Pokemon &pokelib_pkmn);
-        PokeLib::Pokemon export_gen4_pokemon(team_pokemon::sptr t_pkmn);
+        team_pokemon::sptr import_nds_pokemon(const nds_pc_pokemon_t &pkmn,
+                                              unsigned int version_id,
+                                              bool is_encrypted = true);
+        team_pokemon::sptr import_nds_pokemon(const nds_party_pokemon_t &pkmn,
+                                              unsigned int version_id,
+                                              bool is_encrypted = true);
+
+        void export_nds_pokemon(team_pokemon::sptr t_pkmn, nds_pc_pokemon_t &pkmn,
+                                bool encrypt = true);
+        void export_nds_pokemon(team_pokemon::sptr t_pkmn, nds_party_pokemon_t &pkmn,
+                                bool encrypt = true);
+
+        // OLD BELOW
 
         /*
          * Generation V
          */
-        team_pokemon::sptr import_gen5_pokemon(party_pkm* p_pkm);
-        void export_gen5_pokemon(team_pokemon::sptr t_pkmn, party_pkm* p_pkm);
-
-        /*
-         * Generation VI
-         */
-        team_pokemon::sptr import_gen6_pokemon(party_pkx* p_pkx);
-        void export_gen6_pokemon(team_pokemon::sptr t_pkmn, party_pkx* p_pkx);
+        team_pokemon::sptr import_gen5_pokemon(pkmds::party_pkm* p_pkm);
+        void export_gen5_pokemon(team_pokemon::sptr t_pkmn, pkmds::party_pkm* p_pkm);
     }
 }
 

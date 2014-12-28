@@ -36,6 +36,7 @@ namespace pkmn
  */
 %ignore pkmn::dict::operator[];
 %ignore pkmn::markings::operator uint8_t;
+%ignore pkmn::nature_t::operator[];
 %ignore pkmn::pkstring::pkstring(const std::string&);
 %ignore pkmn::pkstring::pkstring(const uint16_t*);
 %ignore pkmn::pkstring::pkstring(const wchar_t*);
@@ -50,7 +51,12 @@ namespace pkmn
 %ignore pkmn::pkstring::set(const std::string&);
 %ignore pkmn::pkstring::set(const wchar_t*);
 %ignore pkmn::pkstring::set(const std::wstring&);
-%ignore pkmn::nature_t::operator[];
+%ignore pkmn::hoenn_ribbons::operator uint32_t;
+%ignore pkmn::sinnoh_ribbons1::operator uint16_t;
+%ignore pkmn::sinnoh_ribbons2::operator uint16_t;
+%ignore pkmn::sinnoh_ribbons3::operator uint32_t;
+%ignore pkmn::unova_ribbons::operator uint16_t;
+%ignore pkmn::kalos_ribbons::operator uint64_t;
 
 %{
     #include "pkmn/config.hpp"

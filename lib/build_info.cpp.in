@@ -39,11 +39,6 @@ namespace pkmn
         return "@LIBPKMN_GIT_DESCRIBE@";
     }
 
-    pkmn::pkstring get_pokelib_nc_commit()
-    {
-        return "@POKELIB_GIT_DESCRIBE@";
-    }
-
     pkmn::pkstring get_pkmds_commit()
     {
         return "@PKMDS_GIT_DESCRIBE@";
