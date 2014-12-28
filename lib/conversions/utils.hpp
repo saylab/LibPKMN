@@ -10,6 +10,7 @@
 #include <boost/assign/list_of.hpp>
 
 #include <pkmn/types/dict.hpp>
+#include <pkmn/types/pkstring.hpp>
 
 #include "structs/pokemon.hpp"
 

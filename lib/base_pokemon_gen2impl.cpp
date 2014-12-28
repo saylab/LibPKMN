@@ -160,7 +160,7 @@ namespace pkmn
         }
         else throw std::runtime_error("Invalid form.");
 
-        unown_signal();
+        _unown_signal();
     }
 
     // Gender doesn't matter for icons in Generation 2
@@ -177,5 +177,13 @@ namespace pkmn
     }
 
     // Set Unown's form without sending IV signal to team_pokemon_gen2impl
-    void base_pokemon_gen2impl::_set_unown_form()
+    void base_pokemon_gen2impl::_set_unown_form(unsigned int form)
+    {
+        _form_id = form;
+        char letter;
+
+        if(_species_id == Species::UNOWN) letter = 'A';
+        else letter = 'A' + (form - 9935); // Will become ASCII value for letter
+        SET_IMAGES_PATHS(str(boost::format("201-%c.png") % letter))
+    }
 } /* namespace pkmn */

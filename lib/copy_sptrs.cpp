@@ -20,7 +20,7 @@
 #include "pocket_impl.hpp"
 #include "team_pokemon_gen1impl.hpp"
 #include "team_pokemon_gen2impl.hpp"
-#include "team_pokemon_modernimpl.hpp"
+#include "team_pokemon_gen3impl.hpp"
 #include "trainer_impl.hpp"
 #include "types/prng_impl.hpp"
 
@@ -92,8 +92,8 @@ namespace pkmn
 
             default:
             {
-                team_pokemon_modernimpl actual3 = *pkmn::dynamic_pointer_cast<team_pokemon_modernimpl>(in);
-                return pkmn::make_shared<team_pokemon_modernimpl>(actual3);
+                team_pokemon_gen3impl actual3 = *pkmn::dynamic_pointer_cast<team_pokemon_gen3impl>(in);
+                return pkmn::make_shared<team_pokemon_gen3impl>(actual3);
             }
         }
     }

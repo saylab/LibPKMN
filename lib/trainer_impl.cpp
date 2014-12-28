@@ -15,11 +15,6 @@
 #include <pkmn/types/dict.hpp>
 #include <pkmn/types/prng.hpp>
 
-#include "bag_impl.hpp"
-#include "team_pokemon_gen1impl.hpp"
-#include "team_pokemon_gen2impl.hpp"
-#include "team_pokemon_modernimpl.hpp"
-
 #include "trainer_impl.hpp"
 
 namespace pkmn

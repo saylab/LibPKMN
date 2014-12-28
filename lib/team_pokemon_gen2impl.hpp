@@ -14,7 +14,7 @@
 
 namespace pkmn
 {
-    class team_pokemon_gen2impl
+    class team_pokemon_gen2impl: public team_pokemon_impl
     {
         public:
 
@@ -24,6 +24,7 @@ namespace pkmn
             ~team_pokemon_gen2impl() {};
 
             //Getting Trainer Info
+            pkmn::pkstring get_nickname() const;
             pkmn::pkstring get_trainer_name() const;
             pkmn::pkstring get_trainer_gender() const;
             unsigned int get_trainer_id() const;
@@ -34,7 +35,6 @@ namespace pkmn
 
             //Setting Trainer Info
             void set_original_game(unsigned int game);
-            void set_original_game(const pkmn::pkstring &game);
             void set_nickname(const pkmn::pkstring &nickname);
             void set_trainer_name(const pkmn::pkstring &trainer_name);
             void set_trainer_gender(const pkmn::pkstring &gender);
@@ -106,7 +106,7 @@ namespace pkmn
             void _set_stats();
 
             void _reset_caught_data();
-            void _set_unown_forms_from_IVs();
+            void _set_unown_form_from_IVs();
             void _set_unown_IVs_from_form();
 
             Gallant::Signal1<unsigned int> _unown_signal;

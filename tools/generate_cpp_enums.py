@@ -51,7 +51,7 @@ def get_balls(c):
 
     c.execute("SELECT * FROM balls")
     from_db = c.fetchall()
-    balls = [(0,"NONE")]
+    balls = [(0,"UNKNOWN")]
 
     for i in range(len(from_db)):
         ball_name = str(unidecode(from_db[i][1])).replace("-","_").replace(" ","_").replace(".","").replace("'","").upper()

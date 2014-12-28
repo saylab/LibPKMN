@@ -29,6 +29,12 @@ namespace pkmn
             // Non-battle Stats
             base_pokemon::sptr get_base_pokemon(bool copy = false) const;
             pkmn::pkstring get_species_name() const;
+            pkmn::pkstring get_original_game() const;
+            pkmn::pkstring_pair_t get_types() const;
+            pkmn::dict<pkmn::pkstring, unsigned int> get_base_stats() const;
+
+            virtual void set_original_game(unsigned int game) = 0;
+            void set_original_game(const pkmn::pkstring &game);
 
             // Getting Individual Stat Info
             virtual pkmn::pkstring get_gender() const = 0;
@@ -45,6 +51,7 @@ namespace pkmn
             void set_form(unsigned int form);
 
             // Database Info
+            virtual unsigned int get_original_game_id() const = 0;
             unsigned int get_pokemon_id() const;
             unsigned int get_species_id() const;
             unsigned int get_game_id() const;

@@ -4,7 +4,7 @@
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  *
- * This file was generated: 2014-12-27 10:17:23.917730
+ * This file was generated: 2014-12-27 14:13:33.354336
  */
 
 #ifndef INCLUDED_PKMN_ENUMS_HPP
@@ -212,7 +212,7 @@ namespace pkmn
     {
         enum balls
         {
-            NONE,
+            UNKNOWN,
             MASTER_BALL,
             ULTRA_BALL,
             GREAT_BALL,

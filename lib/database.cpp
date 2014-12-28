@@ -91,7 +91,7 @@ namespace pkmn
         unsigned int get_ball_id(const pkmn::pkstring &ball_name)
         {
             CONNECT_TO_DB();
-            if(ball_name == "None") return Balls::NONE;
+            if(ball_name == "None" or ball_name == "Unknown") return Balls::UNKNOWN;
 
             std::ostringstream query_stream;
             query_stream << "SELECT id FROM balls WHERE name='" << ball_name << "'";
@@ -102,10 +102,10 @@ namespace pkmn
         pkmn::pkstring get_ball_name(const unsigned int ball_id)
         {
             CONNECT_TO_DB();
-            if(ball_id == Balls::NONE) return "None";
+            if(ball_id == Balls::UNKNOWN) return "None";
 
             std::ostringstream query_stream;
-            query_stream << "SELECT name FROM balls WHERE id=" << ball_name;
+            query_stream << "SELECT name FROM balls WHERE id=" << ball_id;
             SQLite::Statement query(*db, query_stream.str().c_str());
             GET_PKSTRING(query);
         }

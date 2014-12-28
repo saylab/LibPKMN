@@ -13,7 +13,6 @@
 
 #include "base_pokemon_impl.hpp"
 #include "Signal.h"
-#include "team_pokemon_modernimpl.hpp"
 
 //For code cleanliness in source file
 #define HAS_DIFFERENT_FEMALE_ICON (_species_id == Species::UNFEZANT \
@@ -47,8 +46,6 @@ namespace pkmn
             pkmn::pkstring get_sprite_path(bool is_male, bool is_shiny) const;
 
         private:
-
-            friend class team_pokemon_modernimpl;
 
             Gallant::Signal0<> form_signal1;
             Gallant::Signal0<> form_signal2;

@@ -39,7 +39,7 @@ namespace pkmn
             Gallant::Signal0<> _unown_signal;
 
             // Set form without sending signal to team_pokemon_gen2impl
-            void _set_unown_form();
+            void _set_unown_form(unsigned int form);
     };
 }
 

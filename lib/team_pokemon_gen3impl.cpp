@@ -34,7 +34,7 @@ namespace pkmn
         _raw.pc.personality = _prng->lcrng();
         _raw.pc.ot_id = _prng->lcrng();
 
-        pkmn::pkstring nickname = boost::to_upper_copy(_base->get_species());
+        pkmn::pkstring nickname = boost::algorithm::to_upper_copy(_base->get_species().std_wstring());
         conversions::export_gen3_text(nickname, _raw.pc.nickname, 10);
 
         _raw.pc.language = 0x202; // English
@@ -60,21 +60,21 @@ namespace pkmn
             _attacks->move_pps[i] = database::get_move_pp(_attacks->moves[i]);
         do
         {
-            _effort->ev_hp    = _prng->lcrng() % 256;
-            _effort->ev_atk   = _prng->lcrng() % 256;
-            _effort->ev_def   = _prng->lcrng() % 256;
-            _effort->ev_spd   = _prng->lcrng() % 256;
-            _effort->ev_spatk = _prng->lcrng() % 256;
-            _effort->ev_spdef = _prng->lcrng() % 256;
+            _effort->ev_hp    = _prng->lcrng() % 246;
+            _effort->ev_atk   = _prng->lcrng() % 246;
+            _effort->ev_def   = _prng->lcrng() % 246;
+            _effort->ev_spd   = _prng->lcrng() % 246;
+            _effort->ev_spatk = _prng->lcrng() % 246;
+            _effort->ev_spdef = _prng->lcrng() % 246;
         }
         while((_effort->ev_hp  + _effort->ev_atk   + _effort->ev_def +
                _effort->ev_spd + _effort->ev_spatk + _effort->ev_spdef) > 510);
         // TODO: contest stats data structure
         _attributes["cool"]   = _effort->coolness;
         _attributes["beauty"] = _effort->beauty;
-        _attributes["cute"]   = _effort->cute;
-        _attributes["smart"]  = _effort->smart;
-        _attributes["tough"]  = _effort->tough;
+        _attributes["cute"]   = _effort->cuteness;
+        _attributes["smart"]  = _effort->smartness;
+        _attributes["tough"]  = _effort->toughness;
         _attributes["feel"]   = _effort->feel;
         // TODO: Pokerus
         _misc->met_location = 255; // Fateful encounter
@@ -93,8 +93,13 @@ namespace pkmn
         _misc->ribbons_obedience |= (1<<31); // Mew and Deoxys will be obedient
 
         _raw.condition = 0; // OK
-        _set_level();
+        _set_level(level);
         _set_stats();
+    }
+
+    pkmn::pkstring team_pokemon_gen3impl::get_nickname() const
+    {
+        return conversions::import_gen3_text(_raw.pc.nickname, 10);
     }
 
     pkmn::pkstring team_pokemon_gen3impl::get_trainer_name() const
@@ -107,17 +112,17 @@ namespace pkmn
         return (_misc->origin_info & (1<<31)) ? "Female" : "Male";
     }
 
-    pkmn::pkstring team_pokemon_gen3impl::get_trainer_id() const
+    unsigned int team_pokemon_gen3impl::get_trainer_id() const
     {
         return _raw.pc.ot_id;
     }
 
-    pkmn::pkstring team_pokemon_gen3impl::get_trainer_public_id() const
+    unsigned short team_pokemon_gen3impl::get_trainer_public_id() const
     {
         return _raw.pc.ot_pid;
     }
 
-    pkmn::pkstring team_pokemon_gen3impl::get_trainer_secret_id() const
+    unsigned short team_pokemon_gen3impl::get_trainer_secret_id() const
     {
         return _raw.pc.ot_sid;
     }
@@ -127,22 +132,17 @@ namespace pkmn
         return database::get_ball_name((_misc->origin_info & 0x3C00) >> 11);
     }
 
-    pkmn::pkstring team_pokemon_gen3impl::get_met_level() const
+    unsigned int team_pokemon_gen3impl::get_met_level() const
     {
-        return (_raw.pc.caught_data & 0x3F00) >> 8;
+        return (_misc->origin_info & 0x3F00) >> 8;
     }
 
-    pkmn::pkstring team_pokemon_gen3impl::set_original_game(unsigned int game)
+    void team_pokemon_gen3impl::set_original_game(unsigned int game)
     {
         if(database::get_generation(game) != 3)
             throw std::runtime_error("Original game must be from Generation III.");
 
         _misc->origin_info = 0xFC3F | (uint8_t(libpkmn_game_to_hometown(game)) << 6);
-    }
-
-    pkmn::pkstring team_pokemon_gen3impl::set_original_game(const pkmn::pkstring &game)
-    {
-        set_original_game(database::get_version_id(game));
     }
 
     void team_pokemon_gen3impl::set_nickname(const pkmn::pkstring &nickname)
@@ -163,11 +163,11 @@ namespace pkmn
 
     void team_pokemon_gen3impl::set_trainer_gender(const pkmn::pkstring &gender)
     {
-        if(gender != "Male" and gender != "Female")
+        if(gender.std_string() != "Male" and gender.std_string() != "Female")
             throw std::runtime_error("Gender must be male or female.");
 
-        if(gender == "Male") _raw.pc.origin_info &= ~(1<<31);
-        else                 _raw.pc.origin_info |= (1<<31);
+        if(gender == "Male") _misc->origin_info &= ~(1<<31);
+        else                 _misc->origin_info |= (1<<31);
     }
 
     void team_pokemon_gen3impl::set_trainer_id(unsigned int id)
@@ -239,25 +239,26 @@ namespace pkmn
 
     pkmn::nature_t team_pokemon_gen3impl::get_nature() const
     {
-        return pkmn::nature_t(_raw.pc.personality % 25);
+        return pkmn::nature_t(_raw.pc.personality % 24);
     }
 
     pkmn::pkstring team_pokemon_gen3impl::get_ability() const
     {
-        int ability_slot = get_gen3_ability_slot(_misc->iv_egg_ability) + 1; 
-        query_stream.str("");
-        query_stream << "SELECT ability_id FROM pokemon_abilities WHERE pokemon_id=" << t_pkmn->get_pokemon_id()
+        int ability_slot = get_gen3_ability_slot(_misc->iv_egg_ability) + 1;
+
+        std::ostringstream query_stream;
+        query_stream << "SELECT ability_id FROM pokemon_abilities WHERE pokemon_id=" << _species_id
                      << " AND is_hidden=0 AND slot=" << ability_slot;
-        SQLite::Statement query(db, query_stream.str().c_str());
+        SQLite::Statement query(*_db, query_stream.str().c_str());
 
         unsigned int ability_id;
         if((not query.executeStep()) and ability_slot == 2)
         {
             //Account for odd situation where slot=1 but there is no second ability
             query_stream.str("");
-            query_stream << "SELECT ability_id FROM pokemon_abilities WHERE pokemon_id=" << t_pkmn->get_pokemon_id()
+            query_stream << "SELECT ability_id FROM pokemon_abilities WHERE pokemon_id=" << _species_id
                          << " AND is_hidden=0 AND slot=1";
-            ability_id = db.execAndGet(query_stream.str().c_str());
+            ability_id = _db->execAndGet(query_stream.str().c_str());
         }
         else ability_id = query.getColumn(0);
 
@@ -293,12 +294,12 @@ namespace pkmn
     pkmn::dict<pkmn::pkstring, unsigned int> team_pokemon_gen3impl::get_EVs() const
     {
         pkmn::dict<pkmn::pkstring, unsigned int> EVs;
-        EVs["HP"]              = _raw.pc.ev_hp;
-        EVs["Attack"]          = _raw.pc.ev_atk;
-        EVs["Defense"]         = _raw.pc.ev_def;
-        EVs["Speed"]           = _raw.pc.ev_spd;
-        EVs["Special Attack"]  = _raw.pc.ev_spcl;
-        EVs["Special Defense"] = _raw.pc.ev_spcl;
+        EVs["HP"]              = _effort->ev_hp;
+        EVs["Attack"]          = _effort->ev_atk;
+        EVs["Defense"]         = _effort->ev_def;
+        EVs["Speed"]           = _effort->ev_spd;
+        EVs["Special Attack"]  = _effort->ev_spatk;
+        EVs["Special Defense"] = _effort->ev_spdef;
 
         return EVs;
     }
@@ -343,9 +344,9 @@ namespace pkmn
     void team_pokemon_gen3impl::set_nature(const pkmn::pkstring &nature_name)
     {
         // Set personality to nearest value that results in given nature
-        int8_t current_nature = (raw.pc.personality % 25);
+        int8_t current_nature = (_raw.pc.personality % 24);
         int8_t desired_nature = database::get_nature_id(nature_name);
-        raw.pc.personality += (current_nature - desired_nature);
+        _raw.pc.personality += (current_nature - desired_nature);
     }
 
     // NOTE: this affects many things
@@ -353,16 +354,16 @@ namespace pkmn
     {
         // Check to see if Pokemon has this ability
         std::ostringstream query_stream;
-        query_stream << "SELECT slot FROM pokemon_abilities WHERE ability_id=" <<
+        query_stream << "SELECT slot FROM pokemon_abilities WHERE ability_id="
                      << database::get_ability_id(ability) << " AND is_hidden=0"
                      << " AND pokemon_id=" << _species_id;
-        SQLite::Statement query(db, query_stream.str().c_str());
+        SQLite::Statement query(*_db, query_stream.str().c_str());
         if(query.executeStep())
         {
             uint8_t ability_slot = (unsigned int)(query.getColumn(0)) - 1;
             uint8_t current_ability_slot = get_gen3_ability_slot(_misc->iv_egg_ability) + 1;
 
-            if(ability_slot != current_ability_slot) raw.pc.personality++;
+            if(ability_slot != current_ability_slot) _raw.pc.personality++;
         }
         else throw std::runtime_error("Invalid ability for this Pokemon.");
     }
@@ -381,64 +382,66 @@ namespace pkmn
         if(stat > 255)
             throw std::runtime_error("EV's have a maximum value of 255 in Generation III.");
 
+        uint16_t sum_of_rest;
+
         switch(database::get_stat_id(stat_name)) // Will throw if stat_name is invalid
         {
             case Stats::HP:
-                uint16_t sum_of_rest = _effort->ev_atk + _effort->ev_def + _effort->ev_spd + _effort->ev_spatk
-                                     + _effort->ev_spdef;
+                sum_of_rest = _effort->ev_atk + _effort->ev_def + _effort->ev_spd + _effort->ev_spatk
+                            + _effort->ev_spdef;
                 if((sum_of_rest + stat) > 510)
-                    throw std::runtime_error(boost::format("The maximum possible value to set is %d")
-                                             % (510 - sum_of_rest));
+                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
+                                             % (510 - sum_of_rest)));
 
                 _effort->ev_hp = stat;
                 break;
 
             case Stats::ATTACK:
-                uint16_t sum_of_rest = _effort->ev_hp + _effort->ev_def + _effort->ev_spd + _effort->ev_spatk
-                                     + _effort->ev_spdef;
+                sum_of_rest = _effort->ev_hp + _effort->ev_def + _effort->ev_spd + _effort->ev_spatk
+                            + _effort->ev_spdef;
                 if((sum_of_rest + stat) > 510)
-                    throw std::runtime_error(boost::format("The maximum possible value to set is %d")
-                                             % (510 - sum_of_rest));
+                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
+                                                 % (510 - sum_of_rest)));
 
                 _effort->ev_atk = stat;
                 break;
 
             case Stats::DEFENSE:
-                uint16_t sum_of_rest = _effort->ev_hp + _effort->ev_atk + _effort->ev_spd + _effort->ev_spatk
-                                     + _effort->ev_spdef;
+                sum_of_rest = _effort->ev_hp + _effort->ev_atk + _effort->ev_spd + _effort->ev_spatk
+                            + _effort->ev_spdef;
                 if((sum_of_rest + stat) > 510)
-                    throw std::runtime_error(boost::format("The maximum possible value to set is %d")
-                                             % (510 - sum_of_rest));
+                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
+                                                 % (510 - sum_of_rest)));
 
                 _effort->ev_def = stat;
                 break;
 
             case Stats::SPEED:
-                uint16_t sum_of_rest = _effort->ev_hp + _effort->ev_atk + _effort->ev_def + _effort->ev_spatk
-                                     + _effort->ev_spdef;
+                sum_of_rest = _effort->ev_hp + _effort->ev_atk + _effort->ev_def + _effort->ev_spatk
+                            + _effort->ev_spdef;
                 if((sum_of_rest + stat) > 510)
-                    throw std::runtime_error(boost::format("The maximum possible value to set is %d")
-                                             % (510 - sum_of_rest));
+                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
+                                                 % (510 - sum_of_rest)));
 
                 _effort->ev_spd = stat;
                 break;
 
             case Stats::SPECIAL_ATTACK:
-                uint16_t sum_of_rest = _effort->ev_hp + _effort->ev_atk + _effort->ev_def + _effort->ev_spd
-                                     + _effort->ev_spdef;
+                sum_of_rest = _effort->ev_hp + _effort->ev_atk + _effort->ev_def + _effort->ev_spd
+                            + _effort->ev_spdef;
                 if((sum_of_rest + stat) > 510)
-                    throw std::runtime_error(boost::format("The maximum possible value to set is %d")
-                                             % (510 - sum_of_rest));
+                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
+                                                 % (510 - sum_of_rest)));
 
                 _effort->ev_spatk = stat;
                 break;
 
             default: // Stats::SPECIAL_DEFENSE
-                uint16_t sum_of_rest = _effort->ev_hp + _effort->ev_atk + _effort->ev_def + _effort->ev_spd
-                                     + _effort->ev_spatk;
+                sum_of_rest = _effort->ev_hp + _effort->ev_atk + _effort->ev_def + _effort->ev_spd
+                            + _effort->ev_spatk;
                 if((sum_of_rest + stat) > 510)
-                    throw std::runtime_error(boost::format("The maximum possible value to set is %d")
-                                             % (510 - sum_of_rest));
+                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
+                                                 % (510 - sum_of_rest)));
 
                 _effort->ev_spdef = stat;
                 break;
@@ -456,14 +459,14 @@ namespace pkmn
             throw std::runtime_error("IV's have a maximum value of 31 in Generation III.");
 
         // Will throw if stat_name is invalid
-        conversions::set_retro_IV(database::get_stat_id(stat_name), _misc->iv_egg_ability, stat);
+        conversions::set_modern_IV(database::get_stat_id(stat_name), _misc->iv_egg_ability, stat);
 
         _set_stats();
     }
 
     pkmn::pkstring team_pokemon_gen3impl::get_status() const
     {
-        return retro_statuses.at(_raw.pc.status, "OK");
+        return conversions::retro_statuses.at(_raw.condition, "OK");
     }
 
     item::sptr team_pokemon_gen3impl::get_held_item() const
@@ -473,16 +476,16 @@ namespace pkmn
 
     void team_pokemon_gen3impl::set_status(const pkmn::pkstring &status)
     {
-        if(not reverse_retro_statuses.has_key(status))
+        if(not conversions::reverse_retro_statuses.has_key(status))
             throw std::runtime_error("Invalid status given.");
 
-        _raw.condition = reverse_retro_statuses.at(status);
+        _raw.condition = conversions::reverse_retro_statuses.at(status);
     }
 
     void team_pokemon_gen3impl::set_held_item(const pkmn::pkstring &item_name)
     {
         _growth->held_item = database::get_item_game_index(item_name,
-                                                           database::get_version_id(_game_id));
+                                                           database::get_version_name(_game_id));
     }
 
     move::sptr team_pokemon_gen3impl::get_move(unsigned int pos) const
@@ -493,7 +496,7 @@ namespace pkmn
         return move::make(_attacks->moves[pos-1], _game_id);
     }
 
-    void team_pokemon_gen3impl::get_moves(pkmn::moveset &moves) const
+    void team_pokemon_gen3impl::get_moves(pkmn::moveset_t &moves) const
     {
         moves.clear();
         for(size_t i = 0; i < 4; i++) moves.push_back(get_move(i+1));
@@ -510,23 +513,23 @@ namespace pkmn
     void team_pokemon_gen3impl::get_move_PPs(std::vector<unsigned int> &move_PPs) const
     {
         move_PPs.clear();
-        for(size_t i = 0; i < 4; i++) move_PPs.push_back(_raw.pc.move_pps[pos]); 
+        for(size_t i = 0; i < 4; i++) move_PPs.push_back(_attacks->move_pps[i+1]); 
     }
 
     pkmn::markings team_pokemon_gen3impl::get_markings() const
     {
-        return raw.pc.markings;
+        return _raw.pc.markings;
     }
 
     void team_pokemon_gen3impl::set_markings(const pkmn::markings &mark)
     {
-        raw.pc.markings = mark;
+        pkmn::markings m = mark;
+        _raw.pc.markings = m;
     }
 
-    unsigned int team_pokemon_gen3impl::get_original_game() const
+    unsigned int team_pokemon_gen3impl::get_original_game_id() const
     {
-        _misc->origin_info = 0xFC3F | (uint8_t(libpkmn_game_to_hometown(game)) << 6);
-        return hometown_to_libpkmn_game(_misc_origin_info
+        return hometown_to_libpkmn_game((_misc->origin_info &= ~0xFC3F) >> 6);
     }
 
     unsigned int team_pokemon_gen3impl::get_ability_id() const
@@ -536,12 +539,12 @@ namespace pkmn
 
     unsigned int team_pokemon_gen3impl::get_item_id() const
     {
-        return database::get_item_id(get_held_item());
+        return database::get_item_id(_growth->held_item, _game_id);
     }
 
     unsigned int team_pokemon_gen3impl::get_nature_id() const
     {
-        return (_raw.personality % 25);
+        return (_raw.pc.personality % 24);
     }
 
     void team_pokemon_gen3impl::_set_experience(const uint32_t exp)
@@ -564,27 +567,27 @@ namespace pkmn
 
         _raw.max_hp = int(floor(((double(IVs["HP"]) + (2.0*double(stats["HP"]))
                                   + (0.25*double(_effort->ev_hp)) + 100.0)
-                                * double(_level))/100.0 + 10.0));
+                                * double(_raw.level))/100.0 + 10.0));
         _raw.current_hp = _raw.max_hp;
 
         _raw.atk    = int(ceil(((((double(IVs["Attack"]) + 2.0*double(stats["Attack"])
                                    + 0.25*double(_effort->ev_atk))
-                             * double(_level))/100.0) + 5.0) * _nature["Attack"]));
+                             * double(_raw.level))/100.0) + 5.0) * nature["Attack"]));
 
         _raw.def    = int(ceil(((((double(IVs["Defense"]) + 2.0*double(stats["Defense"])
                                    + 0.25*double(_effort->ev_def))
-                             * double(_level))/100.0) + 5.0) * _nature["Defense"]));
+                             * double(_raw.level))/100.0) + 5.0) * nature["Defense"]));
 
         _raw.spd    = int(ceil(((((double(IVs["Speed"]) + 2.0*double(stats["Speed"])
                                    + 0.25*double(_effort->ev_spd))
-                             * double(_level))/100.0) + 5.0) * _nature["Speed"]));
+                             * double(_raw.level))/100.0) + 5.0) * nature["Speed"]));
 
         _raw.spatk  = int(ceil(((((double(IVs["Special Attack"]) + 2.0*double(stats["Special Attack"])
                                    + 0.25*double(_effort->ev_spatk))
-                             * double(_level))/100.0) + 5.0) * _nature["Special Attack"]));
+                             * double(_raw.level))/100.0) + 5.0) * nature["Special Attack"]));
 
         _raw.spdef  = int(ceil(((((double(IVs["Special Defense"]) + 2.0*double(stats["Special Defense"])
                                    + 0.25*double(_effort->ev_spdef))
-                             * double(_level))/100.0) + 5.0) * _nature["Special Defense"]));
+                             * double(_raw.level))/100.0) + 5.0) * nature["Special Defense"]));
     }
 }

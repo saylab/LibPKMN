@@ -714,7 +714,7 @@ namespace pkmn
 
             uint8_t* metlevel_int = reinterpret_cast<uint8_t*>(&(pokelib_pkmn.pkm->pkm.pokeball)+1);
             set_gen_456_met_level(metlevel_int, t_pkmn->get_met_level());
-            pokelib_pkmn.pkm->pkm.pokeball = libpkmn_ball_to_game_ball(reverse_ball_dict.at(t_pkmn->get_ball(), PokeBalls::POKE_BALL));
+            pokelib_pkmn.pkm->pkm.pokeball = libpkmn_ball_to_game_ball(reverse_ball_dict.at(t_pkmn->get_ball(), Balls::POKE_BALL));
             set_gen_456_met_level(metlevel_int, (t_pkmn->get_trainer_gender().std_string() == "Female"));
 
             moveset_t moves;
@@ -903,7 +903,7 @@ namespace pkmn
             if(get_gen_456_otgender(metlevel_int)) t_pkmn->set_trainer_gender("Female");
             else t_pkmn->set_trainer_gender("Male");
 
-            t_pkmn->set_held_item(item::make(database::get_item_id(p_pkm->item, Versions::BLACK), Versions::BLACK));
+            t_pkmn->set_held_item(database::get_item_name(p_pkm->item, Versions::BLACK));
             t_pkmn->set_personality(p_pkm->pid);
             t_pkmn->set_trainer_public_id(p_pkm->tid);
             t_pkmn->set_trainer_secret_id(p_pkm->sid);
@@ -1071,7 +1071,7 @@ namespace pkmn
 
             uint8_t* metlevel_int = reinterpret_cast<uint8_t*>(&(p_pkm->ball)+1);
             set_gen_456_met_level(metlevel_int, t_pkmn->get_met_level());
-            p_pkm->ball = ::Balls::balls(libpkmn_ball_to_game_ball(reverse_ball_dict.at(t_pkmn->get_ball(), PokeBalls::POKE_BALL)));
+            p_pkm->ball = ::Balls::balls(libpkmn_ball_to_game_ball(reverse_ball_dict.at(t_pkmn->get_ball(), Balls::POKE_BALL)));
             set_gen_456_otgender(metlevel_int, (t_pkmn->get_trainer_gender().std_string() == "Female"));
             p_pkm->pid = t_pkmn->get_personality();
             p_pkm->tid = t_pkmn->get_trainer_public_id();
@@ -1240,7 +1240,7 @@ namespace pkmn
             if(get_gen_456_otgender(metlevel_int)) t_pkmn->set_trainer_gender("Female");
             else t_pkmn->set_trainer_gender("Male");
 
-            t_pkmn->set_held_item(item::make(database::get_item_id(p_pkx->item, from_game), from_game));
+            t_pkmn->set_held_item(database::get_item_name(p_pkx->item, from_game));
             t_pkmn->set_personality(p_pkx->pid);
             t_pkmn->set_trainer_public_id(p_pkx->tid);
             t_pkmn->set_trainer_secret_id(p_pkx->sid);
@@ -1292,7 +1292,7 @@ namespace pkmn
 
             uint8_t* metlevel_int = reinterpret_cast<uint8_t*>(&(p_pkx->ball)+1);
             set_gen_456_met_level(metlevel_int, t_pkmn->get_met_level());
-            p_pkx->ball = Balls::balls(libpkmn_ball_to_game_ball(reverse_ball_dict[t_pkmn->get_ball()]));
+            p_pkx->ball = ::Balls::balls(libpkmn_ball_to_game_ball(reverse_ball_dict[t_pkmn->get_ball()]));
             set_gen_456_otgender(metlevel_int, (t_pkmn->get_trainer_gender().std_string() == "Female"));
             p_pkx->pid = t_pkmn->get_personality();
             p_pkx->tid = t_pkmn->get_trainer_public_id();

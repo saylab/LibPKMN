@@ -39,16 +39,16 @@ namespace pkmn
         switch(base->get_generation())
         {
             case 1:
-                return sptr(new team_pokemon_gen1impl(base, game, level,
-                                                   move1, move2, move3, move4));
+                return sptr(new team_pokemon_gen1impl(base, game,
+                                                      move1, move2, move3, move4));
 
             case 2:
-                return sptr(new team_pokemon_gen2impl(base, game, level,
-                                                   move1, move2, move3, move4));
+                return sptr(new team_pokemon_gen2impl(base, game,
+                                                      move1, move2, move3, move4));
 
             case 3:
-                return sptr(new team_pokemon_gen3impl(base, game, level,
-                                                   move1, move2, move3, move4));
+                return sptr(new team_pokemon_gen3impl(base, game,
+                                                      move1, move2, move3, move4));
         }
     }
 
@@ -97,6 +97,26 @@ namespace pkmn
         return _base->get_species();
     }
 
+    pkmn::pkstring team_pokemon_impl::get_original_game() const
+    {
+        return database::get_version_name(get_original_game_id());
+    }
+
+    pkmn::pkstring_pair_t team_pokemon_impl::get_types() const
+    {
+        return _base->get_types();
+    }
+
+    pkmn::dict<pkmn::pkstring, unsigned int> team_pokemon_impl::get_base_stats() const
+    {
+        return _base->get_base_stats();
+    }
+
+    void team_pokemon_impl::set_original_game(const pkmn::pkstring &game)
+    {   
+        set_original_game(database::get_version_id(game));
+    }
+
     int team_pokemon_impl::get_attribute(const pkmn::pkstring &attribute) const
     {
         return _attributes.at(attribute);
@@ -112,12 +132,12 @@ namespace pkmn
         _attributes[attribute] = value;
     }
 
-    pkmn::pkstring team_pokemon_impl::get_icon_path()
+    pkmn::pkstring team_pokemon_impl::get_icon_path() const
     {
         return _base->get_icon_path(get_gender() == "Male");
     }
 
-    pkmn::pkstring team_pokemon_impl::get_sprite_path()
+    pkmn::pkstring team_pokemon_impl::get_sprite_path() const
     {
         return _base->get_sprite_path(get_gender() == "Male", is_shiny());
     }
@@ -129,27 +149,28 @@ namespace pkmn
     }
 
     // NOTE: Could affect IV's and stats
-    void team_pokemon_impl::set_form(unsigned int &form)
+    void team_pokemon_impl::set_form(unsigned int form)
     {
         _base->set_form(form);
     }
 
-    void team_pokemon_impl::get_pokemon_id() const
+    unsigned int team_pokemon_impl::get_pokemon_id() const
     {
         return _base->get_pokemon_id();
     }
 
-    void team_pokemon_impl::get_species_id() const
+    unsigned int team_pokemon_impl::get_species_id() const
     {
         return _species_id;
     }
 
-    void team_pokemon_impl::get_game_id() const
+    unsigned int team_pokemon_impl::get_game_id() const
     {
         return _game_id;
     }
 
-    void team_pokemon_impl::get_form_id() const
+    unsigned int team_pokemon_impl::get_form_id() const
     {
         return _base->get_form_id();
     }
+} /* namespace pkmn */

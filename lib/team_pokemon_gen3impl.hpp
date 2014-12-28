@@ -14,7 +14,7 @@
 
 namespace pkmn
 {
-    class team_pokemon_gen3impl
+    class team_pokemon_gen3impl: public team_pokemon_impl
     {
         public:
 
@@ -24,6 +24,7 @@ namespace pkmn
             ~team_pokemon_gen3impl() {};
 
             //Getting Trainer Info
+            pkmn::pkstring get_nickname() const;
             pkmn::pkstring get_trainer_name() const;
             pkmn::pkstring get_trainer_gender() const;
             unsigned int get_trainer_id() const;
@@ -34,7 +35,6 @@ namespace pkmn
 
             //Setting Trainer Info
             void set_original_game(unsigned int game);
-            void set_original_game(const pkmn::pkstring &game);
             void set_nickname(const pkmn::pkstring &nickname);
             void set_trainer_name(const pkmn::pkstring &trainer_name);
             void set_trainer_gender(const pkmn::pkstring &gender);
