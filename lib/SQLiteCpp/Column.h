@@ -159,20 +159,24 @@ public:
         return getBytes ();
     }
 
-    /// @brief Inline cast operator to int
-    inline operator int() const
+    #define INT_OPERATOR(type) inline operator type() const \
+                               { \
+                                   return type(getInt()); \
+                               }
+
+    INT_OPERATOR(uint8_t)
+    INT_OPERATOR(uint16_t)
+    INT_OPERATOR(uint32_t)
+    INT_OPERATOR(uint64_t)
+    INT_OPERATOR(int8_t)
+    INT_OPERATOR(int16_t)
+    INT_OPERATOR(int32_t)
+    INT_OPERATOR(int64_t)
+
+    /// @brief Inline cast operator to float
+    inline operator float() const
     {
-        return getInt();
-    }
-    /// @brief Inline cast operator to unsigned int
-    inline operator unsigned int() const
-    {
-        return getInt();
-    }
-    /// @brief Inline cast operator to 64bits integer
-    inline operator sqlite3_int64() const
-    {
-        return getInt64();
+        return float(getDouble());
     }
     /// @brief Inline cast operator to double
     inline operator double() const

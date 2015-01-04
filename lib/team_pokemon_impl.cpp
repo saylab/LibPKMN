@@ -332,7 +332,7 @@ namespace pkmn
         std::string query_string(str(boost::format("SELECT generation_id FROM item_game_indices WHERE item_id=%d")
                                      % item_id));
         SQLite::Statement query(*_db, query_string.c_str());
-        unsigned int gen = query.executeStep() ? int(query.getColumn(0)) : 7;
+        unsigned int gen = query.executeStep() ? query.getColumn(0) : 7;
 
         if(_generation <= gen) _held_item = item_id;
     }
@@ -367,7 +367,7 @@ namespace pkmn
         std::string query_string(str(boost::format("SELECT generation_id FROM moves WHERE id=%d")
                                      % move_id));
         SQLite::Statement query(*_db, query_string.c_str());
-        unsigned int generation = (query.executeStep()) ? int(query.getColumn(0)) : 7; //Invalid if invalid move ID is given
+        unsigned int generation = (query.executeStep()) ? query.getColumn(0) : 7; //Invalid if invalid move ID is given
         if(generation <= _generation and (pos >= 1 and pos <= 4)) //Position must be valid
         {
             _moves[pos-1] = move::make(move_id, _game_id);

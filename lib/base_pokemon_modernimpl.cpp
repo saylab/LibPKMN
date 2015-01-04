@@ -109,9 +109,9 @@ namespace pkmn
                              << " AND stat_id IN (3,5)";
                 SQLite::Statement query(*_db, query_stream.str().c_str());
                 query.executeStep();
-                _special_attack = int(query.getColumn(0));
+                _special_attack = query.getColumn(0);
                 query.executeStep();
-                _special_defense = int(query.getColumn(0));
+                _special_defense = query.getColumn(0);
                 if(_generation < 6) _set_old_values();
 
                 break;
@@ -237,17 +237,17 @@ namespace pkmn
                 SQLite::Statement stats_query(*_db, query_stream.str().c_str());
 
                 stats_query.executeStep();
-                ev_yields["HP"] = int(stats_query.getColumn(0));
+                ev_yields["HP"] = stats_query.getColumn(0);
                 stats_query.executeStep();
-                ev_yields["Attack"] = int(stats_query.getColumn(0));
+                ev_yields["Attack"] = stats_query.getColumn(0);
                 stats_query.executeStep();
-                ev_yields["Defense"] = int(stats_query.getColumn(0));
+                ev_yields["Defense"] = stats_query.getColumn(0);
                 stats_query.executeStep();
-                ev_yields["Special Attack"] = int(stats_query.getColumn(0));
+                ev_yields["Special Attack"] = stats_query.getColumn(0);
                 stats_query.executeStep();
-                ev_yields["Special Defense"] = int(stats_query.getColumn(0));
+                ev_yields["Special Defense"] = stats_query.getColumn(0);
                 stats_query.executeStep();
-                ev_yields["Speed"] = int(stats_query.getColumn(0));
+                ev_yields["Speed"] = stats_query.getColumn(0);
 
                 return ev_yields;
         }
@@ -1176,17 +1176,17 @@ namespace pkmn
         SQLite::Statement stats_query(*_db, query_stream.str().c_str());
 
         stats_query.executeStep();
-        _hp = int(stats_query.getColumn(0));
+        _hp = stats_query.getColumn(0);
         stats_query.executeStep();
-        _attack = int(stats_query.getColumn(0));
+        _attack = stats_query.getColumn(0);
         stats_query.executeStep();
-        _defense = int(stats_query.getColumn(0));
+        _defense = stats_query.getColumn(0);
         stats_query.executeStep();
-        _special_attack = int(stats_query.getColumn(0));
+        _special_attack = stats_query.getColumn(0);
         stats_query.executeStep();
-        _special_defense = int(stats_query.getColumn(0));
+        _special_defense = stats_query.getColumn(0);
         stats_query.executeStep();
-        _speed = int(stats_query.getColumn(0));
+        _speed = stats_query.getColumn(0);
         if(_generation < 6) _set_old_values();
 
         _type1_id = stats_query.getColumn(0);
@@ -1613,17 +1613,17 @@ namespace pkmn
         SQLite::Statement stats_query(*_db, query_stream.str().c_str());
 
         stats_query.executeStep();
-        _hp = int(stats_query.getColumn(0));
+        _hp = stats_query.getColumn(0);
         stats_query.executeStep();
-        _attack = int(stats_query.getColumn(0));
+        _attack = stats_query.getColumn(0);
         stats_query.executeStep();
-        _defense = int(stats_query.getColumn(0));
+        _defense = stats_query.getColumn(0);
         stats_query.executeStep();
-        _special_attack = int(stats_query.getColumn(0));
+        _special_attack = stats_query.getColumn(0);
         stats_query.executeStep();
-        _special_defense = int(stats_query.getColumn(0));
+        _special_defense = stats_query.getColumn(0);
         stats_query.executeStep();
-        _speed = int(stats_query.getColumn(0));
+        _speed = stats_query.getColumn(0);
         if(_generation < 6) _set_old_values();
 
         form_signal1();

@@ -155,7 +155,7 @@ namespace pkmn
                                      % pokedex_id));
         SQLite::Statement query(*db, query_string.c_str());
 
-        while(query.executeStep()) entry_list.push_back(std::make_pair(int(query.getColumn(0)), int(query.getColumn(1))));
+        while(query.executeStep()) entry_list.push_back(std::make_pair(query.getColumn(0), int(query.getColumn(1))));
     }
 
     void get_pokemon_list(std::vector<pkmn::pkstring> &pokemon_vec, unsigned int game)

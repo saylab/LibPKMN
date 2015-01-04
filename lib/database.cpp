@@ -417,8 +417,8 @@ namespace pkmn
             SQLite::Statement query(*db, query_stream.str().c_str());
             if(not query.executeStep()) THROW_QUERY_ERROR();
 
-            if(int(query.getColumn(0)) == stat_id) return 0.9;
-            else if(int(query.getColumn(1)) == stat_id) return 1.1;
+            if(double(query.getColumn(0)) == stat_id) return 0.9;
+            else if(double(query.getColumn(1)) == stat_id) return 1.1;
             else return 1.0;
         }
 

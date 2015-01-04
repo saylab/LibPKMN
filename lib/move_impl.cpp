@@ -180,7 +180,7 @@ namespace pkmn
         std::ostringstream query_stream;
         query_stream << "SELECT gen" << _generation << "_accuracy FROM old_move_accuracies WHERE move_id=" << _move_id;
         SQLite::Statement accuracy_query(*_db, query_stream.str().c_str());
-        if(accuracy_query.executeStep()) _base_accuracy = int(accuracy_query.getColumn(0)) / 100.0;
+        if(accuracy_query.executeStep()) _base_accuracy = double(accuracy_query.getColumn(0)) / 100.0;
         
         //Hypnosis varies in accuracy between games
         if(_move_id == Moves::HYPNOSIS and (_game_id == Versions::DIAMOND or _game_id == Versions::PEARL)) _base_accuracy = 0.7;
