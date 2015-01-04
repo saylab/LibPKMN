@@ -66,9 +66,9 @@ namespace pkmn
                              << " AND stat_id IN (3,5)";
                 SQLite::Statement query(*_db, query_stream.str().c_str());
                 query.executeStep();
-                _special_attack = int(query.getColumn(0));
+                _special_attack = query.getColumn(0);
                 query.executeStep();
-                _special_defense = int(query.getColumn(0));
+                _special_defense = query.getColumn(0);
                 _set_old_values();
 
                 break;
