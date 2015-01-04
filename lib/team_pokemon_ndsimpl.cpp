@@ -616,30 +616,21 @@ namespace pkmn
         pkmn::dict<pkmn::pkstring, unsigned int> IVs = get_IVs();
         pkmn::nature_t nature = get_nature();
 
-        _raw.max_hp = int(floor(((double(IVs["HP"]) + (2.0*double(stats["HP"]))
-                                  + (0.25*double(_blockA->ev_hp)) + 100.0)
-                                * double(_raw.level))/100.0 + 10.0));
+        _raw.max_hp = calculations::get_modern_stat(Stats::HP, stats["HP"], _raw.level,
+                                                    nature, _blockA->ev_hp, IVs["HP"]);
         _raw.current_hp = _raw.max_hp;
-
-        _raw.atk    = int(ceil(((((double(IVs["Attack"]) + 2.0*double(stats["Attack"])
-                                   + 0.25*double(_blockA->ev_atk))
-                             * double(_raw.level))/100.0) + 5.0) * nature["Attack"]));
-
-        _raw.def    = int(ceil(((((double(IVs["Defense"]) + 2.0*double(stats["Defense"])
-                                   + 0.25*double(_blockA->ev_def))
-                             * double(_raw.level))/100.0) + 5.0) * nature["Defense"]));
-
-        _raw.spd    = int(ceil(((((double(IVs["Speed"]) + 2.0*double(stats["Speed"])
-                                   + 0.25*double(_blockA->ev_spd))
-                             * double(_raw.level))/100.0) + 5.0) * nature["Speed"]));
-
-        _raw.spatk  = int(ceil(((((double(IVs["Special Attack"]) + 2.0*double(stats["Special Attack"])
-                                   + 0.25*double(_blockA->ev_spatk))
-                             * double(_raw.level))/100.0) + 5.0) * nature["Special Attack"]));
-
-        _raw.spdef  = int(ceil(((((double(IVs["Special Defense"]) + 2.0*double(stats["Special Defense"])
-                                   + 0.25*double(_blockA->ev_spdef))
-                             * double(_raw.level))/100.0) + 5.0) * nature["Special Defense"]));
+        _raw.atk = calculations::get_modern_stat(Stats::ATTACK, stats["Attack"], _raw.level,
+                                                 nature, _blockA->ev_atk, IVs["Attack"]);
+        _raw.def = calculations::get_modern_stat(Stats::DEFENSE, stats["Defense"], _raw.level,
+                                                 nature, _blockA->ev_def, IVs["Defense"]);
+        _raw.spd = calculations::get_modern_stat(Stats::SPEED, stats["Speed"], _raw.level,
+                                                 nature, _blockA->ev_spd, IVs["Speed"]);
+        _raw.spatk = calculations::get_modern_stat(Stats::SPECIAL_ATTACK, stats["Special Attack"],
+                                                   _raw.level, nature, _blockA->ev_spatk,
+                                                   IVs["Special Attack"]);
+        _raw.spdef = calculations::get_modern_stat(Stats::SPECIAL_DEFENSE, stats["Special Defense"],
+                                                   _raw.level, nature, _blockA->ev_spdef,
+                                                   IVs["Special Defense"]);
     }
 
     // Source: http://www.smogon.com/ingame/rng/pid_iv_creation#finding_gender_from_pid

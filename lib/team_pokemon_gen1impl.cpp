@@ -7,6 +7,7 @@
 
 #include <boost/algorithm/string.hpp>
 
+#include <pkmn/calculations.hpp>
 #include <pkmn/enums.hpp>
 #include <pkmn/database.hpp>
 #include <pkmn/types/prng.hpp>
@@ -491,20 +492,16 @@ namespace pkmn
         pkmn::dict<pkmn::pkstring, unsigned int> stats = _base->get_base_stats();
         pkmn::dict<pkmn::pkstring, unsigned int> IVs = get_IVs();
 
-        _raw.max_hp = int(floor((((double(IVs["HP"]) + double(stats["HP"]) + (pow(_raw.pc.ev_hp,0.5)/8.0)
-                            + 50.0) * double(_raw.level))/50.0) + 10.0));
+        _raw.max_hp = calculations::get_retro_stat(Stats::HP, stats["HP"], _raw.level,
+                                                   _raw.pc.ev_hp, IVs["HP"]);
         _raw.pc.current_hp = _raw.max_hp;
-
-        _raw.atk    = int(ceil((((double(IVs["Attack"]) + double(stats["Attack"]) + (pow(_raw.pc.ev_atk,0.5)/8.0))
-                                * double(_raw.level))/50.0) + 5.0));
-
-        _raw.def    = int(ceil((((double(IVs["Defense"]) + double(stats["Defense"]) + (pow(_raw.pc.ev_def,0.5)/8.0))
-                                * double(_raw.level))/50.0) + 5.0));
-
-        _raw.spd    = int(ceil((((double(IVs["Speed"]) + double(stats["Speed"]) + (pow(_raw.pc.ev_spd,0.5)/8.0))
-                                * double(_raw.level))/50.0) + 5.0));
-
-        _raw.spcl   = int(ceil((((double(IVs["Special"]) + double(stats["Special"]) + (pow(_raw.pc.ev_spcl,0.5)/8.0))
-                                * double(_raw.level))/50.0) + 5.0));
+        _raw.atk = calculations::get_retro_stat(Stats::ATTACK, stats["Attack"], _raw.level,
+                                                _raw.pc.ev_atk, IVs["Attack"]);
+        _raw.def = calculations::get_retro_stat(Stats::DEFENSE, stats["Defense"], _raw.level,
+                                                _raw.pc.ev_def, IVs["Defense"]);
+        _raw.spd = calculations::get_retro_stat(Stats::SPEED, stats["Speed"], _raw.level,
+                                                _raw.pc.ev_spd, IVs["Speed"]);
+        _raw.spcl = calculations::get_retro_stat(Stats::SPECIAL, stats["Special"], _raw.level,
+                                                 _raw.pc.ev_spcl, IVs["Special"]);
     }
 }
