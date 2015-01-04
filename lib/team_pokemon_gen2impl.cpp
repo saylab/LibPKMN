@@ -24,7 +24,7 @@ namespace pkmn
                                                  uint8_t move3, uint8_t move4):
         team_pokemon_impl(base),
         _nickname(boost::algorithm::to_upper_copy(base->get_species().std_wstring())),
-        _otname("GOLD")
+        _otname("LIBPKMN")
     {
         /*
          * Populate native struct

@@ -132,6 +132,8 @@ namespace pkmn
             virtual unsigned int get_ability_id() const = 0;
             virtual unsigned int get_item_id() const = 0;
             virtual unsigned int get_nature_id() const = 0;
+
+            virtual void* get_native() = 0;
     };
 
     // Related typedefs

@@ -38,7 +38,7 @@ namespace pkmn
         conversions::export_gen3_text(nickname, _raw.pc.nickname, 10);
 
         _raw.pc.language = 0x202; // English
-        conversions::export_gen3_text("RED", _raw.pc.otname, 7);
+        conversions::export_gen3_text("LIBPKMN", _raw.pc.otname, 7);
         // TODO: checksum
 
         _growth = &(_raw.pc.blocks.growth);
@@ -60,22 +60,16 @@ namespace pkmn
             _attacks->move_pps[i] = database::get_move_pp(_attacks->moves[i]);
         do
         {
-            _effort->ev_hp    = _prng->lcrng() % 246;
-            _effort->ev_atk   = _prng->lcrng() % 246;
-            _effort->ev_def   = _prng->lcrng() % 246;
-            _effort->ev_spd   = _prng->lcrng() % 246;
-            _effort->ev_spatk = _prng->lcrng() % 246;
-            _effort->ev_spdef = _prng->lcrng() % 246;
+            _effort->ev_hp    = _prng->lcrng() % 256;
+            _effort->ev_atk   = _prng->lcrng() % 256;
+            _effort->ev_def   = _prng->lcrng() % 256;
+            _effort->ev_spd   = _prng->lcrng() % 256;
+            _effort->ev_spatk = _prng->lcrng() % 256;
+            _effort->ev_spdef = _prng->lcrng() % 256;
         }
         while((_effort->ev_hp  + _effort->ev_atk   + _effort->ev_def +
                _effort->ev_spd + _effort->ev_spatk + _effort->ev_spdef) > 510);
         // TODO: contest stats data structure
-        _attributes["cool"]   = _effort->coolness;
-        _attributes["beauty"] = _effort->beauty;
-        _attributes["cute"]   = _effort->cuteness;
-        _attributes["smart"]  = _effort->smartness;
-        _attributes["tough"]  = _effort->toughness;
-        _attributes["feel"]   = _effort->feel;
         // TODO: Pokerus
         _misc->met_location = 255; // Fateful encounter
 
@@ -89,7 +83,6 @@ namespace pkmn
         _misc->iv_egg_ability &= ~(1<<30); // Not an egg
 
         _misc->ribbons_obedience = 0;
-        // TODO: ribbons
         _misc->ribbons_obedience |= (1<<31); // Mew and Deoxys will be obedient
 
         _raw.condition = 0; // OK
@@ -554,6 +547,8 @@ namespace pkmn
     {
         pkmn::ribbons rib;
         rib.hoenn = _misc->ribbons_obedience;
+
+        return rib;
     }
 
     void team_pokemon_gen3impl::set_ribbons(const pkmn::ribbons &rib)

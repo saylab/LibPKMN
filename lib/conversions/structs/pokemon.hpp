@@ -328,8 +328,8 @@ namespace pkmn
         uint16_t otname[8];
         uint8_t eggmet_date[3];
         uint8_t met_date[3];
-        uint8_t eggmet_dp;
-        uint8_t met_dp;
+        uint16_t eggmet_dp;
+        uint16_t met_dp;
         uint8_t pokerus;
         uint8_t ball;
         uint8_t metlevel_otgender;
