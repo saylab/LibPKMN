@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -20,7 +20,9 @@ namespace pkmn
         public:
 
             team_pokemon_impl(base_pokemon::sptr base);
-            virtual ~team_pokemon_impl() {};
+            team_pokemon_impl(const team_pokemon_impl &other);
+            team_pokemon_impl& operator=(const team_pokemon_impl &other);
+            ~team_pokemon_impl() {};
 
             // Game-specific Info
             pkmn::pkstring get_game() const;

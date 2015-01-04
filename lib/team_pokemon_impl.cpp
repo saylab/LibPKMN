@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -77,6 +77,22 @@ namespace pkmn
         if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
     }
 
+    team_pokemon_impl::team_pokemon_impl(const team_pokemon_impl &other):
+        _base(copy_base_pokemon(other._base)),
+        _prng(copy_prng(other._prng)),
+        _species_id(other._species_id),
+        _game_id(other._game_id),
+        _attributes(other._attributes) {};
+
+    team_pokemon_impl& team_pokemon_impl::operator=(const team_pokemon_impl &other)
+    {
+        _base       = copy_base_pokemon(other._base);
+        _prng       = copy_prng(other._prng);
+        _species_id = other._species_id;
+        _game_id    = other._game_id;
+        _attributes = other._attributes;
+    }
+
     pkmn::pkstring team_pokemon_impl::get_game() const
     {
         return database::get_version_name(_game_id);
@@ -94,7 +110,7 @@ namespace pkmn
 
     pkmn::pkstring team_pokemon_impl::get_species_name() const
     {
-        return _base->get_species();
+        return _base->get_name();
     }
 
     pkmn::pkstring team_pokemon_impl::get_original_game() const

@@ -21,6 +21,8 @@ namespace pkmn
             team_pokemon_gen3impl(base_pokemon::sptr base, uint8_t level,
                                   uint8_t move1, uint8_t move2,
                                   uint8_t move3, uint8_t move4);
+            team_pokemon_gen3impl(const team_pokemon_gen3impl &other);
+            team_pokemon_gen3impl& operator=(const team_pokemon_gen3impl &other);
             ~team_pokemon_gen3impl() {};
 
             //Getting Trainer Info

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -21,6 +21,8 @@ namespace pkmn
             team_pokemon_ndsimpl(base_pokemon::sptr base, uint8_t level,
                                   uint8_t move1, uint8_t move2,
                                   uint8_t move3, uint8_t move4);
+            team_pokemon_ndsimpl(const team_pokemon_ndsimpl &other);
+            team_pokemon_ndsimpl& operator=(const team_pokemon_ndsimpl &other);
             ~team_pokemon_ndsimpl() {};
 
             //Getting Trainer Info

@@ -51,6 +51,20 @@ namespace pkmn
         _set_stats(); // Will populate party portion of struct
     }
 
+    team_pokemon_gen1impl::team_pokemon_gen1impl(const team_pokemon_gen1impl &other):
+        team_pokemon_impl(other),
+        _raw(other._raw),
+        _nickname(other._nickname),
+        _otname(other._otname) {};
+
+    team_pokemon_gen1impl& team_pokemon_gen1impl::operator=(const team_pokemon_gen1impl &other)
+    {
+        team_pokemon_impl::operator=(other);
+        _raw      = other._raw;
+        _nickname = other._nickname;
+        _otname   = other._otname;
+    }
+
     pkmn::pkstring team_pokemon_gen1impl::get_nickname() const
     {
         return _nickname;

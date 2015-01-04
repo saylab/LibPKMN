@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -73,6 +73,20 @@ namespace pkmn
             // When Unown's IV's are changed, update its form
             _unown_signal.Connect(b_pkmn, &base_pokemon_gen2impl::_set_unown_form);
         }
+    }
+
+    team_pokemon_gen2impl::team_pokemon_gen2impl(const team_pokemon_gen2impl &other):
+        team_pokemon_impl(other),
+        _raw(other._raw),
+        _nickname(other._nickname),
+        _otname(other._otname) {};
+
+    team_pokemon_gen2impl& team_pokemon_gen2impl::operator=(const team_pokemon_gen2impl &other)
+    {
+        team_pokemon_impl::operator=(other);
+        _raw = other._raw;
+        _nickname = other._nickname;
+        _otname = other._otname;
     }
 
     pkmn::pkstring team_pokemon_gen2impl::get_nickname() const

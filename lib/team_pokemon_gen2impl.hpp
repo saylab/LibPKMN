@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -21,6 +21,8 @@ namespace pkmn
             team_pokemon_gen2impl(base_pokemon::sptr base, uint8_t level,
                                   uint8_t move1, uint8_t move2,
                                   uint8_t move3, uint8_t move4);
+            team_pokemon_gen2impl(const team_pokemon_gen2impl &other);
+            team_pokemon_gen2impl& operator=(const team_pokemon_gen2impl &other);
             ~team_pokemon_gen2impl() {};
 
             //Getting Trainer Info
@@ -103,7 +105,6 @@ namespace pkmn
 
             gen2_party_pokemon_t _raw;
             pkmn::pkstring _nickname, _otname;
-            unsigned int _pokemon_id;
 
             void _set_experience(const uint32_t exp);
             void _set_level(const uint8_t level);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -88,6 +88,26 @@ namespace pkmn
         _raw.condition = 0; // OK
         _set_level(level);
         _set_stats();
+    }
+
+    team_pokemon_gen3impl::team_pokemon_gen3impl(const team_pokemon_gen3impl &other):
+        team_pokemon_impl(other),
+        _raw(other._raw)
+    {
+        _growth = &(_raw.pc.blocks.growth);
+        _attacks = &(_raw.pc.blocks.attacks);
+        _effort = &(_raw.pc.blocks.effort);
+        _misc = &(_raw.pc.blocks.misc);
+    }
+
+    team_pokemon_gen3impl& team_pokemon_gen3impl::operator=(const team_pokemon_gen3impl &other)
+    {
+        team_pokemon_impl::operator=(other);
+
+        _growth = &(_raw.pc.blocks.growth);
+        _attacks = &(_raw.pc.blocks.attacks);
+        _effort = &(_raw.pc.blocks.effort);
+        _misc = &(_raw.pc.blocks.misc);
     }
 
     pkmn::pkstring team_pokemon_gen3impl::get_nickname() const
