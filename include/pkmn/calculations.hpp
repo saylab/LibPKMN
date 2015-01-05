@@ -34,7 +34,7 @@ namespace pkmn
                                          uint16_t EV, uint8_t IV);
 
         uint16_t PKMN_API get_modern_stat(unsigned int stat_id, uint16_t stat,
-                                          unsigned int level, const nature &nat,
+                                          unsigned int level, const pkmn::nature_t &nat,
                                           uint16_t EV, uint8_t IV);
 
         uint8_t PKMN_API get_nature(uint32_t personality);

@@ -135,7 +135,7 @@ namespace pkmn
         }
 
         uint16_t get_modern_stat(unsigned int stat_id, uint16_t stat,
-                                 unsigned int level, const pkmn::nature &nat,
+                                 unsigned int level, const pkmn::nature_t &nat,
                                  uint16_t EV, uint8_t IV)
         {
             if(stat == Stats::HP)
