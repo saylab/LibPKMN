@@ -164,6 +164,7 @@ public:
                                    return type(getInt()); \
                                }
 
+    INT_OPERATOR(bool)
     INT_OPERATOR(uint8_t)
     INT_OPERATOR(uint16_t)
     INT_OPERATOR(uint32_t)
