@@ -8,34 +8,13 @@
 %feature("autodoc", "1");
 
 %include "std_vector.i"
-%import "pkmn_python.i"
-
-%typemap(in) pkmn::pkstring* (std::string temp) %{
-    temp = PyString_AsString($input);
-    $1 = new pkmn::pkstring(temp);
-%}
-
-%typemap(in) const pkmn::pkstring* (std::string temp) %{
-    temp = PyString_AsString($input);
-    $1 = new pkmn::pkstring(temp);
-%}
-
-%typemap(in) pkmn::pkstring& (std::string temp) %{
-    temp = PyString_AsString($input);
-    $1 = new pkmn::pkstring(temp);
-%}
-
-%typemap(in) const pkmn::pkstring& (std::string temp) %{
-    temp = PyString_AsString($input);
-    $1 = new pkmn::pkstring(temp);
-%}
-
-%typemap(out) pkmn::pkstring %{
-    $result = PyString_FromString($1.const_char());
-%}
 
 %{
+    #include <boost/locale/encoding_utf.hpp>
+
     #include "pkmn/database.hpp"
 %} 
+
+%import "pkmn_python.i"
 
 %include "pkmn/database.hpp"
