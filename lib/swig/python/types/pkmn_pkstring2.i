@@ -5,7 +5,10 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-%include "typemaps.i"
+/*
+ * This version of the pkmn::pkstring Python typemap is meant to be used with
+ * Python 2.x.
+ */
 
 %typecheck(SWIG_TYPECHECK_STRING) const pkmn::pkstring& %{
     if(PyString_Check($input)) $1 = 1;

@@ -19,11 +19,12 @@
 import datetime
 from optparse import OptionParser
 import os
+import sys
 
 import CppHeaderParser
 
 def generate_cpp(header, license):
-    class_name = header.classes[header.classes.keys()[0]]["name"]
+    class_name = header.classes[list(header.classes.keys())[0]]["name"]
 
     f = open("%sProxy.cpp" % class_name, 'w')
     f.write(license + "\n")
@@ -63,7 +64,7 @@ namespace pkmn
     f.close()
 
 def generate_hpp(header, license):
-    class_name = header.classes[header.classes.keys()[0]]["name"]
+    class_name = header.classes[list(header.classes.keys())[0]]["name"]
     includeguard_name = "%sPROXY" % class_name.upper()
 
     f = open("%sProxy.hpp" % class_name, 'w')
@@ -100,18 +101,24 @@ namespace pkmn
     f.close()
 
 def generate_py(header, license):
-    class_name = header.classes[header.classes.keys()[0]]["name"]
+    class_name = header.classes[list(header.classes.keys())[0]]["name"]
+
+    python_version_major = sys.version[0]
+    if python_version_major == "3":
+        import_qt4_swig = "from . import qt4_swig"
+    else:
+        import_qt4_swig = "import qt4_swig"
 
     f = open("%s.py" % class_name, 'w')
     f.write(license + "\n")
 
     f.write("""
 from PyQt4 import QtGui
-import qt4_swig
+%s
 import sip
 
 class %s(object):
-    def __new__(cls, """ % class_name)
+    def __new__(cls, """ % (import_qt4_swig, class_name))
 
     for i,parameter in enumerate(header.classes[class_name]["methods"]["public"][0]["parameters"]):
         if i != 0:

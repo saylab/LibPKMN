@@ -8,10 +8,13 @@
 %feature("autodoc", "1");
 
 %include "std_vector.i"
-%import "pkmn_python.i"
 
 %{
+    #include <boost/locale/encoding_utf.hpp>
+
     #include "pkmn/io.hpp"
 %} 
+
+%import "pkmn_python.i"
 
 %include "pkmn/io.hpp"
