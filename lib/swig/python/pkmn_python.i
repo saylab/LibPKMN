@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -26,6 +26,7 @@
     #include "pkmn/move.hpp"
     #include "pkmn/paths.hpp"
     #include "pkmn/pocket.hpp"
+    #include "pkmn/pokedex.hpp"
     #include "pkmn/team_pokemon.hpp"
     #include "pkmn/trainer.hpp"
 
@@ -40,6 +41,7 @@
 %include "pkmn/pocket.hpp"
 %include "pkmn/bag.hpp"
 
+%include "pkmn/pokedex.hpp"
 %include "pkmn/move.hpp"
 %include "pkmn/base_pokemon.hpp"
 %include "pkmn/team_pokemon.hpp"
@@ -61,6 +63,7 @@
  * std::vector templates
  */
 %template(int_vector)          std::vector<int>;
+%template(ushort_vector)       std::vector<uint16_t>;
 %template(uint_vector)         std::vector<unsigned int>;
 %template(item_list)           std::vector<std::pair<pkmn::item::sptr, unsigned int> >;
 %template(uint_pair_vector)    std::vector<std::pair<unsigned int, unsigned int> >;
@@ -74,6 +77,7 @@
  * pkmn::dict templates
  */
 PYTHON_PKMN_DICT(string_int_dict,    pkmn::pkstring, int)
+PYTHON_PKMN_DICT(string_ushort_dict, pkmn::pkstring, uint16_t)
 PYTHON_PKMN_DICT(string_uint_dict,   pkmn::pkstring, unsigned int)
 PYTHON_PKMN_DICT(string_string_dict, pkmn::pkstring, pkmn::pkstring)
 PYTHON_PKMN_DICT(pocket_dict,        pkmn::pkstring, pkmn::pocket::sptr)
@@ -87,6 +91,7 @@ PYTHON_PKMN_SPTR(game_save)
 PYTHON_PKMN_SPTR(item)
 PYTHON_PKMN_SPTR(move)
 PYTHON_PKMN_SPTR(pocket)
-PYTHON_PKMN_SPTR(team_pokemon)
+PYTHON_PKMN_SPTR(pokedex)
 PYTHON_PKMN_SPTR(prng)
+PYTHON_PKMN_SPTR(team_pokemon)
 PYTHON_PKMN_SPTR(trainer)
