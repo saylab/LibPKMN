@@ -81,8 +81,8 @@ namespace pkmn
         pokemon_query.executeStep();
         entry.pokedex_num = pokemon_query.getColumn(2);           // species_id
         entry.species_name = database::get_species_name(entry.pokedex_num);
-        entry.height = double(pokemon_query.getColumn(3)) / 10.0; // height
-        entry.height = double(pokemon_query.getColumn(4)) / 10.0; // weight
+        entry.height = float(pokemon_query.getColumn(3)) / float(10.0); // height
+        entry.weight = float(pokemon_query.getColumn(4)) / float(10.0); // weight
         entry.exp_yield = pokemon_query.getColumn(5);             // base_experience
 
         /*
@@ -116,12 +116,14 @@ namespace pkmn
         entry.abilities.first = database::get_ability_name(pokemon_abilities_query.getColumn(0)); // ability_id
         if(pokemon_abilities_query.executeStep())
             entry.abilities.second = database::get_ability_name(pokemon_abilities_query.getColumn(0)); // ability_id
+        else
+            entry.abilities.second = "None";
         if(get_generation() < 5)
             entry.hidden_ability = "None";
         else
         {
             query_stream.str("");
-            query_stream << "SELECT ability_id FROM pokemon_stats WHERE pokemon_id="
+            query_stream << "SELECT ability_id FROM pokemon_abilities WHERE pokemon_id="
                          << pokemon_id << " AND is_hidden=1";
             SQLite::Statement pokemon_abilities_query2(*_db, query_stream.str().c_str());
             if(pokemon_abilities_query2.executeStep())
