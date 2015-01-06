@@ -210,6 +210,9 @@
 %rename(hasGenderDifferences) has_gender_differences;
 %rename(baseStats) base_stats;
 %rename(EVYields) ev_yields;
+%rename(getGame) pkmn::pokedex::get_game;
+%rename(getGeneration) pkmn::pokedex::get_generation;
+%rename(getEntry) pkmn::pokedex::get_entry;
 
 /*
  * pkmn/team_pokemon.hpp
