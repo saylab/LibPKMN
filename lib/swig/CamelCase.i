@@ -195,6 +195,23 @@
 %rename(getGameID) pkmn::pocket::get_game_id;
 
 /*
+ * pkmn/pokedex.hpp
+ */
+%rename(PokedexEntry) pkmn::pokedex_entry_t;
+%rename(speciesName) species_name;
+%rename(pokedexNum) pokedex_num;
+%rename(hiddenAbility) hidden_ability;
+%rename(eggGroups) egg_groups;
+%rename(catchRate) catch_rate;
+%rename(expYield) exp_yield;
+%rename(baseFriendship) base_friendship;
+%rename(chanceMale) chance_male;
+%rename(chanceFemale) chance_female;
+%rename(hasGenderDifferences) has_gender_differences;
+%rename(baseStats) base_stats;
+%rename(EVYields) ev_yields;
+
+/*
  * pkmn/team_pokemon.hpp
  */
 %rename(TeamPokemon) pkmn::team_pokemon;

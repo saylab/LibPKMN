@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -35,6 +35,7 @@
     #include "pkmn/game_save.hpp"
     #include "pkmn/move.hpp"
     #include "pkmn/pocket.hpp"
+    #include "pkmn/pokedex.hpp"
     #include "pkmn/team_pokemon.hpp"
     #include "pkmn/trainer.hpp"
 
@@ -50,6 +51,7 @@
 %include "pkmn/pocket.hpp"
 %include "pkmn/bag.hpp"
 
+%include "pkmn/pokedex.hpp"
 %include "pkmn/move.hpp"
 %include "pkmn/base_pokemon.hpp"
 %include "pkmn/team_pokemon.hpp"
@@ -73,6 +75,7 @@ namespace pkmn
  * std::vector templates
  */
 %template(IntVector)         std::vector<int>;
+%template(UShortVector)      std::vector<uint16_t>;
 %template(LongVector)        std::vector<unsigned int>;
 %template(ItemList)          std::vector<std::pair<pkmn::item::sptr, unsigned int> >;
 %template(LongPairVector)    std::vector<std::pair<unsigned int, unsigned int> >;
@@ -86,6 +89,7 @@ namespace pkmn
  * pkmn::dict templates
  */
 JAVA_PKMN_DICT(StringIntDict, pkmn::pkstring, int, string, int)
+JAVA_PKMN_DICT(StringUShortDict, pkmn::pkstring, uint16_t, string, int)
 JAVA_PKMN_DICT(StringLongDict, pkmn::pkstring, unsigned int, string, long)
 JAVA_PKMN_DICT(StringStringDict, pkmn::pkstring, pkmn::pkstring, string, string)
 JAVA_PKMN_DICT(PocketDict, pkmn::pkstring, pkmn::pocket::sptr, string, PocketSPtr)
@@ -99,6 +103,7 @@ JAVA_PKMN_SPTR(game_save,    GameSaveSPtr)
 JAVA_PKMN_SPTR(item,         ItemSPtr)
 JAVA_PKMN_SPTR(move,         MoveSPtr)
 JAVA_PKMN_SPTR(pocket,       PocketSPtr)
-JAVA_PKMN_SPTR(team_pokemon, TeamPokemonSPtr)
+JAVA_PKMN_SPTR(pokedex,      PokedexSPtr)
 JAVA_PKMN_SPTR(prng,         PRNGSPtr)
+JAVA_PKMN_SPTR(team_pokemon, TeamPokemonSPtr)
 JAVA_PKMN_SPTR(trainer,      TrainerSPtr)
