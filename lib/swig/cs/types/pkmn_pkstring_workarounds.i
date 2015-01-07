@@ -40,6 +40,7 @@
     struct PokedexEntry {
         std::wstring speciesName;
         uint16_t pokedexNum;
+        std::wstring entry;
         std::pair<std::wstring, std::wstring> types;
         std::pair<std::wstring, std::wstring> abilities;
         std::wstring hiddenAbility;
@@ -61,6 +62,7 @@
 struct PokedexEntry {
     std::wstring speciesName;
     uint16_t pokedexNum;
+    std::wstring entry;
     std::pair<std::wstring, std::wstring> types;
     std::pair<std::wstring, std::wstring> abilities;
     std::wstring hiddenAbility;
@@ -87,6 +89,7 @@ struct PokedexEntry {
 
         entry2.speciesName = entry1.species_name;
         entry2.pokedexNum = entry1.pokedex_num;
+        entry2.entry = entry1.entry;
         entry2.types.first = entry1.types.first;
         entry2.types.second = entry1.types.second;
         entry2.abilities.first = entry1.abilities.first;
@@ -117,6 +120,7 @@ struct PokedexEntry {
 
         entry2.speciesName = entry1.species_name;
         entry2.pokedexNum = entry1.pokedex_num;
+        entry2.entry = entry1.entry;
         entry2.types.first = entry1.types.first;
         entry2.types.second = entry1.types.second;
         entry2.abilities.first = entry1.abilities.first;

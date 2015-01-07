@@ -160,6 +160,15 @@ namespace pkmn
             entry.egg_groups.second = "None";
 
         /*
+         * Pokédex entry
+         */
+        query_stream.str("");
+        query_stream << "SELECT flavor_text FROM pokemon_species_flavor_text WHERE species_id="
+                     << database::get_species_id(pokemon_id) << " AND version_id="
+                     << _version_id << " AND language_id=9";
+        entry.entry = _db->execAndGet(query_stream.str().c_str());
+
+        /*
          * Base stats, effort yields
          */
         query_stream.str("");
