@@ -49,9 +49,17 @@ namespace pkmn
         else
         {
             std::ostringstream query_stream;
-            query_stream << "SELECT pokemon_id FROM pokemon_forms WHERE id="
+            query_stream << "SELECT pokemon_id,introduced_in_version_group_id FROM pokemon_forms WHERE id="
                          << form_id;
-            pokemon_id = _db->execAndGet(query_stream.str().c_str());
+            SQLite::Statement query(*_db, query_stream.str().c_str());
+            if(query.executeStep())
+            {
+                if(database::get_version_group_id(_version_id) > int(query.getColumn(1)))
+                    throw std::runtime_error("This form did not exist in this version.");
+
+                pokemon_id = query.getColumn(0);
+            }
+            else throw std::runtime_error("Invalid form.");
         }
 
         _create_entry(pokemon_id);
@@ -61,8 +69,13 @@ namespace pkmn
     pokedex_entry_t& pokedex_impl::get_entry(const pkmn::pkstring& species_name,
                                              const pkmn::pkstring& form_name)
     {
-        // TODO: form name to ID
-        return get_entry(database::get_species_id(species_name));
+        unsigned int form_id;
+        if(form_name == "Standard" or form_name == species_name or form_name == "")
+            form_id = database::get_species_id(species_name);
+        else
+            form_id = database::get_form_id(species_name, form_name);
+
+        return get_entry(database::get_species_id(species_name), form_id);
     }
 
     void pokedex_impl::_create_entry(const uint16_t pokemon_id)

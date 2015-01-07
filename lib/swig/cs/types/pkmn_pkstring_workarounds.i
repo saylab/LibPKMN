@@ -109,7 +109,6 @@ struct PokedexEntry {
         return entry2;
     }
 
-    /* TODO: form name to ID */
     PokedexEntry getEntry(const std::wstring& speciesName,
                           const std::wstring& formName = std::wstring()){
 

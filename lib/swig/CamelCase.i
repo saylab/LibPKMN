@@ -309,12 +309,6 @@
 %rename(getGameID) pkmn::trainer::get_game_id;
 
 /*
- * pkmn/database/lists.hpp
- */
-%rename(getTableList) pkmn::database::get_table_list;
-%rename(getColumnList) pkmn::database::get_column_list;
-
-/*
  * pkmn/database.hpp
  */
 %rename(toDatabaseFormat) pkmn::database::to_database_format;
@@ -324,6 +318,8 @@
 %rename(getEggGroupID) pkmn::database::get_egg_group_id;
 %rename(getEggGroupName) pkmn::database::get_egg_group_name;
 %rename(getExperience) pkmn::database::get_experience;
+%rename(getFormID) pkmn::database::get_form_id;
+%rename(getFormName) pkmn::database::get_form_name;
 %rename(getLevel) pkmn::database::get_level;
 %rename(getGameID) pkmn::database::get_game_id;
 %rename(getGameName) pkmn::database::get_game_name;
