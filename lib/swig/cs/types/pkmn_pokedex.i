@@ -55,6 +55,18 @@
         std::wstring contestEffect;
         std::wstring superContestEffect;
     };
+
+    struct ItemEntry {
+        std::wstring name;
+        std::wstring category;
+        std::wstring pocket;
+        std::wstring description;
+
+        uint16_t cost;
+
+        uint8_t flingPower;
+        std::wstring flingEffect;
+    };
 %}
 
 struct PokemonEntry {
@@ -96,6 +108,18 @@ struct MoveEntry {
     std::wstring contestType;
     std::wstring contestEffect;
     std::wstring superContestEffect;
+};
+
+struct ItemEntry {
+    std::wstring name;
+    std::wstring category;
+    std::wstring pocket;
+    std::wstring description;
+
+    uint16_t cost;
+
+    uint8_t flingPower;
+    std::wstring flingEffect;
 };
 
 %extend pkmn::pokedex{
@@ -183,8 +207,8 @@ struct MoveEntry {
         return entry2;
     }
 
-    MoveEntry getMoveEntry(const uint16_t moveID){
-        pkmn::move_entry_t entry1 = self->get_move_entry(moveID);
+    MoveEntry getMoveEntry(const std::wstring& moveName){
+        pkmn::move_entry_t entry1 = self->get_move_entry(moveName);
         MoveEntry entry2;
 
         entry2.name = entry1.name;
@@ -204,15 +228,49 @@ struct MoveEntry {
 
         return entry2;
     }
+
+    ItemEntry getItemEntry(const uint16_t itemID){
+        pkmn::item_entry_t entry1 = self->get_item_entry(itemID);
+        ItemEntry entry2;
+
+        entry2.name = entry1.name;
+        entry2.category = entry1.category;
+        entry2.pocket = entry1.pocket;
+        entry2.description = entry1.description;
+        entry2.cost = entry1.cost;
+        entry2.flingPower = entry1.fling_power;;
+        entry2.flingEffect = entry1.fling_effect;
+
+        return entry2;
+    }
+
+    ItemEntry getItemEntry(const std::wstring& itemName){
+        pkmn::item_entry_t entry1 = self->get_item_entry(itemName);
+        ItemEntry entry2;
+
+        entry2.name = entry1.name;
+        entry2.category = entry1.category;
+        entry2.pocket = entry1.pocket;
+        entry2.description = entry1.description;
+        entry2.cost = entry1.cost;
+        entry2.flingPower = entry1.fling_power;;
+        entry2.flingEffect = entry1.fling_effect;
+
+        return entry2;
+    }
 }
 
 %ignore pkmn::pokemon_entry_t;
+%ignore pkmn::move_entry_t;
+%ignore pkmn::item_entry_t;
 %ignore pkmn::pokedex::get_pokemon_entry;
 %ignore pkmn::pokedex::get_move_entry;
+%ignore pkmn::pokedex::get_item_entry;
 
 %{
     #include "pkmn/pokedex/pokemon_entry.hpp"
     #include "pkmn/pokedex/move_entry.hpp"
+    #include "pkmn/pokedex/item_entry.hpp"
     #include "pkmn/pokedex.hpp"
 %}
 

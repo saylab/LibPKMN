@@ -10,6 +10,7 @@
 #include <cstdint>
 
 #include <pkmn/config.hpp>
+#include <pkmn/pokedex/item_entry.hpp>
 #include <pkmn/pokedex/move_entry.hpp>
 #include <pkmn/pokedex/pokemon_entry.hpp>
 #include <pkmn/types/dict.hpp>
@@ -43,6 +44,10 @@ namespace pkmn
             virtual move_entry_t& get_move_entry(const uint16_t move_id) = 0;
 
             virtual move_entry_t& get_move_entry(const pkmn::pkstring& move_name) = 0;
+
+            virtual item_entry_t& get_item_entry(const uint16_t item_id) = 0;
+
+            virtual item_entry_t& get_item_entry(const pkmn::pkstring& item_name) = 0;
     };
 }
 

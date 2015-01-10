@@ -34,12 +34,14 @@
     #include "pkmn/types/prng.hpp"
     #include "pkmn/pokedex/pokemon_entry.hpp"
     #include "pkmn/pokedex/move_entry.hpp"
+    #include "pkmn/pokedex/item_entry.hpp"
 %}
 
 %include "pkmn/types/markings.hpp"
 %include "pkmn/types/prng.hpp"
 %include "pkmn/pokedex/pokemon_entry.hpp"
 %include "pkmn/pokedex/move_entry.hpp"
+%include "pkmn/pokedex/item_entry.hpp"
 
 %include "pkmn/item.hpp"
 %include "pkmn/pocket.hpp"

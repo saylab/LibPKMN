@@ -200,6 +200,7 @@
 %rename(Pokedex) pkmn::pokedex;
 %rename(PokedexEntry) pkmn::pokemon_entry_t;
 %rename(MoveEntry) pkmn::move_entry_t;
+%rename(ItemEntry) pkmn::item_entry_t;
 %rename(speciesName) species_name;
 %rename(pokedexNum) pokedex_num;
 %rename(hiddenAbility) hidden_ability;
@@ -218,9 +219,13 @@
 %rename(contestEffect) contest_effect;
 %rename(superContestEffect) super_contest_effect;
 %rename(PP) pp;
+%rename(flingPower) fling_power;
+%rename(flingEffect) fling_effect;
 %rename(getGame) pkmn::pokedex::get_game;
 %rename(getGeneration) pkmn::pokedex::get_generation;
-%rename(getEntry) pkmn::pokedex::get_entry;
+%rename(getPokemonEntry) pkmn::pokedex::get_pokemon_entry;
+%rename(getMoveEntry) pkmn::pokedex::get_move_entry;
+%rename(getItemEntry) pkmn::pokedex::get_item_entry;
 
 /*
  * pkmn/team_pokemon.hpp
