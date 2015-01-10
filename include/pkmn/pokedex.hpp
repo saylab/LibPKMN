@@ -10,9 +10,10 @@
 #include <cstdint>
 
 #include <pkmn/config.hpp>
+#include <pkmn/pokedex/move_entry.hpp>
+#include <pkmn/pokedex/pokemon_entry.hpp>
 #include <pkmn/types/dict.hpp>
 #include <pkmn/types/pkstring.hpp>
-#include <pkmn/types/pokemon_entry.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
 namespace pkmn
@@ -33,11 +34,15 @@ namespace pkmn
 
             virtual uint16_t get_generation() const = 0;
 
-            virtual pokemon_entry_t& get_entry(const uint16_t species_id,
-                                               const uint16_t form_id = 0) = 0;
+            virtual pokemon_entry_t& get_pokemon_entry(const uint16_t species_id,
+                                                       const uint16_t form_id = 0) = 0;
 
-            virtual pokemon_entry_t& get_entry(const pkmn::pkstring& species_name,
-                                               const pkmn::pkstring& form_name = "") = 0;
+            virtual pokemon_entry_t& get_pokemon_entry(const pkmn::pkstring& species_name,
+                                                       const pkmn::pkstring& form_name = "") = 0;
+
+            virtual move_entry_t& get_move_entry(const uint16_t move_id) = 0;
+
+            virtual move_entry_t& get_move_entry(const pkmn::pkstring& move_name) = 0;
     };
 }
 

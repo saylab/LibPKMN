@@ -10,8 +10,8 @@
 /*
  * This workaround is necessary because of a bug in SWIG in which typemaps
  * are not properly propogated into structs that use the given class.
- * bug is only present in versions 2.0.5-3.0.0, but I have encountered it
- * in 3.0.1, so this workaround is necessary.
+ * This bug is theoretically only present in versions 2.0.5-3.0.0, but I
+ * have encountered it in 3.0.1, so this workaround is necessary.
  */
 
 %{
@@ -34,6 +34,26 @@
 
         pkmn::dict<pkmn::pkstring, uint16_t> baseStats;
         pkmn::dict<pkmn::pkstring, uint16_t> EVYields;
+    };
+
+    struct MoveEntry {
+        std::wstring name;
+        std::wstring type;
+        std::wstring description;
+        std::wstring damageClass;
+        std::wstring target;
+
+        uint8_t power;
+        uint8_t pp;
+        float accuracy;
+        int8_t priority;
+
+        pkmn::pkstring effect;
+        float effectChance;
+
+        std::wstring contestType;
+        std::wstring contestEffect;
+        std::wstring superContestEffect;
     };
 %}
 
@@ -58,11 +78,31 @@ struct PokemonEntry {
     pkmn::dict<pkmn::pkstring, uint16_t> EVYields;
 };
 
-%extend pkmn::pokedex{
-    PokemonEntry getEntry(const uint16_t speciesID,
-                          const uint16_t formID = 0){
+struct MoveEntry {
+    std::wstring name;
+    std::wstring type;
+    std::wstring description;
+    std::wstring damageClass;
+    std::wstring target;
 
-        pkmn::pokemon_entry_t entry1 = self->get_entry(speciesID, formID);
+    uint8_t power;
+    uint8_t pp;
+    float accuracy;
+    int8_t priority;
+
+    std::wstring effect;
+    float effectChance;
+
+    std::wstring contestType;
+    std::wstring contestEffect;
+    std::wstring superContestEffect;
+};
+
+%extend pkmn::pokedex{
+    PokemonEntry getPokemonEntry(const uint16_t speciesID,
+                                const uint16_t formID = 0){
+
+        pkmn::pokemon_entry_t entry1 = self->get_pokemon_entry(speciesID, formID);
         PokemonEntry entry2;
 
         entry2.speciesName = entry1.species_name;
@@ -90,10 +130,10 @@ struct PokemonEntry {
         return entry2;
     }
 
-    PokemonEntry getEntry(const std::wstring& speciesName,
-                          const std::wstring& formName = std::wstring()){
+    PokemonEntry getPokemonEntry(const std::wstring& speciesName,
+                                 const std::wstring& formName = std::wstring()){
 
-        pkmn::pokemon_entry_t entry1 = self->get_entry(speciesName, formName);
+        pkmn::pokemon_entry_t entry1 = self->get_pokemon_entry(speciesName, formName);
         PokemonEntry entry2;
 
         entry2.speciesName = entry1.species_name;
@@ -117,16 +157,62 @@ struct PokemonEntry {
 
         entry2.baseStats = entry1.base_stats;
         entry2.EVYields = entry1.ev_yields;
+
+        return entry2;
+    }
+
+    MoveEntry getMoveEntry(const uint16_t moveID){
+        pkmn::move_entry_t entry1 = self->get_move_entry(moveID);
+        MoveEntry entry2;
+
+        entry2.name = entry1.name;
+        entry2.type = entry1.type;
+        entry2.description = entry1.description;
+        entry2.damageClass = entry1.damage_class;
+        entry2.target = entry1.target;
+        entry2.power = entry1.power;
+        entry2.pp = entry1.pp;
+        entry2.accuracy = entry1.accuracy;
+        entry2.priority = entry1.priority;
+        entry2.effect = entry1.effect;
+        entry2.effectChance = entry1.effect_chance;
+        entry2.contestType = entry1.contest_type;
+        entry2.contestEffect = entry1.contest_effect;
+        entry2.superContestEffect = entry1.super_contest_effect;
+
+        return entry2;
+    }
+
+    MoveEntry getMoveEntry(const uint16_t moveID){
+        pkmn::move_entry_t entry1 = self->get_move_entry(moveID);
+        MoveEntry entry2;
+
+        entry2.name = entry1.name;
+        entry2.type = entry1.type;
+        entry2.description = entry1.description;
+        entry2.damageClass = entry1.damage_class;
+        entry2.target = entry1.target;
+        entry2.power = entry1.power;
+        entry2.pp = entry1.pp;
+        entry2.accuracy = entry1.accuracy;
+        entry2.priority = entry1.priority;
+        entry2.effect = entry1.effect;
+        entry2.effectChance = entry1.effect_chance;
+        entry2.contestType = entry1.contest_type;
+        entry2.contestEffect = entry1.contest_effect;
+        entry2.superContestEffect = entry1.super_contest_effect;
 
         return entry2;
     }
 }
 
 %ignore pkmn::pokemon_entry_t;
-%ignore pkmn::pokedex::get_entry;
+%ignore pkmn::pokedex::get_pokemon_entry;
+%ignore pkmn::pokedex::get_move_entry;
 
 %{
-    #include "pkmn/types/pokemon_entry.hpp"
+    #include "pkmn/pokedex/pokemon_entry.hpp"
+    #include "pkmn/pokedex/move_entry.hpp"
     #include "pkmn/pokedex.hpp"
 %}
 

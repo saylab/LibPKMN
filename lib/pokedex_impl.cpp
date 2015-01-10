@@ -7,6 +7,9 @@
 
 #include <sstream>
 
+#include <boost/format.hpp>
+
+#include <pkmn/enums.hpp>
 #include <pkmn/database.hpp>
 #include <pkmn/paths.hpp>
 
@@ -26,7 +29,8 @@ namespace pkmn
         if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
     }
 
-    pkmn::dict<uint16_t, pkmn::dict<uint16_t, pokemon_entry_t> > pokedex_impl::_entry_cache;
+    pkmn::dict<uint16_t, pkmn::dict<uint16_t, pokemon_entry_t> > pokedex_impl::_pokemon_entry_cache;
+    pkmn::dict<uint16_t, pkmn::dict<uint16_t, move_entry_t> >    pokedex_impl::_move_entry_cache;
     pkmn::shared_ptr<SQLite::Database>                           pokedex_impl::_db;
 
     pkmn::pkstring pokedex_impl::get_game() const
@@ -39,8 +43,8 @@ namespace pkmn
         return database::get_generation(_version_id);
     }
 
-    pokemon_entry_t& pokedex_impl::get_entry(const uint16_t species_id,
-                                             const uint16_t form_id)
+    pokemon_entry_t& pokedex_impl::get_pokemon_entry(const uint16_t species_id,
+                                                     const uint16_t form_id)
     {
         uint16_t pokemon_id;
 
@@ -62,12 +66,12 @@ namespace pkmn
             else throw std::runtime_error("Invalid form.");
         }
 
-        _create_entry(pokemon_id);
-        return _entry_cache[_version_id][pokemon_id];
+        _create_pokemon_entry(pokemon_id);
+        return _pokemon_entry_cache[_version_id][pokemon_id];
     }
 
-    pokemon_entry_t& pokedex_impl::get_entry(const pkmn::pkstring& species_name,
-                                             const pkmn::pkstring& form_name)
+    pokemon_entry_t& pokedex_impl::get_pokemon_entry(const pkmn::pkstring& species_name,
+                                                     const pkmn::pkstring& form_name)
     {
         unsigned int form_id;
         if(form_name == "Standard" or form_name == species_name or form_name == "")
@@ -75,12 +79,30 @@ namespace pkmn
         else
             form_id = database::get_form_id(species_name, form_name);
 
-        return get_entry(database::get_species_id(species_name), form_id);
+        return get_pokemon_entry(database::get_species_id(species_name), form_id);
     }
 
-    void pokedex_impl::_create_entry(const uint16_t pokemon_id)
+    move_entry_t& pokedex_impl::get_move_entry(const uint16_t move_id)
     {
-        if(_entry_cache[_version_id].has_key(pokemon_id)) return;
+        uint16_t generation = database::get_generation(_version_id);
+
+        std::ostringstream query_stream;
+        query_stream << "SELECT generation_id FROM moves WHERE id=" << move_id;
+        if(uint16_t(_db->execAndGet(query_stream.str().c_str())) > generation)
+            throw std::runtime_error("This move did not exist in this generation.");
+
+        _create_move_entry(move_id);
+        return _move_entry_cache[_version_id][move_id];
+    }
+
+    move_entry_t& pokedex_impl::get_move_entry(const pkmn::pkstring& move_name)
+    {
+        return get_move_entry(database::get_move_id(move_name));
+    }
+
+    void pokedex_impl::_create_pokemon_entry(const uint16_t pokemon_id)
+    {
+        if(_pokemon_entry_cache[_version_id].has_key(pokemon_id)) return;
 
         pokemon_entry_t entry;
 
@@ -219,8 +241,8 @@ namespace pkmn
         else
             entry.types.second = "None";
 
-        _adjust_entry(entry);
-        _entry_cache[_version_id][pokemon_id] = entry;
+        _adjust_pokemon_entry(entry);
+        _pokemon_entry_cache[_version_id][pokemon_id] = entry;
     }
 
     float pokedex_impl::_get_gender_chance(const uint16_t species_id,
@@ -253,12 +275,182 @@ namespace pkmn
      * Database values are valid for Generation VI, this fixes entries
      * from earlier generations.
      */
-    void pokedex_impl::_adjust_entry(pokemon_entry_t& entry)
+    void pokedex_impl::_adjust_pokemon_entry(pokemon_entry_t& entry)
     {
         uint8_t generation = get_generation();
 
         if(generation < 5)
         {
+            switch(entry.pokedex_num)
+            {
+                case Species::BUTTERFREE:
+                    if(generation > 1)
+                        entry.base_stats["Special Attack"] = 80;
+                    break;
+
+                case Species::BEEDRILL:
+                    entry.base_stats["Attack"] = 80;
+                    break;
+
+                case Species::PIDGEOT:
+                    entry.base_stats["Speed"] = 91;
+                    break;
+
+                case Species::PIKACHU:
+                    entry.base_stats["Defense"] = 30;
+                    if(generation > 1)
+                        entry.base_stats["Special Defense"] = 40;
+                    break;
+
+                case Species::RAICHU:
+                    entry.base_stats["Speed"] = 100;
+                    break;
+
+                case Species::NIDOQUEEN:
+                    entry.base_stats["Attack"] = 82;
+                    break;
+
+                case Species::NIDOKING:
+                    entry.base_stats["Attack"] = 92;
+                    break;
+
+                case Species::CLEFAIRY:
+                    entry.types.first = "Normal";
+                    break;
+
+                case Species::CLEFABLE:
+                    entry.types.first = "Normal";
+                    if(generation > 1)
+                        entry.base_stats["Special Attack"] = 85;
+                    break;
+
+                case Species::JIGGLYPUFF:
+                    entry.types.second = "None";
+                    break;
+
+                case Species::WIGGLYTUFF:
+                    entry.types.second = "None";
+                    if(generation > 1)
+                        entry.base_stats["Special Attack"] = 75;
+                    break;
+
+                case Species::VILEPLUME:
+                    if(generation > 1)
+                        entry.base_stats["Special Attack"] = 75;
+                    break;
+
+                case Species::POLIWRATH:
+                    entry.base_stats["Attack"] = 85;
+                    break;
+
+                case Species::ALAKAZAM:
+                    if(generation > 1)
+                        entry.base_stats["Special Defense"] = 85;
+                    break;
+
+                case Species::VICTREEBEL:
+                    if(generation > 1)
+                        entry.base_stats["Special Defense"] = 60;
+                    break;
+
+                case Species::GOLEM:
+                    entry.base_stats["Attack"] = 210;
+                    break;
+
+                case Species::MR_MIME:
+                    entry.types.second = "None";
+                    break;
+
+                case Species::IGGLYBUFF:
+                    entry.types.second = "None";
+                    break;
+
+                case Species::AMPHAROS:
+                    entry.base_stats["Defense"] = 75;
+                    break;
+
+                case Species::BELLOSSOM:
+                    entry.base_stats["Defense"] = 85;
+                    break;
+
+                case Species::MARILL:
+                    entry.types.second = "None";
+                    break;
+
+                case Species::AZUMARILL:
+                    entry.types.second = "None";
+                    entry.base_stats["Defense"] = 85;
+                    break;
+
+                case Species::JUMPLUFF:
+                    entry.base_stats["Special Defense"] = 85;
+                    break;
+
+                case Species::BEAUTIFLY:
+                    entry.base_stats["Special Attack"] = 90;
+                    break;
+
+                case Species::RALTS:
+                case Species::KIRLIA:
+                case Species::GARDEVOIR:
+                    entry.types.second = "None";
+                    break;
+
+                case Species::EXPLOUD:
+                    entry.base_stats["Special Defense"] = 63;
+                    break;
+
+                case Species::AZURILL:
+                case Species::MAWILE:
+                    entry.types.second = "None";
+                    break;
+
+                case Species::STARAPTOR:
+                    entry.base_stats["Special Defense"] = 50;
+                    break;
+
+                case Species::ROSERADE:
+                    entry.base_stats["Defense"] = 55;
+                    break;
+
+                case Species::MIME_JR:
+                    entry.types.second = "None";
+                    break;
+
+                case Species::STOUTLAND:
+                    entry.base_stats["Attack"] = 100;
+                    break;
+
+                case Species::UNFEZANT:
+                    entry.base_stats["Attack"] = 105;
+                    break;
+
+                case Species::GIGALITH:
+                    entry.base_stats["Special Defense"] = 70;
+                    break;
+
+                case Species::SEISMITOAD:
+                    entry.base_stats["Attack"] = 85;
+                    break;
+
+                case Species::LEAVANNY:
+                    entry.base_stats["Special Defense"] = 70;
+                    break;
+
+                case Species::SCOLIPEDE:
+                    entry.base_stats["Attack"] = 90;
+                    break;
+
+                case Species::COTTONEE:
+                case Species::WHIMSICOTT:
+                    entry.types.second = "None";
+                    break;
+
+                case Species::KROOKODILE:
+                    entry.base_stats["Defense"] = 70;
+                    break;
+            }
+
             entry.hidden_ability = "None";
         }
         if(generation < 4)
@@ -275,6 +467,179 @@ namespace pkmn
             entry.egg_groups    = pkmn::pkstring_pair_t("None", "None");
             entry.chance_male   = 0.0;
             entry.chance_female = 0.0;
+        }
+    }
+
+    void pokedex_impl::_create_move_entry(const uint16_t move_id)
+    {
+        uint16_t generation = database::get_generation(_version_id);
+
+        if(_move_entry_cache[generation].has_key(move_id)) return;
+
+        move_entry_t entry;
+
+        std::ostringstream query_stream;
+
+        /*
+         * The "moves" table should give us most things.
+         */
+        query_stream << "SELECT * FROM moves WHERE id=" << move_id;
+        SQLite::Statement moves_query(*_db, query_stream.str().c_str());
+        moves_query.executeStep();
+
+        entry.name = database::get_move_name(move_id);
+        entry.type = database::get_type_name(moves_query.getColumn(3)); // type_id
+        entry.damage_class = database::get_move_damage_class_name(uint16_t(moves_query.getColumn(9))); // damage_class_id
+
+        entry.power = moves_query.getColumn(4); // power
+        entry.pp = moves_query.getColumn(5); // pp
+        entry.accuracy = float(moves_query.getColumn(6)) / float(100.0); // accuracy
+        entry.priority = moves_query.getColumn(7); // priority
+
+        // entry.effect = 
+        entry.effect_chance = float(moves_query.getColumn(11)) / float(100.0); // effect_chance
+
+        /*
+         * Description
+         */
+        query_stream.str("");
+        query_stream << "SELECT flavor_text FROM move_flavor_text WHERE move_id="
+                     << move_id << " AND language_id=9 AND version_group_id="
+                     << database::get_version_group_id(_version_id);
+        entry.description = _db->execAndGet(query_stream.str().c_str());
+
+        /*
+         * Target
+         */
+        query_stream.str("");
+        query_stream << "SELECT name FROM move_target_prose WHERE move_target_id="
+                     << moves_query.getColumn(8) << " AND local_language_id=9"; // target_id
+        entry.target = _db->execAndGet(query_stream.str().c_str());
+
+        /*
+         * Effect
+         * TODO: parse tokens in short_effect
+         */
+        query_stream.str("");
+        query_stream << "SELECT short_effect FROM move_effect_prose WHERE move_effect_id="
+                     << moves_query.getColumn(10);  // effect_id
+        entry.effect = _db->execAndGet(query_stream.str().c_str());
+
+        /*
+         * Contest type
+         */
+        query_stream.str("");
+        query_stream << "SELECT name FROM contest_type_names WHERE contest_type_id="
+                     << moves_query.getColumn(12) << " AND local_language_id=9"; // contest_type_id
+        entry.contest_type = _db->execAndGet(query_stream.str().c_str());
+
+        /*
+         * Contest effect
+         */
+        query_stream.str("");
+        query_stream << "SELECT flavor_text FROM contest_effect_prose WHERE contest_effect_id="
+                     << moves_query.getColumn(13) << " AND local_language_id=9"; // contest_effect_id
+        entry.contest_effect = _db->execAndGet(query_stream.str().c_str());
+
+        /*
+         * Super Contest effect
+         */
+        query_stream.str("");
+        query_stream << "SELECT flavor_text FROM super_contest_effect_prose"
+                     << " WHERE super_contest_effect_id=" << moves_query.getColumn(14)
+                     << " AND local_language_id=9"; // super_contest_effect_id
+        entry.super_contest_effect = _db->execAndGet(query_stream.str().c_str());
+
+        if(generation < 6) _adjust_move_entry(entry);
+        _move_entry_cache[_version_id][move_id] = entry;
+    }
+
+    /*
+     * Database values are valid for Generation VI, this fixes entries
+     * from earlier generations.
+     */
+    void pokedex_impl::_adjust_move_entry(move_entry_t& entry)
+    {
+        uint16_t generation = database::get_generation(_version_id);
+        uint16_t move_id    = database::get_move_id(entry.name);
+
+        std::ostringstream query_stream;
+        query_stream << "SELECT gen" << generation << "_accuracy FROM old_move_accuracies WHERE move_id=" << move_id;
+        SQLite::Statement accuracy_query(*_db, query_stream.str().c_str());
+        if(accuracy_query.executeStep()) entry.accuracy = float(accuracy_query.getColumn(0)) / 100.0;
+    
+        // Hypnosis varies in accuracy between games
+        if(move_id == Moves::HYPNOSIS and (_version_id == Versions::DIAMOND or _version_id == Versions::PEARL))
+            entry.accuracy = 0.7;
+
+        query_stream.str("");
+        query_stream << "SELECT gen" << generation << "_power FROM old_move_powers WHERE move_id=" << move_id;
+        SQLite::Statement power_query(*_db, query_stream.str().c_str());
+        if(power_query.executeStep()) entry.power = power_query.getColumn(0);
+
+        // Shadow Rush varies in power between Gamecube games
+        if(move_id == Moves::SHADOW_RUSH and _version_id == Versions::COLOSSEUM)
+            entry.power = 90; 
+
+        query_stream.str("");
+        query_stream << "SELECT gen" << generation << "_pp FROM old_move_pps WHERE move_id=" << move_id;
+        SQLite::Statement pp_query(*_db, query_stream.str().c_str());
+        if(pp_query.executeStep())
+            entry.pp = pp_query.getColumn(0);
+
+        // Not enough type changes to warrant a database table
+        if(generation == 1)
+        {
+            if(move_id == Moves::BITE or move_id == Moves::GUST or
+               move_id == Moves::KARATE_CHOP or move_id == Moves::SAND_ATTACK)
+                entry.type = "Normal";
+        }
+        else if(move_id == Moves::CURSE and generation < 4)
+            entry.type = "???";
+        else if(move_id == Moves::CHARM or move_id == Moves::MOONLIGHT or
+                move_id == Moves::SWEET_KISS)
+            entry.type = "Normal";
+
+        // Only one move changes categories before Generation IV
+        if(generation == 1 and move_id == Moves::BITE)
+            entry.damage_class = "Physical";
+    
+        // TODO: targeting changes, making contact
+
+        query_stream.str("");
+        query_stream << "SELECT gen" << generation << "_priority FROM old_move_priorities WHERE move_id=" << move_id;
+        SQLite::Statement priority_query(*_db, query_stream.str().c_str());
+        if(priority_query.executeStep())
+            entry.priority = priority_query.getColumn(0);
+
+        // Only one move changed name between Generation II-III
+        if(move_id == Moves::CONVERSION_2 and generation < 3)
+            entry.name = "Conversion2";
+
+        query_stream.str("");
+        query_stream << "SELECT name FROM old_move_names WHERE move_id=" << move_id;
+        SQLite::Statement name_query(*_db, query_stream.str().c_str());
+        if(name_query.executeStep())
+            entry.name = name_query.getColumn(0);
+
+        if(generation != 4)
+            entry.super_contest_effect = "None";
+
+        if(generation < 4)
+        {
+            query_stream.str("");
+            query_stream << "SELECT name FROM move_damage_class_prose WHERE local_language_id=9"
+                         << " AND move_damage_class_id=(SELECT damage_class_id FROM types WHERE"
+                         << " id=" << database::get_type_id(entry.type) << ")";
+            std::string damage_class_name = _db->execAndGet(query_stream.str().c_str());
+            damage_class_name[0] = ::toupper(damage_class_name[0]);
+            entry.damage_class = damage_class_name;
+        }
+
+        if(generation < 3)
+        {
+            entry.contest_type   = "None";
+            entry.contest_effect = "None";
         }
     }
 } /* namespace pkmn */

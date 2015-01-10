@@ -199,6 +199,7 @@
  */
 %rename(Pokedex) pkmn::pokedex;
 %rename(PokedexEntry) pkmn::pokemon_entry_t;
+%rename(MoveEntry) pkmn::move_entry_t;
 %rename(speciesName) species_name;
 %rename(pokedexNum) pokedex_num;
 %rename(hiddenAbility) hidden_ability;
@@ -211,6 +212,12 @@
 %rename(hasGenderDifferences) has_gender_differences;
 %rename(baseStats) base_stats;
 %rename(EVYields) ev_yields;
+%rename(damageClass) damage_class;
+%rename(effectChance) effect_chance;
+%rename(contestType) contest_type;
+%rename(contestEffect) contest_effect;
+%rename(superContestEffect) super_contest_effect;
+%rename(PP) pp;
 %rename(getGame) pkmn::pokedex::get_game;
 %rename(getGeneration) pkmn::pokedex::get_generation;
 %rename(getEntry) pkmn::pokedex::get_entry;

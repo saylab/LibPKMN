@@ -10,8 +10,8 @@
 /*
  * This workaround is necessary because of a bug in SWIG in which typemaps
  * are not properly propogated into structs that use the given class.
- * bug is only present in versions 2.0.5-3.0.0, but I have encountered it
- * in 3.0.1, so this workaround is necessary.
+ * This bug is theoretically only present in versions 2.0.5-3.0.0, but I
+ * have encountered it in 3.0.1, so this workaround is necessary.
  */
 
 %extend pkmn::base_pokemon{
