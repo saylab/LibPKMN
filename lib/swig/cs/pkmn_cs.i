@@ -25,6 +25,7 @@
 #endif
 
 %include "pkmn_nature.i"
+%include "pkmn_pokedex.i"
 %include "pkmn_shared_ptr.i"
 
 %include "pkmn_pkstring_workarounds.i"
@@ -35,7 +36,6 @@
     #include "pkmn/game_save.hpp"
     #include "pkmn/move.hpp"
     #include "pkmn/pocket.hpp"
-    #include "pkmn/pokedex.hpp"
     #include "pkmn/team_pokemon.hpp"
     #include "pkmn/trainer.hpp"
 
@@ -49,7 +49,6 @@
 %include "pkmn/pocket.hpp"
 %include "pkmn/bag.hpp"
 
-%include "pkmn/pokedex.hpp"
 %include "pkmn/move.hpp"
 %include "pkmn/base_pokemon.hpp"
 %include "pkmn/team_pokemon.hpp"
