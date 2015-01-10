@@ -197,7 +197,8 @@
 /*
  * pkmn/pokedex.hpp
  */
-%rename(PokedexEntry) pkmn::pokedex_entry_t;
+%rename(Pokedex) pkmn::pokedex;
+%rename(PokedexEntry) pkmn::pokemon_entry_t;
 %rename(speciesName) species_name;
 %rename(pokedexNum) pokedex_num;
 %rename(hiddenAbility) hidden_ability;

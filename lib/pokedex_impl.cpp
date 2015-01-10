@@ -26,7 +26,7 @@ namespace pkmn
         if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
     }
 
-    pkmn::dict<uint16_t, pkmn::dict<uint16_t, pokedex_entry_t> > pokedex_impl::_entry_cache;
+    pkmn::dict<uint16_t, pkmn::dict<uint16_t, pokemon_entry_t> > pokedex_impl::_entry_cache;
     pkmn::shared_ptr<SQLite::Database>                           pokedex_impl::_db;
 
     pkmn::pkstring pokedex_impl::get_game() const
@@ -39,7 +39,7 @@ namespace pkmn
         return database::get_generation(_version_id);
     }
 
-    pokedex_entry_t& pokedex_impl::get_entry(const uint16_t species_id,
+    pokemon_entry_t& pokedex_impl::get_entry(const uint16_t species_id,
                                              const uint16_t form_id)
     {
         uint16_t pokemon_id;
@@ -66,7 +66,7 @@ namespace pkmn
         return _entry_cache[_version_id][pokemon_id];
     }
 
-    pokedex_entry_t& pokedex_impl::get_entry(const pkmn::pkstring& species_name,
+    pokemon_entry_t& pokedex_impl::get_entry(const pkmn::pkstring& species_name,
                                              const pkmn::pkstring& form_name)
     {
         unsigned int form_id;
@@ -82,7 +82,7 @@ namespace pkmn
     {
         if(_entry_cache[_version_id].has_key(pokemon_id)) return;
 
-        pokedex_entry_t entry;
+        pokemon_entry_t entry;
 
         std::ostringstream query_stream;
 
@@ -253,7 +253,7 @@ namespace pkmn
      * Database values are valid for Generation VI, this fixes entries
      * from earlier generations.
      */
-    void pokedex_impl::_adjust_entry(pokedex_entry_t& entry)
+    void pokedex_impl::_adjust_entry(pokemon_entry_t& entry)
     {
         uint8_t generation = get_generation();
 

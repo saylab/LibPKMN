@@ -37,7 +37,7 @@
 }
 
 %{
-    struct PokedexEntry {
+    struct PokemonEntry {
         std::wstring speciesName;
         uint16_t pokedexNum;
         std::wstring entry;
@@ -59,7 +59,7 @@
     };
 %}
 
-struct PokedexEntry {
+struct PokemonEntry {
     std::wstring speciesName;
     uint16_t pokedexNum;
     std::wstring entry;
@@ -81,11 +81,11 @@ struct PokedexEntry {
 };
 
 %extend pkmn::pokedex{
-    PokedexEntry getEntry(const uint16_t speciesID,
+    PokemonEntry getEntry(const uint16_t speciesID,
                           const uint16_t formID = 0){
 
-        pkmn::pokedex_entry_t entry1 = self->get_entry(speciesID, formID);
-        PokedexEntry entry2;
+        pkmn::pokemon_entry_t entry1 = self->get_entry(speciesID, formID);
+        PokemonEntry entry2;
 
         entry2.speciesName = entry1.species_name;
         entry2.pokedexNum = entry1.pokedex_num;
@@ -112,11 +112,11 @@ struct PokedexEntry {
         return entry2;
     }
 
-    PokedexEntry getEntry(const std::wstring& speciesName,
+    PokemonEntry getEntry(const std::wstring& speciesName,
                           const std::wstring& formName = std::wstring()){
 
-        pkmn::pokedex_entry_t entry1 = self->get_entry(speciesName, formName);
-        PokedexEntry entry2;
+        pkmn::pokemon_entry_t entry1 = self->get_entry(speciesName, formName);
+        PokemonEntry entry2;
 
         entry2.speciesName = entry1.species_name;
         entry2.pokedexNum = entry1.pokedex_num;
@@ -158,6 +158,6 @@ struct PokedexEntry {
 
 %ignore pkmn::base_pokemon::get_abilities;
 %ignore pkmn::base_pokemon::get_types;
-%ignore pkmn::pokedex_entry_t;
+%ignore pkmn::pokemon_entry_t;
 %ignore pkmn::pokedex::get_entry;
 %ignore pkmn::team_pokemon::get_types;
