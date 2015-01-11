@@ -195,6 +195,39 @@
 %rename(getGameID) pkmn::pocket::get_game_id;
 
 /*
+ * pkmn/pokedex.hpp
+ */
+%rename(Pokedex) pkmn::pokedex;
+%rename(PokedexEntry) pkmn::pokemon_entry_t;
+%rename(MoveEntry) pkmn::move_entry_t;
+%rename(ItemEntry) pkmn::item_entry_t;
+%rename(speciesName) species_name;
+%rename(pokedexNum) pokedex_num;
+%rename(hiddenAbility) hidden_ability;
+%rename(eggGroups) egg_groups;
+%rename(catchRate) catch_rate;
+%rename(expYield) exp_yield;
+%rename(baseFriendship) base_friendship;
+%rename(chanceMale) chance_male;
+%rename(chanceFemale) chance_female;
+%rename(hasGenderDifferences) has_gender_differences;
+%rename(baseStats) base_stats;
+%rename(EVYields) ev_yields;
+%rename(damageClass) damage_class;
+%rename(effectChance) effect_chance;
+%rename(contestType) contest_type;
+%rename(contestEffect) contest_effect;
+%rename(superContestEffect) super_contest_effect;
+%rename(PP) pp;
+%rename(flingPower) fling_power;
+%rename(flingEffect) fling_effect;
+%rename(getGame) pkmn::pokedex::get_game;
+%rename(getGeneration) pkmn::pokedex::get_generation;
+%rename(getPokemonEntry) pkmn::pokedex::get_pokemon_entry;
+%rename(getMoveEntry) pkmn::pokedex::get_move_entry;
+%rename(getItemEntry) pkmn::pokedex::get_item_entry;
+
+/*
  * pkmn/team_pokemon.hpp
  */
 %rename(TeamPokemon) pkmn::team_pokemon;
@@ -289,12 +322,6 @@
 %rename(getGameID) pkmn::trainer::get_game_id;
 
 /*
- * pkmn/database/lists.hpp
- */
-%rename(getTableList) pkmn::database::get_table_list;
-%rename(getColumnList) pkmn::database::get_column_list;
-
-/*
  * pkmn/database.hpp
  */
 %rename(toDatabaseFormat) pkmn::database::to_database_format;
@@ -304,6 +331,8 @@
 %rename(getEggGroupID) pkmn::database::get_egg_group_id;
 %rename(getEggGroupName) pkmn::database::get_egg_group_name;
 %rename(getExperience) pkmn::database::get_experience;
+%rename(getFormID) pkmn::database::get_form_id;
+%rename(getFormName) pkmn::database::get_form_name;
 %rename(getLevel) pkmn::database::get_level;
 %rename(getGameID) pkmn::database::get_game_id;
 %rename(getGameName) pkmn::database::get_game_name;

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+# Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
 #
 # Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
 # or copy at http://opensource.org/licenses/MIT)
@@ -10,7 +10,7 @@
 # This script is to be manually run when LibPKMN's database
 # is updated. This isn't called at build-time for two reasons:
 # a public header shouldn't be generated at build-time, and it
-# removes a build-time dependency on PySQLite3.
+# removes a build-time dependency on PySQLite3 and Unidecode.
 ###############################################################
 
 import datetime
@@ -34,6 +34,7 @@ stats = []
 types = []
 versions = []
 version_groups = []
+db_table_output = ""
 
 def get_abilities(c):
     global abilities
@@ -257,7 +258,9 @@ def get_version_groups(c):
         version_group_name = str(from_db[i][1]).replace("-","_").replace(" ","_").upper()
         version_groups += [(from_db[i][0], version_group_name)]
 
-def generate_cpp_file(output_dir, license):
+def generate_enums_hpp(output_dir, license):
+    global db_table_output
+
     output = license + """
 
 #ifndef INCLUDED_PKMN_ENUMS_HPP
@@ -312,6 +315,10 @@ def generate_cpp_file(output_dir, license):
 
         for j in range(1,len(forms[i])):
             output += "\n                %s = %d," % (forms[i][j][1], forms[i][j][0])
+            db_table_output += "INSERT INTO \"libpkmn_pokemon_form_names\" VALUES(%d,\'%s\');\n" % (forms[i][j][0],
+                                   forms[i][j][1].replace("_","-").title())
+
+
         output += """
             };
         }
@@ -540,12 +547,23 @@ def generate_cpp_file(output_dir, license):
     f.write(output)
     f.close()
 
+def generate_db_table(my_path):
+    global db_table_output
+    db_table_output += "COMMIT;"
+
+    os.chdir(my_path)
+    f = open("libpkmn_pokemon_form_names",'w')
+    f.write(db_table_output)
+    f.close()
+
 if __name__ == "__main__":
+
+    my_path = os.path.dirname(os.path.realpath(__file__))
 
     parser = OptionParser()
     parser.add_option("--database-path", type="string", help="LibPKMN database location")
     parser.add_option("--output-dir", type="string", help="Output directory")
-    parser.add_option("--language", type="string", help="cpp, python, cs, or java")
+    parser.add_option("--create-form-table", action="store_true", default=False, help="Generate libpkmn_pokemon_form_names table")
     (options,args) = parser.parse_args()
 
     conn = sqlite3.connect(options.database_path)
@@ -554,13 +572,19 @@ if __name__ == "__main__":
     time = datetime.datetime.now()
 
     license = """/*
- * Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  *
  * This file was generated: %s
  */""" % time
+
+    db_table_output = """CREATE TABLE libpkmn_pokemon_form_names (
+    form_id INTEGER NOT NULL,
+    name VARCHAR(20) NOT NULL,
+    PRIMARY KEY (form_id)
+);\n"""
 
     get_abilities(c)
     get_egg_groups(c)
@@ -578,4 +602,6 @@ if __name__ == "__main__":
     get_versions(c)
     get_version_groups(c)
 
-    generate_cpp_file(options.output_dir, license)
+    generate_enums_hpp(options.output_dir, license)
+    if options.create_form_table:
+        generate_db_table(my_path)

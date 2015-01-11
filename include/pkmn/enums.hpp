@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  *
- * This file was generated: 2014-11-16 19:11:57.442005
+ * This file was generated: 2015-01-06 15:57:09.822861
  */
 
 #ifndef INCLUDED_PKMN_ENUMS_HPP
