@@ -4,12 +4,16 @@
  * @brief   Encapsulation of a Column in a row of the result pointed by the prepared SQLite::Statement.
  *
  * Copyright (c) 2012-2013 Sebastien Rombauts (sebastien.rombauts@gmail.com)
- *               2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ *               2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  */
 #pragma once
+
+#ifdef _MSC_VER
+#pragma warning(disable: 4800) // forcing value to bool 'true' or 'false' (performance warning)
+#endif
 
 #include <cstdint>
 
@@ -164,6 +168,7 @@ public:
                                    return type(getInt()); \
                                }
 
+    INT_OPERATOR(bool)
     INT_OPERATOR(uint8_t)
     INT_OPERATOR(uint16_t)
     INT_OPERATOR(uint32_t)

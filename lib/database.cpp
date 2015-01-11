@@ -1,17 +1,18 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  */
 
 #include <algorithm>
-#include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
-#include <boost/algorithm/string.hpp>
+#include <boost/foreach.hpp>
 #include <boost/format.hpp>
+#include <boost/algorithm/string.hpp>
 #include <boost/locale/encoding_utf.hpp>
 
 #include <pkmn/enums.hpp>
@@ -148,6 +149,41 @@ namespace pkmn
         unsigned int get_experience(const pkmn::pkstring &species_name, const unsigned int level)
         {
             return get_experience(get_species_id(species_name), level);
+        }
+
+        unsigned int PKMN_API get_form_id(const pkmn::pkstring &species_name, const pkmn::pkstring &form_name)
+        {
+            CONNECT_TO_DB();
+
+            std::ostringstream query_stream;
+            query_stream << "SELECT form_id FROM libpkmn_pokemon_form_names WHERE name='"
+                         << form_name << "'";
+            SQLite::Statement query(*db, query_stream.str().c_str());
+            std::vector<unsigned int> form_ids;
+            while(query.executeStep()) form_ids.push_back(query.getColumn(0));
+            BOOST_FOREACH(unsigned int id, form_ids)
+            {
+                query_stream.str("");
+                query_stream << "SELECT species_id FROM pokemon WHERE id="
+                             << "(SELECT pokemon_id FROM pokemon_forms WHERE id="
+                             << id << ")";
+                unsigned int species_id = db->execAndGet(query_stream.str().c_str());
+
+                if(database::get_species_id(species_name) == species_id) return id;
+            }
+
+            THROW_QUERY_ERROR();
+        }
+
+        pkmn::pkstring PKMN_API get_form_name(const unsigned int form_id)
+        {
+            CONNECT_TO_DB();
+
+            std::ostringstream query_stream;
+            query_stream << "SELECT name FROM libpkmn_pokemon_form_names WHERE form_id="
+                         << form_id;
+            SQLite::Statement query(*db, query_stream.str().c_str());
+            GET_PKSTRING(query);
         }
 
         unsigned int get_level(const unsigned int species_id, const unsigned int experience)

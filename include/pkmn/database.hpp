@@ -26,6 +26,9 @@ namespace pkmn
         unsigned int PKMN_API get_egg_group_id(const pkmn::pkstring &egg_group_name);
         pkmn::pkstring PKMN_API get_egg_group_name(const unsigned int egg_group_id);
 
+        unsigned int PKMN_API get_form_id(const pkmn::pkstring &species_name, const pkmn::pkstring &form_name);
+        pkmn::pkstring PKMN_API get_form_name(const unsigned int form_id);
+
         unsigned int PKMN_API get_experience(const unsigned int species_id, const unsigned int level);
         unsigned int PKMN_API get_experience(const pkmn::pkstring &species_name, const unsigned int level);
         unsigned int PKMN_API get_level(const unsigned int species_id, const unsigned int experience);

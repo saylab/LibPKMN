@@ -76,6 +76,7 @@ IF(ENABLE_LIBPKMN)
         item_impl.cpp
         trainer_impl.cpp
         move_impl.cpp
+        pokedex_impl.cpp
         game_save_impl.cpp
         game_save_gen1impl.cpp
         game_save_gen2impl.cpp
