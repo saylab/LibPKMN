@@ -687,10 +687,39 @@ namespace pkmn
          * Description
          */
         query_stream.str("");
-        query_stream << "SELECT flavor_text FROM item_flavor_text WHERE item_id="
-                     << item_id << " AND version_group_id=" << _version_group_id
-                     << " AND language_id=9";
-        entry.description = _db->execAndGet(query_stream.str().c_str());
+        uint16_t machine_id;
+        bool is_machine = ((item_id >= Items::TM01 and item_id <= Items::HM08)
+                           or (item_id >= Items::TM93 and item_id <= Items::TM95)
+                           or (item_id >= Items::TM96 and item_id <= Items::TM100));
+
+        if(is_machine)
+        {
+            if(item_id >= Items::TM01 and item_id <= Items::TM92)
+                machine_id = item_id - 304;
+            else
+                machine_id = 101 + (item_id - Items::HM01);
+
+            query_stream << "SELECT move_id FROM machines WHERE machine_number=" << machine_id
+                         << " AND version_group_id=" << database::get_version_group_id(_version_id);
+            uint16_t move_id = _db->execAndGet(query_stream.str().c_str());
+
+            query_stream.str("");
+            query_stream << "SELECT flavor_text FROM move_flavor_text WHERE move_id="
+                         << move_id << " AND version_group_id=" << _version_group_id
+                         << " AND language_id=9";
+            pkmn::pkstring move_description = _db->execAndGet(query_stream.str().c_str());
+
+            entry.description = str(boost::format("%s - %s")
+                                    % database::get_move_name(move_id)
+                                    % move_description);
+        }
+        else
+        {
+            query_stream << "SELECT flavor_text FROM item_flavor_text WHERE item_id="
+                         << item_id << " AND version_group_id=" << _version_group_id
+                         << " AND language_id=9";
+            entry.description = _db->execAndGet(query_stream.str().c_str());
+        }
 
         entry.cost = items_query.getColumn(3); // cost
 
