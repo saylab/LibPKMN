@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -72,6 +72,12 @@ namespace pkmn
     {
         pocket_impl actual = *pkmn::dynamic_pointer_cast<pocket_impl>(in);
         return pkmn::make_shared<pocket_impl>(actual);
+    }
+
+    pokedex::sptr copy_pokedex(pokedex::sptr in)
+    {
+        pokedex_impl actual = *pkmn::dynamic_pointer_cast<pokedex_impl>(in);
+        return pkmn::make_shared<pokedex_impl>(actual);
     }
 
     team_pokemon::sptr copy_team_pokemon(team_pokemon::sptr in)

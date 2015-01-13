@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -14,6 +14,7 @@
 #include <pkmn/item.hpp>
 #include <pkmn/move.hpp>
 #include <pkmn/pocket.hpp>
+#include <pkmn/pokedex.hpp>
 #include <pkmn/trainer.hpp>
 #include <pkmn/types/prng.hpp>
 
@@ -28,6 +29,8 @@ namespace pkmn
     move::sptr PKMN_API copy_move(move::sptr in);
 
     pocket::sptr PKMN_API copy_pocket(pocket::sptr in);
+
+    pokedex::sptr PKMN_API copy_pokedex(pokedex::sptr in);
 
     team_pokemon::sptr PKMN_API copy_team_pokemon(team_pokemon::sptr in);
 
