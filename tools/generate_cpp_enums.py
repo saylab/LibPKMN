@@ -330,8 +330,12 @@ def generate_enums_hpp(output_dir, license):
 
         for j in range(1,len(forms[i])):
             output += "\n                %s = %d," % (forms[i][j][1], forms[i][j][0])
-            db_table_output += "INSERT INTO \"libpkmn_pokemon_form_names\" VALUES(%d,\'%s\');\n" % (forms[i][j][0],
-                                   forms[i][j][1].replace("_","-").title())
+
+            form_name = forms[i][j][1].replace("_","-").replace("Mega-","Mega ").title()
+            form_image_name = form_name.lower().replace("-mark","").replace("mega x","mega-x").replace("mega y","mega-y").replace("-cloak","")
+            form_image_name = "'%s'" % form_image_name if form_image_name != 'standard' else "NULL"
+            db_table_output += "INSERT INTO \"libpkmn_pokemon_form_names\" VALUES(%d,\'%s\',%s);\n" % (forms[i][j][0],
+                                   form_name, form_image_name)
 
 
         output += """
@@ -584,7 +588,8 @@ if __name__ == "__main__":
 
     db_table_output = """CREATE TABLE libpkmn_pokemon_form_names (
     form_id INTEGER NOT NULL,
-    name VARCHAR(20) NOT NULL,
+    name VARCHAR(30) NOT NULL,
+    image_name VARCHAR(30) NOT NULL,
     PRIMARY KEY (form_id)
 );\n"""
 
