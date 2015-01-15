@@ -1641,8 +1641,8 @@ INSERT INTO "balls" VALUES(25,"Park Ball");
 INSERT INTO "balls" VALUES(26,"Dream Ball");
 CREATE TABLE version_game_indices (
     version_id INTEGER NOT NULL,
-    index VARCHAR(20) NOT NULL,
-    PRIMARY KEY (form_id)
+    game_index VARCHAR(20) NOT NULL,
+    PRIMARY KEY (version_id)
 );
 INSERT INTO "version_game_indices" VALUES(7,2);
 INSERT INTO "version_game_indices" VALUES(8,1);
@@ -1657,7 +1657,7 @@ INSERT INTO "version_game_indices" VALUES(16,8);
 INSERT INTO "version_game_indices" VALUES(17,21);
 INSERT INTO "version_game_indices" VALUES(18,20);
 INSERT INTO "version_game_indices" VALUES(19,15);
-INSERT INTO "version_game_indices" VALUES(19,15);
+INSERT INTO "version_game_indices" VALUES(20,15);
 INSERT INTO "version_game_indices" VALUES(21,23);
 INSERT INTO "version_game_indices" VALUES(22,22);
 INSERT INTO "version_game_indices" VALUES(23,24);
