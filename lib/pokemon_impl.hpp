@@ -25,7 +25,7 @@ namespace pkmn
             ~pokemon_impl() {};
 
             // Getting Non-battle Info
-            pkmn::pokemon_entry_t& get_pokedex_entry() const;
+            pkmn::pokemon_entry_t get_pokedex_entry() const;
 
             // Getting LibPKMN info
             pkmn::pkstring get_game() const;
@@ -46,7 +46,7 @@ namespace pkmn
             uint16_t _species_id, _version_id;
             pkmn::dict<pkmn::pkstring, int> _attributes;
             pokedex::sptr _pokedex;
-            pkmn::pokemon_entry_t& _pokedex_entry;
+            pkmn::pokemon_entry_t _pokedex_entry;
             prng::sptr    _prng;
     };
 }

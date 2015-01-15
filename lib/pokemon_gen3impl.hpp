@@ -4,37 +4,29 @@
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  */
-#ifndef INCLUDED_POKEMON_GEN1IMPL_HPP
-#define INCLUDED_POKEMON_GEN1IMPL_HPP
+#ifndef INCLUDED_POKEMON_GEN3IMPL_HPP
+#define INCLUDED_POKEMON_GEN3IMPL_HPP
 
 #include "pokemon_impl.hpp"
 #include "conversions/structs/pokemon.hpp"
 
 namespace pkmn
 {
-    class pokemon_gen1impl: public pokemon_impl
+    class pokemon_gen3impl: public pokemon_impl
     {
         public:
 
-            pokemon_gen1impl(uint16_t species, uint16_t version,
+            pokemon_gen3impl(uint16_t species, uint16_t version,
                              uint8_t level,
                              uint16_t move1, uint16_t move2,
                              uint16_t move3, uint16_t move4);
-            pokemon_gen1impl(const pkmn::gen1_pc_pokemon_t& raw,
+            pokemon_gen3impl(const pkmn::gen3_pc_pokemon_t& raw,
                              uint8_t version);
-            pokemon_gen1impl(const pkmn::gen1_pc_pokemon_t& raw,
-                             const pkmn::pkstring& nickname,
-                             const pkmn::pkstring& otname,
+            pokemon_gen3impl(const pkmn::gen3_party_pokemon_t& raw,
                              uint8_t version);
-            pokemon_gen1impl(const pkmn::gen1_party_pokemon_t& raw,
-                             uint8_t version);
-            pokemon_gen1impl(const pkmn::gen1_party_pokemon_t& raw,
-                             const pkmn::pkstring& nickname,
-                             const pkmn::pkstring& otname,
-                             uint8_t version);
-            pokemon_gen1impl(const pokemon_gen1impl& other);
-            pokemon_gen1impl& operator=(const pokemon_gen1impl& other);
-            ~pokemon_gen1impl() {};
+            pokemon_gen3impl(const pokemon_gen3impl& other);
+            pokemon_gen3impl& operator=(const pokemon_gen3impl& other);
+            ~pokemon_gen3impl() {};
 
             // Getting Non-battle Info
             pkmn::contest_stats_t get_contest_stats() const;
@@ -85,7 +77,7 @@ namespace pkmn
             // Setting Individual Stat Info
             void set_personality(uint32_t personality);
             void set_friendship(uint8_t friendship);
-            void set_level(uint16_t level);
+            void set_level(uint8_t level);
             void set_experience(uint32_t experience);
             void set_gender(const pkmn::pkstring& gender);
             void set_nature(const pkmn::pkstring& nature_name);
@@ -127,14 +119,19 @@ namespace pkmn
 
         private:
 
-            pkmn::gen1_party_pokemon_t _raw;
+            pkmn::gen3_party_pokemon_t    _raw;
+            pkmn::gen3_pokemon_growth_t  *_growth;
+            pkmn::gen3_pokemon_attacks_t *_attacks;
+            pkmn::gen3_pokemon_effort_t  *_effort;
+            pkmn::gen3_pokemon_moves_t   *_moves;
 
-            pkmn::pkstring _nickname, _otname;
+            uint16_t _form_id;
 
             void _set_experience(uint32_t exp);
             void _set_level(uint8_t level);
             void _set_stats();
+            void _set_form();
     };
 }
 
-#endif /* INCLUDED_POKEMON_GEN1IMPL_HPP */
+#endif /* INCLUDED_POKEMON_GEN3IMPL_HPP */

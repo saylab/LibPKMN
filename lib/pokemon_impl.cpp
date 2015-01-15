@@ -21,7 +21,7 @@
 #include "pokemon_gen1impl.hpp"
 #include "pokemon_gen2impl.hpp"
 #include "pokemon_gen3impl.hpp"
-#include "pokemon_ndsimpl.hpp"
+//#include "pokemon_ndsimpl.hpp"
 
 #include "SQLiteCpp/SQLiteC++.h"
 
@@ -58,9 +58,9 @@ namespace pkmn
                 return sptr(new pokemon_gen3impl(species, version, level,
                                                  move1, move2, move3, move4));
 
-            default:
-                return sptr(new pokemon_ndsimpl(species, version, level,
-                                                move1, move2, move3, move4));
+            //default:
+            //    return sptr(new pokemon_ndsimpl(species, version, level,
+            //                                    move1, move2, move3, move4));
         }
     }
 
@@ -113,7 +113,7 @@ namespace pkmn
      * Getting Non-battle info
      */
 
-    pkmn::pokemon_entry_t& pokemon_impl::get_pokedex_entry() const
+    pkmn::pokemon_entry_t pokemon_impl::get_pokedex_entry() const
     {
         return _pokedex->get_pokemon_entry(_species_id, get_form_id());
     }

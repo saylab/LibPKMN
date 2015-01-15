@@ -47,8 +47,8 @@ namespace pkmn
         return database::get_generation(_version_id);
     }
 
-    pokemon_entry_t& pokedex_impl::get_pokemon_entry(const uint16_t species_id,
-                                                     const uint16_t form_id)
+    pokemon_entry_t pokedex_impl::get_pokemon_entry(const uint16_t species_id,
+                                                    const uint16_t form_id)
     {
         uint16_t pokemon_id;
 
@@ -74,10 +74,10 @@ namespace pkmn
         return _pokemon_entry_cache[_version_id][pokemon_id];
     }
 
-    pokemon_entry_t& pokedex_impl::get_pokemon_entry(const pkmn::pkstring& species_name,
-                                                     const pkmn::pkstring& form_name)
+    pokemon_entry_t pokedex_impl::get_pokemon_entry(const pkmn::pkstring& species_name,
+                                                    const pkmn::pkstring& form_name)
     {
-        unsigned int form_id;
+        uint16_t form_id;
         if(form_name == "Standard" or form_name == species_name or form_name == "")
             form_id = database::get_species_id(species_name);
         else
@@ -86,7 +86,7 @@ namespace pkmn
         return get_pokemon_entry(database::get_species_id(species_name), form_id);
     }
 
-    move_entry_t& pokedex_impl::get_move_entry(const uint16_t move_id)
+    move_entry_t pokedex_impl::get_move_entry(const uint16_t move_id)
     {
         std::ostringstream query_stream;
         query_stream << "SELECT generation_id FROM moves WHERE id=" << move_id;
@@ -97,12 +97,12 @@ namespace pkmn
         return _move_entry_cache[_version_id][move_id];
     }
 
-    move_entry_t& pokedex_impl::get_move_entry(const pkmn::pkstring& move_name)
+    move_entry_t pokedex_impl::get_move_entry(const pkmn::pkstring& move_name)
     {
         return get_move_entry(database::get_move_id(move_name));
     }
 
-    item_entry_t& pokedex_impl::get_item_entry(const uint16_t item_id)
+    item_entry_t pokedex_impl::get_item_entry(const uint16_t item_id)
     {
         std::ostringstream query_stream;
         query_stream << "SELECT generation_id FROM item_game_indices WHERE item_id="
@@ -115,7 +115,7 @@ namespace pkmn
         return _item_entry_cache[_version_group_id][item_id];
     }
 
-    item_entry_t& pokedex_impl::get_item_entry(const pkmn::pkstring& item_name)
+    item_entry_t pokedex_impl::get_item_entry(const pkmn::pkstring& item_name)
     {
         return get_item_entry(database::get_item_id(item_name));
     }
@@ -295,7 +295,7 @@ namespace pkmn
      * Database values are valid for Generation VI, this fixes entries
      * from earlier generations.
      */
-    void pokedex_impl::_adjust_pokemon_entry(pokemon_entry_t& entry)
+    void pokedex_impl::_adjust_pokemon_entry(pokemon_entry_t entry)
     {
         if(_generation < 5)
         {
@@ -574,7 +574,7 @@ namespace pkmn
      * Database values are valid for Generation VI, this fixes entries
      * from earlier generations.
      */
-    void pokedex_impl::_adjust_move_entry(move_entry_t& entry)
+    void pokedex_impl::_adjust_move_entry(move_entry_t entry)
     {
         uint16_t move_id = database::get_move_id(entry.name);
 

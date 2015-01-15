@@ -24,19 +24,19 @@ namespace pkmn
             pkmn::pkstring get_game() const;
             uint16_t get_generation() const;
 
-            pokemon_entry_t& get_pokemon_entry(const uint16_t species_id,
-                                               const uint16_t form_id = 0);
+            pokemon_entry_t get_pokemon_entry(const uint16_t species_id,
+                                              const uint16_t form_id = 0);
 
-            pokemon_entry_t& get_pokemon_entry(const pkmn::pkstring& species_name,
-                                               const pkmn::pkstring& form_name = "");
+            pokemon_entry_t get_pokemon_entry(const pkmn::pkstring& species_name,
+                                              const pkmn::pkstring& form_name = "");
 
-            move_entry_t& get_move_entry(const uint16_t move_id);
+            move_entry_t get_move_entry(const uint16_t move_id);
 
-            move_entry_t& get_move_entry(const pkmn::pkstring& move_name);
+            move_entry_t get_move_entry(const pkmn::pkstring& move_name);
 
-            item_entry_t& get_item_entry(const uint16_t item_id);
+            item_entry_t get_item_entry(const uint16_t item_id);
 
-            item_entry_t& get_item_entry(const pkmn::pkstring& item_name);
+            item_entry_t get_item_entry(const pkmn::pkstring& item_name);
 
 
         private:
@@ -52,10 +52,10 @@ namespace pkmn
             float _get_gender_chance(const uint16_t species_id,
                                      uint8_t gender_rate,
                                      bool male) const;
-            void _adjust_pokemon_entry(pokemon_entry_t& entry);
+            void _adjust_pokemon_entry(pokemon_entry_t entry);
 
             void _create_move_entry(const uint16_t move_id);
-            void _adjust_move_entry(move_entry_t& entry);
+            void _adjust_move_entry(move_entry_t entry);
 
             void _create_item_entry(const uint16_t item_id);
     };

@@ -12,6 +12,7 @@
 #include <pkmn/config.hpp>
 #include <pkmn/pokedex.hpp>
 
+#include <pkmn/types/contest_stats.hpp>
 #include <pkmn/types/dict.hpp>
 #include <pkmn/types/markings.hpp>
 #include <pkmn/types/nature.hpp>
@@ -40,11 +41,13 @@ namespace pkmn
             virtual ~pokemon() {};
 
             // Getting Non-battle Info
-            virtual pkmn::pokemon_entry_t& get_pokedex_entry() const = 0;
+            virtual pkmn::pokemon_entry_t get_pokedex_entry() const = 0;
+            virtual pkmn::contest_stats_t get_contest_stats() const = 0;
             virtual pkmn::markings_t get_markings() const = 0;
             virtual pkmn::ribbons_t get_ribbons() const = 0;
 
             // Setting Non-battle Info
+            virtual void set_contest_stats(const pkmn::contest_stats_t& contest_stats) = 0;
             virtual void set_markings(const pkmn::markings_t& markings) = 0;
             virtual void set_ribbons(const pkmn::ribbons_t& ribbons) = 0;
 
@@ -99,12 +102,12 @@ namespace pkmn
 
             // Battle Stat Info
             virtual pkmn::pkstring get_status() const = 0;
-            virtual pkmn::item_entry_t& get_held_item() const = 0;
+            virtual pkmn::item_entry_t get_held_item() const = 0;
             virtual void set_status(const pkmn::pkstring& status) = 0;
             virtual void set_held_item(const pkmn::pkstring& item_name) = 0;
 
             // Getting Move Info
-            virtual pkmn::move_entry_t& get_move(uint8_t pos) const = 0;
+            virtual pkmn::move_entry_t get_move(uint8_t pos) const = 0;
             virtual void get_moves(pkmn::moveset_t& moves) const = 0;
             virtual uint8_t get_move_PP(uint8_t pos) const = 0;
             virtual void get_move_PPs(std::vector<uint8_t>& move_PPs) const = 0;

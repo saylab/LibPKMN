@@ -9,6 +9,8 @@
 
 #include <cstdint>
 
+#include <pkmn/types/contest_stats.hpp>
+
 namespace pkmn
 {
     #pragma pack(push,1)
@@ -163,12 +165,7 @@ namespace pkmn
         uint8_t ev_spd;
         uint8_t ev_spatk;
         uint8_t ev_spdef;
-        uint8_t coolness;
-        uint8_t beauty;
-        uint8_t cuteness;
-        uint8_t smartness;
-        uint8_t toughness;
-        uint8_t feel;
+        contest_stats_t contest_stats;
     } gen3_pokemon_effort_t;
 
     typedef struct
@@ -278,12 +275,7 @@ namespace pkmn
         uint8_t ev_spd;
         uint8_t ev_spatk;
         uint8_t ev_spdef;
-        uint8_t coolness;
-        uint8_t beauty;
-        uint8_t cuteness;
-        uint8_t smartness;
-        uint8_t toughness;
-        uint8_t sheen;
+        contest_stats_t contest_stats;
         uint16_t sinnoh_ribbons1;
         union
         {

@@ -28,7 +28,7 @@ namespace pkmn
                                        uint8_t move1, uint8_t move2,
                                        uint8_t move3, uint8_t move4):
         pokemon_impl(species, version),
-        _nickname(boost::algorithm::to_upper_copy(base->get_species().std_wstring())),
+        _nickname(boost::algorithm::to_upper_copy(database::get_species_name(species).std_wstring()),
         _otname("LIBPKMN"),
         _form_id(species)
     {
@@ -69,13 +69,36 @@ namespace pkmn
                                        uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.pc.species, version),
                      version),
-        _nickname(boost::algorithm::to_upper_copy(base->get_species().std_wstring())),
+        _nickname(boost::algorithm::to_upper_copy(database::get_species_name(species).std_wstring()),
         _otname("LIBPKMN"),
-        _form_id(species)
+        _form_id(database::get_pokemon_id(raw.pc.species, version))
     {
         _raw.pc = raw;
         _set_stats(); // Will populate rest of party portion in struct
     }
+
+    pokemon_gen2impl::pokemon_gen2impl(const pkmn::gen2_pc_pokemon_t& raw,
+                                       const pkmn::pkstring& nickname,
+                                       const pkmn::pkstring& otname,
+                                       uint8_t version):
+        pokemon_impl(database::get_pokemon_id(raw.pc.species, version),
+                     version),
+        _nickname(nickname)
+        _otname(otname),
+        _form_id(database::get_pokemon_id(raw.pc.species, version))
+    {
+        _raw.pc = raw;
+        _set_stats(); // Will populate rest of party portion in struct
+    }
+
+    pokemon_gen2impl::pokemon_gen2impl(const pkmn::gen2_party_pokemon_t& raw,
+                                       uint8_t version):
+        pokemon_impl(database::get_pokemon_id(raw.pc.species, version),
+                     version),
+        _raw(raw),
+        _nickname(boost::algorithm::to_upper_copy(base->get_species().std_wstring())),
+        _otname("LIBPKMN"),
+        _form_id(database::get_pokemon_id(raw.pc.species, version)) {};
 
     pokemon_gen2impl::pokemon_gen2impl(const pkmn::gen2_party_pokemon_t& raw,
                                        const pkmn::pkstring& nickname,
@@ -86,31 +109,7 @@ namespace pkmn
         _raw(raw),
         _nickname(nickname)
         _otname(otname),
-        _form_id(species)
-    {
-        _raw.pc = raw;
-        _set_stats(); // Will populate rest of party portion in struct
-    }
-
-    pokemon_gen2impl::pokemon_gen2impl(const pkmn::gen2_party_pokemon_t& raw,
-                                       uint8_t version):
-        pokemon_impl(database::get_pokemon_id(raw.pc.species, version),
-                     version),
-        _raw(raw),
-        _nickname(boost::algorithm::to_upper_copy(base->get_species().std_wstring())),
-        _otname("LIBPKMN"),
-        _form_id(species) {};
-
-    pokemon_gen2impl::pokemon_gen2impl(const pkmn::gen2_party_pokemon_t& raw,
-                                       const pkmn::pkstring& nickname,
-                                       const pkmn::pkstring& otname,
-                                       uint8_t version):
-        pokemon_impl(database::get_pokemon_id(raw.pc.species, version),
-                     version),
-        _raw(raw),
-        _nickname(nickname)
-        _otname(otname),
-        _form_id(species) {};
+        _form_id(database::get_pokemon_id(raw.pc.species, version)) {};
 
     pokemon_gen2impl::pokemon_gen2impl(const pokemon_gen2impl& other):
         pokemon_impl(other),
@@ -132,6 +131,12 @@ namespace pkmn
      * Getting Non-battle Info
      */
 
+    // No contests in Generation II
+    pkmn::contest_stats_t pokemon_gen2impl::get_contest_stats() const
+    {
+        return pkmn::contest_stats_t();
+    }
+
     // No markings in Generation II
     pkmn::markings_t pokemon_gen2impl::get_markings() const
     {
@@ -147,6 +152,12 @@ namespace pkmn
     /*
      * Setting Non-battle Info
      */
+
+    // No contests in Generation II
+    void pokemon_gen2impl::set_contest_stats(const pkmn::contest_stats_t& contest_stats)
+    {
+        /* NOP */
+    }
 
     // No markings in Generation II
     void pokemon_gen2impl::set_markings(const pkmn::markings_t& markings)
@@ -310,6 +321,11 @@ namespace pkmn
         return 0;
     }
 
+    uint8_t pokemon_gen2impl::get_friendship() const
+    {
+        return _raw.pc.friendship;
+    }
+
     uint8_t pokemon_gen2impl::get_level() const
     {
         return _raw.pc.level;
@@ -422,6 +438,11 @@ namespace pkmn
     void pokemon_gen2impl::set_personality(uint32_t personality)
     {
         /* NOP */
+    }
+
+    void pokemon_gen2impl::set_friendship(uint8_t friendship)
+    {
+        _raw.pc.friendship = friendship;
     }
 
     // NOTE: this changes experience and stats
@@ -598,7 +619,7 @@ namespace pkmn
         return conversions::retro_statuses.at(_raw.status, "OK");
     }
 
-    pkmn::item_entry_t& pokemon_gen2impl::get_held_item() const
+    pkmn::item_entry_t pokemon_gen2impl::get_held_item() const
     {
         return _pokedex->get_item_entry(database::get_item_id(_raw.pc.held_item, _game_id));
     }
@@ -617,7 +638,7 @@ namespace pkmn
                                                           database::get_version_name(_game_id));
     }
 
-    pkmn::move_entry_t& pokemon_gen2impl::get_move(uint8_t pos) const
+    pkmn::move_entry_t pokemon_gen2impl::get_move(uint8_t pos) const
     {
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");

@@ -37,10 +37,12 @@ namespace pkmn
             ~pokemon_gen2impl() {};
 
             // Getting Non-battle Info
+            pkmn::contest_stats_t get_contest_stats() const;
             pkmn::markings_t get_markings() const;
             pkmn::ribbons_t get_ribbons() const;
 
             // Setting Non-battle Info
+            void set_contest_stats(const pkmn::contest_stats_t& contest_stats);
             void set_markings(const pkmn::markings_t& markings);
             void set_ribbons(const pkmn::ribbons_t& ribbons);
 
@@ -69,7 +71,7 @@ namespace pkmn
             // Getting Individual Stat Info
             uint32_t get_personality() const;
             uint8_t get_friendship() const;
-            uint16_t get_level() const;
+            uint8_t get_level() const;
             uint32_t get_experience() const;
             pkmn::pkstring get_gender() const;
             pkmn::nature_t get_nature() const;
@@ -83,7 +85,7 @@ namespace pkmn
             // Setting Individual Stat Info
             void set_personality(uint32_t personality);
             void set_friendship(uint8_t friendship);
-            void set_level(uint16_t level);
+            void set_level(uint8_t level);
             void set_experience(uint32_t experience);
             void set_gender(const pkmn::pkstring& gender);
             void set_nature(const pkmn::pkstring& nature_name);
@@ -95,12 +97,12 @@ namespace pkmn
 
             // Battle Stat Info
             pkmn::pkstring get_status() const;
-            pkmn::item_entry_t& get_held_item() const;
+            pkmn::item_entry_t get_held_item() const;
             void set_status(const pkmn::pkstring& status);
             void set_held_item(const pkmn::pkstring& item_name);
 
             // Getting Move Info
-            pkmn::move_entry_t& get_move(uint8_t pos) const;
+            pkmn::move_entry_t get_move(uint8_t pos) const;
             void get_moves(pkmn::moveset_t& moves) const;
             uint8_t get_move_PP(uint8_t pos) const;
             void get_move_PPs(std::vector<uint8_t>& move_PPs) const;

@@ -55,6 +55,38 @@ namespace pkmn
             ("Paralyzed", 0x40)
         ;
 
+        static const pkmn::dict<uint8_t, pkmn::pkstring> modern_statuses = boost::assign::map_list_of
+            (0x00, "OK")
+            (0x01, "Asleep")
+            (0x02, "Asleep")
+            (0x03, "Asleep")
+            (0x04, "Asleep")
+            (0x05, "Asleep")
+            (0x06, "Asleep")
+            (0x07, "Asleep")
+            (0x08, "Poisoned")
+            (0x10, "Burned")
+            (0x20, "Frozen")
+            (0x40, "Paralyzed")
+            (0x80, "Badly Poisoned")
+        ;
+
+        static const pkmn::dict<uint8_t, pkmn::pkstring> modern_statuses = boost::assign::map_list_of
+            ("OK",             0x00)
+            ("Asleep",         0x01)
+            ("Asleep",         0x02)
+            ("Asleep",         0x03)
+            ("Asleep",         0x04)
+            ("Asleep",         0x05)
+            ("Asleep",         0x06)
+            ("Asleep",         0x07)
+            ("Poisoned",       0x08)
+            ("Burned",         0x10)
+            ("Frozen",         0x20)
+            ("Paralyzed",      0x40)
+            ("Badly Poisoned", 0x80)
+        ;
+
         uint8_t get_retro_IV(uint8_t stat, const uint16_t iv_data);
 
         void set_retro_IV(uint8_t stat, uint16_t &iv_data, uint8_t new_iv);

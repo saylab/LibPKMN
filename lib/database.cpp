@@ -646,6 +646,34 @@ namespace pkmn
             GET_PKSTRING(query);
         }
 
+        uint16_t get_version_game_index(const pkmn::pkstring& version_name)
+        {
+            return get_version_game_index(get_version_id(version_name));
+        }
+
+        uint16_t get_version_game_index(uint16_t version_id)
+        {
+            CONNECT_TO_DB();
+            if(version_id == Versions::NONE) return 0;
+
+            std::ostringstream query_stream;
+            query_stream << "SELECT index FROM version_game_indices WHERE version_id="
+                         << version_id;
+            SQLite::Statement query(*db, query_stream.str().c_str());
+            GET_NUM(query);
+        }
+
+        uint16_t get_version_id(uint16_t version_game_index)
+        {
+            CONNECT_TO_DB();
+
+            std::ostringstream query_stream;
+            query_stream << "SELECT version_id FROM version_game_indices WHERE index="
+                         << version_game_index;
+            SQLite::Statement query(*db, query_stream.str().c_str());
+            GET_NUM(query);
+        }
+
         unsigned int get_version_group_id(const unsigned int version_id)
         {
             CONNECT_TO_DB();

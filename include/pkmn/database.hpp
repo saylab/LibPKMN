@@ -90,6 +90,10 @@ namespace pkmn
         unsigned int PKMN_API get_version_id(const pkmn::pkstring &version_name);
         pkmn::pkstring PKMN_API get_version_name(const unsigned int version_id);
 
+        uint16_t PKMN_API get_version_game_index(const pkmn::pkstring& version_name);
+        uint16_t PKMN_API get_version_game_index(uint16_t version_id);
+        uint16_t PKMN_API get_version_id(uint16_t game_index);
+
         unsigned int PKMN_API get_version_group_id(const unsigned int version_id);
         unsigned int PKMN_API get_version_group_id(const pkmn::pkstring &version_name);
         pkmn::pkstring PKMN_API get_version_group_name(const unsigned int version_group_id);

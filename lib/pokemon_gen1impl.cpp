@@ -117,6 +117,12 @@ namespace pkmn
      * Getting Non-battle info
      */
 
+    // No contests in Generation I
+    pkmn::contest_stats_t pokemon_gen1impl::get_contest_stats() const
+    {
+        return pkmn::contest_stats_t();
+    }
+
     // No markings in Generation I
     pkmn::markings_t pokemon_gen1impl::get_markings() const
     {
@@ -132,6 +138,12 @@ namespace pkmn
     /*
      * Setting Non-battle info
      */
+
+    // No contests in Generation I
+    void pokemon_gen1impl::set_contest_stats(const pkmn::contest_stats_t& contest_stats)
+    {
+        /* NOP */
+    }
 
     // No markings in Generation I
     void pokemon_gen1impl::set_markings(const pkmn::markings_t& markings)
@@ -484,7 +496,7 @@ namespace pkmn
     }
 
     // No held items in Generation I
-    pkmn::item_entry_t& pokemon_gen1impl::get_held_item() const
+    pkmn::item_entry_t pokemon_gen1impl::get_held_item() const
     {
         return _pokedex->get_item_entry(Items::NONE);
     }
@@ -507,7 +519,7 @@ namespace pkmn
      * Getting Move Info
      */
 
-    pkmn::move_entry_t& pokemon_gen1impl::get_move(uint8_t pos) const
+    pkmn::move_entry_t pokemon_gen1impl::get_move(uint8_t pos) const
     {
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
