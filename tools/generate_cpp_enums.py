@@ -589,7 +589,7 @@ if __name__ == "__main__":
     db_table_output = """CREATE TABLE libpkmn_pokemon_form_names (
     form_id INTEGER NOT NULL,
     name VARCHAR(30) NOT NULL,
-    image_name VARCHAR(30) NOT NULL,
+    image_name VARCHAR(30),
     PRIMARY KEY (form_id)
 );\n"""
 

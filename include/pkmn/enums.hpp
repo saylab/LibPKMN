@@ -4,7 +4,7 @@
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  *
- * This file was generated: 2015-01-14 21:14:40.856680
+ * This file was generated: 2015-01-14 21:39:42.061692
  */
 
 #ifndef INCLUDED_PKMN_ENUMS_HPP

@@ -1665,7 +1665,7 @@ INSERT INTO "version_game_indices" VALUES(24,25);
 CREATE TABLE libpkmn_pokemon_form_names (
     form_id INTEGER NOT NULL,
     name VARCHAR(30) NOT NULL,
-    image_name VARCHAR(30) NOT NULL,
+    image_name VARCHAR(30),
     PRIMARY KEY (form_id)
 );
 INSERT INTO "libpkmn_pokemon_form_names" VALUES(3,'Standard',NULL);
@@ -1754,12 +1754,12 @@ INSERT INTO "libpkmn_pokemon_form_names" VALUES(386,'Normal','normal');
 INSERT INTO "libpkmn_pokemon_form_names" VALUES(10031,'Attack','attack');
 INSERT INTO "libpkmn_pokemon_form_names" VALUES(10032,'Defense','defense');
 INSERT INTO "libpkmn_pokemon_form_names" VALUES(10033,'Speed','speed');
-INSERT INTO "libpkmn_pokemon_form_names" VALUES(412,'Plant-Cloak','plant-cloak');
-INSERT INTO "libpkmn_pokemon_form_names" VALUES(10034,'Sandy-Cloak','sandy-cloak');
-INSERT INTO "libpkmn_pokemon_form_names" VALUES(10035,'Trash-Cloak','trash-cloak');
-INSERT INTO "libpkmn_pokemon_form_names" VALUES(413,'Plant-Cloak','plant-cloak');
-INSERT INTO "libpkmn_pokemon_form_names" VALUES(10036,'Sandy-Cloak','sandy-cloak');
-INSERT INTO "libpkmn_pokemon_form_names" VALUES(10037,'Trash-Cloak','trash-cloak');
+INSERT INTO "libpkmn_pokemon_form_names" VALUES(412,'Plant-Cloak','plant');
+INSERT INTO "libpkmn_pokemon_form_names" VALUES(10034,'Sandy-Cloak','sandy');
+INSERT INTO "libpkmn_pokemon_form_names" VALUES(10035,'Trash-Cloak','trash');
+INSERT INTO "libpkmn_pokemon_form_names" VALUES(413,'Plant-Cloak','plant');
+INSERT INTO "libpkmn_pokemon_form_names" VALUES(10036,'Sandy-Cloak','sandy');
+INSERT INTO "libpkmn_pokemon_form_names" VALUES(10037,'Trash-Cloak','trash');
 INSERT INTO "libpkmn_pokemon_form_names" VALUES(421,'Overcast','overcast');
 INSERT INTO "libpkmn_pokemon_form_names" VALUES(10038,'Sunshine','sunshine');
 INSERT INTO "libpkmn_pokemon_form_names" VALUES(422,'West-Sea','west-sea');
