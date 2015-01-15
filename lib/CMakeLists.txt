@@ -62,34 +62,23 @@ IF(ENABLE_LIBPKMN)
         library_bridge.cpp
         calculations.cpp
         database.cpp
-        base_pokemon_impl.cpp
-        base_pokemon_gen1impl.cpp
-        base_pokemon_gen2impl.cpp
-        base_pokemon_modernimpl.cpp
-        team_pokemon_impl.cpp
-        team_pokemon_gen1impl.cpp
-        team_pokemon_gen2impl.cpp
-        team_pokemon_gen3impl.cpp
-        team_pokemon_ndsimpl.cpp
         pokemon_impl.cpp
         pokemon_gen1impl.cpp
         pokemon_gen2impl.cpp
         pokemon_gen3impl.cpp
-        pocket_impl.cpp
-        bag_impl.cpp
-        item_impl.cpp
-        trainer_impl.cpp
-        move_impl.cpp
+        #pocket_impl.cpp
+        #bag_impl.cpp
+        #trainer_impl.cpp
         pokedex_impl.cpp
-        game_save_impl.cpp
-        game_save_gen1impl.cpp
-        game_save_gen2impl.cpp
-        game_save_gen3impl.cpp
-        game_save_gen4impl.cpp
-        game_save_gen5impl.cpp
-        io.cpp
-        lists.cpp
-        copy_sptrs.cpp
+        #game_save_impl.cpp
+        #game_save_gen1impl.cpp
+        #game_save_gen2impl.cpp
+        #game_save_gen3impl.cpp
+        #game_save_gen4impl.cpp
+        #game_save_gen5impl.cpp
+        #io.cpp
+        #lists.cpp
+        #copy_sptrs.cpp
         ${pkmds_sources}
         ${conversions_sources}
         ${qt4_sources}
