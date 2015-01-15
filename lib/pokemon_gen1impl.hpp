@@ -18,8 +18,8 @@ namespace pkmn
 
             pokemon_gen1impl(uint16_t species, uint16_t version,
                              uint8_t level,
-                             uint16_t move1, uint16_t move2,
-                             uint16_t move3, uint16_t move4);
+                             uint8_t move1, uint8_t move2,
+                             uint8_t move3, uint8_t move4);
             pokemon_gen1impl(const pkmn::gen1_pc_pokemon_t& raw,
                              uint8_t version);
             pokemon_gen1impl(const pkmn::gen1_pc_pokemon_t& raw,
@@ -85,7 +85,7 @@ namespace pkmn
             // Setting Individual Stat Info
             void set_personality(uint32_t personality);
             void set_friendship(uint8_t friendship);
-            void set_level(uint16_t level);
+            void set_level(uint8_t level);
             void set_experience(uint32_t experience);
             void set_gender(const pkmn::pkstring& gender);
             void set_nature(const pkmn::pkstring& nature_name);

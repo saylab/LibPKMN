@@ -382,7 +382,7 @@ namespace pkmn
         return move::make(_raw.pc.moves[pos-1], _game_id);
     }
 
-    void team_pokemon_gen1impl::get_moves(pkmn::moveset_t &moves) const
+    void team_pokemon_gen1impl::get_moves(pkmn::moveset_t2 &moves) const
     {
         moves.clear();
         for(size_t i = 0; i < 4; i++) moves.push_back(get_move(i+1));
@@ -426,25 +426,25 @@ namespace pkmn
     }
 
     // No markings in Generation I
-    pkmn::markings team_pokemon_gen1impl::get_markings() const
+    pkmn::markings_t team_pokemon_gen1impl::get_markings() const
     {
-        return pkmn::markings();
+        return pkmn::markings_t();
     }
 
     // No markings in Generation I
-    void team_pokemon_gen1impl::set_markings(const pkmn::markings &mark)
+    void team_pokemon_gen1impl::set_markings(const pkmn::markings_t &mark)
     {
         /* NOP */
     }
 
     // No ribbons in Generation I
-    pkmn::ribbons team_pokemon_gen1impl::get_ribbons() const
+    pkmn::ribbons_t team_pokemon_gen1impl::get_ribbons() const
     {
-        return pkmn::ribbons();
+        return pkmn::ribbons_t();
     }
 
     // No ribbons in Generation I
-    void team_pokemon_gen1impl::set_ribbons(const pkmn::ribbons &rib)
+    void team_pokemon_gen1impl::set_ribbons(const pkmn::ribbons_t &rib)
     {
         /* NOP */
     }

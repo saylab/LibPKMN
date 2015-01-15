@@ -44,8 +44,8 @@ namespace pkmn
             team_pokemon::sptr get_pokemon(unsigned int pos);
             void set_pokemon(unsigned int pos, team_pokemon::sptr t_pkmn);
             void remove_pokemon(unsigned int pos);
-            void get_party(pokemon_team_t &party);
-            void set_party(pokemon_team_t &party);
+            void get_party(pokemon_team_t2 &party);
+            void set_party(pokemon_team_t2 &party);
 
             //Bag
             bag::sptr get_bag() const;
@@ -69,7 +69,7 @@ namespace pkmn
 
             bag::sptr _bag;
             pkmn::pkstring _trainer_name;
-            pokemon_team_t _party;
+            pokemon_team_t2 _party;
 
             std::string _sprite_path;
     };

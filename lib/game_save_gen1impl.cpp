@@ -43,7 +43,7 @@ namespace pkmn
                                  Genders::MALE);
         conversions::import_gen1_bag(_trainer->get_bag(), _item_bag);
 
-        pokemon_team_t team(6);
+        pokemon_team_t2 team(6);
         for(size_t i = 0; i < _pokemon_party->count; i++)
         {
             team[i] = conversions::import_gen1_pokemon(_pokemon_party->party[i],
@@ -69,7 +69,7 @@ namespace pkmn
 
         conversions::export_gen1_bag(_trainer->get_bag(), _item_bag);
 
-        pokemon_team_t team;
+        pokemon_team_t2 team;
         _trainer->get_party(team);
         _pokemon_party->count = 0;
         for(size_t i = 0; i < 6; i++)

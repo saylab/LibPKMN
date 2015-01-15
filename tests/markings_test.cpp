@@ -13,7 +13,7 @@
 
 BOOST_AUTO_TEST_CASE(from_markings_test)
 {
-    pkmn::markings mark;
+    pkmn::markings_t mark;
     mark.circle = true;
     mark.triangle = false;
     mark.square = true;
@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE(from_markings_test)
 BOOST_AUTO_TEST_CASE(to_markings_test)
 {
     uint8_t mark_int = 21; // 0b010101
-    pkmn::markings mark = mark_int;
+    pkmn::markings_t mark = mark_int;
     BOOST_CHECK(mark.circle);
     BOOST_CHECK(!mark.triangle);
     BOOST_CHECK(mark.square);

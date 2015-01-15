@@ -79,9 +79,9 @@ namespace pkmn
 
     pkmn::shared_ptr<SQLite::Database> pokemon_impl::_db;
 
-    pokemon_impl::pokemon_impl(uint16_t species_id, uint16_t version_id)
+    pokemon_impl::pokemon_impl(uint16_t species_id, uint16_t version_id):
         pokemon(),
-        _pokedex(pokedex::make(version_id)),
+        _pokedex(pokedex::make(database::get_version_name(version_id))),
         _prng(prng::make(database::get_generation(version_id))),
         _species_id(_species_id),
         _version_id(version_id)
@@ -92,12 +92,12 @@ namespace pkmn
     }
 
     pokemon_impl::pokemon_impl(const pokemon_impl& other):
-        _pokedex(copy_pokedex(other._pokedex),
+        _pokedex(copy_pokedex(other._pokedex)),
         _pokedex_entry(other._pokedex_entry),
         _prng(copy_prng(other._prng)),
         _species_id(other._species_id),
         _version_id(other._version_id),
-        _attributes(other._attributes) {};
+        _attributes(other._attributes) {}
 
     pokemon_impl& pokemon_impl::operator=(const pokemon_impl& other)
     {
@@ -152,12 +152,12 @@ namespace pkmn
         _attributes[attribute] = value;
     }
 
-    void pokemon_impl::get_species_id() const
+    uint16_t pokemon_impl::get_species_id() const
     {
         return _species_id;
     }
 
-    void pokemon_impl::get_game_id() const
+    uint16_t pokemon_impl::get_game_id() const
     {
         return _version_id;
     }

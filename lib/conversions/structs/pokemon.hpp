@@ -290,7 +290,7 @@ namespace pkmn
         uint8_t move_pps[4];
         uint8_t move_pp_ups[4];
         uint32_t iv_isegg_isnicknamed;
-        uint32_t hoenn_ribbons;
+        uint32_t hoenn_ribbons_t;
         uint8_t form_encounterinfo; // Fateful encounter, is female, is genderless
         union
         {

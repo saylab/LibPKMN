@@ -71,7 +71,7 @@ namespace pkmn
             (0x80, "Badly Poisoned")
         ;
 
-        static const pkmn::dict<uint8_t, pkmn::pkstring> modern_statuses = boost::assign::map_list_of
+        static const pkmn::dict<pkmn::pkstring, uint8_t> reverse_modern_statuses = boost::assign::map_list_of
             ("OK",             0x00)
             ("Asleep",         0x01)
             ("Asleep",         0x02)

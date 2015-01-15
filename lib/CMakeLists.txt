@@ -71,6 +71,10 @@ IF(ENABLE_LIBPKMN)
         team_pokemon_gen2impl.cpp
         team_pokemon_gen3impl.cpp
         team_pokemon_ndsimpl.cpp
+        pokemon_impl.cpp
+        pokemon_gen1impl.cpp
+        pokemon_gen2impl.cpp
+        pokemon_gen3impl.cpp
         pocket_impl.cpp
         bag_impl.cpp
         item_impl.cpp
@@ -130,7 +134,7 @@ IF(ENABLE_LIBPKMN)
         RUNTIME DESTINATION ${RUNTIME_DIR} COMPONENT Runtime #.dll
     )
     IF(NOT DISABLE_SWIG)
-        ADD_SUBDIRECTORY(swig)
+        #ADD_SUBDIRECTORY(swig)
     ENDIF(NOT DISABLE_SWIG)
 
     IF(UNIX)

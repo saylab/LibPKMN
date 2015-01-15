@@ -513,7 +513,7 @@ namespace pkmn
         return move::make(_blockB->moves[pos-1], _game_id);
     }
 
-    void team_pokemon_ndsimpl::get_moves(pkmn::moveset_t &moves) const
+    void team_pokemon_ndsimpl::get_moves(pkmn::moveset_t2 &moves) const
     {
         moves.clear();
         for(size_t i = 0; i < 4; i++) moves.push_back(get_move(i+1));
@@ -556,22 +556,22 @@ namespace pkmn
         else throw std::runtime_error("This move PP is invalid.");
     }
 
-    pkmn::markings team_pokemon_ndsimpl::get_markings() const
+    pkmn::markings_t team_pokemon_ndsimpl::get_markings() const
     {
         return _blockA->markings;
     }
 
-    void team_pokemon_ndsimpl::set_markings(const pkmn::markings &mark)
+    void team_pokemon_ndsimpl::set_markings(const pkmn::markings_t &mark)
     {
-        pkmn::markings m = mark;
+        pkmn::markings_t m = mark;
         _blockA->markings = m;
     }
 
-    pkmn::ribbons team_pokemon_ndsimpl::get_ribbons() const
+    pkmn::ribbons_t team_pokemon_ndsimpl::get_ribbons() const
     {
-        pkmn::ribbons rib;
+        pkmn::ribbons_t rib;
 
-        rib.hoenn = _blockB->hoenn_ribbons;
+        rib.hoenn = _blockB->hoenn_ribbons_t;
         rib.sinnoh.ribbons1 = _blockA->sinnoh_ribbons1;
         if(get_generation() == 4) rib.sinnoh.ribbons2 = _blockA->sinnoh_ribbons2;
         else rib.unova = _blockA->unova_ribbons;
@@ -580,10 +580,10 @@ namespace pkmn
         return rib;
     }
 
-    void team_pokemon_ndsimpl::set_ribbons(const pkmn::ribbons &rib)
+    void team_pokemon_ndsimpl::set_ribbons(const pkmn::ribbons_t &rib)
     {
-        pkmn::ribbons r = rib;
-        _blockB->hoenn_ribbons = r.hoenn;
+        pkmn::ribbons_t r = rib;
+        _blockB->hoenn_ribbons_t = r.hoenn;
         _blockA->sinnoh_ribbons1 = r.sinnoh.ribbons1;
         if(get_generation() == 4) _blockA->sinnoh_ribbons2 = r.sinnoh.ribbons2;
         else _blockA->unova_ribbons = r.unova;

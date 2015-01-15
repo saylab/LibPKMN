@@ -8,6 +8,7 @@
 #define INCLUDED_PKMN_POKEDEX_MOVE_ENTRY_HPP
 
 #include <cstdint>
+#include <vector>
 
 #include <pkmn/types/dict.hpp>
 #include <pkmn/types/pkstring.hpp>
@@ -34,6 +35,8 @@ namespace pkmn
         pkmn::pkstring contest_effect;
         pkmn::pkstring super_contest_effect;
     } move_entry_t;
+
+    typedef std::vector<move_entry_t> moveset_t;
 }
 
 #endif /* INCLUDED_PKMN_POKEDEX_MOVE_ENTRY_HPP */

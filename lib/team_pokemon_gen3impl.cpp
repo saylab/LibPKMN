@@ -509,7 +509,7 @@ namespace pkmn
         return move::make(_attacks->moves[pos-1], _game_id);
     }
 
-    void team_pokemon_gen3impl::get_moves(pkmn::moveset_t &moves) const
+    void team_pokemon_gen3impl::get_moves(pkmn::moveset_t2 &moves) const
     {
         moves.clear();
         for(size_t i = 0; i < 4; i++) moves.push_back(get_move(i+1));
@@ -552,28 +552,28 @@ namespace pkmn
         else throw std::runtime_error("This move PP is invalid.");
     }
 
-    pkmn::markings team_pokemon_gen3impl::get_markings() const
+    pkmn::markings_t team_pokemon_gen3impl::get_markings() const
     {
         return _raw.pc.markings;
     }
 
-    void team_pokemon_gen3impl::set_markings(const pkmn::markings &mark)
+    void team_pokemon_gen3impl::set_markings(const pkmn::markings_t &mark)
     {
-        pkmn::markings m = mark;
+        pkmn::markings_t m = mark;
         _raw.pc.markings = m;
     }
 
-    pkmn::ribbons team_pokemon_gen3impl::get_ribbons() const
+    pkmn::ribbons_t team_pokemon_gen3impl::get_ribbons() const
     {
-        pkmn::ribbons rib;
+        pkmn::ribbons_t rib;
         rib.hoenn = _misc->ribbons_obedience;
 
         return rib;
     }
 
-    void team_pokemon_gen3impl::set_ribbons(const pkmn::ribbons &rib)
+    void team_pokemon_gen3impl::set_ribbons(const pkmn::ribbons_t &rib)
     {
-        pkmn::hoenn_ribbons hoenn = rib.hoenn;
+        pkmn::hoenn_ribbons_t hoenn = rib.hoenn;
         _misc->ribbons_obedience = hoenn;
     }
 

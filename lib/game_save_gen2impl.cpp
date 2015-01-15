@@ -73,7 +73,7 @@ namespace pkmn
 
         conversions::export_gen2_bag(_trainer->get_bag(), _item_bag);
 
-        pokemon_team_t team;
+        pokemon_team_t2 team;
         _trainer->get_party(team);
         _pokemon_party->count = 0;
         for(size_t i = 0; i < 6; i++)

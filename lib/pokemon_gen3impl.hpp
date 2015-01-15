@@ -18,8 +18,8 @@ namespace pkmn
 
             pokemon_gen3impl(uint16_t species, uint16_t version,
                              uint8_t level,
-                             uint16_t move1, uint16_t move2,
-                             uint16_t move3, uint16_t move4);
+                             uint8_t move1, uint8_t move2,
+                             uint8_t move3, uint8_t move4);
             pokemon_gen3impl(const pkmn::gen3_pc_pokemon_t& raw,
                              uint8_t version);
             pokemon_gen3impl(const pkmn::gen3_party_pokemon_t& raw,
@@ -123,7 +123,7 @@ namespace pkmn
             pkmn::gen3_pokemon_growth_t  *_growth;
             pkmn::gen3_pokemon_attacks_t *_attacks;
             pkmn::gen3_pokemon_effort_t  *_effort;
-            pkmn::gen3_pokemon_moves_t   *_moves;
+            pkmn::gen3_pokemon_misc_t    *_misc;
 
             uint16_t _form_id;
 

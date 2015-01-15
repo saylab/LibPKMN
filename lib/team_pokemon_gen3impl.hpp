@@ -77,7 +77,7 @@ namespace pkmn
 
             //Getting Move Info
             move::sptr get_move(unsigned int pos) const;
-            void get_moves(pkmn::moveset_t &moves) const;
+            void get_moves(pkmn::moveset_t2 &moves) const;
             unsigned int get_move_PP(unsigned int pos) const;
             void get_move_PPs(std::vector<unsigned int> &move_PPs) const;
 
@@ -86,10 +86,10 @@ namespace pkmn
             void set_move_PP(unsigned int PP, unsigned int pos);
 
             //Misc
-            pkmn::markings get_markings() const;
-            void set_markings(const pkmn::markings &mark);
-            pkmn::ribbons get_ribbons() const;
-            void set_ribbons(const pkmn::ribbons &rib);
+            pkmn::markings_t get_markings() const;
+            void set_markings(const pkmn::markings_t &mark);
+            pkmn::ribbons_t get_ribbons() const;
+            void set_ribbons(const pkmn::ribbons_t &rib);
 
             //Database Info
             unsigned int get_original_game_id() const;

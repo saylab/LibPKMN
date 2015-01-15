@@ -18,8 +18,8 @@ namespace pkmn
 
             pokemon_gen2impl(uint16_t species, uint16_t version,
                              uint8_t level,
-                             uint16_t move1, uint16_t move2,
-                             uint16_t move3, uint16_t move4);
+                             uint8_t move1, uint8_t move2,
+                             uint8_t move3, uint8_t move4);
             pokemon_gen2impl(const pkmn::gen2_pc_pokemon_t& raw,
                              uint8_t version);
             pokemon_gen2impl(const pkmn::gen2_pc_pokemon_t& raw,
@@ -136,6 +136,7 @@ namespace pkmn
             void _set_experience(uint32_t exp);
             void _set_level(uint8_t level);
             void _set_stats();
+            void _reset_caught_data();
     };
 }
 

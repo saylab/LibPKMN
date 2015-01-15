@@ -201,7 +201,7 @@ namespace pkmn
              *
              * \param party reference to a pokemon_team vector
              */
-            virtual void get_party(pokemon_team_t &party) = 0;
+            virtual void get_party(pokemon_team_t2 &party) = 0;
 
             /*!
              * Sets the party to the given pokemon_vector. Currently only takes Pokémon
@@ -209,7 +209,7 @@ namespace pkmn
              *
              * \param party reference to a pokemon_team vector
              */
-            virtual void set_party(pokemon_team_t &party) = 0;
+            virtual void set_party(pokemon_team_t2 &party) = 0;
 
             //! Returns a pointer to the trainer's bag.
             virtual bag::sptr get_bag() const = 0;

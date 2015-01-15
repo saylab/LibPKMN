@@ -28,14 +28,14 @@ namespace pkmn
                                        uint8_t move1, uint8_t move2,
                                        uint8_t move3, uint8_t move4):
         pokemon_impl(species, version),
-        _nickname(boost::algorithm::to_upper_copy(database::get_species_name(species).std_wstring()),
+        _nickname(boost::algorithm::to_upper_copy(database::get_species_name(species).std_wstring())),
         _otname("LIBPKMN"),
         _form_id(species)
     {
         /*
          * Populate native struct
          */
-        _raw.pc.species = database::get_pokemon_game_index(_species_id, _game_id);
+        _raw.pc.species = database::get_pokemon_game_index(_species_id, _version_id);
         _raw.pc.held_item = 0;
         _raw.pc.moves[0] = move1;
         _raw.pc.moves[1] = move2;
@@ -53,7 +53,7 @@ namespace pkmn
             _raw.pc.move_pps[i] = database::get_move_pp(_raw.pc.moves[i]);
         _raw.pc.friendship = 70;
         _raw.pc.pokerus = 0;
-        if(_game_id == Versions::CRYSTAL)
+        if(_version_id == Versions::CRYSTAL)
         {
             _raw.pc.caught_data = ((level & 0x3F) << 8);
             // Trainer male by default, can be set
@@ -67,11 +67,13 @@ namespace pkmn
 
     pokemon_gen2impl::pokemon_gen2impl(const pkmn::gen2_pc_pokemon_t& raw,
                                        uint8_t version):
-        pokemon_impl(database::get_pokemon_id(raw.pc.species, version),
+        pokemon_impl(database::get_pokemon_id(raw.species, version),
                      version),
-        _nickname(boost::algorithm::to_upper_copy(database::get_species_name(species).std_wstring()),
+        _nickname(boost::algorithm::to_upper_copy(database::get_species_name(
+                                                      database::get_pokemon_id(raw.species,
+                                                                               Versions::GOLD)).std_wstring())),
         _otname("LIBPKMN"),
-        _form_id(database::get_pokemon_id(raw.pc.species, version))
+        _form_id(database::get_pokemon_id(raw.species, version))
     {
         _raw.pc = raw;
         _set_stats(); // Will populate rest of party portion in struct
@@ -81,11 +83,11 @@ namespace pkmn
                                        const pkmn::pkstring& nickname,
                                        const pkmn::pkstring& otname,
                                        uint8_t version):
-        pokemon_impl(database::get_pokemon_id(raw.pc.species, version),
+        pokemon_impl(database::get_pokemon_id(raw.species, version),
                      version),
-        _nickname(nickname)
+        _nickname(nickname),
         _otname(otname),
-        _form_id(database::get_pokemon_id(raw.pc.species, version))
+        _form_id(database::get_pokemon_id(raw.species, version))
     {
         _raw.pc = raw;
         _set_stats(); // Will populate rest of party portion in struct
@@ -96,7 +98,9 @@ namespace pkmn
         pokemon_impl(database::get_pokemon_id(raw.pc.species, version),
                      version),
         _raw(raw),
-        _nickname(boost::algorithm::to_upper_copy(base->get_species().std_wstring())),
+        _nickname(boost::algorithm::to_upper_copy(database::get_species_name(
+                                                      database::get_pokemon_id(raw.pc.species,
+                                                                               Versions::GOLD)).std_wstring())),
         _otname("LIBPKMN"),
         _form_id(database::get_pokemon_id(raw.pc.species, version)) {};
 
@@ -107,7 +111,7 @@ namespace pkmn
         pokemon_impl(database::get_pokemon_id(raw.pc.species, version),
                      version),
         _raw(raw),
-        _nickname(nickname)
+        _nickname(nickname),
         _otname(otname),
         _form_id(database::get_pokemon_id(raw.pc.species, version)) {};
 
@@ -253,9 +257,9 @@ namespace pkmn
         if(gender.std_string() != "Male" and gender.std_string() != "Female")
             throw std::runtime_error("Gender must be male or female.");
 
-        if(_game_id == Versions::CRYSTAL)
+        if(_version_id == Versions::CRYSTAL)
         {
-            if(gender == "Male") _raw.pc.caught_data& = ~(0x80);
+            if(gender == "Male") _raw.pc.caught_data &= ~(0x80);
             else                 _raw.pc.caught_data |= 0x80;
         }
     }
@@ -297,7 +301,7 @@ namespace pkmn
     }
 
     // Met level only tracked in Crystal
-    void pokemon_gen2impl::set_met_level(uint16_t level)
+    void pokemon_gen2impl::set_met_level(uint8_t level)
     {
         /*
          * Pokémon in Generation I-II cannot be level 1.
@@ -307,7 +311,7 @@ namespace pkmn
         if(level < 2 or level > 100)
             throw std::runtime_error("Level must be 2-100.");
 
-        if(_game_id == Versions::CRYSTAL)
+        if(_version_id == Versions::CRYSTAL)
             _raw.pc.caught_data |= ((level&  0x3F) << 8);
     }
 
@@ -478,7 +482,7 @@ namespace pkmn
         if(((chance_male + chance_female) == 0) or
             (chance_male == 1.0) or (chance_female == 1.0))
             throw std::runtime_error("This species's gender cannot be changed.");
-        else if(gender != "Male" and gender != "Female")
+        else if(gender.std_string() != "Male" and gender.std_string() != "Female")
             throw std::runtime_error("Gender can only be \"Male\" or \"Female\".");
         else
         {
@@ -510,7 +514,6 @@ namespace pkmn
     void pokemon_gen2impl::set_ability(const pkmn::pkstring& ability)
     {
         /* NOP */
-    }
     }
 
     void pokemon_gen2impl::set_form(const pkmn::pkstring& form)
@@ -621,7 +624,7 @@ namespace pkmn
 
     pkmn::item_entry_t pokemon_gen2impl::get_held_item() const
     {
-        return _pokedex->get_item_entry(database::get_item_id(_raw.pc.held_item, _game_id));
+        return _pokedex->get_item_entry(database::get_item_id(_raw.pc.held_item, _version_id));
     }
 
     void pokemon_gen2impl::set_status(const pkmn::pkstring& status)
@@ -635,7 +638,7 @@ namespace pkmn
     void pokemon_gen2impl::set_held_item(const pkmn::pkstring& item_name)
     {
         _raw.pc.held_item = database::get_item_game_index(item_name,
-                                                          database::get_version_name(_game_id));
+                                                          database::get_version_name(_version_id));
     }
 
     pkmn::move_entry_t pokemon_gen2impl::get_move(uint8_t pos) const
@@ -652,7 +655,7 @@ namespace pkmn
         for(size_t i = 0; i < 4; i++) moves.push_back(get_move(i+1));
     }
 
-    unsigned int pokemon_gen2impl::get_move_PP(uint8_t pos) const
+    uint8_t pokemon_gen2impl::get_move_PP(uint8_t pos) const
     {
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
@@ -709,7 +712,7 @@ namespace pkmn
         }
         else icon_path /= str(boost::format("%d.png") % _species_id);
 
-        return icon_path;
+        return icon_path.string();
     }
 
     static const pkmn::dict<uint8_t, std::string> version_dirs = boost::assign::map_list_of
@@ -720,7 +723,7 @@ namespace pkmn
 
     pkmn::pkstring pokemon_gen2impl::get_sprite_path() const
     {
-        fs::path sprite_path(get_images_dir();
+        fs::path sprite_path(get_images_dir());
 
         sprite_path /= "generation-2";
         sprite_path /= version_dirs.at(_version_id, "gold");
@@ -733,7 +736,7 @@ namespace pkmn
         }
         else sprite_path /= str(boost::format("%d.png") % _species_id);
 
-        return sprite_path;
+        return sprite_path.string();
     }
 
     /*
@@ -813,7 +816,7 @@ namespace pkmn
 
     void pokemon_gen2impl::_reset_caught_data()
     {
-        if(_game_id == Versions::CRYSTAL) _raw.pc.caught_data = ((_raw.pc.level & 0x3F) << 8);
+        if(_version_id == Versions::CRYSTAL) _raw.pc.caught_data = ((_raw.pc.level & 0x3F) << 8);
         else _raw.pc.caught_data = 0;
     }
 }

@@ -54,10 +54,10 @@ namespace pkmn
         operator uint32_t();
     };
 
-    struct PKMN_API sinnoh_ribbons_t1
+    struct PKMN_API sinnoh_ribbons1_t
     {
-        sinnoh_ribbons_t1() {};
-        sinnoh_ribbons_t1(uint16_t ribbonint);
+        sinnoh_ribbons1_t() {};
+        sinnoh_ribbons1_t(uint16_t ribbonint);
 
         bool sinnoh_champ;
         bool ability;
@@ -79,10 +79,10 @@ namespace pkmn
         operator uint16_t();
     };
 
-    struct PKMN_API sinnoh_ribbons_t2
+    struct PKMN_API sinnoh_ribbons2_t
     {
-        sinnoh_ribbons_t2() {};
-        sinnoh_ribbons_t2(uint16_t ribbonint);
+        sinnoh_ribbons2_t() {};
+        sinnoh_ribbons2_t(uint16_t ribbonint);
 
         bool gorgeous_royal;
         bool footprint;
@@ -100,10 +100,10 @@ namespace pkmn
         operator uint16_t();
     };
 
-    struct PKMN_API sinnoh_ribbons_t3
+    struct PKMN_API sinnoh_ribbons3_t
     {
-        sinnoh_ribbons_t3() {};
-        sinnoh_ribbons_t3(uint32_t ribbonint);
+        sinnoh_ribbons3_t() {};
+        sinnoh_ribbons3_t(uint32_t ribbonint);
 
         bool cool;
         bool cool_super;
@@ -131,9 +131,9 @@ namespace pkmn
 
     struct sinnoh_ribbons_t
     {
-        struct sinnoh_ribbons_t1 ribbons_t1;
-        struct sinnoh_ribbons_t2 ribbons_t2;
-        struct sinnoh_ribbons_t3 ribbons_t3;
+        struct sinnoh_ribbons1_t ribbons1;
+        struct sinnoh_ribbons2_t ribbons2;
+        struct sinnoh_ribbons3_t ribbons3;
     };
 
     struct PKMN_API unova_ribbons_t

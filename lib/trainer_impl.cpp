@@ -47,7 +47,7 @@ namespace pkmn
         _trainer_id = (_generation < 3) ? (_rand_gen->lcrng() % 65535)
                                         : _rand_gen->lcrng();
 
-        _party = pokemon_team_t(6);
+        _party = pokemon_team_t2(6);
         for(int i = 0; i < 6; i++)
         {
             _party[i] = team_pokemon::make(Species::NONE, _game_id, 1, Moves::NONE, Moves::NONE,
@@ -147,13 +147,13 @@ namespace pkmn
         }
     }
 
-    void trainer_impl::get_party(pokemon_team_t &party)
+    void trainer_impl::get_party(pokemon_team_t2 &party)
     {
         party = _party;
     }
 
     //TODO: allow for other trainers' Pokemon
-    void trainer_impl::set_party(pokemon_team_t &party)
+    void trainer_impl::set_party(pokemon_team_t2 &party)
     {
         //Only set party if party and all Pokemon are valid
         if(party.size() != 6) return;

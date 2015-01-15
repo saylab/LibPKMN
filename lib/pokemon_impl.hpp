@@ -39,7 +39,7 @@ namespace pkmn
             uint16_t get_species_id() const;
             uint16_t get_game_id() const;
 
-        private:
+        protected:
 
             static pkmn::shared_ptr<SQLite::Database> _db;
 

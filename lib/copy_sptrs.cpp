@@ -18,6 +18,7 @@
 #include "item_impl.hpp"
 #include "move_impl.hpp"
 #include "pocket_impl.hpp"
+#include "pokedex_impl.hpp"
 #include "team_pokemon_gen1impl.hpp"
 #include "team_pokemon_gen2impl.hpp"
 #include "team_pokemon_gen3impl.hpp"

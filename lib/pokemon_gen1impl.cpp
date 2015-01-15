@@ -33,12 +33,12 @@ namespace pkmn
         /*
          * Populate native struct
          */
-        _raw.pc.species = database::get_pokemon_game_index(_species_id, _game_id);
+        _raw.pc.species = database::get_pokemon_game_index(_species_id, _version_id);
         // current_hp populated by _set_stats()
         _set_level(level);
         _raw.pc.status = 0x00;
         _raw.pc.types[0] = database::get_type_id(_pokedex_entry.types.first);
-        _raw.pc.types[1] = database::get_type_id(_pokedex_entry.types..second);
+        _raw.pc.types[1] = database::get_type_id(_pokedex_entry.types.second);
         _raw.pc.catch_rate = conversions::gen1_catch_rates[_species_id];
         _raw.pc.moves[0] = move1;
         _raw.pc.moves[1] = move2;
@@ -59,12 +59,16 @@ namespace pkmn
 
     pokemon_gen1impl::pokemon_gen1impl(const pkmn::gen1_pc_pokemon_t& raw,
                                        uint8_t version):
-        pokemon_impl(database::get_pokemon_id(raw.pc.species, Versions::RED),
+        pokemon_impl(database::get_pokemon_id(raw.species, Versions::RED),
                      version),
-        _nickname(boost::algorithm::to_upper_copy(database::get_species_name(species).std_wstring())),
+        _nickname(boost::algorithm::to_upper_copy(database::get_species_name(
+                                                      database::get_pokemon_id(raw.species,
+                                                                           Versions::RED)).std_wstring())),
         _otname("LIBPKMN")
     {
         _raw.pc = raw;
+
+
         _set_stats(); // Will populate party portion of struct
     }
 
@@ -72,7 +76,7 @@ namespace pkmn
                                        const pkmn::pkstring& nickname,
                                        const pkmn::pkstring& otname,
                                        uint8_t version):
-        pokemon_impl(database::get_pokemon_id(raw.pc.species, Versions::RED),
+        pokemon_impl(database::get_pokemon_id(raw.species, Versions::RED),
                      version),
         _nickname(nickname),
         _otname(otname)
@@ -86,7 +90,9 @@ namespace pkmn
         pokemon_impl(database::get_pokemon_id(raw.pc.species, Versions::RED),
                      version),
         _raw(raw),
-        _nickname(boost::algorithm::to_upper_copy(database::get_species_name(species).std_wstring())),
+        _nickname(boost::algorithm::to_upper_copy(database::get_species_name(
+                                                      database::get_pokemon_id(raw.pc.species,
+                                                                               Versions::RED)).std_wstring())),
         _otname("LIBPKMN") {};
 
     pokemon_gen1impl::pokemon_gen1impl(const pkmn::gen1_party_pokemon_t& raw,
@@ -270,7 +276,7 @@ namespace pkmn
     }
 
     // Met level not recorded in Generation I
-    void pokemon_gen1impl::set_met_level(uint16_t level) const
+    void pokemon_gen1impl::set_met_level(uint8_t level)
     {
         /* NOP */
     }

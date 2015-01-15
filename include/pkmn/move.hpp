@@ -169,7 +169,7 @@ namespace pkmn
     };
 
     //Related typedefs
-    typedef std::vector<move::sptr> moveset_t;
+    typedef std::vector<move::sptr> moveset_t2;
 }
 
 #endif /* INCLUDED_PKMN_MOVE_HPP */

@@ -101,7 +101,7 @@ namespace pkmn
 
             // Getting Move Info
             virtual move::sptr get_move(unsigned int pos) const = 0;
-            virtual void get_moves(pkmn::moveset_t &moves) const = 0;
+            virtual void get_moves(pkmn::moveset_t2 &moves) const = 0;
             virtual unsigned int get_move_PP(unsigned int pos) const = 0;
             virtual void get_move_PPs(std::vector<unsigned int> &move_PPs) const = 0;
 
@@ -110,10 +110,10 @@ namespace pkmn
             virtual void set_move_PP(unsigned int PP, unsigned int pos) = 0;
 
             // Misc
-            virtual pkmn::markings get_markings() const = 0;
-            virtual void set_markings(const pkmn::markings &mark) = 0;
-            virtual pkmn::ribbons get_ribbons() const = 0;
-            virtual void set_ribbons(const pkmn::ribbons &ribbons) = 0;
+            virtual pkmn::markings_t get_markings() const = 0;
+            virtual void set_markings(const pkmn::markings_t &mark) = 0;
+            virtual pkmn::ribbons_t get_ribbons() const = 0;
+            virtual void set_ribbons(const pkmn::ribbons_t &ribbons) = 0;
             virtual int get_attribute(const pkmn::pkstring &attribute) const = 0;
             virtual pkmn::dict<pkmn::pkstring, int> get_attributes() const = 0;
             virtual bool has_attribute(const pkmn::pkstring &attribute) const = 0;
@@ -137,7 +137,7 @@ namespace pkmn
     };
 
     // Related typedefs
-    typedef std::vector<team_pokemon::sptr> pokemon_team_t;
+    typedef std::vector<team_pokemon::sptr> pokemon_team_t2;
 }
 
 #endif /* INCLUDED_PKMN_TEAM_POKEMON_HPP */

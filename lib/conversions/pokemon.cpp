@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -101,7 +101,7 @@ namespace pkmn
             pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
             pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
             pkmn::pkstring_pair_t types = t_pkmn->get_types();
-            pkmn::moveset_t moves;
+            pkmn::moveset_t2 moves;
             t_pkmn->get_moves(moves);
             std::vector<unsigned int> move_PPs;
             t_pkmn->get_move_PPs(move_PPs);
@@ -230,7 +230,7 @@ namespace pkmn
             SQLite::Database db(get_database_path());
             pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
             pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
-            moveset_t moves;
+            moveset_t2 moves;
             t_pkmn->get_moves(moves);
             std::vector<unsigned int> move_PPs;
             t_pkmn->get_move_PPs(move_PPs);
@@ -399,7 +399,14 @@ namespace pkmn
             for(size_t i = 0; i < 4; i++) t_pkmn->set_move_PP(blocks.attacks.move_pps[i], (i+1));
 
             //Effort
-            //TODO: contest stats
+            pkmn::contest_stats_t contest_stats;
+            contest_stats.coolness  = blocks.effort.contest_stats.coolness;
+            contest_stats.beauty    = blocks.effort.contest_stats.beauty;
+            contest_stats.cuteness  = blocks.effort.contest_stats.cuteness;
+            contest_stats.smartness = blocks.effort.contest_stats.smartness;
+            contest_stats.toughness = blocks.effort.contest_stats.toughness;
+            contest_stats.feel      = blocks.effort.contest_stats.feel;
+            ////t_pkmn->set_contest_stats(contest_stats);
             t_pkmn->set_EV("HP", blocks.effort.ev_hp);
             t_pkmn->set_EV("Attack", blocks.effort.ev_atk);
             t_pkmn->set_EV("Defense", blocks.effort.ev_def);
@@ -434,7 +441,7 @@ namespace pkmn
             else ability_id = query.getColumn(0);
             t_pkmn->set_ability(database::get_ability_name(ability_id));
 
-            pkmn::ribbons rib;
+            pkmn::ribbons_t rib;
             rib.hoenn = blocks.misc.ribbons_obedience;
             t_pkmn->set_ribbons(rib);
 
@@ -446,7 +453,7 @@ namespace pkmn
             SQLite::Database db(get_database_path());
             pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
             pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
-            moveset_t moves;
+            moveset_t2 moves;
             t_pkmn->get_moves(moves);
             std::vector<unsigned int> move_PPs;
             t_pkmn->get_move_PPs(move_PPs);
@@ -472,7 +479,7 @@ namespace pkmn
             }
 
             //Effort
-            //TODO: contest stats
+            //blocks.effort.contest_stats = t_pkmn->get_contest_stats();
             blocks.effort.ev_hp = EVs["HP"];
             blocks.effort.ev_atk = EVs["Attack"];
             blocks.effort.ev_def = EVs["Defense"];
@@ -608,7 +615,15 @@ namespace pkmn
             t_pkmn->set_EV("Speed", blocks.blockA.ev_spd);
             t_pkmn->set_EV("Special Attack", blocks.blockA.ev_spatk);
             t_pkmn->set_EV("Special Defense", blocks.blockA.ev_spdef);
-            pkmn::ribbons rib;
+            pkmn::contest_stats_t contest_stats;
+            contest_stats.coolness  = blocks.blockA.contest_stats.coolness;
+            contest_stats.beauty    = blocks.blockA.contest_stats.beauty;
+            contest_stats.cuteness  = blocks.blockA.contest_stats.cuteness;
+            contest_stats.smartness = blocks.blockA.contest_stats.smartness;
+            contest_stats.toughness = blocks.blockA.contest_stats.toughness;
+            contest_stats.feel      = blocks.blockA.contest_stats.feel;
+            //t_pkmn->set_contest_stats(contest_stats);
+            pkmn::ribbons_t rib;
             rib.sinnoh.ribbons1 = blocks.blockA.sinnoh_ribbons1;
             if(gen == 4) rib.sinnoh.ribbons2 = blocks.blockA.sinnoh_ribbons2;
             else rib.unova = blocks.blockA.unova_ribbons;
@@ -622,7 +637,7 @@ namespace pkmn
             t_pkmn->set_IV("Speed", modern_get_IV(&blocks.blockB.iv_isegg_isnicknamed, Stats::SPEED));
             t_pkmn->set_IV("Special Attack", modern_get_IV(&blocks.blockB.iv_isegg_isnicknamed, Stats::SPECIAL_ATTACK));
             t_pkmn->set_IV("Special Defense", modern_get_IV(&blocks.blockB.iv_isegg_isnicknamed, Stats::SPECIAL_DEFENSE));
-            rib.hoenn = blocks.blockB.hoenn_ribbons;
+            rib.hoenn = blocks.blockB.hoenn_ribbons_t;
             // TODO: Form, encounter info
             if(gen == 4) t_pkmn->set_attribute("shiny-leaf", blocks.blockB.shiny_leaf);
             t_pkmn->set_nature(database::get_nature_name((gen == 4) ? (pkmn.personality % 24)
@@ -662,8 +677,8 @@ namespace pkmn
             pkmn::dict<pkmn::pkstring, unsigned int> EVs = t_pkmn->get_EVs();
             pkmn::dict<pkmn::pkstring, unsigned int> IVs = t_pkmn->get_IVs();
             pkmn::dict<pkmn::pkstring, int> attributes = t_pkmn->get_attributes();
-            pkmn::ribbons rib = t_pkmn->get_ribbons();
-            pkmn::moveset_t moves;
+            pkmn::ribbons_t rib = t_pkmn->get_ribbons();
+            pkmn::moveset_t2 moves;
             t_pkmn->get_moves(moves);
             std::vector<unsigned int> move_PPs;
             t_pkmn->get_move_PPs(move_PPs);
@@ -690,13 +705,14 @@ namespace pkmn
             blockA->ev_spd = EVs["Speed"];
             blockA->ev_spatk = EVs["Special Attack"];
             blockA->ev_spdef = EVs["Special Defense"];
-            // TODO: contest stats
-            blockA->coolness = 0;
-            blockA->beauty = 0;
-            blockA->cuteness = 0;
-            blockA->smartness = 0;
-            blockA->toughness = 0;
-            blockA->sheen = 0;
+
+            /*pkmn::contest_stats_t contest_stats = t_pkmn->get_contest_stats();
+            blockA->contest_stats.coolness  = contest_stats.coolness;
+            blockA->contest_stats.beauty    = contest_stats.beauty;
+            blockA->contest_stats.cuteness  = contest_stats.cuteness;
+            blockA->contest_stats.smartness = contest_stats.smartness;
+            blockA->contest_stats.toughness = contest_stats.toughness;
+            blockA->contest_stats.sheen     = contest_stats.sheen;*/
             blockA->sinnoh_ribbons1 = rib.sinnoh.ribbons1;
             if(generation == 4) blockA->sinnoh_ribbons2 = rib.sinnoh.ribbons2;
             else blockA->unova_ribbons = rib.unova;
@@ -714,7 +730,7 @@ namespace pkmn
             modern_set_IV(&blockB->iv_isegg_isnicknamed, Stats::SPECIAL_DEFENSE, IVs["Special Defense"]);
             if(t_pkmn->get_nickname() == boost::algorithm::to_upper_copy(t_pkmn->get_species_name().std_wstring()))
                 blockB->iv_isegg_isnicknamed |= (1<<31);
-            blockB->hoenn_ribbons = rib.hoenn;
+            blockB->hoenn_ribbons_t = rib.hoenn;
 
             if(t_pkmn->get_gender() == "Female") blockB->form_encounterinfo |= (1<<1);
             else if(t_pkmn->get_gender() == "Genderless") blockB->form_encounterinfo |= (1<<2);
@@ -924,7 +940,7 @@ namespace pkmn
                              database::get_pokemon_game_index(t_pkmn->get_pokemon_id(),
                              t_pkmn->get_game_id()));
 
-            moveset_t moves;
+            moveset_t2 moves;
             t_pkmn->get_moves(moves);
             p_pkm->moves[0] = pkmds::Moves::moves(moves[0]->get_move_id());
             p_pkm->moves[1] = pkmds::Moves::moves(moves[1]->get_move_id());
