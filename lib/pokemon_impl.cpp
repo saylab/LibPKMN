@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -8,6 +8,7 @@
 #include <sstream>
 #include <stdexcept>
 
+#include <boost/assign.hpp>
 #include <boost/format.hpp>
 
 #include <pkmn/enums.hpp>
@@ -78,6 +79,26 @@ namespace pkmn
     }
 
     pkmn::shared_ptr<SQLite::Database> pokemon_impl::_db;
+
+    pkmn::dict<uint8_t, std::string> pokemon_impl::_version_dirs = boost::assign::map_list_of
+        (Versions::GOLD,       "gold")
+        (Versions::SILVER,     "silver")
+        (Versions::CRYSTAL,    "crystal")
+        (Versions::RUBY,       "ruby-sapphire")
+        (Versions::SAPPHIRE,   "ruby-sapphire")
+        (Versions::FIRERED,    "firered-leafgreen")
+        (Versions::LEAFGREEN,  "firered-leafgreen")
+        (Versions::EMERALD,    "emerald")
+        (Versions::DIAMOND,    "diamond-pearl")
+        (Versions::PEARL,      "diamond-pearl")
+        (Versions::PLATINUM,   "diamond-pearl")
+        (Versions::HEARTGOLD,  "heartgold-soulsilver")
+        (Versions::SOULSILVER, "heartgold-soulsilver")
+        (Versions::BLACK,      "black-white")
+        (Versions::WHITE,      "black-white")
+        (Versions::BLACK_2,    "black2-white2")
+        (Versions::WHITE_2,    "black2-white2")
+    ;
 
     pokemon_impl::pokemon_impl(uint16_t species_id, uint16_t version_id):
         pokemon(),

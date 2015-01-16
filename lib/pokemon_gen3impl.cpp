@@ -5,7 +5,6 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <boost/assign.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include <boost/algorithm/string.hpp>
@@ -706,20 +705,12 @@ namespace pkmn
         return icon_path.string();
     }
 
-    static const pkmn::dict<uint8_t, std::string> version_dirs = boost::assign::map_list_of
-        (Versions::RUBY,       "ruby-sapphire")
-        (Versions::SAPPHIRE,   "ruby-sapphire")
-        (Versions::FIRERED,   "firered-leafgreen")
-        (Versions::LEAFGREEN, "firered-leafgreen")
-        (Versions::EMERALD,    "emerald")
-    ;
-
     pkmn::pkstring pokemon_gen3impl::get_sprite_path() const
     {
         fs::path sprite_path(get_images_dir());
 
         sprite_path /= "generation-3";
-        sprite_path /= version_dirs[_version_id];
+        sprite_path /= _version_dirs[_version_id];
         if(is_shiny()) sprite_path /= "shiny";
 
         if(_form_id == _species_id)

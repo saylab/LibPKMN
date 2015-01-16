@@ -5,7 +5,6 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <boost/assign.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include <boost/algorithm/string.hpp>
@@ -715,18 +714,12 @@ namespace pkmn
         return icon_path.string();
     }
 
-    static const pkmn::dict<uint8_t, std::string> version_dirs = boost::assign::map_list_of
-        (Versions::GOLD,    "gold")
-        (Versions::SILVER,  "silver")
-        (Versions::CRYSTAL, "crystal")
-    ;
-
     pkmn::pkstring pokemon_gen2impl::get_sprite_path() const
     {
         fs::path sprite_path(get_images_dir());
 
         sprite_path /= "generation-2";
-        sprite_path /= version_dirs.at(_version_id, "gold");
+        sprite_path /= _version_dirs.at(_version_id, "gold");
         if(is_shiny()) sprite_path /= "shiny";
         if(_species_id == Species::UNOWN)
         {

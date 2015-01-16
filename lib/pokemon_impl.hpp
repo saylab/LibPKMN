@@ -7,6 +7,8 @@
 #ifndef INCLUDED_POKEMON_IMPL_HPP
 #define INCLUDED_POKEMON_IMPL_HPP
 
+#include <boost/assign.hpp>
+
 #include <pkmn/pokemon.hpp>
 #include <pkmn/types/prng.hpp>
 #include <pkmn/types/shared_ptr.hpp>
@@ -42,12 +44,14 @@ namespace pkmn
         protected:
 
             static pkmn::shared_ptr<SQLite::Database> _db;
+            static pkmn::dict<uint8_t, std::string> _version_dirs;
 
             uint16_t _species_id, _version_id;
             pkmn::dict<pkmn::pkstring, int> _attributes;
             pokedex::sptr _pokedex;
             pkmn::pokemon_entry_t _pokedex_entry;
             prng::sptr    _prng;
+
     };
 }
 
