@@ -1662,6 +1662,81 @@ INSERT INTO "version_game_indices" VALUES(21,23);
 INSERT INTO "version_game_indices" VALUES(22,22);
 INSERT INTO "version_game_indices" VALUES(23,24);
 INSERT INTO "version_game_indices" VALUES(24,25);
+CREATE TABLE form_game_indices (
+    form_id INTEGER NOT NULL,
+    form_index INTEGER NOT NULL,
+    PRIMARY KEY(form_id)
+);
+INSERT INTO "form_game_indices" VALUES(201,   0);
+INSERT INTO "form_game_indices" VALUES(10001, 8);
+INSERT INTO "form_game_indices" VALUES(10002, 16);
+INSERT INTO "form_game_indices" VALUES(10003, 24);
+INSERT INTO "form_game_indices" VALUES(10004, 32);
+INSERT INTO "form_game_indices" VALUES(10005, 40);
+INSERT INTO "form_game_indices" VALUES(10006, 48);
+INSERT INTO "form_game_indices" VALUES(10007, 56);
+INSERT INTO "form_game_indices" VALUES(10008, 64);
+INSERT INTO "form_game_indices" VALUES(10009, 72);
+INSERT INTO "form_game_indices" VALUES(10010, 80);
+INSERT INTO "form_game_indices" VALUES(10011, 88);
+INSERT INTO "form_game_indices" VALUES(10012, 96);
+INSERT INTO "form_game_indices" VALUES(10013, 104);
+INSERT INTO "form_game_indices" VALUES(10014, 112);
+INSERT INTO "form_game_indices" VALUES(10015, 120);
+INSERT INTO "form_game_indices" VALUES(10016, 128);
+INSERT INTO "form_game_indices" VALUES(10017, 136);
+INSERT INTO "form_game_indices" VALUES(10018, 144);
+INSERT INTO "form_game_indices" VALUES(10019, 152);
+INSERT INTO "form_game_indices" VALUES(10020, 160);
+INSERT INTO "form_game_indices" VALUES(10021, 168);
+INSERT INTO "form_game_indices" VALUES(10022, 176);
+INSERT INTO "form_game_indices" VALUES(10023, 184);
+INSERT INTO "form_game_indices" VALUES(10024, 192);
+INSERT INTO "form_game_indices" VALUES(10025, 200);
+INSERT INTO "form_game_indices" VALUES(10026, 208);
+INSERT INTO "form_game_indices" VALUES(10027, 216);
+INSERT INTO "form_game_indices" VALUES(386,   0);
+INSERT INTO "form_game_indices" VALUES(10031, 8);
+INSERT INTO "form_game_indices" VALUES(10032, 16);
+INSERT INTO "form_game_indices" VALUES(10033, 24);
+INSERT INTO "form_game_indices" VALUES(412,   0);
+INSERT INTO "form_game_indices" VALUES(10034, 8);
+INSERT INTO "form_game_indices" VALUES(10035, 16);
+INSERT INTO "form_game_indices" VALUES(413,   0);
+INSERT INTO "form_game_indices" VALUES(10036, 8);
+INSERT INTO "form_game_indices" VALUES(10037, 16);
+INSERT INTO "form_game_indices" VALUES(422,   0);
+INSERT INTO "form_game_indices" VALUES(10039, 8);
+INSERT INTO "form_game_indices" VALUES(423,   0);
+INSERT INTO "form_game_indices" VALUES(10040, 8);
+INSERT INTO "form_game_indices" VALUES(479,   0);
+INSERT INTO "form_game_indices" VALUES(10058, 8);
+INSERT INTO "form_game_indices" VALUES(10059, 16);
+INSERT INTO "form_game_indices" VALUES(10060, 24);
+INSERT INTO "form_game_indices" VALUES(10061, 32);
+INSERT INTO "form_game_indices" VALUES(10062, 40);
+INSERT INTO "form_game_indices" VALUES(487,   0);
+INSERT INTO "form_game_indices" VALUES(10063, 8);
+INSERT INTO "form_game_indices" VALUES(492,   0);
+INSERT INTO "form_game_indices" VALUES(10064, 8);
+INSERT INTO "form_game_indices" VALUES(493,   0);
+INSERT INTO "form_game_indices" VALUES(10045, 8);
+INSERT INTO "form_game_indices" VALUES(10047, 16);
+INSERT INTO "form_game_indices" VALUES(10052, 24);
+INSERT INTO "form_game_indices" VALUES(10050, 32);
+INSERT INTO "form_game_indices" VALUES(10054, 40);
+INSERT INTO "form_game_indices" VALUES(10041, 48);
+INSERT INTO "form_game_indices" VALUES(10048, 56);
+INSERT INTO "form_game_indices" VALUES(10055, 64);
+INSERT INTO "form_game_indices" VALUES(10046, 72);
+INSERT INTO "form_game_indices" VALUES(10056, 80);
+INSERT INTO "form_game_indices" VALUES(10049, 88);
+INSERT INTO "form_game_indices" VALUES(10044, 96);
+INSERT INTO "form_game_indices" VALUES(10053, 104);
+INSERT INTO "form_game_indices" VALUES(10043, 112);
+INSERT INTO "form_game_indices" VALUES(10042, 120);
+INSERT INTO "form_game_indices" VALUES(10057, 76);
+/* TODO: Arceus Fairy */
 CREATE TABLE libpkmn_pokemon_form_names (
     form_id INTEGER NOT NULL,
     name VARCHAR(30) NOT NULL,
