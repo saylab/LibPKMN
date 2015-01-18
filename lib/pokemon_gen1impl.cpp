@@ -5,7 +5,6 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -18,8 +17,6 @@
 #include "pokemon_gen1impl.hpp"
 #include "conversions/utils.hpp"
 
-namespace fs = boost::filesystem;
-
 namespace pkmn
 {
     pokemon_gen1impl::pokemon_gen1impl(uint16_t species, uint16_t version,
@@ -27,7 +24,7 @@ namespace pkmn
                                        uint8_t move1, uint8_t move2,
                                        uint8_t move3, uint8_t move4):
         pokemon_impl(species, version),
-        _nickname(boost::algorithm::to_upper_copy(database::get_species_name(species).std_wstring())),
+        _nickname(PKSTRING_UPPERCASE(database::get_species_name(species))),
         _otname("LIBPKMN")
     {
         /*
@@ -61,13 +58,10 @@ namespace pkmn
                                        uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.species, Versions::RED),
                      version),
-        _nickname(boost::algorithm::to_upper_copy(database::get_species_name(
-                                                      database::get_pokemon_id(raw.species,
-                                                                           Versions::RED)).std_wstring())),
+        _nickname(UPPERCASE_SPECIES_NAME(raw.species, Versions::RED)),
         _otname("LIBPKMN")
     {
         _raw.pc = raw;
-
 
         _set_stats(); // Will populate party portion of struct
     }
@@ -90,9 +84,7 @@ namespace pkmn
         pokemon_impl(database::get_pokemon_id(raw.pc.species, Versions::RED),
                      version),
         _raw(raw),
-        _nickname(boost::algorithm::to_upper_copy(database::get_species_name(
-                                                      database::get_pokemon_id(raw.pc.species,
-                                                                               Versions::RED)).std_wstring())),
+        _nickname(UPPERCASE_SPECIES_NAME(raw.pc.species, Versions::RED)),
         _otname("LIBPKMN") {};
 
     pokemon_gen1impl::pokemon_gen1impl(const pkmn::gen1_party_pokemon_t& raw,
@@ -114,6 +106,7 @@ namespace pkmn
     pokemon_gen1impl& pokemon_gen1impl::operator=(const pokemon_gen1impl& other)
     {
         pokemon_impl::operator=(other);
+
         _raw      = other._raw;
         _nickname = other._nickname;
         _otname   = other._otname;
@@ -324,12 +317,6 @@ namespace pkmn
     pkmn::pkstring pokemon_gen1impl::get_ability() const
     {
         return "None";
-    }
-
-    // No alternate forms in Generation I
-    pkmn::pkstring pokemon_gen1impl::get_form() const
-    {
-        return "Standard";
     }
 
     // No shininess in Generation I
@@ -583,32 +570,6 @@ namespace pkmn
     }
 
     /*
-     * Getting LibPKMN Info
-     */
-
-    pkmn::pkstring pokemon_gen1impl::get_icon_path() const
-    {
-        fs::path icon_path(get_images_dir());
-
-        icon_path /= "pokemon-icons";
-        icon_path /= str(boost::format("%d.png") % _species_id);
-
-        return icon_path.string();
-    }
-
-    pkmn::pkstring pokemon_gen1impl::get_sprite_path() const
-    {
-        fs::path sprite_path(get_images_dir());
-
-        sprite_path /= "generation-1";
-        sprite_path /= (_version_id == Versions::YELLOW) ? "yellow"
-                                                         : "red-blue";
-        sprite_path /= str(boost::format("%d.png") % _species_id);
-
-        return sprite_path.string();
-    }
-
-    /*
      * Database Info
      */
 
@@ -616,12 +577,6 @@ namespace pkmn
     uint16_t pokemon_gen1impl::get_original_game_id() const
     {
         return _version_id;
-    }
-
-    // No alternate forms in Generation I
-    uint16_t pokemon_gen1impl::get_pokemon_id() const
-    {
-        return _species_id;
     }
 
     // No abilities in Generation I
@@ -640,12 +595,6 @@ namespace pkmn
     uint16_t pokemon_gen1impl::get_nature_id() const
     {
         return Natures::NONE;
-    }
-
-    // No alternate forms in Generation I
-    uint16_t pokemon_gen1impl::get_form_id() const
-    {
-        return _species_id;
     }
 
     const void* pokemon_gen1impl::get_native()

@@ -11,6 +11,7 @@
 
 namespace pkmn
 {
+    #pragma pack(push,1)
     typedef struct
     {
         uint8_t coolness;
@@ -24,6 +25,7 @@ namespace pkmn
             uint8_t sheen;
         };
     } contest_stats_t;
+    #pragma pack(pop)
 }
 
 #endif /* INCLUDED_PKMN_TYPES_CONTEST_STATS_HPP */

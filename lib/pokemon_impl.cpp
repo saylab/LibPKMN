@@ -9,6 +9,7 @@
 #include <stdexcept>
 
 #include <boost/assign.hpp>
+#include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 
 #include <pkmn/enums.hpp>
@@ -22,9 +23,11 @@
 #include "pokemon_gen1impl.hpp"
 #include "pokemon_gen2impl.hpp"
 #include "pokemon_gen3impl.hpp"
-//#include "pokemon_ndsimpl.hpp"
+#include "pokemon_ndsimpl.hpp"
 
 #include "SQLiteCpp/SQLiteC++.h"
+
+namespace fs = boost::filesystem;
 
 namespace pkmn
 {
@@ -100,11 +103,16 @@ namespace pkmn
         (Versions::WHITE_2,    "black2-white2")
     ;
 
+    boost::format pokemon_impl::_generation_format   = boost::format("generation-%d");
+    boost::format pokemon_impl::_pokemon_format      = boost::format("%d.png");
+    boost::format pokemon_impl::_pokemon_form_format = boost::format("%d-%s.png");
+
     pokemon_impl::pokemon_impl(uint16_t species_id, uint16_t version_id):
         pokemon(),
         _pokedex(pokedex::make(database::get_version_name(version_id))),
         _prng(prng::make(database::get_generation(version_id))),
-        _species_id(_species_id),
+        _species_id(species_id),
+        _form_id(species_id),
         _version_id(version_id)
     {
         if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
@@ -117,6 +125,7 @@ namespace pkmn
         _pokedex_entry(other._pokedex_entry),
         _prng(copy_prng(other._prng)),
         _species_id(other._species_id),
+        _form_id(other._form_id),
         _version_id(other._version_id),
         _attributes(other._attributes) {}
 
@@ -126,6 +135,7 @@ namespace pkmn
         _pokedex_entry = other._pokedex_entry;
         _prng          = copy_prng(other._prng);
         _species_id    = other._species_id;
+        _form_id       = other._form_id;
         _version_id    = other._version_id;
         _attributes    = other._attributes;
     }
@@ -137,6 +147,18 @@ namespace pkmn
     pkmn::pokemon_entry_t pokemon_impl::get_pokedex_entry() const
     {
         return _pokedex->get_pokemon_entry(_species_id, get_form_id());
+    }
+
+    /*
+     * Getting Individual Stat Info
+     */
+
+    pkmn::pkstring pokemon_impl::get_form() const
+    {
+        if(_species_id == _form_id)
+            return "Standard";
+        else
+            return database::get_form_name(_form_id);
     }
 
     /*
@@ -173,13 +195,70 @@ namespace pkmn
         _attributes[attribute] = value;
     }
 
+    pkmn::pkstring pokemon_impl::get_icon_path() const
+    {   
+        fs::path icon_path(get_images_dir());
+
+        icon_path /= "pokemon-icons";
+        if(_form_id == _species_id)
+            icon_path /= str(_pokemon_format % _species_id);
+        else
+        {
+            std::ostringstream query_stream;
+            query_stream << "SELECT image_name FROM libpkmn_pokemon_form_names WHERE form_id="
+                         << _form_id;
+            std::string image_suffix = _db->execAndGet(query_stream.str().c_str());
+
+            icon_path /= str(_pokemon_form_format % _species_id % image_suffix);
+        }
+
+        return icon_path.string();
+    }   
+
+    pkmn::pkstring pokemon_impl::get_sprite_path() const
+    {   
+        fs::path sprite_path(get_images_dir());
+
+        sprite_path /= str(_generation_format % database::get_generation(_version_id));
+        sprite_path /= _version_dirs[_version_id];
+        if(is_shiny()) sprite_path /= "shiny";
+
+        if(_form_id == _species_id)
+            sprite_path /= str(_pokemon_format % _species_id);
+        else
+        {
+            std::ostringstream query_stream;
+            query_stream << "SELECT image_name FROM libpkmn_pokemon_form_names WHERE form_id="
+                         << _form_id;
+            std::string image_suffix = _db->execAndGet(query_stream.str().c_str());
+
+            sprite_path /= str(_pokemon_form_format % _species_id % image_suffix);
+        }
+
+        return sprite_path.string();
+    }
+
+    /*
+     * Database Info
+     */
+
     uint16_t pokemon_impl::get_species_id() const
     {
         return _species_id;
     }
 
+    uint16_t pokemon_impl::get_pokemon_id() const
+    {
+        return database::get_pokemon_id(_form_id);
+    }
+
     uint16_t pokemon_impl::get_game_id() const
     {
         return _version_id;
+    }
+
+    uint16_t pokemon_impl::get_form_id() const
+    {
+        return _form_id;
     }
 } /* namespace pkmn */

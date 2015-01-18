@@ -5,7 +5,6 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -18,8 +17,6 @@
 #include "pokemon_gen2impl.hpp"
 #include "conversions/utils.hpp"
 
-namespace fs = boost::filesystem;
-
 namespace pkmn
 {
     pokemon_gen2impl::pokemon_gen2impl(uint16_t species, uint16_t version,
@@ -27,9 +24,8 @@ namespace pkmn
                                        uint8_t move1, uint8_t move2,
                                        uint8_t move3, uint8_t move4):
         pokemon_impl(species, version),
-        _nickname(boost::algorithm::to_upper_copy(database::get_species_name(species).std_wstring())),
-        _otname("LIBPKMN"),
-        _form_id(species)
+        _nickname(PKSTRING_UPPERCASE(database::get_species_name(species))),
+        _otname("LIBPKMN")
     {
         /*
          * Populate native struct
@@ -68,11 +64,8 @@ namespace pkmn
                                        uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.species, version),
                      version),
-        _nickname(boost::algorithm::to_upper_copy(database::get_species_name(
-                                                      database::get_pokemon_id(raw.species,
-                                                                               Versions::GOLD)).std_wstring())),
-        _otname("LIBPKMN"),
-        _form_id(database::get_pokemon_id(raw.species, version))
+        _nickname(UPPERCASE_SPECIES_NAME(raw.species, Versions::GOLD)),
+        _otname("LIBPKMN")
     {
         _raw.pc = raw;
         _set_stats(); // Will populate rest of party portion in struct
@@ -85,8 +78,7 @@ namespace pkmn
         pokemon_impl(database::get_pokemon_id(raw.species, version),
                      version),
         _nickname(nickname),
-        _otname(otname),
-        _form_id(database::get_pokemon_id(raw.species, version))
+        _otname(otname)
     {
         _raw.pc = raw;
         _set_stats(); // Will populate rest of party portion in struct
@@ -97,11 +89,9 @@ namespace pkmn
         pokemon_impl(database::get_pokemon_id(raw.pc.species, version),
                      version),
         _raw(raw),
-        _nickname(boost::algorithm::to_upper_copy(database::get_species_name(
-                                                      database::get_pokemon_id(raw.pc.species,
-                                                                               Versions::GOLD)).std_wstring())),
-        _otname("LIBPKMN"),
-        _form_id(database::get_pokemon_id(raw.pc.species, version)) {};
+        _nickname(UPPERCASE_SPECIES_NAME(raw.pc.species, Versions::GOLD)),
+        _otname("LIBPKMN")
+    {};
 
     pokemon_gen2impl::pokemon_gen2impl(const pkmn::gen2_party_pokemon_t& raw,
                                        const pkmn::pkstring& nickname,
@@ -111,23 +101,23 @@ namespace pkmn
                      version),
         _raw(raw),
         _nickname(nickname),
-        _otname(otname),
-        _form_id(database::get_pokemon_id(raw.pc.species, version)) {};
+        _otname(otname)
+    {};
 
     pokemon_gen2impl::pokemon_gen2impl(const pokemon_gen2impl& other):
         pokemon_impl(other),
         _raw(other._raw),
         _nickname(other._nickname),
-        _otname(other._otname),
-        _form_id(other._form_id) {};
+        _otname(other._otname)
+    {};
 
     pokemon_gen2impl& pokemon_gen2impl::operator=(const pokemon_gen2impl& other)
     {
         pokemon_impl::operator=(other);
+
         _raw = other._raw;
         _nickname = other._nickname;
         _otname = other._otname;
-        _form_id = other._form_id;
     }
 
     /*
@@ -372,14 +362,6 @@ namespace pkmn
     pkmn::pkstring pokemon_gen2impl::get_ability() const
     {
         return "None";
-    }
-
-    pkmn::pkstring pokemon_gen2impl::get_form() const
-    {
-        if(_species_id == Species::UNOWN)
-            return database::get_form_name(_form_id);
-        else
-            return "None";
     }
 
     bool pokemon_gen2impl::is_shiny() const
@@ -695,55 +677,12 @@ namespace pkmn
     }
 
     /*
-     * Getting LibPKMN Info
-     */
-
-    pkmn::pkstring pokemon_gen2impl::get_icon_path() const
-    {
-        fs::path icon_path(get_images_dir());
-
-        icon_path /= "pokemon-icons";
-        if(_species_id == Species::UNOWN)
-        {
-            char letter = database::get_form_name(_form_id).std_string()[0];
-
-            icon_path /= str(boost::format("201-%c.png") % letter);
-        }
-        else icon_path /= str(boost::format("%d.png") % _species_id);
-
-        return icon_path.string();
-    }
-
-    pkmn::pkstring pokemon_gen2impl::get_sprite_path() const
-    {
-        fs::path sprite_path(get_images_dir());
-
-        sprite_path /= "generation-2";
-        sprite_path /= _version_dirs.at(_version_id, "gold");
-        if(is_shiny()) sprite_path /= "shiny";
-        if(_species_id == Species::UNOWN)
-        {
-            char letter = database::get_form_name(_form_id).std_string()[0];
-
-            sprite_path /= str(boost::format("201-%c.png") % letter);
-        }
-        else sprite_path /= str(boost::format("%d.png") % _species_id);
-
-        return sprite_path.string();
-    }
-
-    /*
      * Database Info
      */
 
     uint16_t pokemon_gen2impl::get_original_game_id() const
     {
         return _version_id;
-    }
-
-    uint16_t pokemon_gen2impl::get_pokemon_id() const
-    {
-        return database::get_pokemon_id(_form_id);
     }
 
     // No abilities in Generation II
@@ -756,11 +695,6 @@ namespace pkmn
     uint16_t pokemon_gen2impl::get_nature_id() const
     {
         return Natures::NONE;
-    }
-
-    uint16_t pokemon_gen2impl::get_form_id() const
-    {
-        return _form_id;
     }
 
     const void* pokemon_gen2impl::get_native()

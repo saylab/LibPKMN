@@ -5,7 +5,6 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -15,12 +14,9 @@
 #include <pkmn/paths.hpp>
 #include <pkmn/types/prng.hpp>
 
-#include "library_bridge.hpp" 
 #include "pokemon_gen3impl.hpp"
 #include "conversions/text.hpp"
 #include "conversions/utils.hpp"
-
-namespace fs = boost::filesystem;
 
 namespace pkmn
 {
@@ -28,8 +24,7 @@ namespace pkmn
                                        uint8_t level,
                                        uint8_t move1, uint8_t move2,
                                        uint8_t move3, uint8_t move4):
-        pokemon_impl(species, version),
-        _form_id(species)
+        pokemon_impl(species, version)
     {
         /*
          * Populate native struct
@@ -37,7 +32,7 @@ namespace pkmn
         _raw.pc.personality = _prng->lcrng();
         _raw.pc.ot_id = _prng->lcrng();
 
-        pkmn::pkstring nickname = boost::algorithm::to_upper_copy(_pokedex_entry.species_name.std_wstring());
+        pkmn::pkstring nickname = PKSTRING_UPPERCASE(_pokedex_entry.species_name);
         conversions::export_gen3_text(nickname, _raw.pc.nickname, 10);
 
         _raw.pc.language = 0x202; // English
@@ -72,7 +67,6 @@ namespace pkmn
         }
         while((_effort->ev_hp  + _effort->ev_atk   + _effort->ev_def +
                _effort->ev_spd + _effort->ev_spatk + _effort->ev_spdef) > 510);
-        // TODO: contest stats data structure
         // TODO: Pokerus
         _misc->met_location = 255; // Fateful encounter
 
@@ -80,7 +74,6 @@ namespace pkmn
         _misc->origin_info = (level & 0x7F);
         _misc->origin_info |= (uint8_t(database::get_version_game_index(_version_id)) << 6);
         _misc->origin_info |= (uint8_t(Balls::LUXURY_BALL) << 10);
-        // Don't set trainer gender, male by default
 
         _misc->iv_egg_ability = _prng->lcrng();
         _misc->iv_egg_ability &= ~(1<<30); // Not an egg
@@ -97,10 +90,14 @@ namespace pkmn
     pokemon_gen3impl::pokemon_gen3impl(const pkmn::gen3_pc_pokemon_t& raw,
                                        uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.blocks.growth.species, version),
-                     version),
-        _form_id(database::get_pokemon_id(raw.blocks.growth.species, version))
+                     version)
     {
         _raw.pc = raw;
+        _growth = &(_raw.pc.blocks.growth);
+        _attacks = &(_raw.pc.blocks.attacks);
+        _effort = &(_raw.pc.blocks.effort);
+        _misc = &(_raw.pc.blocks.misc);
+
         _set_stats(); // Will populate party portion
     }
 
@@ -108,8 +105,13 @@ namespace pkmn
                                        uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.pc.blocks.growth.species, version),
                      version),
-        _raw(raw),
-        _form_id(database::get_pokemon_id(raw.pc.blocks.growth.species, version)) {};
+        _raw(raw)
+    {
+        _growth = &(_raw.pc.blocks.growth);
+        _attacks = &(_raw.pc.blocks.attacks);
+        _effort = &(_raw.pc.blocks.effort);
+        _misc = &(_raw.pc.blocks.misc);
+    };
 
     pokemon_gen3impl::pokemon_gen3impl(const pokemon_gen3impl& other):
         pokemon_impl(other),
@@ -149,6 +151,8 @@ namespace pkmn
     {
         pkmn::ribbons_t ribbons;
         ribbons.hoenn = _misc->ribbons_obedience;
+
+        return ribbons;
     }
 
     /*
@@ -364,11 +368,6 @@ namespace pkmn
         return database::get_ability_name(ability_id);
     }
 
-    pkmn::pkstring pokemon_gen3impl::get_form() const
-    {
-        return database::get_form_name(_form_id);
-    }
-
     bool pokemon_gen3impl::is_shiny() const
     {
         return calculations::get_modern_shiny(_raw.pc.personality,
@@ -416,7 +415,7 @@ namespace pkmn
     }
 
     /*
-     * Getting Individual Stat Forms
+     * Getting Individual Stat Infos
      */
 
     // NOTE: this affects many things
@@ -509,7 +508,7 @@ namespace pkmn
         if(stat == "Special")
             throw std::runtime_error("The Special value is only in Generations I-II.");
         if(value > 255)
-            throw std::runtime_error("EV's have a maximum value of 255 in Generation III.");
+            throw std::runtime_error("EV's have a maximum value of 255 in Generation IV-V.");
 
         uint16_t sum_of_rest;
 
@@ -681,66 +680,12 @@ namespace pkmn
     }
 
     /*
-     * Getting LibPKMN Info
-     */
-
-    pkmn::pkstring pokemon_gen3impl::get_icon_path() const
-    {
-        fs::path icon_path(get_images_dir());
-
-        icon_path /= "pokemon-icons";
-        if(_form_id == _species_id)
-            icon_path /= str(boost::format("%d.png") % _species_id);
-        else
-        {
-            std::ostringstream query_stream;
-            query_stream << "SELECT image_name FROM libpkmn_pokemon_form_names WHERE form_id="
-                         << _form_id;
-            std::string image_suffix = _db->execAndGet(query_stream.str().c_str());
-
-            icon_path /= str(boost::format("%d-%s.png")
-                                % _species_id % image_suffix);
-        }
-
-        return icon_path.string();
-    }
-
-    pkmn::pkstring pokemon_gen3impl::get_sprite_path() const
-    {
-        fs::path sprite_path(get_images_dir());
-
-        sprite_path /= "generation-3";
-        sprite_path /= _version_dirs[_version_id];
-        if(is_shiny()) sprite_path /= "shiny";
-
-        if(_form_id == _species_id)
-            sprite_path /= str(boost::format("%d.png") % _species_id);
-        else
-        {
-            std::ostringstream query_stream;
-            query_stream << "SELECT image_name FROM libpkmn_pokemon_form_names WHERE form_id="
-                         << _form_id;
-            std::string image_suffix = _db->execAndGet(query_stream.str().c_str());
-
-            sprite_path /= str(boost::format("%d-%s.png")
-                               % _species_id % image_suffix);
-        }
-
-        return sprite_path.string();
-    }
-
-    /*
      * Database Info
      */
 
     uint16_t pokemon_gen3impl::get_original_game_id() const
     {
         return database::get_version_id((_misc->origin_info &= ~0xFC3F) >> 6);
-    }
-
-    uint16_t pokemon_gen3impl::get_pokemon_id() const
-    {
-        return database::get_pokemon_id(_form_id);
     }
 
     uint16_t pokemon_gen3impl::get_ability_id() const
@@ -756,11 +701,6 @@ namespace pkmn
     uint16_t pokemon_gen3impl::get_nature_id() const
     {
         return (_raw.pc.personality % 24);
-    }
-
-    uint16_t pokemon_gen3impl::get_form_id() const
-    {
-        return _form_id;
     }
 
     const void* pokemon_gen3impl::get_native()

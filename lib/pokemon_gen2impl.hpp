@@ -76,7 +76,6 @@ namespace pkmn
             pkmn::pkstring get_gender() const;
             pkmn::nature_t get_nature() const;
             pkmn::pkstring get_ability() const;
-            pkmn::pkstring get_form() const;
             bool is_shiny() const;
             pkmn::dict<pkmn::pkstring, uint16_t> get_stats() const;
             pkmn::dict<pkmn::pkstring, uint16_t> get_EVs() const;
@@ -111,17 +110,11 @@ namespace pkmn
             void set_move(const pkmn::pkstring& move_name, uint8_t pos);
             void set_move_PP(uint8_t PP, uint8_t pos);
 
-            // Getting LibPKMN Info
-            pkmn::pkstring get_icon_path() const;
-            pkmn::pkstring get_sprite_path() const;
-
             // Database Info
             uint16_t get_original_game_id() const;
-            uint16_t get_pokemon_id() const;
             uint16_t get_ability_id() const;
             uint16_t get_item_id() const;
             uint16_t get_nature_id() const;
-            uint16_t get_form_id() const;
 
             const void* get_native();
 
@@ -130,8 +123,6 @@ namespace pkmn
             pkmn::gen2_party_pokemon_t _raw;
 
             pkmn::pkstring _nickname, _otname;
-
-            uint16_t _form_id;
 
             void _set_experience(uint32_t exp);
             void _set_level(uint8_t level);

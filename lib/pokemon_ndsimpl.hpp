@@ -4,29 +4,29 @@
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  */
-#ifndef INCLUDED_POKEMON_GEN3IMPL_HPP
-#define INCLUDED_POKEMON_GEN3IMPL_HPP
+#ifndef INCLUDED_POKEMON_NDSIMPL_HPP
+#define INCLUDED_POKEMON_NDSIMPL_HPP
 
 #include "pokemon_impl.hpp"
 #include "conversions/structs/pokemon.hpp"
 
 namespace pkmn
 {
-    class pokemon_gen3impl: public pokemon_impl
+    class pokemon_ndsimpl: public pokemon_impl
     {
         public:
 
-            pokemon_gen3impl(uint16_t species, uint16_t version,
-                             uint8_t level,
-                             uint8_t move1, uint8_t move2,
-                             uint8_t move3, uint8_t move4);
-            pokemon_gen3impl(const pkmn::gen3_pc_pokemon_t& raw,
-                             uint8_t version);
-            pokemon_gen3impl(const pkmn::gen3_party_pokemon_t& raw,
-                             uint8_t version);
-            pokemon_gen3impl(const pokemon_gen3impl& other);
-            pokemon_gen3impl& operator=(const pokemon_gen3impl& other);
-            ~pokemon_gen3impl() {};
+            pokemon_ndsimpl(uint16_t species, uint16_t version,
+                            uint8_t level,
+                            uint8_t move1, uint8_t move2,
+                            uint8_t move3, uint8_t move4);
+            pokemon_ndsimpl(const pkmn::nds_pc_pokemon_t& raw,
+                            uint8_t version);
+            pokemon_ndsimpl(const pkmn::nds_party_pokemon_t& raw,
+                            uint8_t version);
+            pokemon_ndsimpl(const pokemon_ndsimpl& other);
+            pokemon_ndsimpl& operator=(const pokemon_ndsimpl& other);
+            ~pokemon_ndsimpl() {};
 
             // Getting Non-battle Info
             pkmn::contest_stats_t get_contest_stats() const;
@@ -68,6 +68,7 @@ namespace pkmn
             pkmn::pkstring get_gender() const;
             pkmn::nature_t get_nature() const;
             pkmn::pkstring get_ability() const;
+            pkmn::pkstring get_form() const;
             bool is_shiny() const;
             pkmn::dict<pkmn::pkstring, uint16_t> get_stats() const;
             pkmn::dict<pkmn::pkstring, uint16_t> get_EVs() const;
@@ -107,22 +108,24 @@ namespace pkmn
             uint16_t get_ability_id() const;
             uint16_t get_item_id() const;
             uint16_t get_nature_id() const;
+            uint16_t get_form_id() const;
 
             const void* get_native();
 
         private:
 
-            pkmn::gen3_party_pokemon_t    _raw;
-            pkmn::gen3_pokemon_growth_t  *_growth;
-            pkmn::gen3_pokemon_attacks_t *_attacks;
-            pkmn::gen3_pokemon_effort_t  *_effort;
-            pkmn::gen3_pokemon_misc_t    *_misc;
+            pkmn::nds_party_pokemon_t   _raw;
+            pkmn::nds_pokemon_blockA_t *_blockA;
+            pkmn::nds_pokemon_blockB_t *_blockB;
+            pkmn::nds_pokemon_blockC_t *_blockC;
+            pkmn::nds_pokemon_blockD_t *_blockD;
 
             void _set_experience(uint32_t exp);
             void _set_level(uint8_t level);
+            void _set_default_gender();
             void _set_stats();
             void _set_form();
     };
 }
 
-#endif /* INCLUDED_POKEMON_GEN3IMPL_HPP */
+#endif /* INCLUDED_POKEMON_NDSIMPL_HPP */
