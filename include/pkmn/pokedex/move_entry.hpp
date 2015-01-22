@@ -15,8 +15,14 @@
 
 namespace pkmn
 {
-    typedef struct
+    struct move_entry_t
     {
+        move_entry_t();
+        move_entry_t(uint16_t version_id,
+                     uint16_t move_id);
+        move_entry_t(const pkmn::pkstring& version_name,
+                     const pkmn::pkstring& move_name);
+
         pkmn::pkstring name;
         pkmn::pkstring type;
         pkmn::pkstring description;
@@ -34,7 +40,7 @@ namespace pkmn
         pkmn::pkstring contest_type;
         pkmn::pkstring contest_effect;
         pkmn::pkstring super_contest_effect;
-    } move_entry_t;
+    };
 
     typedef std::vector<move_entry_t> moveset_t;
 }

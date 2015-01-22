@@ -44,20 +44,9 @@ namespace pkmn
             uint16_t _version_id, _generation, _version_group_id;
 
             static pkmn::dict<uint16_t, pkmn::dict<uint16_t, pokemon_entry_t> > _pokemon_entry_cache;
-            static pkmn::dict<uint16_t, pkmn::dict<uint16_t, move_entry_t> > _move_entry_cache;
-            static pkmn::dict<uint16_t, pkmn::dict<uint16_t, item_entry_t> > _item_entry_cache;
+            static pkmn::dict<uint16_t, pkmn::dict<uint16_t, move_entry_t> >    _move_entry_cache;
+            static pkmn::dict<uint16_t, pkmn::dict<uint16_t, item_entry_t> >    _item_entry_cache;
             static pkmn::shared_ptr<SQLite::Database> _db;
-
-            void _create_pokemon_entry(const uint16_t pokemon_id);
-            float _get_gender_chance(const uint16_t species_id,
-                                     uint8_t gender_rate,
-                                     bool male) const;
-            void _adjust_pokemon_entry(pokemon_entry_t entry);
-
-            void _create_move_entry(const uint16_t move_id);
-            void _adjust_move_entry(move_entry_t entry);
-
-            void _create_item_entry(const uint16_t item_id);
     };
 }
 

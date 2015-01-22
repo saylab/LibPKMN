@@ -14,8 +14,16 @@
 
 namespace pkmn
 {
-    typedef struct
+    struct pokemon_entry_t
     {
+        pokemon_entry_t();
+        pokemon_entry_t(uint16_t version_id,
+                        uint16_t species_id,
+                        uint16_t form_id);
+        pokemon_entry_t(const pkmn::pkstring& version_name,
+                        const pkmn::pkstring& species_name,
+                        const pkmn::pkstring& form_name);
+
         pkmn::pkstring species_name;
         uint16_t pokedex_num;
         pkmn::pkstring pokedex_entry;
@@ -34,7 +42,7 @@ namespace pkmn
 
         pkmn::dict<pkmn::pkstring, uint16_t> base_stats;
         pkmn::dict<pkmn::pkstring, uint16_t> ev_yields;
-    } pokemon_entry_t;
+    };
 }
 
 #endif /* INCLUDED_PKMN_TYPES_POKEMON_ENTRY_HPP */

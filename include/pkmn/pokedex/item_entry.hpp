@@ -14,8 +14,14 @@
 
 namespace pkmn
 {
-    typedef struct
+    struct item_entry_t
     {
+        item_entry_t();
+        item_entry_t(uint16_t version_id,
+                     uint16_t item_id);
+        item_entry_t(const pkmn::pkstring& version_name,
+                     const pkmn::pkstring& item_name);
+
         pkmn::pkstring name;
         pkmn::pkstring category;
         pkmn::pkstring pocket;
@@ -25,7 +31,7 @@ namespace pkmn
 
         uint8_t fling_power;
         pkmn::pkstring fling_effect;
-    } item_entry_t;
+    };
 }
 
 #endif /* INCLUDED_PKMN_POKEDEX_ITEM_ENTRY_HPP */
