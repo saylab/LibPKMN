@@ -499,15 +499,24 @@ namespace pkmn
 
     void pokemon_gen2impl::set_form(const pkmn::pkstring& form)
     {
+        // Note: this will affect other things
         if(_species_id == Species::UNOWN)
         {
-            uint8_t ivATK  = conversions::get_retro_IV(Stats::ATTACK,   _raw.pc.iv_data);
-            uint8_t ivDEF  = conversions::get_retro_IV(Stats::DEFENSE,  _raw.pc.iv_data);
-            uint8_t ivSPCL = conversions::get_retro_IV(Stats::SPECIAL,  _raw.pc.iv_data);
-            uint8_t ivSPD  = conversions::get_retro_IV(Stats::SPEED,    _raw.pc.iv_data);
+            uint16_t new_form = database::get_form_id(database::get_species_name(_species_id), form);
 
-            _form_id = calculations::get_gen2_unown_form(ivATK, ivDEF,
-                                                         ivSPD, ivSPCL);
+            // Get the closest IV value, will probably raise Special IV
+            while(_form_id != new_form)
+            {
+                _raw.pc.iv_data++;
+
+                uint8_t ivATK  = conversions::get_retro_IV(Stats::ATTACK,   _raw.pc.iv_data);
+                uint8_t ivDEF  = conversions::get_retro_IV(Stats::DEFENSE,  _raw.pc.iv_data);
+                uint8_t ivSPCL = conversions::get_retro_IV(Stats::SPECIAL,  _raw.pc.iv_data);
+                uint8_t ivSPD  = conversions::get_retro_IV(Stats::SPEED,    _raw.pc.iv_data);
+
+                _form_id = calculations::get_gen2_unown_form(ivATK, ivDEF,
+                                                             ivSPD, ivSPCL);
+            }
 
             _pokedex_entry = _pokedex->get_pokemon_entry(Species::UNOWN, _form_id);
 

@@ -14,6 +14,7 @@
 #include <pkmn/paths.hpp>
 #include <pkmn/types/prng.hpp>
 
+#include "internal.hpp"
 #include "pokemon_gen3impl.hpp"
 #include "conversions/text.hpp"
 #include "conversions/utils.hpp"
@@ -500,6 +501,75 @@ namespace pkmn
             if(ability_slot != current_ability_slot) _raw.pc.personality++;
         }
         else throw std::runtime_error("Invalid ability for this Pokemon.");
+    }
+
+    void pokemon_gen3impl::set_form(const pkmn::pkstring& form)
+    {
+        uint16_t new_form = database::get_form_id(database::get_species_name(_species_id), form);
+
+        if(_species_id == Species::UNOWN)
+        {
+            // Get the closest personality value, will affect many other things
+            while(_form_id != new_form)
+            {
+                _raw.pc.personality++;
+                _form_id = calculations::get_gen3_unown_form(_raw.pc.personality);
+            }
+        }
+        else if(_species_id == Species::CASTFORM)
+        {
+            _form_id = new_form;
+            _pokedex_entry = _pokedex->get_pokemon_entry(_species_id, _form_id);
+        }
+        else throw std::runtime_error("This Pokemon cannot change forms in this game.");
+    }
+
+    /*
+     * NOTE: this will affect many things, possibly including Trainer ID
+     *
+     * Source: http://www.smogon.com/ingame/rng/pid_iv_creation#how_shiny
+     */
+    void pokemon_gen3impl::set_shiny(bool value)
+    {
+        uint8_t num1_tid = count_ones((_raw.pc.ot_pid >> 3));
+        if(num1_tid == 1 or num1_tid == 3)
+        {
+            if(_raw.pc.ot_pid & (1<<15))
+                _raw.pc.ot_pid &= ~(1<<15);
+            else
+                _raw.pc.ot_pid |= (1<<15);
+        }
+
+        uint8_t num1_sid = count_ones((_raw.pc.ot_sid >> 3));
+        if(num1_sid == 1 or num1_sid == 3)
+        {
+            if(_raw.pc.ot_sid & (1<<15))
+                _raw.pc.ot_sid &= ~(1<<15);
+            else
+                _raw.pc.ot_sid |= (1<<15);
+        }
+
+        uint8_t hid = (_raw.pc.personality & 0xFFFF0000) >> 16;
+        uint8_t num1_hid = count_ones(hid >> 3);
+        if(num1_hid == 1 or num1_hid == 3)
+        {
+            if(hid & (1<<15))
+                hid &= ~(1<<15);
+            else
+                hid |= (1<<15);
+        }
+
+        uint8_t lid = (_raw.pc.personality & 0xFFFF);
+        uint8_t num1_lid = count_ones(lid >> 3);
+        if(num1_lid == 1 or num1_lid == 3)
+        {
+            if(lid & (1<<15))
+                lid &= ~(1<<15);
+            else
+                lid |= (1<<15);
+        }
+
+        _raw.pc.personality = ((hid << 16) | lid);
     }
 
     // NOTE: this affects stats

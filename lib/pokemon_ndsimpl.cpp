@@ -122,6 +122,7 @@ namespace pkmn
         _blockB = &(_raw.pc.blocks.blockB);
         _blockC = &(_raw.pc.blocks.blockC);
         _blockD = &(_raw.pc.blocks.blockD);
+        // TODO: set form
 
         _set_stats();
     }
@@ -136,6 +137,7 @@ namespace pkmn
         _blockB = &(_raw.pc.blocks.blockB);
         _blockC = &(_raw.pc.blocks.blockC);
         _blockD = &(_raw.pc.blocks.blockD);
+        // TODO: set form
 
         _set_stats();
     }
@@ -148,6 +150,7 @@ namespace pkmn
         _blockB = &(_raw.pc.blocks.blockB);
         _blockC = &(_raw.pc.blocks.blockC);
         _blockD = &(_raw.pc.blocks.blockD);
+        // TODO: set form
     }
 
     pokemon_ndsimpl& pokemon_ndsimpl::operator=(const pokemon_ndsimpl& other)
@@ -515,6 +518,29 @@ namespace pkmn
         // TODO: check generation
         _blockA->ability = database::get_ability_id(ability);
         if(ability == _pokedex_entry.hidden_ability) _blockB->gen5_info |= 1;
+    }
+
+    void pokemon_ndsimpl::set_form(const pkmn::pkstring& form)
+    {
+        uint16_t form_id   = database::get_form_id(_pokedex_entry.species_name, form);
+        uint8_t  form_index = database::get_form_game_index(form_id);
+
+        switch(_species_id)
+        {
+            case Species::PICHU:
+                if(_version_id == Versions::HEARTGOLD or _version_id == Versions::SOULSILVER)
+                {
+                    if(form_id == Forms::Pichu::STANDARD)
+                    {
+                        _blockB->form_encounterinfo &= ~0xF;
+                    }
+                }
+                else throw std::runtime_error("Pichu can only change form in HeartGold/SoulSilver.");
+                break;
+        }
+
+        _form_id       = form_id;
+        _pokedex_entry = _pokedex->get_pokemon_entry(_species_id, _form_id);
     }
 
     // NOTE: this affects stats

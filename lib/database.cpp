@@ -186,6 +186,39 @@ namespace pkmn
             GET_PKSTRING(query);
         }
 
+        uint8_t get_form_game_index(uint16_t form_id)
+        {
+            CONNECT_TO_DB();
+            std::ostringstream query_stream;
+            query_stream << "SELECT form_index FROM form_game_indices WHERE form_id="
+                         << form_id;
+            SQLite::Statement query(*db, query_stream.str().c_str());
+            GET_NUM(query);
+        }
+
+        uint16_t get_form_id(uint16_t species_id, uint8_t form_index)
+        {
+            CONNECT_TO_DB();
+            std::ostringstream query_stream;
+            query_stream << "SELECT form_id FROM form_game_indices WHERE form_index="
+                         << form_index;
+            SQLite::Statement query(*db, query_stream.str().c_str());
+            bool match = false;
+            uint16_t form_id = 0;
+            while(query.executeStep())
+            {
+                form_id = uint16_t(query.getColumn(0));
+                if(database::get_species_id(database::get_pokemon_id(form_id)) == species_id)
+                {
+                    match = true;
+                    break;
+                }
+            }
+
+            if(match) return form_id;
+            else throw std::runtime_error("Invalid query.");
+        }
+
         unsigned int get_level(const unsigned int species_id, const unsigned int experience)
         {
             CONNECT_TO_DB();

@@ -15,6 +15,19 @@
 
 namespace pkmn
 {
+    uint8_t PKMN_INLINE count_ones(uint16_t val)
+    {   
+        uint8_t num_ones;
+
+        for(size_t i = 0; i < 16; i++)
+        {   
+            if(val & 1) num_ones++;
+            val >>= 1;
+        }
+
+        return num_ones;
+    }
+
     /*
      * This is an abstraction for getting the value of an environment
      * variable, using the UNIX or Windows functions as appropriate.

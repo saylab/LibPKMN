@@ -28,6 +28,8 @@ namespace pkmn
 
         unsigned int PKMN_API get_form_id(const pkmn::pkstring &species_name, const pkmn::pkstring &form_name);
         pkmn::pkstring PKMN_API get_form_name(const unsigned int form_id);
+        uint8_t PKMN_API get_form_game_index(uint16_t form_id);
+        uint16_t PKMN_API get_form_id(uint16_t species_id, uint8_t form_index);
 
         unsigned int PKMN_API get_experience(const unsigned int species_id, const unsigned int level);
         unsigned int PKMN_API get_experience(const pkmn::pkstring &species_name, const unsigned int level);

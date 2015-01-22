@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -17,6 +17,7 @@
 #include <pkmn/types/dict.hpp>
 #include <pkmds/pkmds_g5_sqlite.h>
 
+#include "internal.hpp"
 #include "SQLiteCpp/SQLiteC++.h"
 
 namespace pkmn
@@ -161,12 +162,26 @@ namespace pkmn
                      or ivATK == 15));
         }
 
+        /*
+         * Source: http://www.smogon.com/ingame/rng/pid_iv_creation#how_shiny
+         */
         bool get_modern_shiny(uint32_t personality, uint16_t secret_tid, uint16_t public_tid)
         {
-            uint16_t p1 = personality & 0xFF00;
-            uint16_t p2 = personality & 0xFF;
+            uint16_t hid = (personality & 0xFFFF0000) >> 19;
+            uint16_t lid = (personality & 0xFFFF) >> 3;
+            uint16_t tid = public_tid >> 3;
+            uint16_t sid = secret_tid >> 3;
 
-            return ((secret_tid xor public_tid xor p1 xor p2) < 8);
+            uint8_t num1_hid = count_ones(hid);
+            if(num1_hid == 1 or num1_hid == 3) return false;
+            uint8_t num1_lid = count_ones(lid);
+            if(num1_lid == 1 or num1_lid == 3) return false;
+            uint8_t num1_tid = count_ones(tid);
+            if(num1_tid == 1 or num1_tid == 3) return false;
+            uint8_t num1_sid = count_ones(sid);
+            if(num1_sid == 1 or num1_sid == 3) return false;
+
+            return true;
         }
 
         uint32_t get_gen2_unown_form(uint8_t ivATK, uint8_t ivDEF,
@@ -189,7 +204,7 @@ namespace pkmn
                           +  (personality & 0x3));
             form %= 28;
 
-            return (form = 0) ? 201 : (Forms::Unown::B + form - 1);
+            return (form == 0) ? 201 : (Forms::Unown::B + form - 1);
         }
 
         uint16_t get_wurmple_evolution(uint32_t personality)

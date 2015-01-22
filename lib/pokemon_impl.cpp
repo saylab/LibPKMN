@@ -62,9 +62,9 @@ namespace pkmn
                 return sptr(new pokemon_gen3impl(species, version, level,
                                                  move1, move2, move3, move4));
 
-            //default:
-            //    return sptr(new pokemon_ndsimpl(species, version, level,
-            //                                    move1, move2, move3, move4));
+            default:
+                return sptr(new pokemon_ndsimpl(species, version, level,
+                                                move1, move2, move3, move4));
         }
     }
 
