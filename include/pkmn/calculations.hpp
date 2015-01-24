@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -11,8 +11,6 @@
 #include <utility>
 
 #include <pkmn/config.hpp>
-#include <pkmn/base_pokemon.hpp>
-#include <pkmn/team_pokemon.hpp>
 #include <pkmn/types/nature.hpp>
 #include <pkmn/types/pkstring.hpp>
 
@@ -51,7 +49,7 @@ namespace pkmn
 
         uint16_t PKMN_API get_wurmple_evolution(uint32_t personality);
 
-        unsigned int PKMN_API get_min_possible_stat(base_pokemon::sptr b_pkmn,
+        /*unsigned int PKMN_API get_min_possible_stat(base_pokemon::sptr b_pkmn,
                                                     const pkmn::pkstring &stat_name,
                                                     unsigned int level,
                                                     unsigned int gen);
@@ -84,7 +82,7 @@ namespace pkmn
                                                                         unsigned int defender_level);
 
         std::pair<unsigned int, unsigned int> PKMN_API get_damage_range(team_pokemon::sptr attacker, team_pokemon::sptr defender,
-                                                                        move::sptr attack);
+                                                                        move::sptr attack);*/
     }
 }
 

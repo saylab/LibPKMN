@@ -12,7 +12,6 @@
 #include <utility>
 #include <vector>
 
-#include <pkmn/base_pokemon.hpp>
 #include <pkmn/config.hpp>
 #include <pkmn/types/pkstring.hpp>
 
@@ -34,7 +33,7 @@ namespace pkmn
 
     void PKMN_API get_nature_list(std::vector<pkmn::pkstring> &nature_vec);
 
-    void PKMN_API get_pokemon_of_type(base_pokemon_vector &pkmn_vector, pkmn::pkstring type1, pkmn::pkstring type2, unsigned int gen, bool lax);
+    //void PKMN_API get_pokemon_of_type(base_pokemon_vector &pkmn_vector, pkmn::pkstring type1, pkmn::pkstring type2, unsigned int gen, bool lax);
 
 }
 

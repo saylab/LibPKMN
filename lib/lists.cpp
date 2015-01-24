@@ -210,7 +210,7 @@ namespace pkmn
         while(query.executeStep()) nature_vec.push_back((const char*)query.getColumn(0));
     }
 
-    void get_pokemon_of_type(base_pokemon_vector &pkmn_vector, pkmn::pkstring type1, pkmn::pkstring type2, unsigned int gen, bool lax)
+    /*void get_pokemon_of_type(base_pokemon_vector &pkmn_vector, pkmn::pkstring type1, pkmn::pkstring type2, unsigned int gen, bool lax)
     {
         if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
         pkmn_vector.clear();
@@ -325,5 +325,5 @@ namespace pkmn
                 pkmn_vector.push_back(b_pkmn);
             }
         }
-    }
+    }*/
 } /* namespace pkmn */

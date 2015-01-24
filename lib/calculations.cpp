@@ -329,7 +329,7 @@ namespace pkmn
                    (double(attack) / double(defense)) * double(base_power) * 2.0)));
         }
 
-        unsigned int get_base_damage(team_pokemon::sptr attacker, team_pokemon::sptr defender,
+        /*unsigned int get_base_damage(team_pokemon::sptr attacker, team_pokemon::sptr defender,
                                      move::sptr attack)
         {
             unsigned int level = attacker->get_level();
@@ -422,11 +422,11 @@ namespace pkmn
                 {
                     if(type_mod > 1.0)
                     {
-                        /*
+                        *
                          * Shedinja's ability, Wonder Guard, blocks any attacks except for
                          * super-effective moves. However, super-effective moves will
                          * automatically make it faint.
-                         */
+                         *
                         damage_pair.first = 1;
                         damage_pair.second = 1;
                         return damage_pair;
@@ -441,10 +441,10 @@ namespace pkmn
                 else if(attack->get_move_id() == Moves::SEISMIC_TOSS
                         or attack->get_move_id() == Moves::NIGHT_SHADE)
                 {
-                    /*
+                    *
                      * Seismic Toss and Night Shade's damage automatically
                      * matches the attacker's level.
-                     */
+                     *
                     damage_pair.first = attacker_level;
                     damage_pair.second = attacker_level;
                     return damage_pair;
@@ -465,11 +465,11 @@ namespace pkmn
                 }
                 else
                 {
-                    /*
+                    *
                      * STAB: Same-type attack bonus
                      * If an attack's type matches the attacker's type,
                      * it's damage will be increased by 150%.
-                     */
+                     *
                     if(attack->get_type() == attacker->get_types().first or
                        attack->get_type() == attacker->get_types().second)
                     {
@@ -477,10 +477,10 @@ namespace pkmn
                         max_damage = (unsigned int)(floor(double(max_damage) * 1.5));
                     }
                 }
-                /*
+                *
                  * As long as the attack does any damage, it will do a minimum
                  * of 1, no matter the strength discrepancy.
-                 */
+                 *
                 if(min_damage == 0) min_damage = 1;
                 if(max_damage == 0) max_damage = 1;
 
@@ -501,6 +501,6 @@ namespace pkmn
         {
             return get_damage_range(attacker->get_base_pokemon(), defender->get_base_pokemon(),
                                     attack, attacker->get_level(), defender->get_level());
-        }
+        }*/
     }
 }

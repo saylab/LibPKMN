@@ -11,63 +11,19 @@
 
 #include "copy_sptrs.hpp"
 
-#include "bag_impl.hpp"
-#include "base_pokemon_gen1impl.hpp"
-#include "base_pokemon_gen2impl.hpp"
-#include "base_pokemon_modernimpl.hpp"
-#include "item_impl.hpp"
-#include "move_impl.hpp"
+//#include "bag_impl.hpp"
 #include "pocket_impl.hpp"
 #include "pokedex_impl.hpp"
-#include "team_pokemon_gen1impl.hpp"
-#include "team_pokemon_gen2impl.hpp"
-#include "team_pokemon_gen3impl.hpp"
-#include "trainer_impl.hpp"
+//#include "trainer_impl.hpp"
 #include "types/prng_impl.hpp"
 
 namespace pkmn
 {
-    bag::sptr copy_bag(bag::sptr in)
+    /*bag::sptr copy_bag(bag::sptr in)
     {
         bag_impl actual = *pkmn::dynamic_pointer_cast<bag_impl>(in);
         return pkmn::dynamic_pointer_cast<bag>(pkmn::make_shared<bag_impl>(actual));
-    }
-
-    base_pokemon::sptr copy_base_pokemon(base_pokemon::sptr in)
-    {
-        switch(in->get_generation()) //Generation determines implementation class
-        {
-            case 1:
-            {
-                base_pokemon_gen1impl actual1 = *pkmn::dynamic_pointer_cast<base_pokemon_gen1impl>(in);
-                return pkmn::make_shared<base_pokemon_gen1impl>(actual1);
-            }
-
-            case 2:
-            {
-                base_pokemon_gen2impl actual2 = *pkmn::dynamic_pointer_cast<base_pokemon_gen2impl>(in);
-                return pkmn::make_shared<base_pokemon_gen2impl>(actual2);
-            }
-
-            default:
-            {
-                base_pokemon_modernimpl actual3 = *pkmn::dynamic_pointer_cast<base_pokemon_modernimpl>(in);
-                return pkmn::make_shared<base_pokemon_modernimpl>(actual3);
-            }
-        }
-    }
-
-    item::sptr copy_item(item::sptr in)
-    {
-        item_impl actual = *pkmn::dynamic_pointer_cast<item_impl>(in);
-        return pkmn::make_shared<item_impl>(actual);
-    }
-
-    move::sptr copy_move(move::sptr in)
-    {
-        move_impl actual = *pkmn::dynamic_pointer_cast<move_impl>(in);
-        return pkmn::make_shared<move_impl>(actual);
-    }
+    }*/
 
     pocket::sptr copy_pocket(pocket::sptr in)
     {
@@ -81,35 +37,11 @@ namespace pkmn
         return pkmn::make_shared<pokedex_impl>(actual);
     }
 
-    team_pokemon::sptr copy_team_pokemon(team_pokemon::sptr in)
-    {
-        switch(in->get_generation()) //Generation determines implementation class
-        {
-            case 1:
-            {
-                team_pokemon_gen1impl actual1 = *pkmn::dynamic_pointer_cast<team_pokemon_gen1impl>(in);
-                return pkmn::make_shared<team_pokemon_gen1impl>(actual1);
-            }
-
-            case 2:
-            {
-                team_pokemon_gen2impl actual2 = *pkmn::dynamic_pointer_cast<team_pokemon_gen2impl>(in);
-                return pkmn::make_shared<team_pokemon_gen2impl>(actual2);
-            }
-
-            default:
-            {
-                team_pokemon_gen3impl actual3 = *pkmn::dynamic_pointer_cast<team_pokemon_gen3impl>(in);
-                return pkmn::make_shared<team_pokemon_gen3impl>(actual3);
-            }
-        }
-    }
-
-    trainer::sptr copy_trainer(trainer::sptr in)
+    /*trainer::sptr copy_trainer(trainer::sptr in)
     {
         trainer_impl actual = *pkmn::dynamic_pointer_cast<trainer_impl>(in);
         return pkmn::make_shared<trainer_impl>(actual);
-    }
+    }*/
 
     prng::sptr copy_prng(prng::sptr in)
     {

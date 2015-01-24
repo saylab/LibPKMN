@@ -19,31 +19,29 @@ namespace pkmn
     {
         public:
 
-            pocket_impl(unsigned int game, const pkmn::pkstring &name, unsigned int size);
+            pocket_impl(uint16_t game, const pkmn::pkstring& name, uint16_t size);
 
             pkmn::pkstring get_game() const;
-            unsigned int get_generation() const;
+            uint16_t get_generation() const;
 
             pkmn::pkstring get_name() const;
-            unsigned int size() const;
+            uint16_t size() const;
 
-            void add_item(const pkmn::pkstring &item_name, unsigned int amount);
-            void add_item(unsigned int item_id, unsigned int amount);
-            void add_item(item::sptr item_sptr, unsigned int amount);
-            void remove_item(const pkmn::pkstring &item_name, unsigned int amount);
-            void remove_item(unsigned int item_id, unsigned int amount);
-            void remove_item(item::sptr item_sptr, unsigned int amount);
-            unsigned int get_item_amount(const pkmn::pkstring &item_name) const;
-            unsigned int get_item_amount(unsigned int item_id) const;
-            unsigned int get_item_amount(item::sptr item_sptr) const;
-            void get_item_list(item_list_t &item_list) const;
+            void add_item(const pkmn::pkstring& item_name, uint16_t amount);
+            void add_item(uint16_t item_id, uint16_t amount);
+            void remove_item(const pkmn::pkstring& item_name, uint16_t amount);
+            void remove_item(uint16_t item_id, uint16_t amount);
+            uint16_t get_item_amount(const pkmn::pkstring& item_name) const;
+            uint16_t get_item_amount(uint16_t item_id) const;
+            void get_item_list(item_list_t& item_list) const;
 
-            unsigned int get_game_id() const;
+            uint16_t get_game_id() const;
 
         private:
 
-            unsigned int _game_id, _generation, _pocket_size;
+            uint16_t _version_id, _generation, _pocket_size;
             pkmn::pkstring _pocket_name;
+            pokedex::sptr _pokedex;
 
             pkmn::dict<uint16_t, uint8_t> _item_dict;
     };

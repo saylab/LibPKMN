@@ -61,14 +61,14 @@ IF(ENABLE_LIBPKMN)
         ${CMAKE_CURRENT_BINARY_DIR}/build_info.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/paths.cpp
         #library_bridge.cpp
-        calculations.cpp
+        #calculations.cpp
         database.cpp
         pokemon_impl.cpp
         pokemon_gen1impl.cpp
         pokemon_gen2impl.cpp
         pokemon_gen3impl.cpp
         pokemon_ndsimpl.cpp
-        #pocket_impl.cpp
+        pocket_impl.cpp
         #bag_impl.cpp
         #trainer_impl.cpp
         pokedex_impl.cpp
