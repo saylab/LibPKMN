@@ -87,6 +87,14 @@ namespace pkmn
             ("Badly Poisoned", 0x80)
         ;
 
+        static const pkmn::dict<uint16_t, pkmn::pkstring> genesect_form_items = boost::assign::map_list_of
+            (Forms::Genesect::STANDARD,    "None")
+            (Forms::Genesect::DOUSE_DRIVE, "Douse Drive")
+            (Forms::Genesect::SHOCK_DRIVE, "Shock Drive")
+            (Forms::Genesect::BURN_DRIVE,  "Burn Drive")
+            (Forms::Genesect::CHILL_DRIVE, "Chill Drive")
+        ;
+
         uint8_t get_retro_IV(uint8_t stat, const uint16_t iv_data);
 
         void set_retro_IV(uint8_t stat, uint16_t &iv_data, uint8_t new_iv);

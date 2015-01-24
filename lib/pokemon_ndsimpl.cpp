@@ -522,25 +522,143 @@ namespace pkmn
 
     void pokemon_ndsimpl::set_form(const pkmn::pkstring& form)
     {
-        uint16_t form_id   = database::get_form_id(_pokedex_entry.species_name, form);
+        uint16_t form_id    = database::get_form_id(_pokedex_entry.species_name, form);
         uint8_t  form_index = database::get_form_game_index(form_id);
 
         switch(_species_id)
         {
+            // All of these can change with no restrictions or side effects
+            case Species::UNOWN:
+            case Species::CASTFORM:
+            case Species::DEOXYS:
+            case Species::BURMY:
+            case Species::WORMADAM:
+            case Species::SHELLOS:
+            case Species::GASTRODON:
+            case Species::BASCULIN:
+            case Species::DEERLING:
+            case Species::SAWSBUCK:
+            case Species::MELOETTA:
+                _blockB->form_encounterinfo &= ~0xF;
+                _blockB->form_encounterinfo |= (form_index << 3);
+                break;
+
             case Species::PICHU:
                 if(_version_id == Versions::HEARTGOLD or _version_id == Versions::SOULSILVER)
                 {
-                    if(form_id == Forms::Pichu::STANDARD)
-                    {
-                        _blockB->form_encounterinfo &= ~0xF;
-                    }
+                    _blockB->form_encounterinfo &= ~0xF;
+                    _blockB->form_encounterinfo |= (form_index << 3);
                 }
                 else throw std::runtime_error("Pichu can only change form in HeartGold/SoulSilver.");
+                break;
+
+            case Species::ROTOM:
+            case Species::SHAYMIN:
+                if(_version_id != Versions::DIAMOND and _version_id != Versions::PEARL)
+                {
+                    _blockB->form_encounterinfo &= ~0xF;
+                    _blockB->form_encounterinfo |= (form_index << 3);
+                }
+                else throw std::runtime_error(str(boost::format("%s cannot change forms in Diamond/Pearl.")
+                                                  % _pokedex_entry.species_name));
+                break;
+
+            case Species::GIRATINA:
+                if(_version_id != Versions::DIAMOND and _version_id != Versions::PEARL)
+                {
+                    _blockB->form_encounterinfo &= ~0xF;
+                    _blockB->form_encounterinfo |= (form_index << 3);
+                    set_held_item(form_index == 0 ? "None" : "Griseous Orb");
+                }
+                else throw std::runtime_error("Giratina cannot change forms in Diamond/Pearl.");
+                break;
+
+            case Species::DARMANITAN:
+                _blockB->form_encounterinfo &= ~0xF;
+                _blockB->form_encounterinfo |= (form_index << 3);
+                set_ability("Zen Mode");
+                break;
+
+            case Species::TORNADUS:
+            case Species::THUNDURUS:
+            case Species::LANDORUS:
+            case Species::KELDEO:
+                if(_version_id != Versions::BLACK and _version_id != Versions::WHITE)
+                {
+                    _blockB->form_encounterinfo &= ~0xF;
+                    _blockB->form_encounterinfo |= (form_index << 3);
+                }
+                else throw std::runtime_error(str(boost::format("%s cannot change forms in Black/White.")
+                                                  % _pokedex_entry.species_name));
+                break;
+
+            case Species::KYUREM:
+                if(_version_id != Versions::BLACK and _version_id != Versions::WHITE)
+                {
+                    _blockB->form_encounterinfo &= ~0xF;
+                    _blockB->form_encounterinfo |= (form_index << 3);
+                    set_held_item(form_index == 0 ? "None" : "DNA Splicers");
+                }
+                else throw std::runtime_error("Kyurem cannot change forms in Black/White.");
+                break;
+
+            case Species::GENESECT:
+                _blockB->form_encounterinfo &= ~0xF;
+                _blockB->form_encounterinfo |= (form_index << 3);
+                set_held_item(conversions::genesect_form_items[form_id]);
                 break;
         }
 
         _form_id       = form_id;
         _pokedex_entry = _pokedex->get_pokemon_entry(_species_id, _form_id);
+    }
+
+    /*
+     * NOTE: this affects personality and probably trainer ID
+     *
+     * Source: http://www.smogon.com/ingame/rng/pid_iv_creation#how_shiny
+     */
+    void pokemon_ndsimpl::set_shiny(bool value)
+    {
+        uint8_t num1_tid = count_ones((_blockA->ot_pid >> 3));
+        if(num1_tid == 1 or num1_tid == 3)
+        {
+            if(_blockA->ot_pid & (1<<15))
+                _blockA->ot_pid &= ~(1<<15);
+            else
+                _blockA->ot_pid |= (1<<15);
+        }
+
+        uint8_t num1_sid = count_ones((_blockA->ot_sid >> 3));
+        if(num1_sid == 1 or num1_sid == 3)
+        {
+            if(_blockA->ot_sid & (1<<15))
+                _blockA->ot_sid &= ~(1<<15);
+            else
+                _blockA->ot_sid |= (1<<15);
+        }
+
+        uint8_t hid = (_raw.pc.personality & 0xFFFF0000) >> 16; 
+        uint8_t num1_hid = count_ones(hid >> 3); 
+        if(num1_hid == 1 or num1_hid == 3)
+        {
+            if(hid & (1<<15))
+                hid &= ~(1<<15);
+            else
+                hid |= (1<<15);
+        }
+
+        uint8_t lid = (_raw.pc.personality & 0xFFFF);
+        uint8_t num1_lid = count_ones(lid >> 3); 
+        if(num1_lid == 1 or num1_lid == 3)
+        {
+            if(lid & (1<<15))
+                lid &= ~(1<<15);
+            else
+                lid |= (1<<15);
+        }
+
+        _raw.pc.personality = ((hid << 16) | lid);
     }
 
     // NOTE: this affects stats
