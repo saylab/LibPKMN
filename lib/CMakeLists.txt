@@ -60,7 +60,7 @@ IF(ENABLE_LIBPKMN)
     LIST(APPEND libpkmn_sources
         ${CMAKE_CURRENT_BINARY_DIR}/build_info.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/paths.cpp
-        library_bridge.cpp
+        #library_bridge.cpp
         calculations.cpp
         database.cpp
         pokemon_impl.cpp

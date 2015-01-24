@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -18,7 +18,6 @@
 #include <pkmds/pkmds_g5.h>
 #include <pkmds/pkmds_g5_sqlite.h>
 
-#include "library_bridge.hpp"
 #include "conversions/pokemon.hpp"
 
 #include "SQLiteCpp/SQLiteC++.h"
