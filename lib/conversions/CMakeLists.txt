@@ -6,10 +6,9 @@
 #
 
 SET(conversions_sources
-    #${CMAKE_CURRENT_SOURCE_DIR}/items.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/items.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/pokemon.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PokeText.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/trainer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utils.cpp
 PARENT_SCOPE)

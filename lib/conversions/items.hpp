@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -13,10 +13,6 @@
 #include <pkmn/config.hpp>
 
 #include "structs/items.hpp"
-
-#include <pkmds/pkmds_g5.h>
-
-#include "trainer.hpp"
 
 namespace pkmn
 {
@@ -33,11 +29,6 @@ namespace pkmn
 
         void import_gen4_bag(bag::sptr libpkmn_bag, const void* raw_bag);
         void export_gen4_bag(bag::sptr libpkmn_bag, void* raw_bag);
-
-        // OLD BELOW
-
-        void import_gen5_items(bag::sptr item_bag, pkmds::bag_obj* pkmds_bag);
-        void export_gen5_items(bag::sptr item_bag, pkmds::bag_obj* pkmds_bag);
     }
 }
 
