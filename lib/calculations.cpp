@@ -15,7 +15,6 @@
 #include <pkmn/paths.hpp>
 #include <pkmn/database.hpp>
 #include <pkmn/types/dict.hpp>
-#include <pkmds/pkmds_g5_sqlite.h>
 
 #include "internal.hpp"
 #include "SQLiteCpp/SQLiteC++.h"
@@ -25,70 +24,6 @@ namespace pkmn
     namespace calculations
     {
         uint8_t get_ability_num(uint32_t personality) {return personality % 2;}
-
-        uint8_t get_gen2_gender(uint16_t species_id, uint8_t ivATK)
-        {
-            //PKMDS has function to get gender rate
-            pkmds::opendb(get_database_path().const_char());
-            int gender_rate = pkmds::getpkmgenderrate(pkmds::Species::species(species_id));
-            pkmds::closedb();
-
-            pkmn::dict<uint32_t, uint32_t> thresholds = boost::assign::map_list_of
-                (0,0)
-                (1,2)
-                (2,4)
-                (4,8)
-                (6,12)
-            ;
-
-            switch(gender_rate)
-            {
-                case -1:
-                    return Genders::GENDERLESS;
-
-                case 0:
-                    return Genders::MALE;
-
-                case 8:
-                    return Genders::FEMALE;
-
-                default:
-                    return (ivATK >= thresholds.at(gender_rate, 0)) ? Genders::MALE : Genders::FEMALE;
-            }
-        }
-
-        uint8_t get_modern_gender(uint16_t species_id, uint32_t personality)
-        {
-            personality %= 256;
-
-            //PKMDS has function to get gender rate
-            pkmds::opendb(get_database_path().const_char());
-            int gender_rate = pkmds::getpkmgenderrate(pkmds::Species::species(species_id));
-            pkmds::closedb();
-
-            dict<uint32_t, uint32_t> ratios = boost::assign::map_list_of
-                (0,254)
-                (1,31)
-                (2,63)
-                (4,127)
-                (6,191)
-            ;
-
-            switch(gender_rate)
-            {
-                case -1:
-                    return Genders::GENDERLESS;
-
-                case 0:
-                    return Genders::MALE;
-
-                case 8:
-                    return Genders::FEMALE;
-
-                default:
-                    return (personality > ratios.at(gender_rate, 0)) ? Genders::MALE : Genders::FEMALE;
-            }
-        }
 
         std::pair<uint8_t, uint8_t> get_hidden_power(uint8_t ivHP, uint8_t ivATK, uint8_t ivDEF,
                                                      uint8_t ivSATK, uint8_t ivSDEF, uint8_t ivSPD)

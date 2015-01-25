@@ -17,7 +17,6 @@ IF(ENABLE_LIBPKMN)
     )
 
     ADD_SUBDIRECTORY(SQLiteCpp)
-    ADD_SUBDIRECTORY(pkmds)
     ADD_SUBDIRECTORY(conversions)
     ADD_SUBDIRECTORY(pokedex)
     ADD_SUBDIRECTORY(qt4)
@@ -35,7 +34,6 @@ IF(ENABLE_LIBPKMN)
 
     LIST(APPEND libpkmn_libs
         ${Boost_LIBRARIES}
-        pkmds
         SQLiteCpp
         ${QT_LIBRARIES}
         ${QT_QTMAIN_LIBRARY}
@@ -80,7 +78,6 @@ IF(ENABLE_LIBPKMN)
         io.cpp
         lists.cpp
         copy_sptrs.cpp
-        ${pkmds_sources}
         ${conversions_sources}
         ${pokedex_sources}
         ${qt4_sources}
