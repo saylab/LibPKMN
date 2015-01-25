@@ -8,6 +8,7 @@
 #define INCLUDED_PKMN_TYPES_POKEMON_ENTRY_HPP
 
 #include <cstdint>
+#include <vector>
 
 #include <pkmn/config.hpp>
 #include <pkmn/types/dict.hpp>
@@ -44,6 +45,8 @@ namespace pkmn
         pkmn::dict<pkmn::pkstring, uint16_t> base_stats;
         pkmn::dict<pkmn::pkstring, uint16_t> ev_yields;
     };
+
+    typedef std::vector<pokemon_entry_t> pokemon_entry_vector_t;
 }
 
 #endif /* INCLUDED_PKMN_TYPES_POKEMON_ENTRY_HPP */
