@@ -7,8 +7,9 @@
 #ifndef INCLUDED_POKEMON_NDSIMPL_HPP
 #define INCLUDED_POKEMON_NDSIMPL_HPP
 
+#include <pkmn/native/pokemon.hpp>
+
 #include "pokemon_impl.hpp"
-#include "conversions/structs/pokemon.hpp"
 
 namespace pkmn
 {
@@ -20,9 +21,9 @@ namespace pkmn
                             uint8_t level,
                             uint8_t move1, uint8_t move2,
                             uint8_t move3, uint8_t move4);
-            pokemon_ndsimpl(const pkmn::nds_pc_pokemon_t& raw,
+            pokemon_ndsimpl(const pkmn::native::nds_pc_pokemon_t& raw,
                             uint8_t version);
-            pokemon_ndsimpl(const pkmn::nds_party_pokemon_t& raw,
+            pokemon_ndsimpl(const pkmn::native::nds_party_pokemon_t& raw,
                             uint8_t version);
             pokemon_ndsimpl(const pokemon_ndsimpl& other);
             pokemon_ndsimpl& operator=(const pokemon_ndsimpl& other);
@@ -114,11 +115,11 @@ namespace pkmn
 
         private:
 
-            pkmn::nds_party_pokemon_t   _raw;
-            pkmn::nds_pokemon_blockA_t *_blockA;
-            pkmn::nds_pokemon_blockB_t *_blockB;
-            pkmn::nds_pokemon_blockC_t *_blockC;
-            pkmn::nds_pokemon_blockD_t *_blockD;
+            pkmn::native::nds_party_pokemon_t   _raw;
+            pkmn::native::nds_pokemon_blockA_t *_blockA;
+            pkmn::native::nds_pokemon_blockB_t *_blockB;
+            pkmn::native::nds_pokemon_blockC_t *_blockC;
+            pkmn::native::nds_pokemon_blockD_t *_blockD;
 
             void _set_experience(uint32_t exp);
             void _set_level(uint8_t level);

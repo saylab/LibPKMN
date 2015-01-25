@@ -16,8 +16,7 @@
 #include <pkmn/bag.hpp>
 #include <pkmn/pocket.hpp>
 #include <pkmn/database.hpp>
-
-#include "items.hpp"
+#include <pkmn/conversions/items.hpp>
 
 #define ITEM_GAME_INDEX(list,i,version) (database::get_item_game_index(database::get_item_id(list[i].first.name),version))
 
@@ -25,7 +24,7 @@ namespace pkmn
 {
     namespace conversions
     {
-        void import_gen1_bag(bag::sptr libpkmn_bag, const gen1_item_bag_t* raw_bag)
+        void import_gen1_bag(bag::sptr libpkmn_bag, const native::gen1_item_bag_t* raw_bag)
         {
             pocket::sptr item_pocket = libpkmn_bag->get_pocket("Items");
 
@@ -36,7 +35,7 @@ namespace pkmn
             }
         }
 
-        void export_gen1_bag(bag::sptr libpkmn_bag, gen1_item_bag_t* raw_bag)
+        void export_gen1_bag(bag::sptr libpkmn_bag, native::gen1_item_bag_t* raw_bag)
         {
             pocket::sptr item_pocket = libpkmn_bag->get_pocket("Items");
 
@@ -51,7 +50,7 @@ namespace pkmn
             }
         }
 
-        void import_gen2_bag(bag::sptr libpkmn_bag, const gen2_item_bag_t* raw_bag)
+        void import_gen2_bag(bag::sptr libpkmn_bag, const native::gen2_item_bag_t* raw_bag)
         {
             pocket::sptr item_pocket    = libpkmn_bag->get_pocket("Items");
             pocket::sptr ball_pocket    = libpkmn_bag->get_pocket("Balls");
@@ -89,7 +88,7 @@ namespace pkmn
             }
         }
 
-        void export_gen2_bag(bag::sptr libpkmn_bag, gen2_item_bag_t* raw_bag)
+        void export_gen2_bag(bag::sptr libpkmn_bag, native::gen2_item_bag_t* raw_bag)
         {
             pocket::sptr tmhm_pocket = libpkmn_bag->get_pocket("TM/HM");
             for(size_t i = 0; i < 50; i++)
@@ -140,35 +139,35 @@ namespace pkmn
             pocket::sptr tmhm_pocket    = libpkmn_bag->get_pocket(is_frlg ? "TM Case" : "TMs and HMs");
             pocket::sptr berry_pocket   = libpkmn_bag->get_pocket(is_frlg ? "Berry Pouch" : "Berries");
 
-            const modern_item_t *raw_item_pocket, *raw_keyitem_pocket, *raw_ball_pocket,
-                                *raw_tmhm_pocket, *raw_berry_pocket;
+            const native::modern_item_t *raw_item_pocket, *raw_keyitem_pocket, *raw_ball_pocket,
+                                        *raw_tmhm_pocket, *raw_berry_pocket;
 
             switch(libpkmn_bag->get_game_id())
             {
                 case Versions::RUBY:
                 case Versions::SAPPHIRE:
-                    raw_item_pocket = reinterpret_cast<const rs_item_storage_t*>(raw_bag)->items;
-                    raw_keyitem_pocket = reinterpret_cast<const rs_item_storage_t*>(raw_bag)->key_items;
-                    raw_ball_pocket = reinterpret_cast<const rs_item_storage_t*>(raw_bag)->balls;
-                    raw_tmhm_pocket = reinterpret_cast<const rs_item_storage_t*>(raw_bag)->tms_hms;
-                    raw_berry_pocket = reinterpret_cast<const rs_item_storage_t*>(raw_bag)->berries;
+                    raw_item_pocket = reinterpret_cast<const native::rs_item_storage_t*>(raw_bag)->items;
+                    raw_keyitem_pocket = reinterpret_cast<const native::rs_item_storage_t*>(raw_bag)->key_items;
+                    raw_ball_pocket = reinterpret_cast<const native::rs_item_storage_t*>(raw_bag)->balls;
+                    raw_tmhm_pocket = reinterpret_cast<const native::rs_item_storage_t*>(raw_bag)->tms_hms;
+                    raw_berry_pocket = reinterpret_cast<const native::rs_item_storage_t*>(raw_bag)->berries;
                     break;
 
                 case Versions::EMERALD:
-                    raw_item_pocket = reinterpret_cast<const e_item_storage_t*>(raw_bag)->items;
-                    raw_keyitem_pocket = reinterpret_cast<const e_item_storage_t*>(raw_bag)->key_items;
-                    raw_ball_pocket = reinterpret_cast<const e_item_storage_t*>(raw_bag)->balls;
-                    raw_tmhm_pocket = reinterpret_cast<const e_item_storage_t*>(raw_bag)->tms_hms;
-                    raw_berry_pocket = reinterpret_cast<const e_item_storage_t*>(raw_bag)->berries;
+                    raw_item_pocket = reinterpret_cast<const native::e_item_storage_t*>(raw_bag)->items;
+                    raw_keyitem_pocket = reinterpret_cast<const native::e_item_storage_t*>(raw_bag)->key_items;
+                    raw_ball_pocket = reinterpret_cast<const native::e_item_storage_t*>(raw_bag)->balls;
+                    raw_tmhm_pocket = reinterpret_cast<const native::e_item_storage_t*>(raw_bag)->tms_hms;
+                    raw_berry_pocket = reinterpret_cast<const native::e_item_storage_t*>(raw_bag)->berries;
                     break;
 
                 case Versions::FIRERED:
                 case Versions::LEAFGREEN:
-                    raw_item_pocket = reinterpret_cast<const frlg_item_storage_t*>(raw_bag)->items;
-                    raw_keyitem_pocket = reinterpret_cast<const frlg_item_storage_t*>(raw_bag)->key_items;
-                    raw_ball_pocket = reinterpret_cast<const frlg_item_storage_t*>(raw_bag)->balls;
-                    raw_tmhm_pocket = reinterpret_cast<const frlg_item_storage_t*>(raw_bag)->tms_hms;
-                    raw_berry_pocket = reinterpret_cast<const frlg_item_storage_t*>(raw_bag)->berries;
+                    raw_item_pocket = reinterpret_cast<const native::frlg_item_storage_t*>(raw_bag)->items;
+                    raw_keyitem_pocket = reinterpret_cast<const native::frlg_item_storage_t*>(raw_bag)->key_items;
+                    raw_ball_pocket = reinterpret_cast<const native::frlg_item_storage_t*>(raw_bag)->balls;
+                    raw_tmhm_pocket = reinterpret_cast<const native::frlg_item_storage_t*>(raw_bag)->tms_hms;
+                    raw_berry_pocket = reinterpret_cast<const native::frlg_item_storage_t*>(raw_bag)->berries;
                     break;
 
                 default:
@@ -218,34 +217,35 @@ namespace pkmn
             bool is_frlg = (libpkmn_bag->get_game_id() == Versions::FIRERED or
                             libpkmn_bag->get_game_id() == Versions::LEAFGREEN);
 
-            modern_item_t *raw_item_pocket, *raw_keyitem_pocket, *raw_ball_pocket, *raw_tmhm_pocket, *raw_berry_pocket;
+            native::modern_item_t *raw_item_pocket, *raw_keyitem_pocket, *raw_ball_pocket,
+                                  *raw_tmhm_pocket, *raw_berry_pocket;
 
             switch(libpkmn_bag->get_game_id())
             {
                 case Versions::RUBY:
                 case Versions::SAPPHIRE:
-                    raw_item_pocket    = reinterpret_cast<rs_item_storage_t*>(raw_bag)->items;
-                    raw_keyitem_pocket = reinterpret_cast<rs_item_storage_t*>(raw_bag)->key_items;
-                    raw_ball_pocket    = reinterpret_cast<rs_item_storage_t*>(raw_bag)->balls;
-                    raw_tmhm_pocket    = reinterpret_cast<rs_item_storage_t*>(raw_bag)->tms_hms;
-                    raw_berry_pocket   = reinterpret_cast<rs_item_storage_t*>(raw_bag)->berries;
+                    raw_item_pocket    = reinterpret_cast<native::rs_item_storage_t*>(raw_bag)->items;
+                    raw_keyitem_pocket = reinterpret_cast<native::rs_item_storage_t*>(raw_bag)->key_items;
+                    raw_ball_pocket    = reinterpret_cast<native::rs_item_storage_t*>(raw_bag)->balls;
+                    raw_tmhm_pocket    = reinterpret_cast<native::rs_item_storage_t*>(raw_bag)->tms_hms;
+                    raw_berry_pocket   = reinterpret_cast<native::rs_item_storage_t*>(raw_bag)->berries;
                     break;
 
                 case Versions::EMERALD:
-                    raw_item_pocket    = reinterpret_cast<e_item_storage_t*>(raw_bag)->items;
-                    raw_keyitem_pocket = reinterpret_cast<e_item_storage_t*>(raw_bag)->key_items;
-                    raw_ball_pocket    = reinterpret_cast<e_item_storage_t*>(raw_bag)->balls;
-                    raw_tmhm_pocket    = reinterpret_cast<e_item_storage_t*>(raw_bag)->tms_hms;
-                    raw_berry_pocket   = reinterpret_cast<e_item_storage_t*>(raw_bag)->berries;
+                    raw_item_pocket    = reinterpret_cast<native::e_item_storage_t*>(raw_bag)->items;
+                    raw_keyitem_pocket = reinterpret_cast<native::e_item_storage_t*>(raw_bag)->key_items;
+                    raw_ball_pocket    = reinterpret_cast<native::e_item_storage_t*>(raw_bag)->balls;
+                    raw_tmhm_pocket    = reinterpret_cast<native::e_item_storage_t*>(raw_bag)->tms_hms;
+                    raw_berry_pocket   = reinterpret_cast<native::e_item_storage_t*>(raw_bag)->berries;
                     break;
 
                 case Versions::FIRERED:
                 case Versions::LEAFGREEN:
-                    raw_item_pocket    = reinterpret_cast<frlg_item_storage_t*>(raw_bag)->items;
-                    raw_keyitem_pocket = reinterpret_cast<frlg_item_storage_t*>(raw_bag)->key_items;
-                    raw_ball_pocket    = reinterpret_cast<frlg_item_storage_t*>(raw_bag)->balls;
-                    raw_tmhm_pocket    = reinterpret_cast<frlg_item_storage_t*>(raw_bag)->tms_hms;
-                    raw_berry_pocket   = reinterpret_cast<frlg_item_storage_t*>(raw_bag)->berries;
+                    raw_item_pocket    = reinterpret_cast<native::frlg_item_storage_t*>(raw_bag)->items;
+                    raw_keyitem_pocket = reinterpret_cast<native::frlg_item_storage_t*>(raw_bag)->key_items;
+                    raw_ball_pocket    = reinterpret_cast<native::frlg_item_storage_t*>(raw_bag)->balls;
+                    raw_tmhm_pocket    = reinterpret_cast<native::frlg_item_storage_t*>(raw_bag)->tms_hms;
+                    raw_berry_pocket   = reinterpret_cast<native::frlg_item_storage_t*>(raw_bag)->berries;
                     break;
 
                 default:
@@ -285,8 +285,8 @@ namespace pkmn
             }
         }
 
-        #define CONST_RAW_NDS_POCKET(field) (is_hgss ? reinterpret_cast<const hgss_item_storage_t*>(raw_bag)->field \
-                                                     : reinterpret_cast<const dppt_item_storage_t*>(raw_bag)->field);
+        #define CONST_RAW_NDS_POCKET(field) (is_hgss ? reinterpret_cast<const native::hgss_item_storage_t*>(raw_bag)->field \
+                                                     : reinterpret_cast<const native::dppt_item_storage_t*>(raw_bag)->field);
 
         void import_gen4_bag(bag::sptr libpkmn_bag, const void* raw_bag)
         {
@@ -305,14 +305,14 @@ namespace pkmn
             pocket::sptr keyitem_pocket    = libpkmn_bag->get_pocket("Key Items");
 
             // Native pockets
-            const modern_item_t* raw_item_pocket       = CONST_RAW_NDS_POCKET(items);
-            const modern_item_t* raw_medicine_pocket   = CONST_RAW_NDS_POCKET(key_items);
-            const modern_item_t* raw_ball_pocket       = CONST_RAW_NDS_POCKET(balls);
-            const modern_item_t* raw_tmhm_pocket       = CONST_RAW_NDS_POCKET(tms_hms);
-            const modern_item_t* raw_berry_pocket      = CONST_RAW_NDS_POCKET(berries);
-            const modern_item_t* raw_mail_pocket       = CONST_RAW_NDS_POCKET(mail);
-            const modern_item_t* raw_battleitem_pocket = CONST_RAW_NDS_POCKET(battle_items);
-            const modern_item_t* raw_keyitem_pocket    = CONST_RAW_NDS_POCKET(key_items);
+            const native::modern_item_t* raw_item_pocket       = CONST_RAW_NDS_POCKET(items);
+            const native::modern_item_t* raw_medicine_pocket   = CONST_RAW_NDS_POCKET(key_items);
+            const native::modern_item_t* raw_ball_pocket       = CONST_RAW_NDS_POCKET(balls);
+            const native::modern_item_t* raw_tmhm_pocket       = CONST_RAW_NDS_POCKET(tms_hms);
+            const native::modern_item_t* raw_berry_pocket      = CONST_RAW_NDS_POCKET(berries);
+            const native::modern_item_t* raw_mail_pocket       = CONST_RAW_NDS_POCKET(mail);
+            const native::modern_item_t* raw_battleitem_pocket = CONST_RAW_NDS_POCKET(battle_items);
+            const native::modern_item_t* raw_keyitem_pocket    = CONST_RAW_NDS_POCKET(key_items);
 
             // Items
             for(size_t i = 0; i < item_pocket->size(); i++)
@@ -378,8 +378,8 @@ namespace pkmn
             }
         }
 
-        #define RAW_NDS_POCKET(field) (is_hgss ? reinterpret_cast<hgss_item_storage_t*>(raw_bag)->field \
-                                               : reinterpret_cast<dppt_item_storage_t*>(raw_bag)->field);
+        #define RAW_NDS_POCKET(field) (is_hgss ? reinterpret_cast<native::hgss_item_storage_t*>(raw_bag)->field \
+                                               : reinterpret_cast<native::dppt_item_storage_t*>(raw_bag)->field);
 
         void export_gen4_bag(bag::sptr libpkmn_bag, void* raw_bag)
         {
@@ -398,14 +398,14 @@ namespace pkmn
             pocket::sptr keyitem_pocket    = libpkmn_bag->get_pocket("Key Items");
 
             // Native pockets
-            modern_item_t* raw_item_pocket       = RAW_NDS_POCKET(items);
-            modern_item_t* raw_medicine_pocket   = RAW_NDS_POCKET(key_items);
-            modern_item_t* raw_ball_pocket       = RAW_NDS_POCKET(balls);
-            modern_item_t* raw_tmhm_pocket       = RAW_NDS_POCKET(tms_hms);
-            modern_item_t* raw_berry_pocket      = RAW_NDS_POCKET(berries);
-            modern_item_t* raw_mail_pocket       = RAW_NDS_POCKET(mail);
-            modern_item_t* raw_battleitem_pocket = RAW_NDS_POCKET(battle_items);
-            modern_item_t* raw_keyitem_pocket    = RAW_NDS_POCKET(key_items);
+            native::modern_item_t* raw_item_pocket       = RAW_NDS_POCKET(items);
+            native::modern_item_t* raw_medicine_pocket   = RAW_NDS_POCKET(key_items);
+            native::modern_item_t* raw_ball_pocket       = RAW_NDS_POCKET(balls);
+            native::modern_item_t* raw_tmhm_pocket       = RAW_NDS_POCKET(tms_hms);
+            native::modern_item_t* raw_berry_pocket      = RAW_NDS_POCKET(berries);
+            native::modern_item_t* raw_mail_pocket       = RAW_NDS_POCKET(mail);
+            native::modern_item_t* raw_battleitem_pocket = RAW_NDS_POCKET(battle_items);
+            native::modern_item_t* raw_keyitem_pocket    = RAW_NDS_POCKET(key_items);
 
             item_list_t item_list;
 

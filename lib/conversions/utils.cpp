@@ -12,9 +12,9 @@
 #include <string>
 
 #include <pkmn/enums.hpp>
+#include <pkmn/native/pokemon.hpp>
 
 #include "utils.hpp"
-#include "structs/pokemon.hpp"
 
 namespace pkmn
 {
@@ -177,7 +177,7 @@ namespace pkmn
             {M,G,A,E},{M,G,E,A},{E,A,G,M},{M,A,M,G},{M,E,G,A},{M,E,A,G}
         };
 
-        uint16_t gen3_crypt(gen3_pc_pokemon_t& pkmn)
+        uint16_t gen3_crypt(native::gen3_pc_pokemon_t& pkmn)
         {
             uint16_t checksum = 0;
             uint8_t index = pkmn.personality % 24; 

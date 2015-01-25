@@ -12,11 +12,11 @@
 #include <pkmn/database.hpp>
 #include <pkmn/enums.hpp>
 #include <pkmn/paths.hpp>
+#include <pkmn/conversions/text.hpp>
 #include <pkmn/types/prng.hpp>
 
 #include "internal.hpp"
 #include "pokemon_gen3impl.hpp"
-#include "conversions/text.hpp"
 #include "conversions/utils.hpp"
 
 namespace pkmn
@@ -88,7 +88,7 @@ namespace pkmn
         _set_form();
     }
 
-    pokemon_gen3impl::pokemon_gen3impl(const pkmn::gen3_pc_pokemon_t& raw,
+    pokemon_gen3impl::pokemon_gen3impl(const pkmn::native::gen3_pc_pokemon_t& raw,
                                        uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.blocks.growth.species, version),
                      version)
@@ -102,7 +102,7 @@ namespace pkmn
         _set_stats(); // Will populate party portion
     }
 
-    pokemon_gen3impl::pokemon_gen3impl(const pkmn::gen3_party_pokemon_t& raw,
+    pokemon_gen3impl::pokemon_gen3impl(const pkmn::native::gen3_party_pokemon_t& raw,
                                        uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.pc.blocks.growth.species, version),
                      version),

@@ -12,11 +12,11 @@
 #include <pkmn/calculations.hpp>
 #include <pkmn/database.hpp>
 #include <pkmn/enums.hpp>
+#include <pkmn/conversions/text.hpp>
 #include <pkmn/types/prng.hpp>
 
 #include "internal.hpp"
 #include "pokemon_ndsimpl.hpp"
-#include "conversions/text.hpp"
 #include "conversions/utils.hpp"
 
 namespace pkmn
@@ -112,7 +112,7 @@ namespace pkmn
         _set_stats();
     }
 
-    pokemon_ndsimpl::pokemon_ndsimpl(const pkmn::nds_pc_pokemon_t& raw,
+    pokemon_ndsimpl::pokemon_ndsimpl(const pkmn::native::nds_pc_pokemon_t& raw,
                                      uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.blocks.blockA.species, version),
                      version)
@@ -127,7 +127,7 @@ namespace pkmn
         _set_stats();
     }
 
-    pokemon_ndsimpl::pokemon_ndsimpl(const pkmn::nds_party_pokemon_t& raw,
+    pokemon_ndsimpl::pokemon_ndsimpl(const pkmn::native::nds_party_pokemon_t& raw,
                                      uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.pc.blocks.blockA.species, version),
                      version),

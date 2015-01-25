@@ -7,8 +7,9 @@
 #ifndef INCLUDED_POKEMON_GEN3IMPL_HPP
 #define INCLUDED_POKEMON_GEN3IMPL_HPP
 
+#include <pkmn/native/pokemon.hpp>
+
 #include "pokemon_impl.hpp"
-#include "conversions/structs/pokemon.hpp"
 
 namespace pkmn
 {
@@ -20,9 +21,9 @@ namespace pkmn
                              uint8_t level,
                              uint8_t move1, uint8_t move2,
                              uint8_t move3, uint8_t move4);
-            pokemon_gen3impl(const pkmn::gen3_pc_pokemon_t& raw,
+            pokemon_gen3impl(const pkmn::native::gen3_pc_pokemon_t& raw,
                              uint8_t version);
-            pokemon_gen3impl(const pkmn::gen3_party_pokemon_t& raw,
+            pokemon_gen3impl(const pkmn::native::gen3_party_pokemon_t& raw,
                              uint8_t version);
             pokemon_gen3impl(const pokemon_gen3impl& other);
             pokemon_gen3impl& operator=(const pokemon_gen3impl& other);
@@ -112,11 +113,11 @@ namespace pkmn
 
         private:
 
-            pkmn::gen3_party_pokemon_t    _raw;
-            pkmn::gen3_pokemon_growth_t  *_growth;
-            pkmn::gen3_pokemon_attacks_t *_attacks;
-            pkmn::gen3_pokemon_effort_t  *_effort;
-            pkmn::gen3_pokemon_misc_t    *_misc;
+            pkmn::native::gen3_party_pokemon_t    _raw;
+            pkmn::native::gen3_pokemon_growth_t  *_growth;
+            pkmn::native::gen3_pokemon_attacks_t *_attacks;
+            pkmn::native::gen3_pokemon_effort_t  *_effort;
+            pkmn::native::gen3_pokemon_misc_t    *_misc;
 
             void _set_experience(uint32_t exp);
             void _set_level(uint8_t level);

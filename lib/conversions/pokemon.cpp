@@ -18,6 +18,8 @@
 #include <pkmn/enums.hpp>
 #include <pkmn/paths.hpp>
 #include <pkmn/database.hpp>
+#include <pkmn/conversions/pokemon.hpp>
+#include <pkmn/conversions/text.hpp>
 #include <pkmn/types/dict.hpp>
 #include <pkmn/types/prng.hpp>
 
@@ -26,8 +28,6 @@
 #include "pokemon_gen3impl.hpp"
 #include "pokemon_ndsimpl.hpp"
 
-#include "pokemon.hpp"
-#include "text.hpp"
 #include "utils.hpp"
 #include "../SQLiteCpp/SQLiteC++.h"
 
@@ -35,7 +35,7 @@ namespace pkmn
 {
     namespace conversions
     {
-        pokemon::sptr import_gen1_pokemon(const gen1_pc_pokemon_t& native,
+        pokemon::sptr import_gen1_pokemon(const native::gen1_pc_pokemon_t& native,
                                           const uint8_t* nickname_buffer,
                                           const uint8_t* otname_buffer,
                                           const pkmn::pkstring& version)
@@ -47,7 +47,7 @@ namespace pkmn
                                 );
         }
 
-        pokemon::sptr import_gen1_pokemon(const gen1_party_pokemon_t& native,
+        pokemon::sptr import_gen1_pokemon(const native::gen1_party_pokemon_t& native,
                                           const uint8_t* nickname_buffer,
                                           const uint8_t* otname_buffer,
                                           const pkmn::pkstring& version)
@@ -59,23 +59,23 @@ namespace pkmn
                                 );
         }
 
-        void export_gen1_pokemon(pokemon::sptr pkmn, gen1_pc_pokemon_t& native,
+        void export_gen1_pokemon(pokemon::sptr pkmn, native::gen1_pc_pokemon_t& native,
                                  uint8_t* nickname_buffer, uint8_t* otname_buffer)
         {
-            memcpy(&native, pkmn->get_native(), sizeof(gen1_pc_pokemon_t));
+            memcpy(&native, pkmn->get_native(), sizeof(native::gen1_pc_pokemon_t));
             export_gen1_text(pkmn->get_nickname(), nickname_buffer, 10);
             export_gen1_text(pkmn->get_trainer_name(), otname_buffer, 7);
         }
 
-        void export_gen1_pokemon(pokemon::sptr pkmn, gen1_party_pokemon_t& native,
+        void export_gen1_pokemon(pokemon::sptr pkmn, native::gen1_party_pokemon_t& native,
                                  uint8_t* nickname_buffer, uint8_t* otname_buffer)
         {
-            memcpy(&native, pkmn->get_native(), sizeof(gen1_party_pokemon_t));
+            memcpy(&native, pkmn->get_native(), sizeof(native::gen1_party_pokemon_t));
             export_gen1_text(pkmn->get_nickname(), nickname_buffer, 10);
             export_gen1_text(pkmn->get_trainer_name(), otname_buffer, 7);
         }
 
-        pokemon::sptr import_gen2_pokemon(const gen2_pc_pokemon_t& native,
+        pokemon::sptr import_gen2_pokemon(const native::gen2_pc_pokemon_t& native,
                                           const uint8_t* nickname_buffer,
                                           const uint8_t* otname_buffer,
                                           const pkmn::pkstring& version)
@@ -87,7 +87,7 @@ namespace pkmn
                                 );
         }
 
-        pokemon::sptr import_gen2_pokemon(const gen2_party_pokemon_t& native,
+        pokemon::sptr import_gen2_pokemon(const native::gen2_party_pokemon_t& native,
                                           const uint8_t* nickname_buffer,
                                           const uint8_t* otname_buffer,
                                           const pkmn::pkstring& version)
@@ -99,92 +99,92 @@ namespace pkmn
                                 );
         }
 
-        void export_gen2_pokemon(pokemon::sptr pkmn, gen2_pc_pokemon_t& native,
+        void export_gen2_pokemon(pokemon::sptr pkmn, native::gen2_pc_pokemon_t& native,
                                  uint8_t* nickname_buffer, uint8_t* otname_buffer)
         {
-            memcpy(&native, pkmn->get_native(), sizeof(gen2_pc_pokemon_t));
+            memcpy(&native, pkmn->get_native(), sizeof(native::gen2_pc_pokemon_t));
             export_gen2_text(pkmn->get_nickname(), nickname_buffer, 10);
             export_gen2_text(pkmn->get_trainer_name(), otname_buffer, 7);
         }
 
-        void export_gen2_pokemon(pokemon::sptr pkmn, gen2_party_pokemon_t& native,
+        void export_gen2_pokemon(pokemon::sptr pkmn, native::gen2_party_pokemon_t& native,
                                  uint8_t* nickname_buffer, uint8_t* otname_buffer)
         {
-            memcpy(&native, pkmn->get_native(), sizeof(gen2_party_pokemon_t));
+            memcpy(&native, pkmn->get_native(), sizeof(native::gen2_party_pokemon_t));
             export_gen2_text(pkmn->get_nickname(), nickname_buffer, 10);
             export_gen2_text(pkmn->get_trainer_name(), otname_buffer, 7);
         }
 
-        pokemon::sptr import_gen3_pokemon(const gen3_pc_pokemon_t& native,
+        pokemon::sptr import_gen3_pokemon(const native::gen3_pc_pokemon_t& native,
                                           const pkmn::pkstring& version,
                                           bool is_encrypted)
         {
-            gen3_pc_pokemon_t _native = native;
+            native::gen3_pc_pokemon_t _native = native;
             if(is_encrypted) gen3_crypt(_native);
 
             return pokemon::sptr(new pokemon_gen3impl(_native,
                                                       database::get_version_id(version)));
         }
 
-        pokemon::sptr import_gen3_pokemon(const gen3_party_pokemon_t& native,
+        pokemon::sptr import_gen3_pokemon(const native::gen3_party_pokemon_t& native,
                                           const pkmn::pkstring& version,
                                           bool is_encrypted)
         {
-            gen3_party_pokemon_t _native = native;
+            native::gen3_party_pokemon_t _native = native;
             if(is_encrypted) gen3_crypt(_native.pc);
 
             return pokemon::sptr(new pokemon_gen3impl(_native,
                                                       database::get_version_id(version)));
         }
 
-        void export_gen3_pokemon(pokemon::sptr pkmn, gen3_pc_pokemon_t& native,
+        void export_gen3_pokemon(pokemon::sptr pkmn, native::gen3_pc_pokemon_t& native,
                                  bool encrypt)
         {
-            memcpy(&native, pkmn->get_native(), sizeof(gen3_pc_pokemon_t));
+            memcpy(&native, pkmn->get_native(), sizeof(native::gen3_pc_pokemon_t));
             if(encrypt) native.checksum = gen3_crypt(native);
         }
 
-        void export_gen3_pokemon(pokemon::sptr pkmn, gen3_party_pokemon_t& native,
+        void export_gen3_pokemon(pokemon::sptr pkmn, native::gen3_party_pokemon_t& native,
                                  bool encrypt)
         {
-            memcpy(&native, pkmn->get_native(), sizeof(gen3_party_pokemon_t));
+            memcpy(&native, pkmn->get_native(), sizeof(native::gen3_party_pokemon_t));
             if(encrypt) native.pc.checksum = gen3_crypt(native.pc);
         }
 
-        pokemon::sptr import_nds_pokemon(const nds_pc_pokemon_t& native,
+        pokemon::sptr import_nds_pokemon(const native::nds_pc_pokemon_t& native,
                                          const pkmn::pkstring& version,
                                          bool is_encrypted)
         {
             // TODO: crypt
-            nds_pc_pokemon_t _native = native;
+            native::nds_pc_pokemon_t _native = native;
 
             return pokemon::sptr(new pokemon_ndsimpl(_native,
                                                       database::get_version_id(version)));
         }
 
-        pokemon::sptr import_nds_pokemon(const nds_party_pokemon_t& native,
+        pokemon::sptr import_nds_pokemon(const native::nds_party_pokemon_t& native,
                                          const pkmn::pkstring& version,
                                          bool is_encrypted)
         {
             // TODO: crypt
-            nds_party_pokemon_t _native = native;
+            native::nds_party_pokemon_t _native = native;
 
             return pokemon::sptr(new pokemon_ndsimpl(_native,
                                                       database::get_version_id(version)));
         }
 
-        void export_nds_pokemon(pokemon::sptr pkmn, nds_pc_pokemon_t& native,
-                                 bool encrypt)
+        void export_nds_pokemon(pokemon::sptr pkmn, native::nds_pc_pokemon_t& native,
+                                bool encrypt)
         {
             // TODO: crypt
-            memcpy(&native, pkmn->get_native(), sizeof(nds_pc_pokemon_t));
+            memcpy(&native, pkmn->get_native(), sizeof(native::nds_pc_pokemon_t));
         }
 
-        void export_nds_pokemon(pokemon::sptr pkmn, nds_party_pokemon_t& native,
-                                 bool encrypt)
+        void export_nds_pokemon(pokemon::sptr pkmn, native::nds_party_pokemon_t& native,
+                                bool encrypt)
         {
             // TODO: crypt
-            memcpy(&native, pkmn->get_native(), sizeof(nds_party_pokemon_t));
+            memcpy(&native, pkmn->get_native(), sizeof(native::nds_party_pokemon_t));
         }
     } /* namespace conversions */
 } /* namespace pkmn */

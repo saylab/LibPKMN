@@ -7,8 +7,9 @@
 #ifndef INCLUDED_POKEMON_GEN2IMPL_HPP
 #define INCLUDED_POKEMON_GEN2IMPL_HPP
 
+#include <pkmn/native/pokemon.hpp>
+
 #include "pokemon_impl.hpp"
-#include "conversions/structs/pokemon.hpp"
 
 namespace pkmn
 {
@@ -20,15 +21,15 @@ namespace pkmn
                              uint8_t level,
                              uint8_t move1, uint8_t move2,
                              uint8_t move3, uint8_t move4);
-            pokemon_gen2impl(const pkmn::gen2_pc_pokemon_t& raw,
+            pokemon_gen2impl(const pkmn::native::gen2_pc_pokemon_t& raw,
                              uint8_t version);
-            pokemon_gen2impl(const pkmn::gen2_pc_pokemon_t& raw,
+            pokemon_gen2impl(const pkmn::native::gen2_pc_pokemon_t& raw,
                              const pkmn::pkstring& nickname,
                              const pkmn::pkstring& otname,
                              uint8_t version);
-            pokemon_gen2impl(const pkmn::gen2_party_pokemon_t& raw,
+            pokemon_gen2impl(const pkmn::native::gen2_party_pokemon_t& raw,
                              uint8_t version);
-            pokemon_gen2impl(const pkmn::gen2_party_pokemon_t& raw,
+            pokemon_gen2impl(const pkmn::native::gen2_party_pokemon_t& raw,
                              const pkmn::pkstring& nickname,
                              const pkmn::pkstring& otname,
                              uint8_t version);
@@ -120,7 +121,7 @@ namespace pkmn
 
         private:
 
-            pkmn::gen2_party_pokemon_t _raw;
+            pkmn::native::gen2_party_pokemon_t _raw;
 
             pkmn::pkstring _nickname, _otname;
 

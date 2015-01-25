@@ -60,7 +60,7 @@ namespace pkmn
         _set_stats(); // Will populate rest of party portion of struct
     }
 
-    pokemon_gen2impl::pokemon_gen2impl(const pkmn::gen2_pc_pokemon_t& raw,
+    pokemon_gen2impl::pokemon_gen2impl(const pkmn::native::gen2_pc_pokemon_t& raw,
                                        uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.species, version),
                      version),
@@ -71,7 +71,7 @@ namespace pkmn
         _set_stats(); // Will populate rest of party portion in struct
     }
 
-    pokemon_gen2impl::pokemon_gen2impl(const pkmn::gen2_pc_pokemon_t& raw,
+    pokemon_gen2impl::pokemon_gen2impl(const pkmn::native::gen2_pc_pokemon_t& raw,
                                        const pkmn::pkstring& nickname,
                                        const pkmn::pkstring& otname,
                                        uint8_t version):
@@ -84,7 +84,7 @@ namespace pkmn
         _set_stats(); // Will populate rest of party portion in struct
     }
 
-    pokemon_gen2impl::pokemon_gen2impl(const pkmn::gen2_party_pokemon_t& raw,
+    pokemon_gen2impl::pokemon_gen2impl(const pkmn::native::gen2_party_pokemon_t& raw,
                                        uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.pc.species, version),
                      version),
@@ -93,7 +93,7 @@ namespace pkmn
         _otname("LIBPKMN")
     {};
 
-    pokemon_gen2impl::pokemon_gen2impl(const pkmn::gen2_party_pokemon_t& raw,
+    pokemon_gen2impl::pokemon_gen2impl(const pkmn::native::gen2_party_pokemon_t& raw,
                                        const pkmn::pkstring& nickname,
                                        const pkmn::pkstring& otname,
                                        uint8_t version):

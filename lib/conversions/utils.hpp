@@ -12,7 +12,7 @@
 #include <pkmn/types/dict.hpp>
 #include <pkmn/types/pkstring.hpp>
 
-#include "structs/pokemon.hpp"
+#include <pkmn/native/pokemon.hpp>
 
 namespace pkmn
 {
@@ -97,24 +97,24 @@ namespace pkmn
 
         uint8_t get_retro_IV(uint8_t stat, const uint16_t iv_data);
 
-        void set_retro_IV(uint8_t stat, uint16_t &iv_data, uint8_t new_iv);
+        void set_retro_IV(uint8_t stat, uint16_t& iv_data, uint8_t new_iv);
 
-        std::string crystal_get_otgender(const uint16_t &caught_data);
+        std::string crystal_get_otgender(const uint16_t& caught_data);
 
-        unsigned int crystal_get_metlevel(const uint16_t &caught_data);
+        unsigned int crystal_get_metlevel(const uint16_t& caught_data);
 
         //TODO: time of day, met location
-        void crystal_set_caughtdata(uint16_t &caught_data, bool ot_is_female, uint8_t met_level);
+        void crystal_set_caughtdata(uint16_t& caught_data, bool ot_is_female, uint8_t met_level);
 
-        unsigned int get_modern_IV(uint8_t stat, const uint32_t &IVint);
+        unsigned int get_modern_IV(uint8_t stat, const uint32_t& IVint);
 
-        void set_modern_IV(uint8_t stat, uint32_t &IVint, uint8_t val);
+        void set_modern_IV(uint8_t stat, uint32_t& IVint, uint8_t val);
 
-        uint16_t gen3_crypt(gen3_pc_pokemon_t& pkmn);
+        uint16_t gen3_crypt(native::gen3_pc_pokemon_t& pkmn);
 
-        #define get_gen3_ability_slot(iv_egg_ability) (uint16_t(iv_egg_ability) & 0x1)
+        #define get_gen3_ability_slot(iv_egg_ability) (uint16_t(iv_egg_ability)&  0x1)
 
-        #define set_gen3_ability_slot(iv_egg_ability, num) iv_egg_ability = num ? (iv_egg_ability | 1) : ~(iv_egg_ability & 1);
+        #define set_gen3_ability_slot(iv_egg_ability, num) iv_egg_ability = num ? (iv_egg_ability | 1) : ~(iv_egg_ability&  1);
     }
 }
 
