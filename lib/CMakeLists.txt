@@ -77,7 +77,7 @@ IF(ENABLE_LIBPKMN)
         #game_save_gen3impl.cpp
         #game_save_gen4impl.cpp
         #game_save_gen5impl.cpp
-        #io.cpp
+        io.cpp
         #lists.cpp
         #copy_sptrs.cpp
         ${pkmds_sources}
