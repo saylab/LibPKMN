@@ -15,6 +15,7 @@
 #include <pkmn/pokedex/item_entry.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
+#include "internal.hpp"
 #include "SQLiteCpp/SQLiteC++.h"
 
 namespace pkmn
@@ -24,7 +25,7 @@ namespace pkmn
     item_entry_t::item_entry_t(uint16_t version_id,
                                uint16_t item_id)
     {   
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
+        CONNECT_TO_DB(db);
 
         std::ostringstream query_stream;
         query_stream << "SELECT generation_id FROM item_game_indices WHERE item_id="
@@ -72,13 +73,15 @@ namespace pkmn
 
             query_stream << "SELECT move_id FROM machines WHERE machine_number=" << machine_id
                          << " AND version_group_id=" << version_group_id;
-            uint16_t move_id = db->execAndGet(query_stream.str().c_str());
+            SQLite::Statement machines_query(*db, query_stream.str().c_str());
+            uint16_t move_id = get_num_from_query<uint16_t>(machines_query);
 
             query_stream.str("");
             query_stream << "SELECT flavor_text FROM move_flavor_text WHERE move_id="
                          << move_id << " AND version_group_id=" << version_group_id
                          << " AND language_id=9";
-            pkmn::pkstring move_description = db->execAndGet(query_stream.str().c_str());
+            SQLite::Statement description_query(*db, query_stream.str().c_str());
+            pkmn::pkstring move_description = get_pkstring_from_query(description_query);
 
             description = str(boost::format("%s - %s")
                                     % database::get_move_name(move_id)
@@ -89,7 +92,8 @@ namespace pkmn
             query_stream << "SELECT flavor_text FROM item_flavor_text WHERE item_id="
                          << item_id << " AND version_group_id=" << version_group_id
                          << " AND language_id=9";
-            description = db->execAndGet(query_stream.str().c_str());
+            SQLite::Statement description_query(*db, query_stream.str().c_str());
+            description = get_pkstring_from_query(description_query);
         }
 
         cost = items_query.getColumn(3); // cost

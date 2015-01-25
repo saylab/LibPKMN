@@ -13,6 +13,7 @@
 #include <pkmn/pokedex/pokemon_entry.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
+#include "internal.hpp"
 #include "SQLiteCpp/SQLiteC++.h"
 
 namespace pkmn
@@ -23,7 +24,7 @@ namespace pkmn
                                      uint16_t species_id,
                                      uint16_t form_id)
     {
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
+        CONNECT_TO_DB(db);
 
         uint16_t pokemon_id;
         std::ostringstream query_stream;
@@ -151,7 +152,8 @@ namespace pkmn
         query_stream << "SELECT flavor_text FROM pokemon_species_flavor_text WHERE species_id="
                      << database::get_species_id(pokemon_id) << " AND version_id="
                      << version_id << " AND language_id=9";
-        pokedex_entry = db->execAndGet(query_stream.str().c_str());
+        SQLite::Statement pokedex_entry_query(*db, query_stream.str().c_str());
+        pokedex_entry = get_pkstring_from_query(pokedex_entry_query);
 
         /*
          * Base stats, effort yields

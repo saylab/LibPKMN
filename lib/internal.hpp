@@ -8,8 +8,17 @@
 #define INCLUDED_INTERNAL_HPP
 
 #include <cstdint>
+#include <sstream>
+
+#include <boost/format.hpp>
 
 #include <pkmn/config.hpp>
+
+#include "SQLiteCpp/SQLiteC++.h"
+
+#define CONNECT_TO_DB(db) if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
+#define THROW_QUERY_ERROR(stream) throw std::runtime_error(str(boost::format("%s: Invalid query \"%s\"") \
+                                                               % __FUNCTION__ % stream.str().c_str()));
 
 #define PKSTRING_UPPERCASE(str) boost::algorithm::to_upper_copy(str.std_wstring())
 
@@ -49,6 +58,35 @@ namespace pkmn
         const char* arr = ::getenv(var);
         return arr ? std::string(arr) : std::string("");
         #endif
+    }
+
+    template<typename T>
+    T get_num_from_query(SQLite::Statement& query)
+    {
+        std::stringstream query_stream(query.getQuery());
+
+        if(query.executeStep()) return query.getColumn(0); \
+        else THROW_QUERY_ERROR(query_stream);
+    }
+
+    pkmn::pkstring PKMN_INLINE get_pkstring_from_query(SQLite::Statement& query)
+    {
+        std::stringstream query_stream(query.getQuery());
+
+        if(query.executeStep())
+        {
+            pkmn::pkstring entry = query.getColumn(0);
+            std::wstring intermediate, s;
+            std::wistringstream iss(entry.std_wstring());
+            entry = "";
+            while(iss >> s)
+            {
+                if(intermediate.size() > 0) intermediate += L" " + s;
+                else intermediate = s;
+            }
+            return pkmn::pkstring(intermediate);
+        }
+        else THROW_QUERY_ERROR(query_stream);
     }
 }
 

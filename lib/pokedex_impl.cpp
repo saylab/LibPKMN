@@ -13,6 +13,7 @@
 #include <pkmn/database.hpp>
 #include <pkmn/paths.hpp>
 
+#include "internal.hpp"
 #include "pokedex_impl.hpp"
 
 namespace pkmn
@@ -26,7 +27,7 @@ namespace pkmn
         pokedex(),
         _version_id(database::get_version_id(game))
     {
-        if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
+        CONNECT_TO_DB(_db);
 
         _generation       = database::get_generation(_version_id);
         _version_group_id = database::get_version_group_id(_version_id);

@@ -18,6 +18,7 @@
 #include <pkmn/database.hpp>
 #include <pkmn/types/dict.hpp>
 
+#include "internal.hpp"
 #include "bag_impl.hpp"
 #include "copy_sptrs.hpp"
 
@@ -43,7 +44,7 @@ namespace pkmn
 
     bag_impl::bag_impl(uint16_t game): bag()
     {
-        if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
+        CONNECT_TO_DB(_db);
 
         _game_id = game;
         _generation = database::get_generation(_game_id);

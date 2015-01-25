@@ -25,6 +25,7 @@
 #include "pokemon_gen3impl.hpp"
 #include "pokemon_ndsimpl.hpp"
 
+#include "internal.hpp"
 #include "SQLiteCpp/SQLiteC++.h"
 
 namespace fs = boost::filesystem;
@@ -115,7 +116,7 @@ namespace pkmn
         _form_id(species_id),
         _version_id(version_id)
     {
-        if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
+        CONNECT_TO_DB(_db);
 
         _pokedex_entry = _pokedex->get_pokemon_entry(_species_id);
     }

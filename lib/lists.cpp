@@ -18,6 +18,7 @@
 #include <pkmn/database.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
+#include "internal.hpp"
 #include "SQLiteCpp/SQLiteC++.h"
 
 namespace pkmn
@@ -26,7 +27,7 @@ namespace pkmn
 
     void get_version_list(std::vector<pkmn::pkstring> &game_vec)
     {
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
+        CONNECT_TO_DB(db);
         game_vec.clear();
 
         SQLite::Statement query(*db, "SELECT name FROM version_names WHERE local_language_id=9");
@@ -54,7 +55,7 @@ namespace pkmn
 
     void get_item_list(std::vector<pkmn::pkstring> &item_vec, unsigned int game)
     {
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
+        CONNECT_TO_DB(db);
         item_vec.clear();
 
         unsigned int gen = database::get_generation(game);
@@ -148,7 +149,7 @@ namespace pkmn
 
     void get_pokemon_list(std::vector<pkmn::pkstring> &pokemon_vec, unsigned int game)
     {
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
+        CONNECT_TO_DB(db);
         pokemon_vec.clear();
 
         unsigned int bounds[] = {0,151,251,386,493,649,719};
@@ -166,7 +167,7 @@ namespace pkmn
 
     void get_type_list(std::vector<pkmn::pkstring> &type_vec, unsigned int gen)
     {
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
+        CONNECT_TO_DB(db);
         type_vec.clear();
 
         SQLite::Statement type_names_query(*db, "SELECT name FROM type_names WHERE local_language_id=9");
@@ -182,7 +183,7 @@ namespace pkmn
 
     void get_ability_list(std::vector<pkmn::pkstring> &ability_vec, unsigned int gen)
     {
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
+        CONNECT_TO_DB(db);
         ability_vec.clear();
 
         SQLite::Statement query(*db, "SELECT name FROM ability_names WHERE local_language_id=9");
@@ -191,7 +192,7 @@ namespace pkmn
 
     void get_nature_list(std::vector<pkmn::pkstring> &nature_vec)
     {
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
+        CONNECT_TO_DB(db);
         nature_vec.clear();
 
         SQLite::Statement query(*db, "SELECT name FROM nature_names WHERE local_language_id=9");
@@ -204,7 +205,7 @@ namespace pkmn
                              uint16_t generation,
                              bool lax)
     {
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
+        CONNECT_TO_DB(db);
         pkmn_vector.clear();
 
         std::stringstream query_stream;

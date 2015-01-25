@@ -15,6 +15,7 @@
 #include <pkmn/pokedex/move_entry.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
+#include "internal.hpp"
 #include "SQLiteCpp/SQLiteC++.h"
 
 namespace pkmn
@@ -24,7 +25,7 @@ namespace pkmn
     move_entry_t::move_entry_t(uint16_t version_id,
                                uint16_t move_id)
     {   
-        if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
+        CONNECT_TO_DB(db);
 
         uint8_t generation = database::get_generation(version_id);
 
@@ -60,7 +61,8 @@ namespace pkmn
         query_stream << "SELECT flavor_text FROM move_flavor_text WHERE move_id="
                      << move_id << " AND language_id=9 AND version_group_id="
                      << database::get_version_group_id(version_id);
-        description = db->execAndGet(query_stream.str().c_str());
+        SQLite::Statement flavor_text_query(*db, query_stream.str().c_str());
+        description = get_pkstring_from_query(flavor_text_query);
 
         /*
          * Target
@@ -68,7 +70,8 @@ namespace pkmn
         query_stream.str("");
         query_stream << "SELECT name FROM move_target_prose WHERE move_target_id="
                      << moves_query.getColumn(8) << " AND local_language_id=9"; // target_id
-        target = db->execAndGet(query_stream.str().c_str());
+        SQLite::Statement move_target_prose_query(*db, query_stream.str().c_str());
+        target = get_pkstring_from_query(move_target_prose_query);
 
         /*
          * Effect
@@ -77,7 +80,8 @@ namespace pkmn
         query_stream.str("");
         query_stream << "SELECT short_effect FROM move_effect_prose WHERE move_effect_id="
                      << moves_query.getColumn(10);  // effect_id
-        effect = db->execAndGet(query_stream.str().c_str());
+        SQLite::Statement move_effect_prose_query(*db, query_stream.str().c_str());
+        effect = get_pkstring_from_query(move_effect_prose_query);
 
         /*
          * Contest type
@@ -85,7 +89,8 @@ namespace pkmn
         query_stream.str("");
         query_stream << "SELECT name FROM contest_type_names WHERE contest_type_id="
                      << moves_query.getColumn(12) << " AND local_language_id=9"; // contest_type_id
-        contest_type = db->execAndGet(query_stream.str().c_str());
+        SQLite::Statement contest_type_names_query(*db, query_stream.str().c_str());
+        contest_type = get_pkstring_from_query(contest_type_names_query);
 
         /*
          * Contest effect
@@ -93,7 +98,8 @@ namespace pkmn
         query_stream.str("");
         query_stream << "SELECT flavor_text FROM contest_effect_prose WHERE contest_effect_id="
                      << moves_query.getColumn(13) << " AND local_language_id=9"; // contest_effect_id
-        contest_effect = db->execAndGet(query_stream.str().c_str());
+        SQLite::Statement contest_effect_prose_query(*db, query_stream.str().c_str());
+        contest_effect = get_pkstring_from_query(contest_effect_prose_query);
 
         /*
          * Super Contest effect
@@ -102,7 +108,8 @@ namespace pkmn
         query_stream << "SELECT flavor_text FROM super_contest_effect_prose"
                      << " WHERE super_contest_effect_id=" << moves_query.getColumn(14)
                      << " AND local_language_id=9"; // super_contest_effect_id
-        super_contest_effect = db->execAndGet(query_stream.str().c_str());
+        SQLite::Statement super_contest_effect_prose_query(*db, query_stream.str().c_str());
+        super_contest_effect = get_pkstring_from_query(super_contest_effect_prose_query);
 
         /*
          * Database values are valid for Generation VI, this fixes entries
