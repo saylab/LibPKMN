@@ -1,12 +1,17 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  */
 
+#include <fstream>
+
 #include <pkmn/enums.hpp>
 #include <pkmn/database.hpp>
+#include <pkmn/conversions/items.hpp>
+#include <pkmn/conversions/pokemon.hpp>
+#include <pkmn/conversions/text.hpp>
 
 #include "game_save_gen1impl.hpp"
 
@@ -14,7 +19,8 @@ namespace fs = boost::filesystem;
 
 namespace pkmn
 {
-    game_save_gen1impl::game_save_gen1impl(const pkmn::pkstring &filename): game_save_impl(filename)
+    game_save_gen1impl::game_save_gen1impl(const pkmn::pkstring& filename):
+        game_save_impl(filename)
     {
         /*
          * The only real distinction between the Generation I games is the introduction
@@ -25,30 +31,31 @@ namespace pkmn
          *
          * There is no known way to distinguish between a Red save and Blue save.
          */
-        _game_id = (_data[gen1_offsets::PIKACHU_FRIENDSHIP] == 0) ? Versions::RED
-                                                                  : Versions::YELLOW;
+        _version_id = (_data[gen1_offsets::PIKACHU_FRIENDSHIP] == 0) ? Versions::RED
+                                                                     : Versions::YELLOW;
 
         load();
     }
 
     void game_save_gen1impl::load()
     {
-        _item_bag = reinterpret_cast<gen1_item_bag_t*>(&_data[gen1_offsets::ITEM_BAG]);
-        _item_pc = reinterpret_cast<gen1_item_pc_t*>(&_data[gen1_offsets::ITEM_PC]);
-        _pokemon_party = reinterpret_cast<gen1_pokemon_party_t*>(&_data[gen1_offsets::POKEMON_PARTY]);
-        _pokemon_pc = reinterpret_cast<gen1_pokemon_pc_t*>(&_data[gen1_offsets::POKEMON_PC]);
+        _item_bag = reinterpret_cast<native::gen1_item_bag_t*>(&_data[gen1_offsets::ITEM_BAG]);
+        _item_pc = reinterpret_cast<native::gen1_item_pc_t*>(&_data[gen1_offsets::ITEM_PC]);
+        _pokemon_party = reinterpret_cast<native::gen1_pokemon_party_t*>(&_data[gen1_offsets::POKEMON_PARTY]);
+        _pokemon_pc = reinterpret_cast<native::gen1_pokemon_pc_t*>(&_data[gen1_offsets::POKEMON_PC]);
 
         _trainer = trainer::make(Versions::YELLOW,
                                  conversions::import_gen1_text(&_data[gen1_offsets::PLAYER_NAME], 7),
                                  Genders::MALE);
         conversions::import_gen1_bag(_trainer->get_bag(), _item_bag);
 
-        pokemon_team_t2 team(6);
+        pokemon_team_t team(6);
         for(size_t i = 0; i < _pokemon_party->count; i++)
         {
             team[i] = conversions::import_gen1_pokemon(_pokemon_party->party[i],
                                                        _pokemon_party->nicknames[i],
-                                                       _pokemon_party->otnames[i]);
+                                                       _pokemon_party->otnames[i],
+                                                       get_game());
         }
         _trainer->set_party(team);
 
@@ -63,13 +70,13 @@ namespace pkmn
                             + ((raw_money[2] >> 0) & 0x0F));
     }
 
-    void game_save_gen1impl::save_as(const pkmn::pkstring &filename)
+    void game_save_gen1impl::save_as(const pkmn::pkstring& filename)
     {
         _filepath = fs::path(filename);
 
         conversions::export_gen1_bag(_trainer->get_bag(), _item_bag);
 
-        pokemon_team_t2 team;
+        pokemon_team_t team;
         _trainer->get_party(team);
         _pokemon_party->count = 0;
         for(size_t i = 0; i < 6; i++)

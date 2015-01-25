@@ -69,12 +69,11 @@ IF(ENABLE_LIBPKMN)
         bag_impl.cpp
         trainer_impl.cpp
         pokedex_impl.cpp
-        #game_save_impl.cpp
-        #game_save_gen1impl.cpp
-        #game_save_gen2impl.cpp
-        #game_save_gen3impl.cpp
-        #game_save_gen4impl.cpp
-        #game_save_gen5impl.cpp
+        game_save_impl.cpp
+        game_save_gen1impl.cpp
+        game_save_gen2impl.cpp
+        game_save_gen3impl.cpp
+        game_save_gen4impl.cpp
         io.cpp
         lists.cpp
         copy_sptrs.cpp

@@ -22,7 +22,7 @@ namespace pkmn
 
         pokemon::sptr PKMN_API import_gen1_pokemon(const native::gen1_party_pokemon_t& native,
                                                    const uint8_t* nickname_buffer,
-                                                   const uint8_t otname_buffer,
+                                                   const uint8_t* otname_buffer,
                                                    const pkmn::pkstring& version);
 
         void PKMN_API export_gen1_pokemon(pokemon::sptr pkmn, native::gen1_pc_pokemon_t& native,
@@ -33,12 +33,12 @@ namespace pkmn
 
         pokemon::sptr PKMN_API import_gen2_pokemon(const native::gen2_pc_pokemon_t& native,
                                                    const uint8_t* nickname_buffer,
-                                                   const uint8_t otname_buffer,
+                                                   const uint8_t* otname_buffer,
                                                    const pkmn::pkstring& version);
 
         pokemon::sptr PKMN_API import_gen2_pokemon(const native::gen2_party_pokemon_t& native,
                                                    const uint8_t* nickname_buffer,
-                                                   const uint8_t otname_buffer,
+                                                   const uint8_t* otname_buffer,
                                                    const pkmn::pkstring& version);
 
         void PKMN_API export_gen2_pokemon(pokemon::sptr pkmn, native::gen2_pc_pokemon_t& native,

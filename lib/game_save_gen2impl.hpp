@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -11,9 +11,8 @@
 
 #include "game_save_impl.hpp"
 
-#include "conversions/items.hpp"
-#include "conversions/pokemon.hpp"
-#include "conversions/trainer.hpp"
+#include <pkmn/native/items.hpp>
+#include <pkmn/native/pokemon.hpp>
 
 namespace pkmn
 {
@@ -63,7 +62,7 @@ namespace pkmn
     /*
      * Source: http://bulbapedia.bulbagarden.net/wiki/Save_data_structure_in_Generation_II#Checksums
      */
-    bool PKMN_INLINE gs_check(const std::vector<uint8_t> &data)
+    bool PKMN_INLINE gs_check(const std::vector<uint8_t>& data)
     {
         uint16_t checksum1 = 0;
         uint16_t checksum2 = 0;
@@ -80,7 +79,7 @@ namespace pkmn
                 (checksum2 == *reinterpret_cast<const uint16_t*>(&data[offsets[0][gen2_offsets::CHECKSUM2]])));
     }
 
-    bool PKMN_INLINE crystal_check(const std::vector<uint8_t> &data)
+    bool PKMN_INLINE crystal_check(const std::vector<uint8_t>& data)
     {
         uint16_t checksum1 = 0;
         uint16_t checksum2 = 0;
@@ -99,10 +98,10 @@ namespace pkmn
     {
         public:
 
-            game_save_gen2impl(const pkmn::pkstring &filename, bool crystal);
+            game_save_gen2impl(const pkmn::pkstring& filename, bool crystal);
 
             void load();
-            void save_as(const pkmn::pkstring &filename);
+            void save_as(const pkmn::pkstring& filename);
             bool check();
 
         private:
@@ -114,10 +113,10 @@ namespace pkmn
             uint16_t _pokedex_seen_offset, _current_pokemon_box_offset, _player_gender_offset;
             uint16_t _pokemon_pc_offset, _checksum1_offset, _checksum2_offset;
 
-            gen2_item_bag_t* _item_bag;
-            gen2_item_pc_t* _item_pc;
-            gen2_pokemon_party_t* _pokemon_party;
-            gen2_pokemon_pc_t* _pokemon_pc;
+            native::gen2_item_bag_t*      _item_bag;
+            native::gen2_item_pc_t*       _item_pc;
+            native::gen2_pokemon_party_t* _pokemon_party;
+            native::gen2_pokemon_pc_t*    _pokemon_pc;
     };
 }
 #endif /* INCLUDED_GAME_SAVE_GEN2IMPL_HPP */

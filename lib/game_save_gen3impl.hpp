@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -13,9 +13,9 @@
 
 #include "game_save_impl.hpp"
 
-#include "conversions/structs/gen3_save.hpp"
-#include "conversions/structs/items.hpp"
-#include "conversions/structs/pokemon.hpp"
+#include <pkmn/native/gen3_save.hpp>
+#include <pkmn/native/items.hpp>
+#include <pkmn/native/pokemon.hpp>
 
 namespace pkmn
 {
@@ -78,10 +78,10 @@ namespace pkmn
     #define GEN3_SAVE_INDEX(save) save->section0.footer.save_index
     #define GEN3_SECURITY_KEY(save,game,num) *reinterpret_cast<const uint32_t*>(&save->section0.data8[section0_offsets[game][num]])
 
-    PKMN_INLINE gen3_save_t* gen3_get_main_save(uint8_t* data)
+    PKMN_INLINE native::gen3_save_t* gen3_get_main_save(uint8_t* data)
     {
-        gen3_save_t* saveA = reinterpret_cast<gen3_save_t*>(&data[SAVE_A]);
-        gen3_save_t* saveB = reinterpret_cast<gen3_save_t*>(&data[SAVE_B]);
+        native::gen3_save_t* saveA = reinterpret_cast<native::gen3_save_t*>(&data[SAVE_A]);
+        native::gen3_save_t* saveB = reinterpret_cast<native::gen3_save_t*>(&data[SAVE_B]);
 
         /*
          * Each file stores two saves. When the game saves, it alternates which of the two save is overwritten,
@@ -94,7 +94,7 @@ namespace pkmn
     }
 
     //The save sections aren't necessarily in order
-    void PKMN_INLINE gen3_crypt_save_sections(const gen3_save_t* src, gen3_save_t* dest)
+    void PKMN_INLINE gen3_crypt_save_sections(const native::gen3_save_t* src, native::gen3_save_t* dest)
     {
         for(size_t i = 0; i < 14; i++)
         {
@@ -103,7 +103,7 @@ namespace pkmn
         }
     }
 
-    bool PKMN_INLINE gen3_section_check(const gen3_save_t* save)
+    bool PKMN_INLINE gen3_section_check(const native::gen3_save_t* save)
     {
         for(size_t i = 0; i < 14; i++)
         {
@@ -114,13 +114,13 @@ namespace pkmn
     }
 
     //Check R/S game code+security key
-    bool PKMN_INLINE rs_check(std::vector<uint8_t> &data)
+    bool PKMN_INLINE rs_check(std::vector<uint8_t>& data)
     {
-        const gen3_save_t* raw_saveA = reinterpret_cast<const gen3_save_t*>(&data[SAVE_A]);
-        const gen3_save_t* raw_saveB = reinterpret_cast<const gen3_save_t*>(&data[SAVE_B]);
+        const native::gen3_save_t* raw_saveA = reinterpret_cast<const native::gen3_save_t*>(&data[SAVE_A]);
+        const native::gen3_save_t* raw_saveB = reinterpret_cast<const native::gen3_save_t*>(&data[SAVE_B]);
 
-        gen3_save_t* saveA = new gen3_save_t;
-        gen3_save_t* saveB = new gen3_save_t;
+        native::gen3_save_t* saveA = new native::gen3_save_t;
+        native::gen3_save_t* saveB = new native::gen3_save_t;
 
         gen3_crypt_save_sections(raw_saveA, saveA);
         gen3_crypt_save_sections(raw_saveB, saveB);
@@ -136,10 +136,10 @@ namespace pkmn
     }
 
     //Check Emerald security key
-    bool PKMN_INLINE emerald_check(std::vector<uint8_t> &data)
+    bool PKMN_INLINE emerald_check(std::vector<uint8_t>& data)
     {
-        const gen3_save_t* raw_save = gen3_get_main_save((uint8_t*)&data[0]);
-        gen3_save_t* save = new gen3_save_t;
+        const native::gen3_save_t* raw_save = gen3_get_main_save((uint8_t*)&data[0]);
+        native::gen3_save_t* save = new native::gen3_save_t;
         gen3_crypt_save_sections(raw_save, save);
 
         uint32_t security_key1 = GEN3_SECURITY_KEY(save,EMERALD,SECURITY_KEY1);
@@ -152,10 +152,10 @@ namespace pkmn
     }
 
     //Check FR/LG security key
-    bool PKMN_INLINE frlg_check(std::vector<uint8_t> &data)
+    bool PKMN_INLINE frlg_check(std::vector<uint8_t>& data)
     {
-        const gen3_save_t* raw_save = gen3_get_main_save((uint8_t*)&data[0]);
-        gen3_save_t* save = new gen3_save_t;
+        const native::gen3_save_t* raw_save = gen3_get_main_save((uint8_t*)&data[0]);
+        native::gen3_save_t* save = new native::gen3_save_t;
         gen3_crypt_save_sections(raw_save, save);
 
         uint32_t security_key1 = GEN3_SECURITY_KEY(save,FRLG,SECURITY_KEY1);
@@ -171,20 +171,20 @@ namespace pkmn
     {
         public:
 
-            game_save_gen3impl(const pkmn::pkstring &filename, unsigned int game_id);
+            game_save_gen3impl(const pkmn::pkstring& filename, uint16_t game_id);
             ~game_save_gen3impl() {free(_save);}
             
             void load();
-            void save_as(const pkmn::pkstring &filename);
+            void save_as(const pkmn::pkstring& filename);
             bool check();
             
         private:
 
-            gen3_save_t* _raw_save; //Main save
-            gen3_save_t* _save; //Unscrambled, what we'll actually be using
+            native::gen3_save_t* _raw_save; //Main save
+            native::gen3_save_t* _save; //Unscrambled, what we'll actually be using
             games _game;
 
-            gen3_pokemon_party_t* _pokemon_party;
+            native::gen3_pokemon_party_t* _pokemon_party;
             void* _item_storage;
 
             uint32_t _security_key;

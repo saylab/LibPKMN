@@ -1,11 +1,17 @@
 /*
- * Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  */
 
+#include <fstream>
+
 #include <pkmn/enums.hpp>
+
+#include <pkmn/conversions/items.hpp>
+#include <pkmn/conversions/pokemon.hpp>
+#include <pkmn/conversions/text.hpp>
 
 #include "game_save_gen2impl.hpp"
 
@@ -13,9 +19,10 @@ namespace fs = boost::filesystem;
 
 namespace pkmn
 {
-    game_save_gen2impl::game_save_gen2impl(const pkmn::pkstring &filename, bool crystal): game_save_impl(filename)
+    game_save_gen2impl::game_save_gen2impl(const pkmn::pkstring& filename, bool crystal):
+        game_save_impl(filename)
     {
-        _game_id = crystal ? Versions::CRYSTAL : Versions::GOLD;
+        _version_id = crystal ? Versions::CRYSTAL : Versions::GOLD;
 
         uint8_t game = crystal ? gen2_games::CRYSTAL : gen2_games::GS;
         _player_id_offset = offsets[game][gen2_offsets::PLAYER_ID];
@@ -39,12 +46,12 @@ namespace pkmn
 
     void game_save_gen2impl::load()
     {
-        _item_bag = reinterpret_cast<gen2_item_bag_t*>(&_data[_item_bag_offset]);
-        _item_pc = reinterpret_cast<gen2_item_pc_t*>(&_data[_item_pc_offset]);
-        _pokemon_party = reinterpret_cast<gen2_pokemon_party_t*>(&_data[_pokemon_party_offset]);
-        _pokemon_pc = reinterpret_cast<gen2_pokemon_pc_t*>(&_data[_pokemon_pc_offset]);
+        _item_bag = reinterpret_cast<native::gen2_item_bag_t*>(&_data[_item_bag_offset]);
+        _item_pc = reinterpret_cast<native::gen2_item_pc_t*>(&_data[_item_pc_offset]);
+        _pokemon_party = reinterpret_cast<native::gen2_pokemon_party_t*>(&_data[_pokemon_party_offset]);
+        _pokemon_pc = reinterpret_cast<native::gen2_pokemon_pc_t*>(&_data[_pokemon_pc_offset]);
 
-        _trainer = trainer::make(_game_id,
+        _trainer = trainer::make(_version_id,
                                  conversions::import_gen2_text(&_data[_player_name_offset], 7),
                                  _data[_player_gender_offset] ? Genders::FEMALE : Genders::MALE);
 
@@ -52,7 +59,8 @@ namespace pkmn
         {
             _trainer->set_pokemon((i+1), conversions::import_gen2_pokemon(_pokemon_party->party[i],
                                                                           _pokemon_party->nicknames[i],
-                                                                          _pokemon_party->otnames[i]));
+                                                                          _pokemon_party->otnames[i],
+                                                                          get_game()));
         }
         conversions::import_gen2_bag(_trainer->get_bag(), _item_bag);
 
@@ -73,7 +81,7 @@ namespace pkmn
 
         conversions::export_gen2_bag(_trainer->get_bag(), _item_bag);
 
-        pokemon_team_t2 team;
+        pokemon_team_t team;
         _trainer->get_party(team);
         _pokemon_party->count = 0;
         for(size_t i = 0; i < 6; i++)
@@ -100,7 +108,7 @@ namespace pkmn
         uint32_t checksum1 = 0;
         uint32_t checksum2 = 0;
 
-        if(_game_id == Versions::CRYSTAL)
+        if(_version_id == Versions::CRYSTAL)
         {
             //Checksum 1
             for(size_t i = 0x2009; i <= 0x2B82; i++) checksum1 += _data[i];
@@ -131,7 +139,7 @@ namespace pkmn
 
     bool game_save_gen2impl::check()
     {
-        return (_game_id == Versions::CRYSTAL) ? crystal_check(_data)
-                                               : gs_check(_data);
+        return (_version_id == Versions::CRYSTAL) ? crystal_check(_data)
+                                                  : gs_check(_data);
     }
 } /* namespace pkmn */
