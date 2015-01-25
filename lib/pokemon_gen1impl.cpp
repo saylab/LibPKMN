@@ -628,16 +628,16 @@ namespace pkmn
         pkmn::dict<pkmn::pkstring, uint16_t> stats = _pokedex_entry.base_stats;
         pkmn::dict<pkmn::pkstring, uint16_t> IVs   = get_IVs();
 
-        _raw.max_hp = calculations::get_retro_stat(Stats::HP, stats["HP"], _raw.level,
+        _raw.max_hp = calculations::get_retro_stat("HP", stats["HP"], _raw.level,
                                                    _raw.pc.ev_hp, IVs["HP"]);
         _raw.pc.current_hp = _raw.max_hp;
-        _raw.atk  = calculations::get_retro_stat(Stats::ATTACK, stats["Attack"], _raw.level,
+        _raw.atk  = calculations::get_retro_stat("Attack", stats["Attack"], _raw.level,
                                                  _raw.pc.ev_atk, IVs["Attack"]);
-        _raw.def  = calculations::get_retro_stat(Stats::DEFENSE, stats["Defense"], _raw.level,
+        _raw.def  = calculations::get_retro_stat("Defense", stats["Defense"], _raw.level,
                                                  _raw.pc.ev_def, IVs["Defense"]);
-        _raw.spd  = calculations::get_retro_stat(Stats::SPEED, stats["Speed"], _raw.level,
+        _raw.spd  = calculations::get_retro_stat("Speed", stats["Speed"], _raw.level,
                                                  _raw.pc.ev_spd, IVs["Speed"]);
-        _raw.spcl  = calculations::get_retro_stat(Stats::SPECIAL, stats["Special"], _raw.level,
+        _raw.spcl  = calculations::get_retro_stat("Special", stats["Special"], _raw.level,
                                                   _raw.pc.ev_spcl, IVs["Special"]);
     }
 }

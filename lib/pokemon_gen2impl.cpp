@@ -514,8 +514,9 @@ namespace pkmn
                 uint8_t ivSPCL = conversions::get_retro_IV(Stats::SPECIAL,  _raw.pc.iv_data);
                 uint8_t ivSPD  = conversions::get_retro_IV(Stats::SPEED,    _raw.pc.iv_data);
 
-                _form_id = calculations::get_gen2_unown_form(ivATK, ivDEF,
-                                                             ivSPD, ivSPCL);
+                _form_id = database::get_form_id("Unown",
+                                                 calculations::get_gen2_unown_form(ivATK, ivDEF,
+                                                                                   ivSPD, ivSPCL));
             }
 
             _pokedex_entry = _pokedex->get_pokemon_entry(Species::UNOWN, _form_id);
@@ -594,8 +595,9 @@ namespace pkmn
             uint8_t ivSPCL = conversions::get_retro_IV(Stats::SPECIAL,  _raw.pc.iv_data);
             uint8_t ivSPD  = conversions::get_retro_IV(Stats::SPEED,    _raw.pc.iv_data);
 
-            _form_id = calculations::get_gen2_unown_form(ivATK, ivDEF,
-                                                         ivSPD, ivSPCL);
+            _form_id = database::get_form_id("Unown",
+                                             calculations::get_gen2_unown_form(ivATK, ivDEF,
+                                                                               ivSPD, ivSPCL));
 
             _pokedex_entry = _pokedex->get_pokemon_entry(Species::UNOWN, _form_id);
         }
@@ -740,18 +742,18 @@ namespace pkmn
         pkmn::dict<pkmn::pkstring, uint16_t> stats = _pokedex_entry.base_stats;
         pkmn::dict<pkmn::pkstring, uint16_t> IVs = get_IVs();
 
-        _raw.max_hp = calculations::get_retro_stat(Stats::HP, stats["HP"], _raw.pc.level,
+        _raw.max_hp = calculations::get_retro_stat("HP", stats["HP"], _raw.pc.level,
                                                    _raw.pc.ev_hp, IVs["HP"]);
         _raw.current_hp = _raw.max_hp;
-        _raw.atk   = calculations::get_retro_stat(Stats::ATTACK, stats["Attack"], _raw.pc.level,
+        _raw.atk   = calculations::get_retro_stat("Attack", stats["Attack"], _raw.pc.level,
                                                   _raw.pc.ev_atk, IVs["Attack"]);
-        _raw.def   = calculations::get_retro_stat(Stats::DEFENSE, stats["Defense"], _raw.pc.level,
+        _raw.def   = calculations::get_retro_stat("Defense", stats["Defense"], _raw.pc.level,
                                                   _raw.pc.ev_def, IVs["Defense"]);
-        _raw.spd   = calculations::get_retro_stat(Stats::SPEED, stats["Speed"], _raw.pc.level,
+        _raw.spd   = calculations::get_retro_stat("Speed", stats["Speed"], _raw.pc.level,
                                                   _raw.pc.ev_spd, IVs["Speed"]);
-        _raw.spatk = calculations::get_retro_stat(Stats::SPECIAL_ATTACK, stats["Special Attack"], _raw.pc.level,
+        _raw.spatk = calculations::get_retro_stat("Special Attack", stats["Special Attack"], _raw.pc.level,
                                                   _raw.pc.ev_spcl, IVs["Special"]);
-        _raw.spdef = calculations::get_retro_stat(Stats::SPECIAL_DEFENSE, stats["Special Defense"], _raw.pc.level,
+        _raw.spdef = calculations::get_retro_stat("Special Defense", stats["Special Defense"], _raw.pc.level,
                                                   _raw.pc.ev_spcl, IVs["Special"]);
     }
 

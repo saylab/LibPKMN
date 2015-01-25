@@ -190,4 +190,11 @@ namespace pkmn
             }
         }
     }
+
+    move_entry_t::move_entry_t(const pkmn::pkstring& version_name,
+                               const pkmn::pkstring& move_name)
+    {
+        move_entry_t(database::get_version_id(version_name),
+                     database::get_move_id(move_name));
+    }
 } /* namespace pkmn */

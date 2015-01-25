@@ -886,19 +886,19 @@ namespace pkmn
         pkmn::dict<pkmn::pkstring, uint16_t> IVs = get_IVs();
         pkmn::nature_t nature = get_nature();
 
-        _raw.max_hp = calculations::get_modern_stat(Stats::HP, stats["HP"], _raw.level,
+        _raw.max_hp = calculations::get_modern_stat("HP", stats["HP"], _raw.level,
                                                     nature, _blockA->ev_hp, IVs["HP"]);
         _raw.current_hp = _raw.max_hp;
-        _raw.atk = calculations::get_modern_stat(Stats::ATTACK, stats["Attack"], _raw.level,
+        _raw.atk = calculations::get_modern_stat("Attack", stats["Attack"], _raw.level,
                                                  nature, _blockA->ev_atk, IVs["Attack"]);
-        _raw.def = calculations::get_modern_stat(Stats::DEFENSE, stats["Defense"], _raw.level,
+        _raw.def = calculations::get_modern_stat("Defense", stats["Defense"], _raw.level,
                                                  nature, _blockA->ev_def, IVs["Defense"]);
-        _raw.spd = calculations::get_modern_stat(Stats::SPEED, stats["Speed"], _raw.level,
+        _raw.spd = calculations::get_modern_stat("Speed", stats["Speed"], _raw.level,
                                                  nature, _blockA->ev_spd, IVs["Speed"]);
-        _raw.spatk = calculations::get_modern_stat(Stats::SPECIAL_ATTACK, stats["Special Attack"],
+        _raw.spatk = calculations::get_modern_stat("Special Attack", stats["Special Attack"],
                                                    _raw.level, nature, _blockA->ev_spatk,
                                                    IVs["Special Attack"]);
-        _raw.spdef = calculations::get_modern_stat(Stats::SPECIAL_DEFENSE, stats["Special Defense"],
+        _raw.spdef = calculations::get_modern_stat("Special Defense", stats["Special Defense"],
                                                    _raw.level, nature, _blockA->ev_spdef,
                                                    IVs["Special Defense"]);
     }
