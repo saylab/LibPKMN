@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -18,58 +18,58 @@ namespace pkmn
     {
         public:
 
-            trainer_impl(unsigned int game, const pkmn::pkstring &name, unsigned int gender);
+            trainer_impl(uint16_t game, const pkmn::pkstring& name, uint16_t gender);
 
             //Game-specific Info
             pkmn::pkstring get_game() const;
-            unsigned int get_generation() const;
+            uint16_t get_generation() const;
 
             //Get attributes
             pkmn::pkstring get_name() const;
-            unsigned int get_money() const;
+            uint16_t get_money() const;
             pkmn::pkstring get_gender() const;
-            unsigned int get_id() const;
-            unsigned short get_public_id() const;
-            unsigned short get_secret_id() const;
+            uint32_t get_id() const;
+            uint16_t get_public_id() const;
+            uint16_t get_secret_id() const;
 
             //Set attributes
-            void set_name(const pkmn::pkstring &name);
-            void set_money(unsigned int money);
-            void set_gender(const pkmn::pkstring &gender);
-            void set_id(unsigned int id);
-            void set_public_id(unsigned short id);
-            void set_secret_id(unsigned short id);
+            void set_name(const pkmn::pkstring& name);
+            void set_money(uint16_t money);
+            void set_gender(const pkmn::pkstring& gender);
+            void set_id(uint32_t id);
+            void set_public_id(uint16_t id);
+            void set_secret_id(uint16_t id);
 
             //Pokemon
-            team_pokemon::sptr get_pokemon(unsigned int pos);
-            void set_pokemon(unsigned int pos, team_pokemon::sptr t_pkmn);
-            void remove_pokemon(unsigned int pos);
-            void get_party(pokemon_team_t2 &party);
-            void set_party(pokemon_team_t2 &party);
+            pokemon::sptr get_pokemon(uint16_t pos);
+            void set_pokemon(uint16_t pos, pokemon::sptr pkmn);
+            void remove_pokemon(uint16_t pos);
+            void get_party(pokemon_team_t& party);
+            void set_party(pokemon_team_t& party);
 
             //Bag
             bag::sptr get_bag() const;
 
             //Database Info
-            unsigned int get_game_id() const;
+            uint16_t get_game_id() const;
 
         protected:
 
-            unsigned int _money, _game_id, _gender_id, _generation;
+            uint16_t _money, _game_id, _gender_id, _generation;
 
             union
             {
                 struct
                 {
-                    unsigned short public_id;
-                    unsigned short secret_id;
+                    uint16_t public_id;
+                    uint16_t secret_id;
                 } _tid;
-                unsigned int _trainer_id;
+                uint32_t _trainer_id;
             };
 
             bag::sptr _bag;
             pkmn::pkstring _trainer_name;
-            pokemon_team_t2 _party;
+            pokemon_team_t _party;
 
             std::string _sprite_path;
     };

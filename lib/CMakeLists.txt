@@ -69,7 +69,7 @@ IF(ENABLE_LIBPKMN)
         pokemon_ndsimpl.cpp
         pocket_impl.cpp
         bag_impl.cpp
-        #trainer_impl.cpp
+        trainer_impl.cpp
         pokedex_impl.cpp
         #game_save_impl.cpp
         #game_save_gen1impl.cpp
