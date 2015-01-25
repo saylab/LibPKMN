@@ -9,14 +9,15 @@
 
 #include <cstdint>
 
+#include <pkmn/config.hpp>
 #include <pkmn/types/dict.hpp>
 #include <pkmn/types/pkstring.hpp>
 
 namespace pkmn
 {
-    struct item_entry_t
+    struct PKMN_API item_entry_t
     {
-        item_entry_t();
+        item_entry_t() {};
         item_entry_t(uint16_t version_id,
                      uint16_t item_id);
         item_entry_t(const pkmn::pkstring& version_name,

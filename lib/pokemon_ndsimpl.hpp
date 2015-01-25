@@ -109,7 +109,6 @@ namespace pkmn
             uint16_t get_ability_id() const;
             uint16_t get_item_id() const;
             uint16_t get_nature_id() const;
-            uint16_t get_form_id() const;
 
             const void* get_native();
 

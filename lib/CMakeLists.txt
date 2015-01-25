@@ -60,7 +60,7 @@ IF(ENABLE_LIBPKMN)
     LIST(APPEND libpkmn_sources
         ${CMAKE_CURRENT_BINARY_DIR}/build_info.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/paths.cpp
-        #calculations.cpp
+        calculations.cpp
         database.cpp
         pokemon_impl.cpp
         pokemon_gen1impl.cpp
@@ -78,8 +78,8 @@ IF(ENABLE_LIBPKMN)
         #game_save_gen4impl.cpp
         #game_save_gen5impl.cpp
         io.cpp
-        #lists.cpp
-        #copy_sptrs.cpp
+        lists.cpp
+        copy_sptrs.cpp
         ${pkmds_sources}
         ${conversions_sources}
         ${pokedex_sources}

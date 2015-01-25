@@ -212,7 +212,7 @@ namespace pkmn
             return (((personality % 65536) % 10) < 5) ? Species::SILCOON : Species::CASCOON;
         }
 
-        unsigned int get_min_possible_stat(base_pokemon::sptr b_pkmn,
+        /*unsigned int get_min_possible_stat(base_pokemon::sptr b_pkmn,
                                            const pkmn::pkstring &stat_name,
                                            unsigned int level,
                                            unsigned int gen)
@@ -292,7 +292,7 @@ namespace pkmn
             stat_pair.second = get_max_possible_stat(b_pkmn, stat_name, level, gen);
 
             return stat_pair;
-        }
+        }*/
 
         //TODO: Account for Gen V-VI differences
         double get_type_damage_mod(const pkmn::pkstring &type1, const pkmn::pkstring &type2, unsigned int gen)

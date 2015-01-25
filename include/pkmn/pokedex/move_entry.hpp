@@ -10,14 +10,15 @@
 #include <cstdint>
 #include <vector>
 
+#include <pkmn/config.hpp>
 #include <pkmn/types/dict.hpp>
 #include <pkmn/types/pkstring.hpp>
 
 namespace pkmn
 {
-    struct move_entry_t
+    struct PKMN_API move_entry_t
     {
-        move_entry_t();
+        move_entry_t() {};
         move_entry_t(uint16_t version_id,
                      uint16_t move_id);
         move_entry_t(const pkmn::pkstring& version_name,

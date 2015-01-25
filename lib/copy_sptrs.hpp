@@ -11,18 +11,20 @@
 
 #include <pkmn/pocket.hpp>
 #include <pkmn/pokedex.hpp>
-//#include <pkmn/trainer.hpp>
+#include <pkmn/trainer.hpp>
 #include <pkmn/types/prng.hpp>
 
 namespace pkmn
 {
-    //bag::sptr PKMN_API copy_bag(bag::sptr in);
+    bag::sptr PKMN_API copy_bag(bag::sptr in);
 
     pocket::sptr PKMN_API copy_pocket(pocket::sptr in);
 
     pokedex::sptr PKMN_API copy_pokedex(pokedex::sptr in);
 
-    //trainer::sptr PKMN_API copy_trainer(trainer::sptr in);
+    pokemon::sptr PKMN_API copy_pokemon(pokemon::sptr in);
+
+    trainer::sptr PKMN_API copy_trainer(trainer::sptr in);
 
     prng::sptr PKMN_API copy_prng(prng::sptr in);
 }

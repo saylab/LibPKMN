@@ -614,7 +614,7 @@ namespace pkmn
 
     pkmn::item_entry_t pokemon_gen2impl::get_held_item() const
     {
-        return _pokedex->get_item_entry(database::get_item_id(_raw.pc.held_item, _version_id));
+        return _pokedex->get_item_entry(get_item_id());
     }
 
     void pokemon_gen2impl::set_status(const pkmn::pkstring& status)
@@ -698,6 +698,11 @@ namespace pkmn
     uint16_t pokemon_gen2impl::get_ability_id() const
     {
         return Abilities::NONE;
+    }
+
+    uint16_t pokemon_gen2impl::get_item_id() const
+    {
+        return database::get_item_id(_raw.pc.held_item, _version_id);
     }
 
     // No natures in Generation II

@@ -9,14 +9,15 @@
 
 #include <cstdint>
 
+#include <pkmn/config.hpp>
 #include <pkmn/types/dict.hpp>
 #include <pkmn/types/pkstring.hpp>
 
 namespace pkmn
 {
-    struct pokemon_entry_t
+    struct PKMN_API pokemon_entry_t
     {
-        pokemon_entry_t();
+        pokemon_entry_t() {};
         pokemon_entry_t(uint16_t version_id,
                         uint16_t species_id,
                         uint16_t form_id);
