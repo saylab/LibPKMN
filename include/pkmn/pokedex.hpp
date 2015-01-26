@@ -48,6 +48,8 @@ namespace pkmn
             virtual item_entry_t get_item_entry(const uint16_t item_id) = 0;
 
             virtual item_entry_t get_item_entry(const pkmn::pkstring& item_name) = 0;
+
+            virtual uint16_t get_game_id() const = 0;
     };
 }
 

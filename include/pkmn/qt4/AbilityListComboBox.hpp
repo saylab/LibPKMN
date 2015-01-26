@@ -21,7 +21,7 @@ namespace pkmn
             Q_OBJECT
 
             public:
-                AbilityListComboBox(const unsigned int gen, QWidget* parent = NULL);
+                AbilityListComboBox(const uint16_t gen, QWidget* parent = NULL);
         };
     }
 }

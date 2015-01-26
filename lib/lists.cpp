@@ -25,7 +25,7 @@ namespace pkmn
 {
     pkmn::shared_ptr<SQLite::Database> db;
 
-    void get_version_list(std::vector<pkmn::pkstring> &game_vec)
+    void get_version_list(std::vector<pkmn::pkstring>& game_vec)
     {
         CONNECT_TO_DB(db);
         game_vec.clear();
@@ -35,7 +35,7 @@ namespace pkmn
         while(query.executeStep()) game_vec.push_back((const char*)query.getColumn(0));
     }
 
-    void get_version_group_list(std::vector<pkmn::pkstring> &game_group_vec)
+    void get_version_group_list(std::vector<pkmn::pkstring>& game_group_vec)
     {
         // Must be done manually
         game_group_vec.clear();
@@ -53,12 +53,12 @@ namespace pkmn
         game_group_vec.push_back("Black 2/White 2");
     }
 
-    void get_item_list(std::vector<pkmn::pkstring> &item_vec, unsigned int game)
+    void get_item_list(std::vector<pkmn::pkstring>& item_vec, uint16_t game)
     {
         CONNECT_TO_DB(db);
         item_vec.clear();
 
-        unsigned int gen = database::get_generation(game);
+        uint16_t gen = database::get_generation(game);
         std::ostringstream query_stream;
         query_stream << "SELECT name FROM item_names WHERE local_language_id=9 AND item_id IN "
                      << "(SELECT item_id FROM item_game_indices WHERE generation_id=" << gen;
@@ -147,13 +147,13 @@ namespace pkmn
         }
     }
 
-    void get_pokemon_list(std::vector<pkmn::pkstring> &pokemon_vec, unsigned int game)
+    void get_pokemon_list(std::vector<pkmn::pkstring>& pokemon_vec, uint16_t game)
     {
         CONNECT_TO_DB(db);
         pokemon_vec.clear();
 
-        unsigned int bounds[] = {0,151,251,386,493,649,719};
-        unsigned int bound = bounds[database::get_generation(game)];
+        uint16_t bounds[] = {0,151,251,386,493,649,719};
+        uint16_t bound = bounds[database::get_generation(game)];
         std::ostringstream query_stream;
         query_stream << "SELECT name FROM pokemon_species_names WHERE local_language_id=9 AND pokemon_species_id<=" << bound << std::endl;
         SQLite::Statement query(*db, query_stream.str().c_str());
@@ -165,7 +165,7 @@ namespace pkmn
         }
     }
 
-    void get_type_list(std::vector<pkmn::pkstring> &type_vec, unsigned int gen)
+    void get_type_list(std::vector<pkmn::pkstring>& type_vec, uint16_t gen)
     {
         CONNECT_TO_DB(db);
         type_vec.clear();
@@ -181,7 +181,7 @@ namespace pkmn
         }
     }
 
-    void get_ability_list(std::vector<pkmn::pkstring> &ability_vec, unsigned int gen)
+    void get_ability_list(std::vector<pkmn::pkstring>& ability_vec, uint16_t gen)
     {
         CONNECT_TO_DB(db);
         ability_vec.clear();
@@ -190,7 +190,7 @@ namespace pkmn
         while(query.executeStep()) ability_vec.push_back((const char*)(query.getColumn(0)));
     }
 
-    void get_nature_list(std::vector<pkmn::pkstring> &nature_vec)
+    void get_nature_list(std::vector<pkmn::pkstring>& nature_vec)
     {
         CONNECT_TO_DB(db);
         nature_vec.clear();

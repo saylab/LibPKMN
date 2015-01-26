@@ -11,7 +11,7 @@
 
 namespace pkmn
 {
-    nature_t::nature_t(unsigned int id)
+    nature_t::nature_t(uint16_t id)
     {
         _id = id;
         _name = database::get_nature_name(id);
@@ -34,12 +34,12 @@ namespace pkmn
         return _modifiers[key];
     }    
 
-    const float& nature_t::operator[](const unsigned int &key) const
+    const float& nature_t::operator[](const uint16_t &key) const
     {
         return _modifiers[database::get_nature_name(key)];
     }    
 
-    unsigned int nature_t::get_nature_id() {return _id;}
+    uint16_t nature_t::get_nature_id() {return _id;}
 
     void nature_t::_populate_dict()
     {

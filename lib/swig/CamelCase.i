@@ -362,7 +362,7 @@
 /*
  * pkmn/types/markings.hpp
  */
-%rename(Markings) pkmn::markings;
+%rename(Markings) pkmn::markings_t;
 
 /*
  * pkmn/types/pkstring.hpp

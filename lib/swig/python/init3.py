@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+# Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
 #
 # Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
 # or copy at http://opensource.org/licenses/MIT)
@@ -35,5 +35,3 @@ QT4_VERSION = "@QT_VERSION_MAJOR@.@QT_VERSION_MINOR@.@QT_VERSION_PATCH@"
 SWIG_VERSION = "@SWIG_VERSION@"
 
 LIBPKMN_COMMIT = "@LIBPKMN_GIT_DESCRIBE@"
-POKELIB_NC_COMMIT = "@POKELIB_GIT_DESCRIBE@"
-PKMDS_COMMIT = "@PKMDS_GIT_DESCRIBE@"

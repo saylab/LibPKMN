@@ -135,4 +135,9 @@ namespace pkmn
     {
         return get_item_entry(database::get_item_id(item_name));
     }
+
+    uint16_t pokedex_impl::get_game_id() const
+    {
+        return _version_id;
+    }
 } /* namespace pkmn */

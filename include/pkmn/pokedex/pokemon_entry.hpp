@@ -28,6 +28,7 @@ namespace pkmn
 
         pkmn::pkstring species_name;
         uint16_t pokedex_num;
+        pkmn::pkstring form;
         pkmn::pkstring pokedex_entry;
         pkmn::pkstring_pair_t types;
         pkmn::pkstring_pair_t abilities;

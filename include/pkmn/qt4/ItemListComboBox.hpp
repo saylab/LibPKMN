@@ -21,7 +21,7 @@ namespace pkmn
             Q_OBJECT
 
             public:
-                ItemListComboBox(const unsigned int version_id, QWidget* parent = NULL);
+                ItemListComboBox(const uint16_t version_id, QWidget* parent = NULL);
         };
     }
 }

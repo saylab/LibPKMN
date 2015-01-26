@@ -46,6 +46,8 @@ namespace pkmn
             else throw std::runtime_error("Invalid form.");
         }
 
+        form = database::get_form_name(form_id);
+
         /*
          * Everything from "pokemon" table
          */

@@ -17,13 +17,13 @@ namespace pkmn
 {
     namespace qt4
     {
-        ItemListComboBox::ItemListComboBox(const unsigned int version_id, QWidget* parent):
+        ItemListComboBox::ItemListComboBox(const uint16_t version_id, QWidget* parent):
             QComboBox(parent)
         {
             std::vector<pkstring> item_vec;
             get_item_list(item_vec, version_id);
 
-            for(unsigned int i = 0; i < item_vec.size(); i++)
+            for(uint16_t i = 0; i < item_vec.size(); i++)
                 addItem(QString::fromUtf16(item_vec[i]), QVariant(i));
         }
     } /* namespace qt4 */

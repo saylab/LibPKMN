@@ -87,6 +87,7 @@ FOREACH(src ${cs_sources})
 ENDFOREACH(src ${cs_sources})
 
 SET(CSHARP_PLATFORM "x86")
+MAKE_DIRECTORY(${LIBPKMN_BINARY_DIR}/tests)
 SET(CSHARP_BINARY_DIRECTORY ${LIBPKMN_BINARY_DIR}/tests) # Hacky solution
 CSHARP_ADD_LIBRARY(
     pkmn-cs "System.Windows.Forms.dll" "${CMAKE_CURRENT_BINARY_DIR}/CSharpSources/*cs"

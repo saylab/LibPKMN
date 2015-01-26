@@ -38,6 +38,7 @@ namespace pkmn
 
             item_entry_t get_item_entry(const pkmn::pkstring& item_name);
 
+            uint16_t get_game_id() const;
 
         private:
 
