@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -7,13 +7,17 @@
 
 import nc.PKMN.*;
 import java.lang.RuntimeException;
+import java.util.Arrays;
 
 public class JavaSPtrTest
 {
-    /*
-     * Make sure the bag shared_ptr copies correctly.
+    /*  
+     * Make sure two instances of BagSPtr properly point to the same underlying
+     * bag::sptr. By adding items through each bag directly and through each of
+     * their pockets, we can query all of them to make sure the change can be
+     * seen with each method.
      */
-    public static void BagPocketTest()
+    public static boolean BagPocketTest()
     {
         try
         {
@@ -22,102 +26,140 @@ public class JavaSPtrTest
             if(bag1 != bag2)
                 throw new RuntimeException("bag1 != bag2");
 
-            /*
-             * SWIG + C# reports pockets from bags from the same pointer having
-             * different values, so check equality through item additions.
-             */
             PocketDict bag1Pockets = bag1.getPockets();
             PocketDict bag2Pockets = bag2.getPockets();
 
-            bag1Pockets.get("Items").addItem("Potion", 10);
-            bag1Pockets.get("Balls").addItem("Master Ball", 10);
+            // Add items with each possible method
+            bag1.addItem("Potion", 5);
+            bag2.addItem("Master Ball", 10);
             bag1Pockets.get("KeyItems").addItem("Bicycle", 1);
-            bag1Pockets.get("TM/HM").addItem("TM01", 10);
-            if(bag2Pockets.get("Items").getItemAmount("Potion") != 10)
-                throw new RuntimeException("bag2Pockets.get(\"Items\").getItemAmount(\"Potion\") != 10");
+            bag2Pockets.get("TM/HM").addItem("TM01", 15);
+
+            // Make sure bag1 reports proper amounts
+            if(bag1.getItemAmount("Potion") != 5)
+                throw new RuntimeException("bag1.getItemAmount(\"Potion\") != 5");
+            if(bag1.getItemAmount("Master Ball") != 10)
+                throw new RuntimeException("bag1.getItemAmount(\"Master Ball\") != 10");
+            if(bag1.getItemAmount("Bicycle") != 1)
+                throw new RuntimeException("bag1.getItemAmount(\"Bicycle\") != 1");
+            if(bag1.getItemAmount("TM01") != 15)
+                throw new RuntimeException("bag1.getItemAmount(\"TM01\") != 15");
+
+            // Make sure bag2 reports proper amounts
+            if(bag2.getItemAmount("Potion") != 5)
+                throw new RuntimeException("bag2.getItemAmount(\"Potion\") != 5");
+            if(bag2.getItemAmount("Master Ball") != 10)
+                throw new RuntimeException("bag2.getItemAmount(\"Master Ball\") != 10");
+            if(bag2.getItemAmount("Bicycle") != 1)
+                throw new RuntimeException("bag2.getItemAmount(\"Bicycle\") != 1");
+            if(bag2.getItemAmount("TM01") != 15)
+                throw new RuntimeException("bag2.getItemAmount(\"TM01\") != 15");
+
+            // Make sure bag1Pockets reports proper amounts
+            if(bag1Pockets.get("Items").getItemAmount("Potion") != 5)
+                throw new RuntimeException("bag1Pockets.get(\"Items\").getItemAmount(\"Potion\") != 5");
+            if(bag1Pockets.get("Balls").getItemAmount("Master Ball") != 10)
+                throw new RuntimeException("bag1Pockets.get(\"Balls\").getItemAmount(\"Master Ball\") != 10");
+            if(bag1Pockets.get("KeyItems").getItemAmount("Bicycle") != 1)
+                throw new RuntimeException("bag1Pockets.get(\"KeyItems\").getItemAmount(\"Bicycle\") != 1");
+            if(bag1Pockets.get("TM/HM").getItemAmount("TM01") != 15)
+                throw new RuntimeException("bag1Pockets.get(\"TM/HM\").getItemAmount(\"TM01\") != 15");
+
+            // Make sure bag1Pockets reports proper amounts
+            if(bag2Pockets.get("Items").getItemAmount("Potion") != 5)
+                throw new RuntimeException("bag2Pockets.get(\"Items\").getItemAmount(\"Potion\") != 5");
             if(bag2Pockets.get("Balls").getItemAmount("Master Ball") != 10)
                 throw new RuntimeException("bag2Pockets.get(\"Balls\").getItemAmount(\"Master Ball\") != 10");
             if(bag2Pockets.get("KeyItems").getItemAmount("Bicycle") != 1)
                 throw new RuntimeException("bag2Pockets.get(\"KeyItems\").getItemAmount(\"Bicycle\") != 1");
-            if(bag2Pockets.get("TM/HM").getItemAmount("TM01") != 10)
-                throw new RuntimeException("bag2Pockets.get(\"TM/HM\").getItemAmount(\"TM01\") != 10");
+            if(bag2Pockets.get("TM/HM").getItemAmount("TM01") != 15)
+                throw new RuntimeException("bag2Pockets.get(\"TM/HM\").getItemAmount(\"TM01\") != 15");
+
+            return true;
         }
         catch(RuntimeException ex)
         {
-            System.out.println("Caught exception:");
-            System.out.println("   " + ex.getMessage());
-            System.out.println(ex.getStackTrace());
-            System.exit(1);
+            System.out.println("\nCaught exception: " + ex.getMessage());
+            System.out.println("Stacktrace:");
+            for(int i = 0; i < ex.getStackTrace().length; i++)
+                System.out.println(" * " + ex.getStackTrace()[i]);
+
+            return false;
         }
     }
 
     /*
-     * Make sure the base_pokemon shared_ptr copies correctly.
+     * Make sure the = operator correclty points the new PokedexSPtr
+     * to the same underlying pkmn::pokedex::sptr instance.
      */
-    public static void BasePokemonTest()
+    public static boolean PokedexTest()
     {
         try
         {
-            BasePokemonSPtr basePokemon1 = BasePokemon.make("Bulbasaur", "Ruby");
-            BasePokemonSPtr basePokemon2 = basePokemon1;
-            if(basePokemon1 != basePokemon2)
-                throw new RuntimeException("basePokemon1 != basePokemon2");
+            PokedexSPtr pokedex1 = Pokedex.make("Red");
+            PokedexSPtr pokedex2 = pokedex1;
+            if(pokedex1 != pokedex2)
+                throw new RuntimeException("pokedex1 != pokedex2");
+
+            return true;
         }
         catch(RuntimeException ex)
         {
-            System.out.println("Caught exception:");
-            System.out.println("   " + ex.getMessage());
-            System.out.println(ex.getStackTrace());
-            System.exit(1);
+            System.out.println("\nCaught exception: " + ex.getMessage());
+            System.out.println("Stacktrace:");
+            for(int i = 0; i < ex.getStackTrace().length; i++)
+                System.out.println(" * " + ex.getStackTrace()[i]);
+
+            return false;
         }
     }
 
     /*
-     * Make sure the item shared_ptr copies correctly.
+     * Make sure the = operator correclty points the new PokemonSPtr
+     * to the same underlying pkmn::pokemon::sptr instance.
      */
-    public static void ItemTest()
+    public static boolean PokemonTest()
     {
         try
         {
-            ItemSPtr item1 = Item.make("Potion", "Diamond");
-            ItemSPtr item2 = item1;
-            if(item1 != item2)
-                throw new RuntimeException("item1 != item2");
+            PokemonSPtr pokemon1 = Pokemon.make("Houndoom", "X", 50,
+                                                "None", "None",
+                                                "None", "None");
+            PokemonSPtr pokemon2 = pokemon1;
+            if(pokemon1 != pokemon2)
+                throw new RuntimeException("pokemon1 != pokemon2");
+
+            // Set form with pokemon1
+            pokemon1.setForm("Mega");
+            if(!pokemon2.getForm().equals("Mega"))
+                throw new RuntimeException("!pokemon2.getForm().equals(\"Mega\"");
+
+            // Set form with pokemon2
+            pokemon2.setForm("Mega");
+            if(!pokemon1.getForm().equals("Mega"))
+                throw new RuntimeException("!pokemon1.getForm().equals(\"Mega\"");
+
+            return true;
         }
         catch(RuntimeException ex)
         {
-            System.out.println("Caught exception:");
-            System.out.println("   " + ex.getMessage());
-            System.out.println(ex.getStackTrace());
-            System.exit(1);
+            System.out.println("\nCaught exception: " + ex.getMessage());
+            System.out.println("Stacktrace:");
+            for(int i = 0; i < ex.getStackTrace().length; i++)
+                System.out.println(" * " + ex.getStackTrace()[i]);
+
+            return false;
         }
     }
 
     /*
-     * Make sure the move shared_ptr copies correctly.
+     * Make sure the = operator correctly points the new PRNGSPtr
+     * to the same underlying pkmn::prng::sptr instance.
+     *
+     * We will seed each instance with the same value and check to
+     * see if the other produces the same output.
      */
-    public static void MoveTest()
-    {
-        try
-        {
-            MoveSPtr move1 = Move.make("Tackle", "Diamond");
-            MoveSPtr move2 = move1;
-            if(move1 != move2)
-                throw new RuntimeException("move1 != move2");
-        }
-        catch(RuntimeException ex)
-        {
-            System.out.println("Caught exception:");
-            System.out.println("   " + ex.getMessage());
-            System.out.println(ex.getStackTrace());
-            System.exit(1);
-        }
-    }
-
-    /*
-     * Make sure the prng shared_ptr copies correctly.
-     */
-    public static void PRNGTest()
+    public static boolean PRNGTest()
     {
         try
         {
@@ -125,97 +167,82 @@ public class JavaSPtrTest
             PRNGSPtr prng2 = prng1;
             if(prng1 != prng2)
                 throw new RuntimeException("prng1 != prng2");
+
+            // Set value with prng1
+            prng1.seedARNG(123456);
+            long ARNG1Output1 = prng1.ARNG();
+            prng1.seedARNG(123456);
+            long ARNG2Output1 = prng2.ARNG();
+            if(ARNG1Output1 != ARNG2Output1)
+                throw new RuntimeException("ARNG1Output1 != ARNG2Output1");
+
+            // Set value with prng2
+            prng2.seedARNG(654321);
+            long ARNG1Output2 = prng1.ARNG();
+            prng2.seedARNG(654321);
+            long ARNG2Output2 = prng2.ARNG();
+            if(ARNG1Output2 != ARNG2Output2)
+                throw new RuntimeException("ARNG1Output2 != ARNG2Output2");
+
+            return true;
         }
         catch(RuntimeException ex)
         {
-            System.out.println("Caught exception:");
-            System.out.println("   " + ex.getMessage());
-            System.out.println(ex.getStackTrace());
-            System.exit(1);
-        }
-    }
+            System.out.println("\nCaught exception: " + ex.getMessage());
+            System.out.println("Stacktrace:");
+            for(int i = 0; i < ex.getStackTrace().length; i++)
+                System.out.println(" * " + ex.getStackTrace()[i]);
 
-    /*
-     * Make sure the team_pokemon shared_ptr copies correctly.
-     * Make sure team_pokemon_modernimpl's signals/slots work correctly.
-     */
-    public static void TeamPokemonTest()
-    {
-        try
-        {
-            TeamPokemonSPtr deoxys = TeamPokemon.make("Deoxys", "Diamond", 50,
-                                                                      "None", "None", "None", "None");
-            TeamPokemonSPtr deoxys2 = deoxys;
-            if(deoxys != deoxys2)
-                throw new RuntimeException("deoxys != deoxys2");
-
-            StringLongDict deoxysStats1 = deoxys.getStats();
-
-            BasePokemonSPtr deoxysBase1 = deoxys.getBasePokemon(false); // Same as deoxys
-            BasePokemonSPtr deoxysBase2 = deoxys.getBasePokemon(true); // Copies from deoxys
-
-            deoxysBase1.setForm("Attack");
-            deoxysBase2.setForm("Defense");
-
-            StringLongDict deoxysStats2 = deoxys.getStats();
-
-            if(deoxysBase1 == deoxysBase2)
-                throw new RuntimeException("deoxysBase1 == deoxysBase2");
-            if(deoxys.getFormID() != DeoxysForms.ATTACK)
-                throw new RuntimeException("deoxys.getFormID() != DeoxysForms.ATTACK");
-            if(deoxysBase1.getFormID() != DeoxysForms.ATTACK)
-                throw new RuntimeException("deoxysBase1.getFormID() != DeoxysForms.ATTACK");
-            if(deoxys.getFormID() != deoxysBase1.getFormID())
-                throw new RuntimeException("deoxys.getFormID() != deoxysBase1.getFormID()");
-            if(deoxysBase2.getFormID() != DeoxysForms.DEFENSE)
-                throw new RuntimeException("deoxysBase2.getFormID() != DeoxysForms.DEFENSE");
-            if(deoxysStats1.get("Attack") == deoxysStats2.get("Attack"))
-                throw new RuntimeException("deoxysStats1.get(\"Attack\") == deoxysStats2.get(\"Attack\")");
-            if(deoxysStats1.get("Defense") == deoxysStats2.get("Defense"))
-                throw new RuntimeException("deoxysStats1.get(\"Defense\") == deoxysStats2.get(\"Defense\")");
-            if(deoxysStats1.get("Special Attack") == deoxysStats2.get("Special Attack"))
-                throw new RuntimeException("deoxysStats1.get(\"Special Attack\") == deoxysStats2.get(\"Special Attack\")");
-            if(deoxysStats1.get("Special Defense") == deoxysStats2.get("Special Defense"))
-                throw new RuntimeException("deoxysStats1.get(\"Special Defense\") == deoxysStats2.get(\"Special Defense\")");
-        }
-        catch(RuntimeException ex)
-        {
-            System.out.println("Caught exception:");
-            System.out.println("   " + ex.getMessage());
-            System.out.println(ex.getStackTrace());
-            System.exit(1);
+            return false;
         }
     }
 
     /*
      * Make sure the trainer shared_ptr copies correctly.
      */
-    public static void TrainerTest()
+    public static boolean TrainerTest()
     {
         try
         {
-            TrainerSPtr trainer1 = Trainer.make("Red", "Red", "Gold");
+            TrainerSPtr trainer1 = Trainer.make("Red", "Red", "Male");
             TrainerSPtr trainer2 = trainer1;
             if(trainer1 != trainer2)
                 throw new RuntimeException("trainer1 != trainer2");
+
+            // Set name with trainer1
+            trainer1.setName("Blue");
+            if(trainer2.getName() != "Blue")
+                throw new RuntimeException("trainer2.getName() != \"Blue\"");
+
+            // Set name with trainer2
+            trainer2.setName("Red");
+            if(trainer1.getName() != "Red")
+                throw new RuntimeException("trainer1.getName() != \"Red\"");
+
+            return true;
         }
         catch(RuntimeException ex)
         {
-            System.out.println("Caught exception:");
-            System.out.println("   " + ex.getMessage());
-            System.out.println(ex.getStackTrace());
-            System.exit(1);
+            System.out.println("\nCaught exception: " + ex.getMessage());
+            System.out.println("Stacktrace:");
+            for(int i = 0; i < ex.getStackTrace().length; i++)
+                System.out.println(" * " + ex.getStackTrace()[i]);
+
+            return false;
         }
     }
 
     public static void main(String[] args)
     {
-        BagPocketTest();
-        BasePokemonTest();
-        ItemTest();
-        MoveTest();
-        PRNGTest();
-        TeamPokemonTest();
-        TrainerTest();
+        boolean successful = true;
+
+        successful = BagPocketTest() && successful;
+        // TODO: GameSaveTest
+        successful = PokedexTest() && successful;
+        successful = PokemonTest() && successful;
+        successful = PRNGTest() && successful;
+        successful = TrainerTest() && successful;
+
+        System.exit(successful ? 0 : 1);
     }    
 }

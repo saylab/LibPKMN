@@ -162,6 +162,13 @@
 %rename(getEffectID) pkmn::move::get_effect_id;
 
 /*
+ * pkmn/pokemon.hpp
+ */
+%rename(Pokemon) pkmn::pokemon;
+%rename(getForm) pkmn::pokemon::get_form;
+%rename(setForm) pkmn::pokemon::set_form;
+
+/*
  * pkmn/types/nature.hpp
  */
 %rename(Nature) pkmn::nature_t;
@@ -376,6 +383,9 @@
 %rename(LCRNG) pkmn::prng::lcrng;
 %rename(ARNG) pkmn::prng::arng;
 %rename(MTRNG) pkmn::prng::mtrng;
+%rename(seedARNG) pkmn::prng::seed_arng;
+%rename(seedLCRNG) pkmn::prng::seed_lcrng;
+%rename(resetMTNRG) pkmn::prng::reset_mtrng;
 
 /*
  * pkmn/types/ribbons.hpp

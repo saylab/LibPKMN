@@ -25,7 +25,7 @@ namespace pkmn
 
             typedef pkmn::shared_ptr<pokedex> sptr;
 
-            static sptr make(const pkmn::pkstring &game);
+            static sptr make(const pkmn::pkstring& game);
 
             //! Class constructor (use factory function instead)
             pokedex() {};

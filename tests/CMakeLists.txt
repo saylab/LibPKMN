@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+# Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
 #
 # Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
 # or copy at http://opensource.org/licenses/MIT)
@@ -20,7 +20,7 @@ FILE(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR} TESTS_SOURCE_DIR)
 FILE(TO_NATIVE_PATH ${CMAKE_CURRENT_BINARY_DIR} TESTS_BINARY_DIR)
 
 INCLUDE_DIRECTORIES(${LIBPKMN_SOURCE_DIR}/lib)
-INCLUDE_DIRECTORIES(${LIBPKMN_SOURCE_DIR}/lib/conversions)
+INCLUDE_DIRECTORIES(${LIBPKMN_SOURCE_DIR}/lib/swig/cs/types)
 INCLUDE_DIRECTORIES(${LIBPKMN_SOURCE_DIR}/PokeLib-NC/include)
 INCLUDE_DIRECTORIES(${LIBPKMN_SOURCE_DIR}/PKMDS/include)
 
@@ -102,12 +102,11 @@ ENDMACRO(LIBPKMN_ADD_PYTHON_TEST)
 ##################################################
 SET(cpp_test_sources
     dict_test.cpp
+    entry_wrapper_test.cpp
     markings_test.cpp
-    old_values_test.cpp
     pkstring_test.cpp
     prng_test.cpp
     sptr_test.cpp
-    qt4_test.cpp
     text_conversion_test.cpp
 )
 
@@ -143,7 +142,7 @@ IF(ENABLE_CSHARP)
     SET(PKMN_CS_DLL "${CSHARP_BINARY_DIRECTORY}/pkmn-cs.dll" CACHE FILEPATH "libpkmn-cs.dll location")
 
     SET(cs_test_names
-        #CSharpDictTest
+        CSharpDictTest
         CSharpMarkingsTest
         CSharpSPtrTest
         CSharpStringTest
@@ -197,7 +196,6 @@ IF(ENABLE_PYTHON)
     SET(python_test_names
         python_dict_test
         python_pkstring_test
-        python_pyqt4_test
         python_sptr_test
     )
 

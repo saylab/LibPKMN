@@ -26,8 +26,8 @@ namespace pkmn
             game_save() {};
             virtual ~game_save() {};
 
-            pkmn::pkstring get_game() const;
-            uint16_t get_generation() const;
+            virtual pkmn::pkstring get_game() const = 0;
+            virtual uint16_t get_generation() const = 0;
 
             virtual void load() = 0;
             virtual void save() = 0;

@@ -17,8 +17,8 @@
 #include "SQLiteCpp/SQLiteC++.h"
 
 #define CONNECT_TO_DB(db) if(!db) db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
-#define THROW_QUERY_ERROR(stream) throw std::runtime_error(str(boost::format("%s: Invalid query \"%s\"") \
-                                                               % __FUNCTION__ % stream.str().c_str()));
+#define THROW_QUERY_ERROR(stream) throw std::runtime_error(str(boost::format("Invalid query \"%s\"") \
+                                                               % stream.str().c_str()));
 
 #define PKSTRING_UPPERCASE(str) boost::algorithm::to_upper_copy(str.std_wstring())
 

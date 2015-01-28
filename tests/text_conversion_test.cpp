@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -8,9 +8,9 @@
 #include <cstring>
 #include <iostream>
 
-#include <boost/test/unit_test.hpp>
+#include <pkmn/conversions/text.hpp>
 
-#include "conversions/text.hpp"
+#include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_CASE(gen1_test)
 {

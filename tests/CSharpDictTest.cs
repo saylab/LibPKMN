@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -10,119 +10,209 @@ using System.Collections.Generic;
 
 public class DictTest
 {
+    /*
+     * pkmn::dict<pkmn::pkstring, int>
+     */
+    public static bool StringIntDictTest()
+    {
+        try
+        {
+            PKMN.StringIntDict dict = new PKMN.StringIntDict();
+            dict.Add("abc", -1);
+            dict.Add("def", 5);
+            dict.Add("ghi", 57);
+
+            // Test adding and swapping
+            if(dict["abc"] != -1)
+                throw new System.Exception("dict[\"abc\"] != -1");
+            if(dict["def"] != 5)
+                throw new System.Exception("dict[\"def\"] != 5");
+            if(dict["ghi"] != 57)
+                throw new System.Exception("dict[\"ghi\"] != 57");
+            if(dict.at("abc", 5) != -1)
+                throw new System.Exception("dict.at(\"abc\", 5) != 57");
+            if(dict.at("ade", -10) != -10)
+                throw new System.Exception("dict.at(\"ade\", -10) != -10");
+            dict.swap("abc", "ghi");
+            if(dict["abc"] != 57)
+                throw new System.Exception("dict[\"abc\"] != 57");
+            if(dict["ghi"] != -1)
+                throw new System.Exception("dict[\"ghi\"] != -1");
+
+            // Make sure key vector is in correct order
+            PKMN.StringVector keys = dict.keys();
+            if(keys.Count != 3)
+                throw new System.Exception("keys.Count != 3");
+            if(keys[0] != "abc")
+                throw new System.Exception("keys[0] != \"abc\"");
+            if(keys[1] != "def")
+                throw new System.Exception("keys[1] != \"def\"");
+            if(keys[2] != "ghi")
+                throw new System.Exception("keys[2] != \"ghi\"");
+
+            // Make sure val vector is in correct order
+            PKMN.IntVector vals = dict.vals();
+            if(vals.Count != 3)
+                throw new System.Exception("vals.Count != 3");
+            if(vals[0] != 57)
+                throw new System.Exception("vals[0] != 57");
+            if(vals[1] != 5)
+                throw new System.Exception("vals[1] != 5");
+            if(vals[2] != -1)
+                throw new System.Exception("vals[2] != -1");
+
+            // Make sure clearing works
+            dict.Clear();
+            if(dict.size() != 0)
+                throw new System.Exception("dict.size() != 0");
+
+            return true;
+        }
+        catch(System.Exception ex)
+        {
+            System.Console.WriteLine("\nCaught exception: " + ex.Message);
+            System.Console.WriteLine("Stacktrace:");
+            System.Console.WriteLine(ex.StackTrace);
+            return false;
+        }
+    }
+
+    public static bool StringStringDictTest()
+    {
+        try
+        {
+            PKMN.StringStringDict dict = new PKMN.StringStringDict();
+            dict.Add("abc", "rst");
+            dict.Add("def", "uvw");
+            dict.Add("ghi", "xyz");
+
+            // Test adding and swapping
+            if(dict["abc"] != "rst")
+                throw new System.Exception("dict[\"abc\"] != \"rst\"");
+            if(dict["def"] != "uvw")
+                throw new System.Exception("dict[\"def\"] != \"uvw\"");
+            if(dict["ghi"] != "xyz")
+                throw new System.Exception("dict[\"ghi\"] != \"xyz\"");
+            if(dict.at("abc", "jkl") != "rst")
+                throw new System.Exception("dict.at(\"abc\", \"jkl\") != \"rst\"");
+            if(dict.at("ade", "jkl") != "jkl")
+                throw new System.Exception("dict.at(\"ade\", \"jkl\") != \"jkl\"");
+            dict.swap("abc", "ghi");
+            if(dict["abc"] != "xyz")
+                throw new System.Exception("dict[\"abc\"] != \"xyz\"");
+            if(dict["ghi"] != "rst")
+                throw new System.Exception("dict[\"ghi\"] != \"rst\"");
+
+            // Make sure key vector is in correct order
+            PKMN.StringVector keys = dict.keys();
+            if(keys.Count != 3)
+                throw new System.Exception("keys.Count != 3");
+            if(keys[0] != "abc")
+                throw new System.Exception("keys[0] != \"abc\"");
+            if(keys[1] != "def")
+                throw new System.Exception("keys[1] != \"def\"");
+            if(keys[2] != "ghi")
+                throw new System.Exception("keys[2] != \"ghi\"");
+
+            // Make sure key vector is in correct order
+            PKMN.StringVector vals = dict.vals();
+            if(vals.Count != 3)
+                throw new System.Exception("vals.Count != 3");
+            if(vals[0] != "xyz")
+                throw new System.Exception("vals[0] != \"xyz\"");
+            if(vals[1] != "uvw")
+                throw new System.Exception("vals[1] != \"uvw\"");
+            if(vals[2] != "rst")
+                throw new System.Exception("vals[2] != \"rst\"");
+
+            // Make sure clearing works
+            dict.Clear();
+            if(dict.size() != 0)
+                throw new System.Exception("dict.size() != 0");
+
+            return true;
+        }
+        catch(System.Exception ex)
+        {
+            System.Console.WriteLine("\nCaught exception: " + ex.Message);
+            System.Console.WriteLine("Stacktrace:");
+            System.Console.WriteLine(ex.StackTrace);
+            return false;
+        }
+    }
+
+    public static bool StringUShortDictTest()
+    {
+        try
+        {
+            PKMN.StringUShortDict dict = new PKMN.StringUShortDict();
+            dict.Add("abc", 25);
+            dict.Add("def", 5);
+            dict.Add("ghi", 57);
+
+            // Test adding and swapping
+            if(dict["abc"] != 25)
+                throw new System.Exception("dict[\"abc\"] != 25");
+            if(dict["def"] != 5)
+                throw new System.Exception("dict[\"def\"] != 5");
+            if(dict["ghi"] != 57)
+                throw new System.Exception("dict[\"ghi\"] != 57");
+            if(dict.at("abc", 5) != 25)
+                throw new System.Exception("dict.At(\"abc\", 5) != 25");
+            if(dict.at("ade", 10) != 10)
+                throw new System.Exception("dict.At(\"ade\", 10) != 10");
+            dict.swap("abc", "ghi");
+            if(dict["abc"] != 57)
+                throw new System.Exception("dict[\"abc\"] != 57");
+            if(dict["ghi"] != 25)
+                throw new System.Exception("dict[\"ghi\"] != 25");
+
+            // Make sure key vector is in correct order
+            PKMN.StringVector keys = dict.keys();
+            if(keys.Count != 3)
+                throw new System.Exception("keys.Count != 3");
+            if(keys[0] != "abc")
+                throw new System.Exception("keys[0] != \"abc\"");
+            if(keys[1] != "def")
+                throw new System.Exception("keys[1] != \"def\"");
+            if(keys[2] != "ghi")
+                throw new System.Exception("keys[2] != \"ghi\"");
+
+            // Make sure key vector is in correct order
+            PKMN.UShortVector vals = dict.vals();
+            if(vals.Count != 3)
+                throw new System.Exception("vals.Count != 3");
+            if(vals[0] != 57)
+                throw new System.Exception("vals[0] != 57");
+            if(vals[1] != 5)
+                throw new System.Exception("vals[1] != 5");
+            if(vals[2] != 25)
+                throw new System.Exception("vals[2] != 25");
+
+            // Make sure clearing works
+            dict.Clear();
+            if(dict.size() != 0)
+                throw new System.Exception("dict.size() != 0");
+
+            return true;
+        }
+        catch(System.Exception ex)
+        {
+            System.Console.WriteLine("\nCaught exception: " + ex.Message);
+            System.Console.WriteLine("Stacktrace:");
+            System.Console.WriteLine(ex.StackTrace);
+            return false;
+        }
+    }
+
     public static int Main(string[] args)
     {
-        /*
-         * pkmn::dict<std::string, int> tests
-         */
-        PKMN.StringIntDict test_dict1 = new PKMN.StringIntDict();
-        test_dict1.Add("TestKey1", -10);
-        test_dict1["TestKey2"] = -5;
-        test_dict1.Add("TestKey3", 0);
-        test_dict1["TestKey4"] = 5;
-        test_dict1.Add("TestKey5", 10);
+        bool successful = true;
 
-        //StringIntDict -> Dictionary<string, int>
-        Dictionary<string, int> test_cs_dict1 = test_dict1;
-        foreach(System.Collections.Generic.KeyValuePair<string, int> pair in test_cs_dict1)
-        {
-            if(pair.Value != test_dict1[pair.Key])
-            {
-                throw new System.Exception("StringIntDict -> Dictionary<string, int> conversion failed!");
-            }
-        }
+        successful = StringIntDictTest();
+        successful = StringStringDictTest() && successful;
+        successful = StringUShortDictTest() && successful;
 
-        //Dictionary<string, int> -> StringIntDict
-        Dictionary<string, int> test_cs_dict2 = new Dictionary<string, int>();
-        test_cs_dict2.Add("TestKey1", -10);
-        test_cs_dict2["TestKey2"] = -5;
-        test_cs_dict2.Add("TestKey3", 0);
-        test_cs_dict2["TestKey4"] = 5;
-        test_cs_dict2.Add("TestKey5", 10);
-        PKMN.StringIntDict test_dict2 = test_cs_dict2;
-        PKMN.string_vec test_dict2_keys = test_dict2.Keys;
-        for(int i = 0; i < test_dict2_keys.Count; i++)
-        {
-            if(test_dict2[test_dict2_keys[i]] != test_cs_dict2[test_dict2_keys[i]])
-            {
-                throw new System.Exception("Dictionary<string, int> -> StringIntDict conversion failed!");
-            }
-        }
-
-        /*
-         * pkmn::dict<std::string, std::string> tests
-         */
-        PKMN.StringStringDict test_dict3 = new PKMN.StringStringDict();
-        test_dict3.Add("TestKey1", "TestValue1");
-        test_dict3["TestKey2"] = "TestValue2";
-        test_dict3.Add("TestKey3", "TestValue3");
-        test_dict3["TestKey4"] = "TestValue4";
-        test_dict3.Add("TestKey5", "TestValue5");
-
-        //StringStringDict -> Dictionary<string, string>
-        Dictionary<string, string> test_cs_dict3 = test_dict3;
-        foreach(System.Collections.Generic.KeyValuePair<string, string> pair in test_cs_dict3)
-        {
-            if(pair.Value != test_dict3[pair.Key])
-            {
-                throw new System.Exception("StringStringDict -> Dictionary<string, string> conversion failed!");
-            }
-        }
-
-        //Dictionary<string, string> -> StringStringDict
-        Dictionary<string, string> test_cs_dict4 = new Dictionary<string, string>();
-        test_cs_dict4.Add("TestKey1", "TestValue1");
-        test_cs_dict4["TestKey2"] = "TestValue2";
-        test_cs_dict4.Add("TestKey3", "TestValue3");
-        test_cs_dict4["TestKey4"] = "TestValue4";
-        test_cs_dict4.Add("TestKey5", "TestValue5");
-        PKMN.StringStringDict test_dict4 = test_cs_dict4;
-        PKMN.string_vec test_dict4_keys = test_dict4.Keys;
-        for(int i = 0; i < test_dict4_keys.Count; i++)
-        {
-            if(test_dict4.at(test_dict4_keys[i]) != test_cs_dict4[test_dict4_keys[i]])
-            {
-                throw new System.Exception("Dictionary<string, string> -> StringStringDict conversion failed!");
-            }
-        }
-
-        /*
-         * pkmn::dict<std::string, uint> tests
-         */
-        PKMN.StringUIntDict test_dict5 = new PKMN.StringUIntDict();
-        test_dict5.Add("TestKey1", 0);
-        test_dict5["TestKey2"] = 5;
-        test_dict5.Add("TestKey3", 10);
-        test_dict5["TestKey4"] = 15;
-        test_dict5.Add("TestKey5", 20);
-
-        //StringUIntDict -> Dictionary<string, uint>
-        Dictionary<string, uint> test_cs_dict5 = test_dict5;
-        foreach(System.Collections.Generic.KeyValuePair<string, uint> pair in test_cs_dict5)
-        {
-            if(pair.Value != test_dict5[pair.Key])
-            {
-                throw new System.Exception("StringUIntDict -> Dictionary<string, uint> conversion failed!");
-            }
-        }
-
-        //Dictionary<string, uint> -> StringUIntDict
-        Dictionary<string, uint> test_cs_dict6 = new Dictionary<string, uint>();
-        test_cs_dict6.Add("TestKey1", 0);
-        test_cs_dict6["TestKey2"] = 5;
-        test_cs_dict6.Add("TestKey3", 10);
-        test_cs_dict6["TestKey4"] = 15;
-        test_cs_dict6.Add("TestKey5", 20);
-        PKMN.StringUIntDict test_dict6 = test_cs_dict6;
-        PKMN.string_vec test_dict6_keys = test_dict6.Keys;
-        for(int i = 0; i < test_dict6_keys.Count; i++)
-        {
-            if(test_dict6[test_dict6_keys[i]] != test_cs_dict6[test_dict6_keys[i]])
-            {
-                throw new System.Exception("Dictionary<string, uint> -> StringUIntDict conversion failed!");
-            }
-        }
-
-        return 0;
+        return successful ? 0 : 1;
     }    
 }

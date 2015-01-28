@@ -466,7 +466,7 @@ def generate_java_files(output_dir, license):
 
         for i in range(len(enums[key])):
             f.write("""
-    public static final long %s = %d;""" % (enums[key][i][0],enums[key][i][1]))
+    public static final int %s = %d;""" % (enums[key][i][0],enums[key][i][1]))
 
         f.write("""
 }""")
@@ -484,7 +484,7 @@ def generate_java_files(output_dir, license):
 
         for j in range(1,len(forms[i])):
             f.write("""
-    public static final long %s = %d;""" % (forms[i][j][0],forms[i][j][1]))
+    public static final int %s = %d;""" % (forms[i][j][0],forms[i][j][1]))
 
         f.write("""
 }""")
@@ -501,7 +501,7 @@ def generate_java_files(output_dir, license):
 
     for i in range(len(ribbons[0])):
         f.write("""
-    public static final long %s = %d;""" % (ribbons[0][i],i))
+    public static final int %s = %d;""" % (ribbons[0][i],i))
 
     f.write("""
 }""")
@@ -519,7 +519,7 @@ def generate_java_files(output_dir, license):
     for i in range(len(ribbons[1])):
         if ribbons[1][i] != "":
             f.write("""
-    public static final long %s = %d;""" % (ribbons[1][i],i))
+    public static final int %s = %d;""" % (ribbons[1][i],i))
 
     f.write("""
 }""")
@@ -537,7 +537,7 @@ def generate_java_files(output_dir, license):
     for i in range(len(ribbons[2])):
         if ribbons[2][i] != "":
             f.write("""
-    public static final long %s = %d;""" % (ribbons[2][i],i))
+    public static final int %s = %d;""" % (ribbons[2][i],i))
 
     f.write("""
 }""")
@@ -555,7 +555,7 @@ def generate_java_files(output_dir, license):
     for i in range(len(ribbons[3])):
         if ribbons[3][i] != "":
             f.write("""
-    public static final long %s = %d;""" % (ribbons[3][i],i))
+    public static final int %s = %d;""" % (ribbons[3][i],i))
 
     f.write("""
 }""")
