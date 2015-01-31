@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+# Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
 #
 # Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
 # or copy at http://opensource.org/licenses/MIT)
@@ -15,27 +15,6 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ELSEIF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     SET(CMAKE_REQUIRED_FLAGS "-std=c++11")
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-
-CHECK_CXX_SOURCE_COMPILES("
-    enum testenum: short
-    {
-        foo,
-        bar,
-        baz
-    };
-
-    int main()
-    {
-        int a = bar;
-
-        return 0;
-    }
-    " HAVE_STRONGLY_TYPED_ENUMS
-)
-
-IF(NOT HAVE_STRONGLY_TYPED_ENUMS)
-    MESSAGE(FATAL_ERROR "Strongly typed enums not supported!")
-ENDIF(NOT HAVE_STRONGLY_TYPED_ENUMS)
 
 CHECK_CXX_SOURCE_COMPILES("
     namespace testnamespace
