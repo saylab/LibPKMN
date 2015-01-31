@@ -27,7 +27,7 @@ namespace pkmn
             nature_t() {};
 
             //! Constructor that uses the nature's SQLite ID.
-            nature_t(unsigned int id);
+            nature_t(uint16_t id);
 
             //! Constructor that uses the nature's name.
             nature_t(const pkmn::pkstring &name);
@@ -41,14 +41,14 @@ namespace pkmn
             const float& operator[](const pkmn::pkstring &key) const;
 
             //! Return the modifier (0.9, 1.0, or 1.1) for the given stat, using its SQLite ID.
-            const float& operator[](const unsigned int &key) const;
+            const float& operator[](const uint16_t &key) const;
 
             //! Return the nature's SQLite ID.
-            unsigned int get_nature_id();
+            uint16_t get_nature_id();
 
         private:
 
-            unsigned int _id;
+            uint16_t _id;
             pkmn::pkstring _name;
 
             pkmn::dict<pkmn::pkstring, float> _modifiers;

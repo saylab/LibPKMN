@@ -162,6 +162,13 @@
 %rename(getEffectID) pkmn::move::get_effect_id;
 
 /*
+ * pkmn/pokemon.hpp
+ */
+%rename(Pokemon) pkmn::pokemon;
+%rename(getForm) pkmn::pokemon::get_form;
+%rename(setForm) pkmn::pokemon::set_form;
+
+/*
  * pkmn/types/nature.hpp
  */
 %rename(Nature) pkmn::nature_t;
@@ -192,6 +199,39 @@
 %rename(setItem) pkmn::pocket::set_item;
 %rename(setAmount) pkmn::pocket::set_amount;
 %rename(getGameID) pkmn::pocket::get_game_id;
+
+/*
+ * pkmn/pokedex.hpp
+ */
+%rename(Pokedex) pkmn::pokedex;
+%rename(PokedexEntry) pkmn::pokemon_entry_t;
+%rename(MoveEntry) pkmn::move_entry_t;
+%rename(ItemEntry) pkmn::item_entry_t;
+%rename(speciesName) species_name;
+%rename(pokedexNum) pokedex_num;
+%rename(hiddenAbility) hidden_ability;
+%rename(eggGroups) egg_groups;
+%rename(catchRate) catch_rate;
+%rename(expYield) exp_yield;
+%rename(baseFriendship) base_friendship;
+%rename(chanceMale) chance_male;
+%rename(chanceFemale) chance_female;
+%rename(hasGenderDifferences) has_gender_differences;
+%rename(baseStats) base_stats;
+%rename(EVYields) ev_yields;
+%rename(damageClass) damage_class;
+%rename(effectChance) effect_chance;
+%rename(contestType) contest_type;
+%rename(contestEffect) contest_effect;
+%rename(superContestEffect) super_contest_effect;
+%rename(PP) pp;
+%rename(flingPower) fling_power;
+%rename(flingEffect) fling_effect;
+%rename(getGame) pkmn::pokedex::get_game;
+%rename(getGeneration) pkmn::pokedex::get_generation;
+%rename(getPokemonEntry) pkmn::pokedex::get_pokemon_entry;
+%rename(getMoveEntry) pkmn::pokedex::get_move_entry;
+%rename(getItemEntry) pkmn::pokedex::get_item_entry;
 
 /*
  * pkmn/team_pokemon.hpp
@@ -290,12 +330,6 @@
 %rename(getGameID) pkmn::trainer::get_game_id;
 
 /*
- * pkmn/database/lists.hpp
- */
-%rename(getTableList) pkmn::database::get_table_list;
-%rename(getColumnList) pkmn::database::get_column_list;
-
-/*
  * pkmn/database.hpp
  */
 %rename(toDatabaseFormat) pkmn::database::to_database_format;
@@ -305,6 +339,8 @@
 %rename(getEggGroupID) pkmn::database::get_egg_group_id;
 %rename(getEggGroupName) pkmn::database::get_egg_group_name;
 %rename(getExperience) pkmn::database::get_experience;
+%rename(getFormID) pkmn::database::get_form_id;
+%rename(getFormName) pkmn::database::get_form_name;
 %rename(getLevel) pkmn::database::get_level;
 %rename(getGameID) pkmn::database::get_game_id;
 %rename(getGameName) pkmn::database::get_game_name;
@@ -333,7 +369,7 @@
 /*
  * pkmn/types/markings.hpp
  */
-%rename(Markings) pkmn::markings;
+%rename(Markings) pkmn::markings_t;
 
 /*
  * pkmn/types/pkstring.hpp
@@ -347,26 +383,29 @@
 %rename(LCRNG) pkmn::prng::lcrng;
 %rename(ARNG) pkmn::prng::arng;
 %rename(MTRNG) pkmn::prng::mtrng;
+%rename(seedARNG) pkmn::prng::seed_arng;
+%rename(seedLCRNG) pkmn::prng::seed_lcrng;
+%rename(resetMTNRG) pkmn::prng::reset_mtrng;
 
 /*
  * pkmn/types/ribbons.hpp
  */
-%rename(HoennRibbons) pkmn::hoenn_ribbons;
-%rename(coolSuper) pkmn::hoenn_ribbons::cool_super;
-%rename(coolHyper) pkmn::hoenn_ribbons::cool_hyper;
-%rename(coolMaster) pkmn::hoenn_ribbons::cool_master;
-%rename(beautySuper) pkmn::hoenn_ribbons::beauty_super;
-%rename(beautyHyper) pkmn::hoenn_ribbons::beauty_hyper;
-%rename(beautyMaster) pkmn::hoenn_ribbons::beauty_master;
-%rename(cuteSuper) pkmn::hoenn_ribbons::cute_super;
-%rename(cuteHyper) pkmn::hoenn_ribbons::cute_hyper;
-%rename(cuteMaster) pkmn::hoenn_ribbons::cute_master;
-%rename(smartSuper) pkmn::hoenn_ribbons::smart_super;
-%rename(smartHyper) pkmn::hoenn_ribbons::smart_hyper;
-%rename(smartMaster) pkmn::hoenn_ribbons::smart_master;
-%rename(toughSuper) pkmn::hoenn_ribbons::tough_super;
-%rename(toughHyper) pkmn::hoenn_ribbons::tough_hyper;
-%rename(toughMaster) pkmn::hoenn_ribbons::tough_master;
+%rename(HoennRibbons) pkmn::hoenn_ribbons_t;
+%rename(coolSuper) pkmn::hoenn_ribbons_t::cool_super;
+%rename(coolHyper) pkmn::hoenn_ribbons_t::cool_hyper;
+%rename(coolMaster) pkmn::hoenn_ribbons_t::cool_master;
+%rename(beautySuper) pkmn::hoenn_ribbons_t::beauty_super;
+%rename(beautyHyper) pkmn::hoenn_ribbons_t::beauty_hyper;
+%rename(beautyMaster) pkmn::hoenn_ribbons_t::beauty_master;
+%rename(cuteSuper) pkmn::hoenn_ribbons_t::cute_super;
+%rename(cuteHyper) pkmn::hoenn_ribbons_t::cute_hyper;
+%rename(cuteMaster) pkmn::hoenn_ribbons_t::cute_master;
+%rename(smartSuper) pkmn::hoenn_ribbons_t::smart_super;
+%rename(smartHyper) pkmn::hoenn_ribbons_t::smart_hyper;
+%rename(smartMaster) pkmn::hoenn_ribbons_t::smart_master;
+%rename(toughSuper) pkmn::hoenn_ribbons_t::tough_super;
+%rename(toughHyper) pkmn::hoenn_ribbons_t::tough_hyper;
+%rename(toughMaster) pkmn::hoenn_ribbons_t::tough_master;
 %rename(SinnohRibbons) pkmn::sinnoh_ribbons;
 %rename(SinnohRibbons1) pkmn::sinnoh_ribbons1;
 %rename(sinnohChamp) pkmn::sinnoh_ribbons1::sinnoh_champ;

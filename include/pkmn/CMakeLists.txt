@@ -6,13 +6,14 @@
 #
 FILE(GLOB pkmn_headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.hpp")
 
-ADD_SUBDIRECTORY(types)
-
 #####################################################################
 # Only install headers if LibPKMN is build standalone
 #####################################################################
 IF(NOT LIBPKMN_USED_AS_SUBMODULE)
+    ADD_SUBDIRECTORY(conversions)
+    ADD_SUBDIRECTORY(pokedex)
     ADD_SUBDIRECTORY(qt4)
+    ADD_SUBDIRECTORY(types)
     FOREACH(header ${pkmn_headers})
         INSTALL(FILES ${header} DESTINATION ${INCLUDE_DIR}/pkmn COMPONENT Headers)
     ENDFOREACH(header)

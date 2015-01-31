@@ -21,7 +21,7 @@ namespace pkmn
             std::vector<pkstring> games_vec;
             get_version_list(games_vec);
 
-            for(unsigned int i = 0; i < games_vec.size(); i++)
+            for(uint16_t i = 0; i < games_vec.size(); i++)
                 addItem(QString::fromUtf16(games_vec[i]), QVariant(i));
         }
     } /* namespace qt4 */

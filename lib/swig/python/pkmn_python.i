@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -20,31 +20,35 @@
 
 %{
     #include "pkmn/bag.hpp"
-    #include "pkmn/base_pokemon.hpp"
     #include "pkmn/game_save.hpp"
     #include "pkmn/lists.hpp"
-    #include "pkmn/move.hpp"
     #include "pkmn/paths.hpp"
     #include "pkmn/pocket.hpp"
-    #include "pkmn/team_pokemon.hpp"
+    #include "pkmn/pokedex.hpp"
+    #include "pkmn/pokemon.hpp"
     #include "pkmn/trainer.hpp"
 
+    #include "pkmn/types/contest_stats.hpp"
     #include "pkmn/types/markings.hpp"
     #include "pkmn/types/prng.hpp"
     #include "pkmn/types/ribbons.hpp"
+    #include "pkmn/pokedex/pokemon_entry.hpp"
+    #include "pkmn/pokedex/move_entry.hpp"
+    #include "pkmn/pokedex/item_entry.hpp"
 %}
 
 %include "pkmn/types/markings.hpp"
 %include "pkmn/types/prng.hpp"
 %include "pkmn/types/ribbons.hpp"
+%include "pkmn/pokedex/pokemon_entry.hpp"
+%include "pkmn/pokedex/move_entry.hpp"
+%include "pkmn/pokedex/item_entry.hpp"
 
-%include "pkmn/item.hpp"
 %include "pkmn/pocket.hpp"
 %include "pkmn/bag.hpp"
 
-%include "pkmn/move.hpp"
-%include "pkmn/base_pokemon.hpp"
-%include "pkmn/team_pokemon.hpp"
+%include "pkmn/pokedex.hpp"
+%include "pkmn/pokemon.hpp"
 %include "pkmn/trainer.hpp"
 %include "pkmn/game_save.hpp"
 
@@ -55,28 +59,28 @@
  * std::pair templates
  */
 %template(uchar_pair)          std::pair<uint8_t, uint8_t>;
-%template(uint_pair)           std::pair<unsigned int, unsigned int>;
-%template(bag_slot)            std::pair<pkmn::item::sptr, unsigned int>;
+%template(ushort_pair)         std::pair<uint16_t, uint16_t>;
+%template(bag_slot)            std::pair<pkmn::item_entry_t, uint16_t>;
 %template(string_pair)         std::pair<pkmn::pkstring, pkmn::pkstring>;
 
 /*
  * std::vector templates
  */
-%template(int_vector)          std::vector<int>;
-%template(uint_vector)         std::vector<unsigned int>;
-%template(item_list)           std::vector<std::pair<pkmn::item::sptr, unsigned int> >;
-%template(uint_pair_vector)    std::vector<std::pair<unsigned int, unsigned int> >;
-%template(base_pokemon_vector) std::vector<pkmn::base_pokemon::sptr>;
-%template(moveset)             std::vector<pkmn::move::sptr>;
-%template(pocket_vector)       std::vector<pkmn::pocket::sptr>;
-%template(pokemon_team)        std::vector<pkmn::team_pokemon::sptr>;
-%template(string_vector)       std::vector<pkmn::pkstring>;
+%template(byte_vector)          std::vector<uint8_t>;
+%template(int_vector)           std::vector<int>;
+%template(ushort_vector)        std::vector<uint16_t>;
+%template(item_list)            std::vector<std::pair<pkmn::item_entry_t, uint16_t> >;
+%template(moveset)              std::vector<pkmn::move_entry_t>;
+%template(pocket_vector)        std::vector<pkmn::pocket::sptr>;
+%template(pokemon_entry_vector) std::vector<pkmn::pokemon_entry_t>;
+%template(pokemon_team)         std::vector<pkmn::pokemon::sptr>;
+%template(string_vector)        std::vector<pkmn::pkstring>;
 
 /*
  * pkmn::dict templates
  */
 PYTHON_PKMN_DICT(string_int_dict,    pkmn::pkstring, int)
-PYTHON_PKMN_DICT(string_uint_dict,   pkmn::pkstring, unsigned int)
+PYTHON_PKMN_DICT(string_ushort_dict, pkmn::pkstring, uint16_t)
 PYTHON_PKMN_DICT(string_string_dict, pkmn::pkstring, pkmn::pkstring)
 PYTHON_PKMN_DICT(pocket_dict,        pkmn::pkstring, pkmn::pocket::sptr)
 
@@ -84,11 +88,9 @@ PYTHON_PKMN_DICT(pocket_dict,        pkmn::pkstring, pkmn::pocket::sptr)
  * pkmn::shared_ptr templates
  */
 PYTHON_PKMN_SPTR(bag)
-PYTHON_PKMN_SPTR(base_pokemon)
 PYTHON_PKMN_SPTR(game_save)
-PYTHON_PKMN_SPTR(item)
-PYTHON_PKMN_SPTR(move)
 PYTHON_PKMN_SPTR(pocket)
-PYTHON_PKMN_SPTR(team_pokemon)
+PYTHON_PKMN_SPTR(pokedex)
+PYTHON_PKMN_SPTR(pokemon)
 PYTHON_PKMN_SPTR(prng)
 PYTHON_PKMN_SPTR(trainer)

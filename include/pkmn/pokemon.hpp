@@ -1,0 +1,146 @@
+/*
+ * Copyright (c) 2015 Nicholas Corgan (n.corgan@gmail.com)
+ *
+ * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
+ * or copy at http://opensource.org/licenses/MIT)
+ */
+#ifndef INCLUDED_PKMN_POKEMON_HPP
+#define INCLUDED_PKMN_POKEMON_HPP
+
+#include <vector>
+
+#include <pkmn/config.hpp>
+#include <pkmn/pokedex.hpp>
+
+#include <pkmn/types/contest_stats.hpp>
+#include <pkmn/types/dict.hpp>
+#include <pkmn/types/markings.hpp>
+#include <pkmn/types/nature.hpp>
+#include <pkmn/types/pkstring.hpp>
+#include <pkmn/types/ribbons.hpp>
+#include <pkmn/types/shared_ptr.hpp>
+
+namespace pkmn
+{
+    class PKMN_API pokemon
+    {
+        public:
+
+            typedef pkmn::shared_ptr<pokemon> sptr;
+
+            static sptr make(uint16_t species, uint16_t version,
+                             uint16_t level,
+                             uint16_t move1, uint16_t move2,
+                             uint16_t move3, uint16_t move4);
+            static sptr make(const pkmn::pkstring& species, const pkmn::pkstring& version,
+                             uint16_t level,
+                             const pkmn::pkstring& move1, const pkmn::pkstring& move2,
+                             const pkmn::pkstring& move3, const pkmn::pkstring& move4);
+
+            pokemon() {};
+            virtual ~pokemon() {};
+
+            // Getting Non-battle Info
+            virtual pkmn::pokemon_entry_t get_pokedex_entry() const = 0;
+            virtual pkmn::contest_stats_t get_contest_stats() const = 0;
+            virtual pkmn::markings_t get_markings() const = 0;
+            virtual pkmn::ribbons_t get_ribbons() const = 0;
+
+            // Setting Non-battle Info
+            virtual void set_contest_stats(const pkmn::contest_stats_t& contest_stats) = 0;
+            virtual void set_markings(const pkmn::markings_t& markings) = 0;
+            virtual void set_ribbons(const pkmn::ribbons_t& ribbons) = 0;
+
+            // Getting Trainer Info
+            virtual pkmn::pkstring get_nickname() const = 0;
+            virtual pkmn::pkstring get_trainer_name() const = 0;
+            virtual pkmn::pkstring get_trainer_gender() const = 0;
+            virtual uint32_t get_trainer_id() const = 0;
+            virtual uint16_t get_trainer_public_id() const = 0;
+            virtual uint16_t get_trainer_secret_id() const = 0;
+            virtual pkmn::pkstring get_ball() const = 0;
+            virtual pkmn::pkstring get_original_game() const = 0;
+            virtual uint8_t get_met_level() const = 0;
+
+            // Setting Trainer Info
+            virtual void set_nickname(const pkmn::pkstring& nickname) = 0;
+            virtual void set_trainer_name(const pkmn::pkstring& trainer_name) = 0;
+            virtual void set_trainer_gender(const pkmn::pkstring& gender) = 0;
+            virtual void set_trainer_id(uint32_t id) = 0;
+            virtual void set_trainer_public_id(uint16_t id) = 0;
+            virtual void set_trainer_secret_id(uint16_t id) = 0;
+            virtual void set_ball(const pkmn::pkstring& ball) = 0;
+            virtual void set_original_game(const pkmn::pkstring& game) = 0;
+            virtual void set_met_level(uint8_t level) = 0;
+
+            // Getting Individual Stat Info
+            virtual uint32_t get_personality() const = 0;
+            virtual uint8_t get_friendship() const = 0;
+            virtual uint8_t get_level() const = 0;
+            virtual uint32_t get_experience() const = 0;
+            virtual pkmn::pkstring get_gender() const = 0;
+            virtual pkmn::nature_t get_nature() const = 0;
+            virtual pkmn::pkstring get_ability() const = 0;
+            virtual pkmn::pkstring get_form() const = 0;
+            virtual bool is_shiny() const = 0;
+            virtual pkmn::dict<pkmn::pkstring, uint16_t> get_stats() const = 0;
+            virtual pkmn::dict<pkmn::pkstring, uint16_t> get_EVs() const = 0;
+            virtual pkmn::dict<pkmn::pkstring, uint16_t> get_IVs() const = 0;
+            
+            // Setting Individual Stat Info
+            virtual void set_personality(uint32_t personality) = 0;
+            virtual void set_friendship(uint8_t friendship) = 0;
+            virtual void set_level(uint8_t level) = 0;
+            virtual void set_experience(uint32_t experience) = 0;
+            virtual void set_gender(const pkmn::pkstring& gender) = 0;
+            virtual void set_nature(const pkmn::pkstring& nature_name) = 0;
+            virtual void set_ability(const pkmn::pkstring& ability) = 0;
+            virtual void set_form(const pkmn::pkstring& form) = 0;
+            virtual void set_shiny(bool value) = 0;
+            virtual void set_EV(const pkmn::pkstring& stat, uint16_t value) = 0;
+            virtual void set_IV(const pkmn::pkstring& stat, uint16_t value) = 0;
+
+            // Battle Stat Info
+            virtual pkmn::pkstring get_status() const = 0;
+            virtual pkmn::item_entry_t get_held_item() const = 0;
+            virtual void set_status(const pkmn::pkstring& status) = 0;
+            virtual void set_held_item(const pkmn::pkstring& item_name) = 0;
+
+            // Getting Move Info
+            virtual pkmn::move_entry_t get_move(uint8_t pos) const = 0;
+            virtual void get_moves(pkmn::moveset_t& moves) const = 0;
+            virtual uint8_t get_move_PP(uint8_t pos) const = 0;
+            virtual void get_move_PPs(std::vector<uint8_t>& move_PPs) const = 0;
+
+            // Setting Move Info
+            virtual void set_move(const pkmn::pkstring& move_name, uint8_t pos) = 0;
+            virtual void set_move_PP(uint8_t PP, uint8_t pos) = 0;
+
+            // Getting LibPKMN info
+            virtual pkmn::pkstring get_game() const = 0;
+            virtual uint16_t get_generation() const = 0;
+            virtual int get_attribute(const pkmn::pkstring& attribute) const = 0;
+            virtual pkmn::dict<pkmn::pkstring, int> get_attributes() const = 0;
+            virtual bool has_attribute(const pkmn::pkstring& attribute) const = 0;
+			virtual void set_attribute(const pkmn::pkstring& attribute, int value) = 0;
+            virtual pkmn::pkstring get_icon_path() const = 0;
+            virtual pkmn::pkstring get_sprite_path() const = 0;
+
+            // Database Info
+            virtual uint16_t get_species_id() const = 0;
+            virtual uint16_t get_game_id() const = 0;
+            virtual uint16_t get_original_game_id() const = 0;
+            virtual uint16_t get_pokemon_id() const = 0;
+            virtual uint16_t get_ability_id() const = 0;
+            virtual uint16_t get_item_id() const = 0;
+            virtual uint16_t get_nature_id() const = 0;
+            virtual uint16_t get_form_id() const = 0;
+
+            virtual const void* get_native() = 0;
+    };
+
+    // Related typedefs
+    typedef std::vector<pokemon::sptr> pokemon_team_t;
+}
+
+#endif /* INCLUDED_PKMN_POKEMON_HPP */

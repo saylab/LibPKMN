@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -27,9 +27,6 @@ namespace pkmn
 
     //! Return LibPKMN commit used in build
     pkmn::pkstring PKMN_API get_libpkmn_commit();
-
-    //! Return PKMDS commit used in build
-    pkmn::pkstring PKMN_API get_pkmds_commit();
 }
 
 #endif /* INCLUDED_PKMN_BUILD_INFO_HPP */

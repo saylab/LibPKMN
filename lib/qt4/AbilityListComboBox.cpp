@@ -15,13 +15,13 @@ namespace pkmn
 {
     namespace qt4
     {
-        AbilityListComboBox::AbilityListComboBox(const unsigned int gen, QWidget* parent):
+        AbilityListComboBox::AbilityListComboBox(const uint16_t gen, QWidget* parent):
             QComboBox(parent)
         {
             std::vector<pkstring> abilities_vec;
             get_ability_list(abilities_vec, gen);
 
-            for(unsigned int i = 0; i < abilities_vec.size(); i++)
+            for(uint16_t i = 0; i < abilities_vec.size(); i++)
                 addItem(QString::fromUtf16(abilities_vec[i]), QVariant(i));
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -13,7 +13,7 @@ namespace PKMN
     {
         public class AbilityListComboBox: ComboBox
         {
-            public AbilityListComboBox(uint gen): base()
+            public AbilityListComboBox(ushort gen): base()
             {
                 StringVector ability_vec = new StringVector();
                 Lists.getAbilityList(ability_vec, gen);

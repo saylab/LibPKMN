@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -12,8 +12,8 @@
 
 #include "game_save_impl.hpp"
 
-#include "conversions/pokemon.hpp"
-#include "conversions/structs/gen4_save.hpp"
+#include <pkmn/native/pokemon.hpp>
+#include <pkmn/native/gen4_save.hpp>
 
 namespace pkmn
 {
@@ -90,7 +90,7 @@ namespace pkmn
         Versions::HEARTGOLD
     };
 
-    gen4_games_t PKMN_INLINE get_gen4_save_type(std::vector<uint8_t> &data)
+    gen4_games_t PKMN_INLINE get_gen4_save_type(std::vector<uint8_t>& data)
     {
         uint32_t* data32 = reinterpret_cast<uint32_t*>(&data);
 
@@ -105,10 +105,10 @@ namespace pkmn
         public:
 
             game_save_gen4impl();
-            game_save_gen4impl(const pkmn::pkstring &filename, gen4_games_t game, bool small);
+            game_save_gen4impl(const pkmn::pkstring& filename, gen4_games_t game, bool small);
 
             void load();
-            void save_as(const pkmn::pkstring &filename);
+            void save_as(const pkmn::pkstring& filename);
 
         private:
 
@@ -116,11 +116,11 @@ namespace pkmn
             uint8_t      _game_id;
             bool         _small;
 
-            uint8_t*       _blocks[2];
-            gen4_footer_t* _footers[2];
+            uint8_t*               _blocks[2];
+            native::gen4_footer_t* _footers[2];
 
-            nds_pokemon_party_t* _party;
-            void*                _items;
+            native::nds_pokemon_party_t* _party;
+            void*                        _items;
     };
 }
 

@@ -11,7 +11,7 @@
 
 namespace pkmn
 {
-    hoenn_ribbons::hoenn_ribbons(const uint32_t ribbonint)
+    hoenn_ribbons_t::hoenn_ribbons_t(const uint32_t ribbonint)
     {
         cool          = ribbonint & 0x1;
         cool_super    = ribbonint & 0x2;
@@ -47,7 +47,7 @@ namespace pkmn
         world         = ribbonint & 0x80000000;
     }
 
-    hoenn_ribbons::operator uint32_t()
+    hoenn_ribbons_t::operator uint32_t()
     {
         uint32_t ribbonint = 0;
 
@@ -87,7 +87,7 @@ namespace pkmn
         return ribbonint;
     }
 
-    sinnoh_ribbons1::sinnoh_ribbons1(const uint16_t ribbonint)
+    sinnoh_ribbons1_t::sinnoh_ribbons1_t(const uint16_t ribbonint)
     {
         sinnoh_champ   = ribbonint & 0x1;
         ability        = ribbonint & 0x2;
@@ -107,7 +107,7 @@ namespace pkmn
         royal          = ribbonint & 0x8000;
     }
 
-    sinnoh_ribbons1::operator uint16_t()
+    sinnoh_ribbons1_t::operator uint16_t()
     {
         uint16_t ribbonint;
 
@@ -131,7 +131,7 @@ namespace pkmn
         return ribbonint;
     }
 
-    sinnoh_ribbons2::sinnoh_ribbons2(const uint16_t ribbonint)
+    sinnoh_ribbons2_t::sinnoh_ribbons2_t(const uint16_t ribbonint)
     {
         gorgeous_royal = ribbonint & 0x1;
         footprint      = ribbonint & 0x2;
@@ -147,7 +147,7 @@ namespace pkmn
         premier        = ribbonint & 0x800;
     }
 
-    sinnoh_ribbons2::operator uint16_t()
+    sinnoh_ribbons2_t::operator uint16_t()
     {
         uint16_t ribbonint;
 
@@ -167,7 +167,7 @@ namespace pkmn
         return ribbonint;
     }
 
-    sinnoh_ribbons3::sinnoh_ribbons3(const uint32_t ribbonint)
+    sinnoh_ribbons3_t::sinnoh_ribbons3_t(const uint32_t ribbonint)
     {
         cool          = ribbonint & 0x1;
         cool_super    = ribbonint & 0x2;
@@ -191,7 +191,7 @@ namespace pkmn
         tough_master  = ribbonint & 0x80000;
     }
 
-    sinnoh_ribbons3::operator uint32_t()
+    sinnoh_ribbons3_t::operator uint32_t()
     {
         uint32_t ribbonint = 0;
 
@@ -219,7 +219,7 @@ namespace pkmn
         return ribbonint;
     }
 
-    unova_ribbons::unova_ribbons(const uint16_t ribbonint)
+    unova_ribbons_t::unova_ribbons_t(const uint16_t ribbonint)
     {
         gorgeous_royal = ribbonint & 0x1;
         footprint      = ribbonint & 0x2;
@@ -235,7 +235,7 @@ namespace pkmn
         premier        = ribbonint & 0x800;
     }
 
-    unova_ribbons::operator uint16_t()
+    unova_ribbons_t::operator uint16_t()
     {
         uint16_t ribbonint;
 
@@ -255,7 +255,7 @@ namespace pkmn
         return ribbonint;
     }
 
-    kalos_ribbons::kalos_ribbons(const uint64_t ribbonint)
+    kalos_ribbons_t::kalos_ribbons_t(const uint64_t ribbonint)
     {
         kalos_champ       = ribbonint & 0x1;
         champion          = ribbonint & 0x2;
@@ -303,7 +303,7 @@ namespace pkmn
         tough_master      = ribbonint & 0x400000000000;
     }
 
-    kalos_ribbons::operator uint64_t()
+    kalos_ribbons_t::operator uint64_t()
     {
         uint64_t ribbonint = 0;
 

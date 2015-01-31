@@ -21,7 +21,7 @@ namespace pkmn
             Q_OBJECT
 
             public:
-                PokemonListComboBox(const unsigned int version_id, QWidget* parent = NULL);
+                PokemonListComboBox(const uint16_t version_id, QWidget* parent = NULL);
         };
     }
 }

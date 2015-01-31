@@ -15,7 +15,7 @@ namespace pkmn
 {
     namespace qt4
     {
-        TypeListComboBox::TypeListComboBox(const unsigned int gen, QWidget* parent):
+        TypeListComboBox::TypeListComboBox(const uint16_t gen, QWidget* parent):
             QComboBox(parent)
         {
             std::vector<pkstring> types_vec;

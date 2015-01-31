@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -13,10 +13,10 @@
 
 namespace pkmn
 {
-    struct PKMN_API hoenn_ribbons
+    struct PKMN_API hoenn_ribbons_t
     {
-        hoenn_ribbons() {};
-        hoenn_ribbons(const uint32_t ribbonint);
+        hoenn_ribbons_t() {};
+        hoenn_ribbons_t(uint32_t ribbonint);
 
         bool cool;
         bool cool_super;
@@ -54,10 +54,10 @@ namespace pkmn
         operator uint32_t();
     };
 
-    struct PKMN_API sinnoh_ribbons1
+    struct PKMN_API sinnoh_ribbons1_t
     {
-        sinnoh_ribbons1() {};
-        sinnoh_ribbons1(const uint16_t ribbonint);
+        sinnoh_ribbons1_t() {};
+        sinnoh_ribbons1_t(uint16_t ribbonint);
 
         bool sinnoh_champ;
         bool ability;
@@ -79,10 +79,10 @@ namespace pkmn
         operator uint16_t();
     };
 
-    struct PKMN_API sinnoh_ribbons2
+    struct PKMN_API sinnoh_ribbons2_t
     {
-        sinnoh_ribbons2() {};
-        sinnoh_ribbons2(const uint16_t ribbonint);
+        sinnoh_ribbons2_t() {};
+        sinnoh_ribbons2_t(uint16_t ribbonint);
 
         bool gorgeous_royal;
         bool footprint;
@@ -100,10 +100,10 @@ namespace pkmn
         operator uint16_t();
     };
 
-    struct PKMN_API sinnoh_ribbons3
+    struct PKMN_API sinnoh_ribbons3_t
     {
-        sinnoh_ribbons3() {};
-        sinnoh_ribbons3(const uint32_t ribbonint);
+        sinnoh_ribbons3_t() {};
+        sinnoh_ribbons3_t(uint32_t ribbonint);
 
         bool cool;
         bool cool_super;
@@ -129,17 +129,17 @@ namespace pkmn
         operator uint32_t();
     };
 
-    struct sinnoh_ribbons
+    struct sinnoh_ribbons_t
     {
-        struct sinnoh_ribbons1 ribbons1;
-        struct sinnoh_ribbons2 ribbons2;
-        struct sinnoh_ribbons3 ribbons3;
+        struct sinnoh_ribbons1_t ribbons1;
+        struct sinnoh_ribbons2_t ribbons2;
+        struct sinnoh_ribbons3_t ribbons3;
     };
 
-    struct PKMN_API unova_ribbons
+    struct PKMN_API unova_ribbons_t
     {
-        unova_ribbons() {};
-        unova_ribbons(const uint16_t ribbonint);
+        unova_ribbons_t() {};
+        unova_ribbons_t(uint16_t ribbonint);
 
         bool gorgeous_royal;
         bool footprint;
@@ -157,10 +157,10 @@ namespace pkmn
         operator uint16_t();
     };
 
-    struct PKMN_API kalos_ribbons
+    struct PKMN_API kalos_ribbons_t
     {
-        kalos_ribbons() {};
-        kalos_ribbons(const uint64_t ribbonint);
+        kalos_ribbons_t() {};
+        kalos_ribbons_t(uint64_t ribbonint);
 
         bool kalos_champ;
         bool champion;
@@ -210,12 +210,12 @@ namespace pkmn
         operator uint64_t();
     };
 
-    struct ribbons
+    struct ribbons_t
     {
-        struct hoenn_ribbons  hoenn;
-        struct sinnoh_ribbons sinnoh;
-        struct unova_ribbons  unova;
-        struct kalos_ribbons  kalos;
+        hoenn_ribbons_t  hoenn;
+        sinnoh_ribbons_t sinnoh;
+        unova_ribbons_t  unova;
+        kalos_ribbons_t  kalos;
     };
 }
 

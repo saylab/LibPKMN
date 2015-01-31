@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -11,9 +11,8 @@
 
 #include "game_save_impl.hpp"
 
-#include "conversions/items.hpp"
-#include "conversions/pokemon.hpp"
-#include "conversions/trainer.hpp"
+#include <pkmn/native/items.hpp>
+#include <pkmn/native/pokemon.hpp>
 
 namespace pkmn
 {
@@ -66,10 +65,10 @@ namespace pkmn
 
         private:
 
-            gen1_item_bag_t* _item_bag;
-            gen1_item_pc_t* _item_pc;
-            gen1_pokemon_party_t* _pokemon_party;
-            gen1_pokemon_pc_t* _pokemon_pc;
+            native::gen1_item_bag_t*      _item_bag;
+            native::gen1_item_pc_t*       _item_pc;
+            native::gen1_pokemon_party_t* _pokemon_party;
+            native::gen1_pokemon_pc_t*    _pokemon_pc;
     };
 }
 #endif /* INCLUDED_GAME_SAVE_GEN1IMPL_HPP */

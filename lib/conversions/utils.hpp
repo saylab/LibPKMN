@@ -12,7 +12,7 @@
 #include <pkmn/types/dict.hpp>
 #include <pkmn/types/pkstring.hpp>
 
-#include "structs/pokemon.hpp"
+#include <pkmn/native/pokemon.hpp>
 
 namespace pkmn
 {
@@ -55,24 +55,66 @@ namespace pkmn
             ("Paralyzed", 0x40)
         ;
 
+        static const pkmn::dict<uint8_t, pkmn::pkstring> modern_statuses = boost::assign::map_list_of
+            (0x00, "OK")
+            (0x01, "Asleep")
+            (0x02, "Asleep")
+            (0x03, "Asleep")
+            (0x04, "Asleep")
+            (0x05, "Asleep")
+            (0x06, "Asleep")
+            (0x07, "Asleep")
+            (0x08, "Poisoned")
+            (0x10, "Burned")
+            (0x20, "Frozen")
+            (0x40, "Paralyzed")
+            (0x80, "Badly Poisoned")
+        ;
+
+        static const pkmn::dict<pkmn::pkstring, uint8_t> reverse_modern_statuses = boost::assign::map_list_of
+            ("OK",             0x00)
+            ("Asleep",         0x01)
+            ("Asleep",         0x02)
+            ("Asleep",         0x03)
+            ("Asleep",         0x04)
+            ("Asleep",         0x05)
+            ("Asleep",         0x06)
+            ("Asleep",         0x07)
+            ("Poisoned",       0x08)
+            ("Burned",         0x10)
+            ("Frozen",         0x20)
+            ("Paralyzed",      0x40)
+            ("Badly Poisoned", 0x80)
+        ;
+
+        static const pkmn::dict<uint16_t, pkmn::pkstring> genesect_form_items = boost::assign::map_list_of
+            (Forms::Genesect::STANDARD,    "None")
+            (Forms::Genesect::DOUSE_DRIVE, "Douse Drive")
+            (Forms::Genesect::SHOCK_DRIVE, "Shock Drive")
+            (Forms::Genesect::BURN_DRIVE,  "Burn Drive")
+            (Forms::Genesect::CHILL_DRIVE, "Chill Drive")
+        ;
+
         uint8_t get_retro_IV(uint8_t stat, const uint16_t iv_data);
 
-        void set_retro_IV(uint8_t stat, uint16_t &iv_data, uint8_t new_iv);
+        void set_retro_IV(uint8_t stat, uint16_t& iv_data, uint8_t new_iv);
 
-        std::string crystal_get_otgender(const uint16_t &caught_data);
+        std::string crystal_get_otgender(const uint16_t& caught_data);
 
-        unsigned int crystal_get_metlevel(const uint16_t &caught_data);
+        unsigned int crystal_get_metlevel(const uint16_t& caught_data);
 
         //TODO: time of day, met location
-        void crystal_set_caughtdata(uint16_t &caught_data, bool ot_is_female, uint8_t met_level);
+        void crystal_set_caughtdata(uint16_t& caught_data, bool ot_is_female, uint8_t met_level);
 
-        unsigned int get_modern_IV(uint8_t stat, const uint32_t &IVint);
+        unsigned int get_modern_IV(uint8_t stat, const uint32_t& IVint);
 
-        void set_modern_IV(uint8_t stat, uint32_t &IVint, uint8_t val);
+        void set_modern_IV(uint8_t stat, uint32_t& IVint, uint8_t val);
 
-        #define get_gen3_ability_slot(iv_egg_ability) (uint16_t(iv_egg_ability) & 0x1)
+        uint16_t gen3_crypt(native::gen3_pc_pokemon_t& pkmn);
 
-        #define set_gen3_ability_slot(iv_egg_ability, num) iv_egg_ability = num ? (iv_egg_ability | 1) : ~(iv_egg_ability & 1);
+        #define get_gen3_ability_slot(iv_egg_ability) (uint16_t(iv_egg_ability)&  0x1)
+
+        #define set_gen3_ability_slot(iv_egg_ability, num) iv_egg_ability = num ? (iv_egg_ability | 1) : ~(iv_egg_ability&  1);
     }
 }
 

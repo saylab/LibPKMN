@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+# Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
 #
 # Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
 # or copy at http://opensource.org/licenses/MIT)
@@ -17,8 +17,8 @@ IF(ENABLE_LIBPKMN)
     )
 
     ADD_SUBDIRECTORY(SQLiteCpp)
-    ADD_SUBDIRECTORY(pkmds)
     ADD_SUBDIRECTORY(conversions)
+    ADD_SUBDIRECTORY(pokedex)
     ADD_SUBDIRECTORY(qt4)
     ADD_SUBDIRECTORY(types)
     
@@ -34,7 +34,6 @@ IF(ENABLE_LIBPKMN)
 
     LIST(APPEND libpkmn_libs
         ${Boost_LIBRARIES}
-        pkmds
         SQLiteCpp
         ${QT_LIBRARIES}
         ${QT_QTMAIN_LIBRARY}
@@ -59,34 +58,27 @@ IF(ENABLE_LIBPKMN)
     LIST(APPEND libpkmn_sources
         ${CMAKE_CURRENT_BINARY_DIR}/build_info.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/paths.cpp
-        library_bridge.cpp
         calculations.cpp
         database.cpp
-        base_pokemon_impl.cpp
-        base_pokemon_gen1impl.cpp
-        base_pokemon_gen2impl.cpp
-        base_pokemon_modernimpl.cpp
-        team_pokemon_impl.cpp
-        team_pokemon_gen1impl.cpp
-        team_pokemon_gen2impl.cpp
-        team_pokemon_gen3impl.cpp
-        team_pokemon_ndsimpl.cpp
+        pokemon_impl.cpp
+        pokemon_gen1impl.cpp
+        pokemon_gen2impl.cpp
+        pokemon_gen3impl.cpp
+        pokemon_ndsimpl.cpp
         pocket_impl.cpp
         bag_impl.cpp
-        item_impl.cpp
         trainer_impl.cpp
-        move_impl.cpp
+        pokedex_impl.cpp
         game_save_impl.cpp
         game_save_gen1impl.cpp
         game_save_gen2impl.cpp
         game_save_gen3impl.cpp
         game_save_gen4impl.cpp
-        game_save_gen5impl.cpp
         io.cpp
         lists.cpp
         copy_sptrs.cpp
-        ${pkmds_sources}
         ${conversions_sources}
+        ${pokedex_sources}
         ${qt4_sources}
         ${qt4_moc_sources}
         ${types_sources}

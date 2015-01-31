@@ -21,7 +21,7 @@ namespace pkmn
             Q_OBJECT
 
             public:
-                TypeListComboBox(const unsigned int gen, QWidget* parent = NULL);
+                TypeListComboBox(const uint16_t gen, QWidget* parent = NULL);
         };
     }
 }

@@ -5,7 +5,7 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-%typemap(cscode) pkmn::markings %{
+%typemap(cscode) pkmn::markings_t %{
     public static implicit operator byte(Markings input) {
         byte markint = 0;
 

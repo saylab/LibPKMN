@@ -18,12 +18,13 @@
 #include <pkmn/database.hpp>
 #include <pkmn/types/dict.hpp>
 
+#include "internal.hpp"
 #include "bag_impl.hpp"
 #include "copy_sptrs.hpp"
 
 namespace pkmn
 {
-    bag::sptr bag::make(unsigned int game)
+    bag::sptr bag::make(uint16_t game)
     {
         return sptr(new bag_impl(game));
     }
@@ -41,9 +42,9 @@ namespace pkmn
 
     pkmn::shared_ptr<SQLite::Database> bag_impl::_db;
 
-    bag_impl::bag_impl(unsigned int game): bag()
+    bag_impl::bag_impl(uint16_t game): bag()
     {
-        if(!_db) _db = pkmn::shared_ptr<SQLite::Database>(new SQLite::Database(get_database_path()));
+        CONNECT_TO_DB(_db);
 
         _game_id = game;
         _generation = database::get_generation(_game_id);
@@ -165,61 +166,46 @@ namespace pkmn
 
     pkmn::pkstring bag_impl::get_game() const {return database::get_version_name(_game_id);}
 
-    unsigned int bag_impl::get_generation() const {return _generation;}
+    uint16_t bag_impl::get_generation() const {return _generation;}
 
-    void bag_impl::add_item(const pkmn::pkstring &item_name, unsigned int amount)
+    void bag_impl::add_item(const pkmn::pkstring &item_name, uint16_t amount)
     {
         add_item(database::get_item_id(item_name), amount);
     }
 
-    void bag_impl::add_item(unsigned int item_id, unsigned int amount)
+    void bag_impl::add_item(uint16_t item_id, uint16_t amount)
     {
         _pockets[_get_pocket_name(item_id)]->add_item(item_id, amount);
     }
 
-    void bag_impl::add_item(item::sptr item_sptr, unsigned int amount)
-    {
-        add_item(item_sptr->get_item_id(), amount);
-    }
-
-    void bag_impl::remove_item(const pkmn::pkstring &item_name, unsigned int amount)
+    void bag_impl::remove_item(const pkmn::pkstring &item_name, uint16_t amount)
     {
         remove_item(database::get_item_id(item_name), amount);
     }
 
-    void bag_impl::remove_item(unsigned int item_id, unsigned int amount)
+    void bag_impl::remove_item(uint16_t item_id, uint16_t amount)
     {
         _pockets[_get_pocket_name(item_id)]->remove_item(item_id, amount);
     }
 
-    void bag_impl::remove_item(item::sptr item_sptr, unsigned int amount)
-    {
-        remove_item(item_sptr->get_item_id(), amount);
-    }
-
-    unsigned int bag_impl::get_item_amount(const pkmn::pkstring &item_name) const
+    uint16_t bag_impl::get_item_amount(const pkmn::pkstring &item_name) const
     {
         return get_item_amount(database::get_item_id(item_name));
     }
 
-    unsigned int bag_impl::get_item_amount(unsigned int item_id) const
+    uint16_t bag_impl::get_item_amount(uint16_t item_id) const
     {
         return _pockets[_get_pocket_name(item_id)]->get_item_amount(item_id);
-    }
-
-    unsigned int bag_impl::get_item_amount(item::sptr item_sptr) const
-    {
-        return get_item_amount(item_sptr->get_item_id());
     }
 
     pocket::sptr bag_impl::get_pocket(const pkmn::pkstring &name) const {return _pockets[name];}
 
     pkmn::dict<pkmn::pkstring, pocket::sptr> bag_impl::get_pockets() const {return _pockets;}
 
-    unsigned int bag_impl::get_game_id() const {return _game_id;}
+    uint16_t bag_impl::get_game_id() const {return _game_id;}
 
     //Determine correct pocket for given item
-    pkmn::pkstring bag_impl::_get_pocket_name(unsigned int item_id) const
+    pkmn::pkstring bag_impl::_get_pocket_name(uint16_t item_id) const
     {
         std::ostringstream query_stream;
         query_stream << "SELECT name FROM pocket_names WHERE version_group_id="
@@ -228,17 +214,5 @@ namespace pkmn
                      << database::get_item_category_id(item_id) << ")";
 
         return (const char*)(_db->execAndGet(query_stream.str().c_str()));
-    }
-
-    void bag_impl::_check() const
-    {
-        BOOST_FOREACH(const std::string& key, _pockets.keys())
-        {
-            if(_game_id != _pockets[key]->get_game_id())
-            {
-                throw std::runtime_error(str(boost::format("Pocket \"%s\" is invalid!")
-                                             % key));
-            }
-        }
     }
 } /* namespace pkmn */

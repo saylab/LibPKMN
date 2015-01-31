@@ -17,13 +17,13 @@ namespace pkmn
 {
     namespace qt4
     {
-        PokemonListComboBox::PokemonListComboBox(const unsigned int version_id, QWidget* parent):
+        PokemonListComboBox::PokemonListComboBox(const uint16_t version_id, QWidget* parent):
             QComboBox(parent)
         {
             std::vector<pkstring> pokemon_vec;
             get_pokemon_list(pokemon_vec, version_id);
 
-            for(unsigned int i = 0; i < pokemon_vec.size(); i++)
+            for(uint16_t i = 0; i < pokemon_vec.size(); i++)
                 addItem(QString::fromUtf16(pokemon_vec[i]), QVariant(i));
         }
     } /* namespace qt4 */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -11,7 +11,7 @@
 
 #include <pkmn/bag.hpp>
 #include <pkmn/config.hpp>
-#include <pkmn/team_pokemon.hpp>
+#include <pkmn/pokemon.hpp>
 #include <pkmn/types/pkstring.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
@@ -43,7 +43,7 @@ namespace pkmn
              * \param gender SQLite ID of the trainer's gender
              * \return shared pointer to instance of pkmn::trainer with described parameters
              */
-            static sptr make(unsigned int game, const pkmn::pkstring &name, unsigned int gender);
+            static sptr make(uint16_t game, const pkmn::pkstring& name, uint16_t gender);
 
             /*!
              * This is the class's factory function. It takes in the name of the game this trainer
@@ -54,7 +54,7 @@ namespace pkmn
              * \param gender trainer's gender
              * \return shared pointer to instance of pkmn::trainer with described parameters
              */
-            static sptr make(const pkmn::pkstring &game, const pkmn::pkstring &name, const pkmn::pkstring &gender);
+            static sptr make(const pkmn::pkstring& game, const pkmn::pkstring& name, const pkmn::pkstring& gender);
 
             //! Class constructor (use factory function instead)
             trainer() {};
@@ -75,7 +75,7 @@ namespace pkmn
              *
              * \return game's generation
              */
-            virtual unsigned int get_generation() const = 0;
+            virtual uint16_t get_generation() const = 0;
 
             /*!
              * Return the trainer's name.
@@ -89,7 +89,7 @@ namespace pkmn
              *
              * \return trainer's money amount
              */
-            virtual unsigned int get_money() const = 0;
+            virtual uint16_t get_money() const = 0;
 
             /*!
              * Return the trainer's gender ("Male" or "Female").
@@ -106,7 +106,7 @@ namespace pkmn
              *
              * \return trainer's full ID (both secret and public)
              */
-            virtual unsigned int get_id() const = 0;
+            virtual uint32_t get_id() const = 0;
             
             /*!
              * In Generations I-II, return the trainer's full ID. In Generations III-VI, return the ID
@@ -115,7 +115,7 @@ namespace pkmn
              *
              * \return trainer's ID as seen in-game
              */
-            virtual unsigned short get_public_id() const = 0;
+            virtual uint16_t get_public_id() const = 0;
 
             /*!
              * In Generations III-VI, there is a second half of the trainer ID that is never seen in-game.
@@ -123,28 +123,28 @@ namespace pkmn
              *
              * \return trainer's secret ID, never seen in-game
              */
-            virtual unsigned short get_secret_id() const = 0;
+            virtual uint16_t get_secret_id() const = 0;
 
             /*!
              * Set the trainer's name. This value must be of length 1-7, or the function will do nothing.
              *
              * \param name trainer's new name
              */
-            virtual void set_name(const pkmn::pkstring &name) = 0;
+            virtual void set_name(const pkmn::pkstring& name) = 0;
 
             /*!
              * Set the amount of money the trainer has. This value must be 0-999999, or the function will do nothing.
              *
              * \param money new amount of money
              */
-            virtual void set_money(unsigned int money) = 0;
+            virtual void set_money(uint16_t money) = 0;
 
             /*!
              * Set the trainer's new gender. This value must be "Male" or "Female", or the function will do nothing.
              *
              * \param gender trainer's new gender
              */
-            virtual void set_gender(const pkmn::pkstring &gender) = 0;
+            virtual void set_gender(const pkmn::pkstring& gender) = 0;
 
             /*!
              * Set the trainer's new full ID. This value must be in range 0-4294967295 (the range of an unsigned 32-bit
@@ -153,7 +153,7 @@ namespace pkmn
              *
              * \param id new trainer ID
              */
-            virtual void set_id(unsigned int id) = 0;
+            virtual void set_id(uint32_t id) = 0;
 
             /*!
              * Sets the trainer's new public ID, as seen in-game. This value must be in range 0-65536. For trainers from
@@ -161,7 +161,7 @@ namespace pkmn
              *
              * \param id trainer's new public ID
              */
-            virtual void set_public_id(unsigned short id) = 0;
+            virtual void set_public_id(uint16_t id) = 0;
 
             /*!
              * Sets the trainer's new secret ID, which is never seen in-game. This value must be in range 0-65536.
@@ -169,7 +169,7 @@ namespace pkmn
              *
              * \param id trainer's new secret ID
              */
-            virtual void set_secret_id(unsigned short id) = 0;
+            virtual void set_secret_id(uint16_t id) = 0;
 
             /*!
              * Return the Pokémon at the given position in the trainer's party. The given position must be in the range
@@ -178,30 +178,30 @@ namespace pkmn
              * \param pos Position of Pokémon in party to return
              * \return Pokémon in given position
              */
-            virtual team_pokemon::sptr get_pokemon(unsigned int pos) = 0;
+            virtual pokemon::sptr get_pokemon(uint16_t pos) = 0;
 
             /*!
              * Replaces the Pokémon at the given position (1-6). Currently, this will fail if the new Pokémon is not from the
              * same version group.
              *
              * \param pos position to place new Pokémon
-             * \param t_pkmn new Pokémon
+             * \param pkmn new Pokémon
              */
-            virtual void set_pokemon(unsigned int pos, team_pokemon::sptr t_pkmn) = 0;
+            virtual void set_pokemon(uint16_t pos, pokemon::sptr pkmn) = 0;
 
             /*!
              * Removes the Pokémon at the given position. Shift any subsequent Pokémon backward.
              *
              * \param pos position of Pokémon to remove.
              */
-            virtual void remove_pokemon(unsigned int pos) = 0;
+            virtual void remove_pokemon(uint16_t pos) = 0;
 
             /*!
              * Places the party in the given pokemon_team vector.
              *
              * \param party reference to a pokemon_team vector
              */
-            virtual void get_party(pokemon_team_t &party) = 0;
+            virtual void get_party(pokemon_team_t& party) = 0;
 
             /*!
              * Sets the party to the given pokemon_vector. Currently only takes Pokémon
@@ -209,13 +209,13 @@ namespace pkmn
              *
              * \param party reference to a pokemon_team vector
              */
-            virtual void set_party(pokemon_team_t &party) = 0;
+            virtual void set_party(pokemon_team_t& party) = 0;
 
             //! Returns a pointer to the trainer's bag.
             virtual bag::sptr get_bag() const = 0;
 
             //! Return SQLite Database ID of game used to create this item instance
-            virtual unsigned int get_game_id() const = 0;
+            virtual uint16_t get_game_id() const = 0;
     };
 }
 

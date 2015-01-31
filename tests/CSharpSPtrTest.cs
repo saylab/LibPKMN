@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -8,9 +8,12 @@
 public class CopySPtrTest
 {
     /*
-     * Make sure the bag shared_ptr copies correctly.
+     * Make sure two instances of BagSPtr properly point to the same underlying
+     * bag::sptr. By adding items through each bag directly and through each of
+     * their pockets, we can query all of them to make sure the change can be
+     * seen with each method.
      */
-    public static void BagPocketTest()
+    public static bool BagPocketTest()
     {
         try
         {
@@ -19,102 +22,134 @@ public class CopySPtrTest
             if(bag1 != bag2)
                 throw new System.Exception("bag1 != bag2");
 
-            /*
-             * SWIG + C# reports pockets from bags from the same pointer having
-             * different values, so check equality through item additions.
-             */
             PKMN.PocketDict bag1Pockets = bag1.getPockets();
             PKMN.PocketDict bag2Pockets = bag2.getPockets();
 
-            bag1Pockets["Items"].addItem("Potion", 10);
-            bag1Pockets["Balls"].addItem("Master Ball", 10);
+            // Add items with each possible method
+            bag1.addItem("Potion", 5);
+            bag2.addItem("Master Ball", 10);
             bag1Pockets["KeyItems"].addItem("Bicycle", 1);
-            bag1Pockets["TM/HM"].addItem("TM01", 10);
-            if(bag2Pockets["Items"].getItemAmount("Potion") != 10)
-                throw new System.Exception("bag2Pockets[\"Items\"].getItemAmount(\"Potion\") != 10");
+            bag2Pockets["TM/HM"].addItem("TM01", 15);
+
+            // Make sure bag1 reports proper amounts
+            if(bag1.getItemAmount("Potion") != 5)
+                throw new System.Exception("bag1.getItemAmount(\"Potion\") != 5");
+            if(bag1.getItemAmount("Master Ball") != 10)
+                throw new System.Exception("bag1.getItemAmount(\"Master Ball\") != 10");
+            if(bag1.getItemAmount("Bicycle") != 1)
+                throw new System.Exception("bag1.getItemAmount(\"Bicycle\") != 1");
+            if(bag1.getItemAmount("TM01") != 15)
+                throw new System.Exception("bag1.getItemAmount(\"TM01\") != 15");
+
+            // Make sure bag2 reports proper amounts
+            if(bag2.getItemAmount("Potion") != 5)
+                throw new System.Exception("bag2.getItemAmount(\"Potion\") != 5");
+            if(bag2.getItemAmount("Master Ball") != 10)
+                throw new System.Exception("bag2.getItemAmount(\"Master Ball\") != 10");
+            if(bag2.getItemAmount("Bicycle") != 1)
+                throw new System.Exception("bag2.getItemAmount(\"Bicycle\") != 1");
+            if(bag2.getItemAmount("TM01") != 15)
+                throw new System.Exception("bag2.getItemAmount(\"TM01\") != 15");
+
+            // Make sure bag1Pockets reports proper amounts
+            if(bag1Pockets["Items"].getItemAmount("Potion") != 5)
+                throw new System.Exception("bag1Pockets[\"Items\"].getItemAmount(\"Potion\") != 5");
+            if(bag1Pockets["Balls"].getItemAmount("Master Ball") != 10)
+                throw new System.Exception("bag1Pockets[\"Balls\"].getItemAmount(\"Master Ball\") != 10");
+            if(bag1Pockets["KeyItems"].getItemAmount("Bicycle") != 1)
+                throw new System.Exception("bag1Pockets[\"KeyItems\"].getItemAmount(\"Bicycle\") != 1");
+            if(bag1Pockets["TM/HM"].getItemAmount("TM01") != 15)
+                throw new System.Exception("bag1Pockets[\"TM/HM\"].getItemAmount(\"TM01\") != 15");
+
+            // Make sure bag2Pockets reports proper amounts
+            if(bag2Pockets["Items"].getItemAmount("Potion") != 5)
+                throw new System.Exception("bag2Pockets[\"Items\"].getItemAmount(\"Potion\") != 5");
             if(bag2Pockets["Balls"].getItemAmount("Master Ball") != 10)
                 throw new System.Exception("bag2Pockets[\"Balls\"].getItemAmount(\"Master Ball\") != 10");
             if(bag2Pockets["KeyItems"].getItemAmount("Bicycle") != 1)
                 throw new System.Exception("bag2Pockets[\"KeyItems\"].getItemAmount(\"Bicycle\") != 1");
-            if(bag2Pockets["TM/HM"].getItemAmount("TM01") != 10)
-                throw new System.Exception("bag2Pockets[\"TM/HM\"].getItemAmount(\"TM01\") != 10");
+            if(bag2Pockets["TM/HM"].getItemAmount("TM01") != 15)
+                throw new System.Exception("bag2Pockets[\"TM/HM\"].getItemAmount(\"TM01\") != 15");
+
+            return true;
         }
         catch(System.Exception ex)
         {
-            System.Console.WriteLine("Caught exception:");
-            System.Console.WriteLine("   " + ex.Message);
+            System.Console.WriteLine("\nCaught exception: " + ex.Message);
+            System.Console.WriteLine("Stacktrace:");
             System.Console.WriteLine(ex.StackTrace);
-            System.Environment.Exit(1);
+            return false;
         }
     }
 
     /*
-     * Make sure the base_pokemon shared_ptr copies correctly.
+     * Make sure the = operator correctly points the new PokedexSPtr
+     * to the same underlying pkmn::pokedex::sptr instance.
      */
-    public static void BasePokemonTest()
+    public static bool PokedexTest()
     {
         try
         {
-            PKMN.BasePokemonSPtr basePokemon1 = PKMN.BasePokemon.make("Bulbasaur", "Ruby");
-            PKMN.BasePokemonSPtr basePokemon2 = basePokemon1;
-            if(basePokemon1 != basePokemon2)
-                throw new System.Exception("basePokemon1 != basePokemon2");
+            PKMN.PokedexSPtr pokedex1 = PKMN.Pokedex.make("Red");
+            PKMN.PokedexSPtr pokedex2 = pokedex1;
+            if(pokedex1 != pokedex2)
+                throw new System.Exception("pokedex1 != pokedex2");
+
+            return true;
         }
         catch(System.Exception ex)
         {
-            System.Console.WriteLine("Caught exception:");
-            System.Console.WriteLine("   " + ex.Message);
+            System.Console.WriteLine("\nCaught exception: " + ex.Message);
+            System.Console.WriteLine("Stacktrace:");
             System.Console.WriteLine(ex.StackTrace);
-            System.Environment.Exit(1);
+            return false;
         }
     }
 
     /*
-     * Make sure the item shared_ptr copies correctly.
+     * Make sure the = operator correctly points the new PokemonSPtr
+     * to the same underlying pkmn::pokemon::sptr instance.
      */
-    public static void ItemTest()
+    public static bool PokemonTest()
     {
         try
         {
-            PKMN.ItemSPtr item1 = PKMN.Item.make("Potion", "Diamond");
-            PKMN.ItemSPtr item2 = item1;
-            if(item1 != item2)
-                throw new System.Exception("item1 != item2");
+            PKMN.PokemonSPtr pokemon1 = PKMN.Pokemon.make("Houndoom", "X", 50,
+                                                          "None", "None",
+                                                          "None", "None");
+            PKMN.PokemonSPtr pokemon2 = pokemon1;
+            if(pokemon1 != pokemon2)
+                throw new System.Exception("pokemon1 != pokemon2");
+
+            // Set form with pokemon1
+            pokemon1.setForm("Mega");
+            if(pokemon2.getForm() != "Mega")
+                throw new System.Exception("pokemon2.getForm() != \"Mega\"");
+
+            // Set form with pokemon2
+            pokemon2.setForm("Standard");
+            if(pokemon1.getForm() != "Standard")
+                throw new System.Exception("pokemon1.getForm() != \"Standard\"");
+
+            return true;
         }
         catch(System.Exception ex)
         {
-            System.Console.WriteLine("Caught exception:");
-            System.Console.WriteLine("   " + ex.Message);
+            System.Console.WriteLine("\nCaught exception: " + ex.Message);
+            System.Console.WriteLine("Stacktrace:");
             System.Console.WriteLine(ex.StackTrace);
-            System.Environment.Exit(1);
+            return false;
         }
     }
 
     /*
-     * Make sure the move shared_ptr copies correctly.
+     * Make sure the = operator correctly points the new PRNGSPtr
+     * to the same underlying pkmn::prng::sptr instance.
+     *
+     * We will seed each instance with the same value and check to
+     * see if the other produces the same output.
      */
-    public static void MoveTest()
-    {
-        try
-        {
-            PKMN.MoveSPtr move1 = PKMN.Move.make("Tackle", "Diamond");
-            PKMN.MoveSPtr move2 = move1;
-            if(move1 != move2)
-                throw new System.Exception("move1 != move2");
-        }
-        catch(System.Exception ex)
-        {
-            System.Console.WriteLine("Caught exception:");
-            System.Console.WriteLine("   " + ex.Message);
-            System.Console.WriteLine(ex.StackTrace);
-            System.Environment.Exit(1);
-        }
-    }
-
-    /*
-     * Make sure the prng shared_ptr copies correctly.
-     */
-    public static void PRNGTest()
+    public static bool PRNGTest()
     {
         try
         {
@@ -122,99 +157,79 @@ public class CopySPtrTest
             PKMN.PRNGSPtr prng2 = prng1;
             if(prng1 != prng2)
                 throw new System.Exception("prng1 != prng2");
+
+            // Set value with prng1
+            prng1.seedARNG(123456);
+            uint ARNG1Output1 = prng1.ARNG();
+            prng1.seedARNG(123456);
+            uint ARNG2Output1 = prng2.ARNG();
+            if(ARNG1Output1 != ARNG2Output1)
+                throw new System.Exception("ARNG1Output1 != ARNG2Output1");
+
+            // Set value with prng2
+            prng2.seedARNG(654321);
+            uint ARNG1Output2 = prng1.ARNG();
+            prng2.seedARNG(654321);
+            uint ARNG2Output2 = prng2.ARNG();
+            if(ARNG1Output2 != ARNG2Output2)
+                throw new System.Exception("ARNG1Output2 != ARNG2Output2");
+
+            return true;
         }
         catch(System.Exception ex)
         {
-            System.Console.WriteLine("Caught exception:");
-            System.Console.WriteLine("   " + ex.Message);
+            System.Console.WriteLine("\nCaught exception: " + ex.Message);
+            System.Console.WriteLine("Stacktrace:");
             System.Console.WriteLine(ex.StackTrace);
-            System.Environment.Exit(1);
+            return false;
         }
     }
 
     /*
-     * Make sure the team_pokemon shared_ptr copies correctly.
-     * Make sure team_pokemon_modernimpl's signals/slots work correctly.
+     * Make sure the = operator correctly points the new TrainerSPtr
+     * to the same underlying pkmn::trainer::sptr instance.
      */
-    public static void TeamPokemonTest()
+    public static bool TrainerTest()
     {
         try
         {
-            PKMN.TeamPokemonSPtr deoxys = PKMN.TeamPokemon.make("Deoxys", "Diamond", 50,
-                                                                      "None", "None", "None", "None");
-            PKMN.TeamPokemonSPtr deoxys2 = deoxys;
-            if(deoxys != deoxys2)
-                throw new System.Exception("deoxys != deoxys2");
-
-            PKMN.StringUIntDict deoxysStats1 = deoxys.getStats();
-
-            PKMN.BasePokemonSPtr deoxysBase1 = deoxys.getBasePokemon(false); // Same as deoxys
-            PKMN.BasePokemonSPtr deoxysBase2 = deoxys.getBasePokemon(true); // Copies from deoxys
-
-            deoxysBase1.setForm("Attack");
-            deoxysBase2.setForm("Defense");
-
-            PKMN.StringUIntDict deoxysStats2 = deoxys.getStats();
-
-            if(deoxysBase1 == deoxysBase2)
-                throw new System.Exception("deoxysBase1 == deoxysBase2");
-            if(deoxys.getFormID() != PKMN.PokemonForms.Deoxys.ATTACK)
-                throw new System.Exception("deoxys.getFormID() != PKMN.PokemonForms.Deoxys.ATTACK");
-            if(deoxysBase1.getFormID() != PKMN.PokemonForms.Deoxys.ATTACK)
-                throw new System.Exception("deoxysBase1.getFormID() != PKMN.PokemonForms.Deoxys.ATTACK");
-            if(deoxys.getFormID() != deoxysBase1.getFormID())
-                throw new System.Exception("deoxys.getFormID() != deoxysBase1.getFormID()");
-            if(deoxysBase2.getFormID() != PKMN.PokemonForms.Deoxys.DEFENSE)
-                throw new System.Exception("deoxysBase2.getFormID() != PKMN.PokemonForms.Deoxys.DEFENSE");
-            if(deoxysStats1["Attack"] == deoxysStats2["Attack"])
-                throw new System.Exception("deoxysStats1[\"Attack\"] == deoxysStats2[\"Attack\"]");
-            if(deoxysStats1["Defense"] == deoxysStats2["Defense"])
-                throw new System.Exception("deoxysStats1[\"Defense\"] == deoxysStats2[\"Defense\"]");
-            if(deoxysStats1["Special Attack"] == deoxysStats2["Special Attack"])
-                throw new System.Exception("deoxysStats1[\"Special Attack\"] == deoxysStats2[\"Special Attack\"]");
-            if(deoxysStats1["Special Defense"] == deoxysStats2["Special Defense"])
-                throw new System.Exception("deoxysStats1[\"Special Defense\"] == deoxysStats2[\"Special Defense\"]");
-        }
-        catch(System.Exception ex)
-        {
-            System.Console.WriteLine("Caught exception:");
-            System.Console.WriteLine("   " + ex.Message);
-            System.Console.WriteLine(ex.StackTrace);
-            System.Environment.Exit(1);
-        }
-    }
-
-    /*
-     * Make sure the trainer shared_ptr copies correctly.
-     */
-    public static void TrainerTest()
-    {
-        try
-        {
-            PKMN.TrainerSPtr trainer1 = PKMN.Trainer.make("Red", "Red", "Gold");
+            PKMN.TrainerSPtr trainer1 = PKMN.Trainer.make("Red", "Red", "Male");
             PKMN.TrainerSPtr trainer2 = trainer1;
             if(trainer1 != trainer2)
                 throw new System.Exception("trainer1 != trainer2");
+
+            // Set name with trainer1
+            trainer1.setName("Blue");
+            if(trainer2.getName() != "Blue")
+                throw new System.Exception("trainer2.getName() != \"Blue\"");
+
+            // Set name with trainer2
+            trainer2.setName("Red");
+            if(trainer1.getName() != "Red")
+                throw new System.Exception("trainer1.getName() != \"Red\"");
+
+            return true;
         }
         catch(System.Exception ex)
         {
-            System.Console.WriteLine("Caught exception:");
-            System.Console.WriteLine("   " + ex.Message);
+            System.Console.WriteLine("\nCaught exception: " + ex.Message);
+            System.Console.WriteLine("Stacktrace:");
             System.Console.WriteLine(ex.StackTrace);
-            System.Environment.Exit(1);
+            return false;
         }
     }
 
     public static int Main(string[] args)
     {
-        BagPocketTest();
-        BasePokemonTest();
-        ItemTest();
-        MoveTest();
-        PRNGTest();
-        TeamPokemonTest();
-        TrainerTest();
+        bool successful = true;
 
-        return 0;
+        successful = BagPocketTest() && successful;
+        // TODO: GameSaveTest
+        successful = PokedexTest() && successful;
+        successful = PokemonTest() && successful;
+        successful = PRNGTest() && successful;
+        successful = TrainerTest() && successful;
+
+        return successful ? 0 : 1;
     }    
 }

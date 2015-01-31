@@ -12,9 +12,9 @@
 #include <string>
 
 #include <pkmn/enums.hpp>
+#include <pkmn/native/pokemon.hpp>
 
 #include "utils.hpp"
-#include "structs/pokemon.hpp"
 
 namespace pkmn
 {
@@ -159,6 +159,34 @@ namespace pkmn
                     IVint = ((IVint & 0x7FFFFFF) | (val << 27));
                     break;
             }
+        }
+
+        enum gen3_substructs
+        {
+            G, //Growth
+            A, //Attacks
+            E, //Effort
+            M  //Misc
+        };
+
+        static const uint8_t gen3_block_orders[24][4] =
+        {
+            {G,A,E,M},{G,A,M,E},{G,E,A,M},{G,M,A,E},{G,M,A,E},{G,M,E,A},
+            {A,G,E,M},{A,G,M,E},{E,G,A,M},{M,G,A,E},{A,M,G,E},{A,M,E,G},
+            {A,E,G,M},{E,G,M,A},{E,A,G,M},{E,A,M,G},{E,M,G,A},{E,M,A,G},
+            {M,G,A,E},{M,G,E,A},{E,A,G,M},{M,A,M,G},{M,E,G,A},{M,E,A,G}
+        };
+
+        uint16_t gen3_crypt(native::gen3_pc_pokemon_t& pkmn)
+        {
+            uint16_t checksum = 0;
+            uint8_t index = pkmn.personality % 24; 
+
+            uint32_t security_key = pkmn.ot_id ^ pkmn.personality;
+            for(uint8_t i = 0; i < 48; i++) checksum += pkmn.blocks.blocks8[i];
+            for(uint8_t i = 0; i < 12; i++) pkmn.blocks.blocks32[i] ^= security_key;
+
+            return checksum;
         }
     }
 }

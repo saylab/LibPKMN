@@ -11,7 +11,7 @@ import nc.PKMN.*;
 public class JavaStringTest
 {
     // Test database usage
-    public static void DatabaseUsageTest()
+    public static boolean DatabaseUsageTest()
     {
         try
         {
@@ -20,25 +20,33 @@ public class JavaStringTest
             if(!testString.equals(testString2))
                 throw new RuntimeException("testString != testString2");
 
-            long testLong1 = Database.getItemID(Database.getItemName(Items.POKE_BALL));
-            if(testLong1 != Items.POKE_BALL)
-                throw new RuntimeException("testLong1 != Items.POKE_BALL");
+            int testInt1 = Database.getItemID(Database.getItemName(Items.POKE_BALL));
+            if(testInt1 != Items.POKE_BALL)
+                throw new RuntimeException("testInt1 != Items.POKE_BALL");
 
-            long testLong2 = Database.getSpeciesID(Database.getSpeciesName(Species.NIDORAN_M));
-            if(testLong2 != Species.NIDORAN_M)
-                throw new RuntimeException("testLong2 != Species.NIDORAN_M");
+            int testInt2 = Database.getSpeciesID(Database.getSpeciesName(Species.NIDORAN_M));
+            if(testInt2 != Species.NIDORAN_M)
+                throw new RuntimeException("testInt2 != Species.NIDORAN_M");
+
+            return true;
         }
         catch(RuntimeException ex)
         {
-            System.out.println("Caught exception:");
-            System.out.println("   " + ex.getMessage());
-            System.out.println(ex.getStackTrace());
-            System.exit(1);
+            System.out.println("\nCaught exception: " + ex.getMessage());
+            System.out.println("Stacktrace:");
+            for(int i = 0; i < ex.getStackTrace().length; i++)
+                System.out.println(" * " + ex.getStackTrace()[i]);
+
+            return false;
         }
     }
 
     public static void main(String[] args)
     {
-        DatabaseUsageTest();
+        boolean successful = true;
+
+        successful = DatabaseUsageTest();
+
+        System.exit(successful ? 0 : 1);
     }
 }

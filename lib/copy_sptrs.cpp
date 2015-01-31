@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -12,15 +12,12 @@
 #include "copy_sptrs.hpp"
 
 #include "bag_impl.hpp"
-#include "base_pokemon_gen1impl.hpp"
-#include "base_pokemon_gen2impl.hpp"
-#include "base_pokemon_modernimpl.hpp"
-#include "item_impl.hpp"
-#include "move_impl.hpp"
 #include "pocket_impl.hpp"
-#include "team_pokemon_gen1impl.hpp"
-#include "team_pokemon_gen2impl.hpp"
-#include "team_pokemon_gen3impl.hpp"
+#include "pokedex_impl.hpp"
+#include "pokemon_gen1impl.hpp"
+#include "pokemon_gen2impl.hpp"
+#include "pokemon_gen3impl.hpp"
+#include "pokemon_ndsimpl.hpp"
 #include "trainer_impl.hpp"
 #include "types/prng_impl.hpp"
 
@@ -32,68 +29,48 @@ namespace pkmn
         return pkmn::dynamic_pointer_cast<bag>(pkmn::make_shared<bag_impl>(actual));
     }
 
-    base_pokemon::sptr copy_base_pokemon(base_pokemon::sptr in)
-    {
-        switch(in->get_generation()) //Generation determines implementation class
-        {
-            case 1:
-            {
-                base_pokemon_gen1impl actual1 = *pkmn::dynamic_pointer_cast<base_pokemon_gen1impl>(in);
-                return pkmn::make_shared<base_pokemon_gen1impl>(actual1);
-            }
-
-            case 2:
-            {
-                base_pokemon_gen2impl actual2 = *pkmn::dynamic_pointer_cast<base_pokemon_gen2impl>(in);
-                return pkmn::make_shared<base_pokemon_gen2impl>(actual2);
-            }
-
-            default:
-            {
-                base_pokemon_modernimpl actual3 = *pkmn::dynamic_pointer_cast<base_pokemon_modernimpl>(in);
-                return pkmn::make_shared<base_pokemon_modernimpl>(actual3);
-            }
-        }
-    }
-
-    item::sptr copy_item(item::sptr in)
-    {
-        item_impl actual = *pkmn::dynamic_pointer_cast<item_impl>(in);
-        return pkmn::make_shared<item_impl>(actual);
-    }
-
-    move::sptr copy_move(move::sptr in)
-    {
-        move_impl actual = *pkmn::dynamic_pointer_cast<move_impl>(in);
-        return pkmn::make_shared<move_impl>(actual);
-    }
-
     pocket::sptr copy_pocket(pocket::sptr in)
     {
         pocket_impl actual = *pkmn::dynamic_pointer_cast<pocket_impl>(in);
         return pkmn::make_shared<pocket_impl>(actual);
     }
 
-    team_pokemon::sptr copy_team_pokemon(team_pokemon::sptr in)
+    pokedex::sptr copy_pokedex(pokedex::sptr in)
     {
-        switch(in->get_generation()) //Generation determines implementation class
+        pokedex_impl actual = *pkmn::dynamic_pointer_cast<pokedex_impl>(in);
+        return pkmn::make_shared<pokedex_impl>(actual);
+    }
+
+    pokemon::sptr copy_pokemon(pokemon::sptr in)
+    {
+        switch(in->get_generation())
         {
             case 1:
             {
-                team_pokemon_gen1impl actual1 = *pkmn::dynamic_pointer_cast<team_pokemon_gen1impl>(in);
-                return pkmn::make_shared<team_pokemon_gen1impl>(actual1);
+                pokemon_gen1impl actual = *pkmn::dynamic_pointer_cast<pokemon_gen1impl>(in);
+                return pkmn::make_shared<pokemon_gen1impl>(actual);
+                break;
             }
 
             case 2:
             {
-                team_pokemon_gen2impl actual2 = *pkmn::dynamic_pointer_cast<team_pokemon_gen2impl>(in);
-                return pkmn::make_shared<team_pokemon_gen2impl>(actual2);
+                pokemon_gen2impl actual = *pkmn::dynamic_pointer_cast<pokemon_gen2impl>(in);
+                return pkmn::make_shared<pokemon_gen2impl>(actual);
+                break;
+            }
+
+            case 3:
+            {
+                pokemon_gen3impl actual = *pkmn::dynamic_pointer_cast<pokemon_gen3impl>(in);
+                return pkmn::make_shared<pokemon_gen3impl>(actual);
+                break;
             }
 
             default:
             {
-                team_pokemon_gen3impl actual3 = *pkmn::dynamic_pointer_cast<team_pokemon_gen3impl>(in);
-                return pkmn::make_shared<team_pokemon_gen3impl>(actual3);
+                pokemon_ndsimpl actual = *pkmn::dynamic_pointer_cast<pokemon_ndsimpl>(in);
+                return pkmn::make_shared<pokemon_ndsimpl>(actual);
+                break;
             }
         }
     }
