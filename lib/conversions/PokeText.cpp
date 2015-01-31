@@ -7,6 +7,9 @@
 
 #include <vector>
 
+#include <string>
+#include <boost/locale/encoding_utf.hpp>
+
 #include "PokeText.h"
 
 namespace PokeLib {
@@ -245,9 +248,7 @@ widetext PokeText::toWidetext(const wchar_t* wc, size_t length) {
     return output;
 }
 widetext PokeText::toWidetext(const char* mb, size_t length) {
-    std::vector<wchar_t> tmp(length);
-    mbstowcs(&tmp[0], mb, length);
-    return toWidetext(&tmp[0],length);
+    return boost::locale::conv::utf_to_utf<wchar_t>(mb);
 }
 
 }
