@@ -110,6 +110,8 @@ namespace pkmn
         _raw      = other._raw;
         _nickname = other._nickname;
         _otname   = other._otname;
+
+        return *this;
     }
 
     /*

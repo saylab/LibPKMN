@@ -155,10 +155,14 @@ namespace pkmn
 
     pokemon_ndsimpl& pokemon_ndsimpl::operator=(const pokemon_ndsimpl& other)
     {
+        pokemon_impl::operator=(other);
+
         _blockA = &(_raw.pc.blocks.blockA);
         _blockB = &(_raw.pc.blocks.blockB);
         _blockC = &(_raw.pc.blocks.blockC);
         _blockD = &(_raw.pc.blocks.blockD);
+
+        return *this;
     }
 
     /*

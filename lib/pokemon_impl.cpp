@@ -139,6 +139,8 @@ namespace pkmn
         _form_id       = other._form_id;
         _version_id    = other._version_id;
         _attributes    = other._attributes;
+
+        return *this;
     }
 
     /*

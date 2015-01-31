@@ -7,6 +7,10 @@
 #ifndef INCLUDED_POKEMON_IMPL_HPP
 #define INCLUDED_POKEMON_IMPL_HPP
 
+#ifdef _MSC_VER
+#pragma warning(disable: 4244) // narrowing
+#endif
+
 #include <boost/assign.hpp>
 #include <boost/format.hpp>
 

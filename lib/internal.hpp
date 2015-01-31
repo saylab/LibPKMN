@@ -26,7 +26,7 @@ namespace pkmn
 {
     uint8_t PKMN_INLINE count_ones(uint16_t val)
     {   
-        uint8_t num_ones;
+        uint8_t num_ones = 0;
 
         for(size_t i = 0; i < 16; i++)
         {   

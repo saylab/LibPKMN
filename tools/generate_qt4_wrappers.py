@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+# Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
 #
 # Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
 # or copy at http://opensource.org/licenses/MIT)
@@ -74,6 +74,7 @@ def generate_hpp(header, license):
 #ifndef INCLUDED_%s_HPP
 #define INCLUDED_%s_HPP
 
+#include <cstdint>
 #include <Python.h>
 #include <pkmn/qt4/%s.hpp>
 

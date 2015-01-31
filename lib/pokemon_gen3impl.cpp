@@ -132,6 +132,8 @@ namespace pkmn
         _attacks = &(_raw.pc.blocks.attacks);
         _effort = &(_raw.pc.blocks.effort);
         _misc = &(_raw.pc.blocks.misc);
+
+        return *this;
     }
 
     /*

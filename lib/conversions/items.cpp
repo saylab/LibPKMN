@@ -45,7 +45,7 @@ namespace pkmn
 
             for(size_t i = 0; i < item_list.size(); i++)
             {
-                raw_bag->items[i].index = ITEM_GAME_INDEX(item_list, i, Versions::YELLOW);
+                raw_bag->items[i].index = uint8_t(ITEM_GAME_INDEX(item_list, i, Versions::YELLOW));
                 raw_bag->items[i].count = item_list[i].second;
             }
         }

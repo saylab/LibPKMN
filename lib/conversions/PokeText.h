@@ -9,6 +9,7 @@
 #ifndef POKETEXT_H_
 #define POKETEXT_H_
 
+#include <cstdint>
 #include <string>
 
 namespace PokeLib {

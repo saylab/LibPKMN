@@ -1,9 +1,13 @@
 /*
- * Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  */
+
+#ifdef _MSC_VER
+#pragma warning(disable: 4800) // forcing value to bool 'true' or 'false'
+#endif
 
 #include <pkmn/types/ribbons.hpp>
 
