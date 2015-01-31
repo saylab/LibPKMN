@@ -103,7 +103,7 @@ namespace pkmn
         // TODO: Pokerus
         if(_version_id != Versions::HEARTGOLD and _version_id != Versions::SOULSILVER)
             _blockD->ball = Balls::LUXURY_BALL;
-        _blockD->metlevel_otgender = (level |= ~(1<<31));
+        _blockD->metlevel_otgender = (level | ~(1<<31));
         _blockD->encounter_info = 0; // Special event
         if(_version_id == Versions::HEARTGOLD or _version_id == Versions::SOULSILVER)
             _blockD->ball_hgss = Balls::LUXURY_BALL;

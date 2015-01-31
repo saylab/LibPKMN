@@ -222,7 +222,10 @@ namespace pkmn
 
         sprite_path /= str(_generation_format % database::get_generation(_version_id));
         sprite_path /= _version_dirs[_version_id];
-        if(is_shiny()) sprite_path /= "shiny";
+        if(_pokedex_entry.has_gender_differences and get_gender() == "Female")
+            sprite_path /= "female";
+        if(is_shiny())
+            sprite_path /= "shiny";
 
         if(_form_id == _species_id)
             sprite_path /= str(_pokemon_format % _species_id);

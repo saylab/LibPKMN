@@ -35,17 +35,17 @@ namespace pkmn
 
             virtual uint16_t get_generation() const = 0;
 
-            virtual pokemon_entry_t get_pokemon_entry(const uint16_t species_id,
-                                                      const uint16_t form_id = 0) = 0;
+            virtual pokemon_entry_t get_pokemon_entry(uint16_t species_id,
+                                                      uint16_t form_id = 0) = 0;
 
             virtual pokemon_entry_t get_pokemon_entry(const pkmn::pkstring& species_name,
                                                       const pkmn::pkstring& form_name = "") = 0;
 
-            virtual move_entry_t get_move_entry(const uint16_t move_id) = 0;
+            virtual move_entry_t get_move_entry(uint16_t move_id) = 0;
 
             virtual move_entry_t get_move_entry(const pkmn::pkstring& move_name) = 0;
 
-            virtual item_entry_t get_item_entry(const uint16_t item_id) = 0;
+            virtual item_entry_t get_item_entry(uint16_t item_id) = 0;
 
             virtual item_entry_t get_item_entry(const pkmn::pkstring& item_name) = 0;
 

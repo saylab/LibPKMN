@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(copy_pokedex_test)
  */
 BOOST_AUTO_TEST_CASE(copy_pokemon_test)
 {
-    pkmn::pokemon::sptr pk1 = pkmn::pokemon::make("Houndoom", "X", 50,
+    pkmn::pokemon::sptr pk1 = pkmn::pokemon::make("Houndoom", "Diamond", 50,
                                                   "None", "None",
                                                   "None", "None");
     pkmn::pokemon::sptr pk2 = pk1;

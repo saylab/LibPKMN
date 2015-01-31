@@ -669,7 +669,7 @@ namespace pkmn
             if(version_id == Versions::NONE) return 0;
 
             std::ostringstream query_stream;
-            query_stream << "SELECT index FROM version_game_indices WHERE version_id="
+            query_stream << "SELECT game_index FROM version_game_indices WHERE version_id="
                          << version_id;
             SQLite::Statement query(*db, query_stream.str().c_str());
             return get_num_from_query<uint16_t>(query);
@@ -680,7 +680,7 @@ namespace pkmn
             CONNECT_TO_DB(db);
 
             std::ostringstream query_stream;
-            query_stream << "SELECT version_id FROM version_game_indices WHERE index="
+            query_stream << "SELECT version_id FROM version_game_indices WHERE game_index="
                          << version_game_index;
             SQLite::Statement query(*db, query_stream.str().c_str());
             return get_num_from_query<uint16_t>(query);
