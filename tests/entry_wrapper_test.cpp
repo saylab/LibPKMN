@@ -5,6 +5,7 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
+#include <iostream>
 #include <boost/foreach.hpp>
 #include <boost/test/unit_test.hpp>
 
@@ -21,8 +22,8 @@
 
 BOOST_AUTO_TEST_CASE(item_entry_wrapper_test)
 {
-    pkmn::item_entry_t entry1(pkmn::Versions::DIAMOND, pkmn::Items::POTION);
-    ItemEntry entry2(pkmn::Versions::DIAMOND, pkmn::Items::POTION);
+    pkmn::item_entry_t entry1(pkmn::Versions::DIAMOND, pkmn::Items::MAGNET);
+    ItemEntry entry2(pkmn::Versions::DIAMOND, pkmn::Items::MAGNET);
 
     BOOST_CHECK(entry1.name == entry2.name);
     BOOST_CHECK(entry1.category == entry2.category);
@@ -30,7 +31,6 @@ BOOST_AUTO_TEST_CASE(item_entry_wrapper_test)
     BOOST_CHECK(entry1.description == entry2.description);
     BOOST_CHECK(entry1.cost == entry2.cost);
     BOOST_CHECK(entry1.fling_power == entry2.flingPower);
-    BOOST_CHECK(entry1.fling_effect == entry2.flingEffect);
 }
 
 BOOST_AUTO_TEST_CASE(move_entry_wrapper_test)

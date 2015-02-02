@@ -99,26 +99,12 @@ namespace pkmn
         cost = items_query.getColumn(3); // cost
 
         /*
-         * Fling effect
+         * Fling power
          */
         if(generation < 4)
-        {
             fling_power  = 0;
-            fling_effect = "None";
-        }
         else
-        {
             fling_power = items_query.getColumn(4); // fling_power
-            query_stream.str("");
-            query_stream << "SELECT effect FROM item_fling_effect_prose WHERE" // fling_effect_id
-                         << " item_fling_effect_id=" << uint16_t(items_query.getColumn(5))
-                         << " AND local_language_id=9";
-            SQLite::Statement fling_effect_query(*db, query_stream.str().c_str());
-            if(fling_effect_query.executeStep())
-                fling_effect = fling_effect_query.getColumn(0); // effect
-            else
-                fling_effect = "None";
-        }
     }
 
     item_entry_t::item_entry_t(const pkmn::pkstring& version_name,

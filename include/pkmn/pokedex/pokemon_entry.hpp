@@ -34,9 +34,9 @@ namespace pkmn
         pkmn::pkstring_pair_t abilities;
         pkmn::pkstring hidden_ability;
         pkmn::pkstring_pair_t egg_groups;
-        uint8_t catch_rate;
+        uint16_t catch_rate;
         uint16_t exp_yield;
-        uint8_t base_friendship;
+        uint16_t base_friendship;
         float height;
         float weight;
         float chance_male;

@@ -30,8 +30,7 @@ namespace pkmn
 
         uint16_t cost;
 
-        uint8_t fling_power;
-        pkmn::pkstring fling_effect;
+        uint16_t fling_power;
     };
 }
 

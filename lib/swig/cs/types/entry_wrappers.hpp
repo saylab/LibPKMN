@@ -31,7 +31,6 @@ struct ItemEntry
         description = entry.description;
         cost = entry.cost;
         flingPower = entry.fling_power;
-        flingEffect = entry.fling_effect;
     }
 
     ItemEntry(const std::wstring& versionName, const std::wstring& itemName)
@@ -47,8 +46,7 @@ struct ItemEntry
 
     uint16_t cost;
 
-    uint8_t flingPower;
-    std::wstring flingEffect;
+    uint16_t flingPower;
 };
 
 struct MoveEntry
@@ -87,8 +85,8 @@ struct MoveEntry
     std::wstring damageClass;
     std::wstring target;
 
-    uint8_t power;
-    uint8_t pp;
+    uint16_t power;
+    uint16_t pp;
     float accuracy;
     int8_t priority;
 
@@ -155,9 +153,9 @@ struct PokemonEntry
     std::pair<std::wstring, std::wstring> abilities;
     std::wstring hiddenAbility;
     std::pair<std::wstring, std::wstring> eggGroups;
-    uint8_t catchRate;
+    uint16_t catchRate;
     uint16_t expYield;
-    uint8_t baseFriendship;
+    uint16_t baseFriendship;
     float height;
     float weight;
     float chanceMale;

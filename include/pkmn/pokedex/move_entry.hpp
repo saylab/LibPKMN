@@ -30,8 +30,8 @@ namespace pkmn
         pkmn::pkstring damage_class;
         pkmn::pkstring target;
 
-        uint8_t power;
-        uint8_t pp;
+        uint16_t power;
+        uint16_t pp;
         float accuracy;
         int8_t priority;
 
