@@ -21,11 +21,52 @@
 namespace pkmn
 {
     static pkmn::shared_ptr<SQLite::Database> db; 
+    static pkmn::move_entry_t none_entry;
+    static pkmn::move_entry_t invalid_entry;
+    static bool entries_created = false;
+
+    static void create_none_invalid_entries()
+    {   
+        // None entry
+        none_entry.name = "None";
+        none_entry.type = "None";
+        none_entry.description = "None";
+        none_entry.damage_class = "None";
+        none_entry.target = "None";
+        none_entry.power = 0;
+        none_entry.pp = 0;
+        none_entry.accuracy = 0.0;
+        none_entry.priority = 0;
+        none_entry.effect = "None";
+        none_entry.effect_chance = 0.0;
+        none_entry.contest_type = "None";
+        none_entry.contest_effect = "None";
+        none_entry.super_contest_effect = "None";
+
+        // Invalid entry
+        invalid_entry = none_entry;
+        none_entry.name = "Invalid";
+
+        entries_created = true;
+    }
 
     move_entry_t::move_entry_t(uint16_t version_id,
                                uint16_t move_id)
     {   
         CONNECT_TO_DB(db);
+        if(not entries_created)
+            create_none_invalid_entries();
+
+        if(move_id == Moves::NONE)
+        {
+            *this = none_entry;
+            return;
+        }
+        else if(move_id == Moves::INVALID)
+        {
+            *this = invalid_entry;
+            return;
+        }
 
         uint8_t generation = database::get_generation(version_id);
 

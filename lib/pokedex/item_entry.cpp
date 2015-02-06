@@ -21,11 +21,44 @@
 namespace pkmn
 {
     static pkmn::shared_ptr<SQLite::Database> db; 
+    static pkmn::item_entry_t none_entry;
+    static pkmn::item_entry_t invalid_entry;
+    static bool entries_created = false;
+
+    static void create_none_invalid_entries()
+    {
+        // None entry
+        none_entry.name = "None";
+        none_entry.category = "None";
+        none_entry.pocket = "None";
+        none_entry.description = "None";
+        none_entry.cost = 0;
+        none_entry.fling_power = 0;
+
+        // Invalid entry
+        invalid_entry = none_entry;
+        none_entry.name = "Invalid";
+
+        entries_created = true;
+    }
 
     item_entry_t::item_entry_t(uint16_t version_id,
                                uint16_t item_id)
     {   
         CONNECT_TO_DB(db);
+        if(not entries_created)
+            create_none_invalid_entries();
+
+        if(item_id == Items::NONE)
+        {
+            *this = none_entry;
+            return;
+        }
+        else if(item_id == Items::INVALID)
+        {
+            *this = invalid_entry;
+            return;
+        }
 
         std::ostringstream query_stream;
         query_stream << "SELECT generation_id FROM item_game_indices WHERE item_id="

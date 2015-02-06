@@ -7,6 +7,8 @@
 
 #include <sstream>
 
+#include <boost/assign.hpp>
+
 #include <pkmn/database.hpp>
 #include <pkmn/enums.hpp>
 #include <pkmn/paths.hpp>
@@ -19,12 +21,73 @@
 namespace pkmn
 {
     static pkmn::shared_ptr<SQLite::Database> db;
+    static pkmn::pokemon_entry_t none_entry;
+    static pkmn::pokemon_entry_t invalid_entry;
+    static bool entries_created = false;
+
+    static void create_none_invalid_entries()
+    {
+        // None entry
+        none_entry.species_name = "None";
+        none_entry.pokedex_num = 0;
+        none_entry.form = "None";
+        none_entry.pokedex_entry = "None";
+        none_entry.types = std::make_pair("None", "None");
+        none_entry.abilities = std::make_pair("None", "None");
+        none_entry.hidden_ability = "None";
+        none_entry.egg_groups = std::make_pair("None", "None");
+        none_entry.catch_rate = 0;
+        none_entry.exp_yield = 0;
+        none_entry.base_friendship = 0;
+        none_entry.height = 0.0;
+        none_entry.weight = 0.0;
+        none_entry.chance_male = 0.0;
+        none_entry.chance_female = 0.0;
+        none_entry.has_gender_differences = false;
+        none_entry.base_stats = boost::assign::map_list_of
+            ("HP", 0)
+            ("Attack", 0)
+            ("Defense", 0)
+            ("Speed", 0)
+            ("Special", 0)
+            ("Special Attack", 0)
+            ("Special Defense", 0)
+        ;
+        none_entry.ev_yields = boost::assign::map_list_of
+            ("HP", 0)
+            ("Attack", 0)
+            ("Defense", 0)
+            ("Speed", 0)
+            ("Special", 0)
+            ("Special Attack", 0)
+            ("Special Defense", 0)
+        ;
+
+        // Invalid entry
+        invalid_entry = none_entry;
+        invalid_entry.species_name = "Invalid";
+
+        entries_created = true;
+    }
 
     pokemon_entry_t::pokemon_entry_t(uint16_t version_id,
                                      uint16_t species_id,
                                      uint16_t form_id)
     {
         CONNECT_TO_DB(db);
+        if(not entries_created)
+            create_none_invalid_entries();
+
+        if(species_id == Species::NONE)
+        {
+            *this = none_entry;
+            return;
+        }
+        else if(species_id == Species::INVALID)
+        {
+            *this = invalid_entry;
+            return;
+        }
 
         uint16_t pokemon_id;
         std::ostringstream query_stream;
