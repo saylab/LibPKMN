@@ -32,13 +32,13 @@ namespace pkmn
     pocket::sptr copy_pocket(pocket::sptr in)
     {
         pocket_impl actual = *pkmn::dynamic_pointer_cast<pocket_impl>(in);
-        return pkmn::make_shared<pocket_impl>(actual);
+        return pkmn::dynamic_pointer_cast<pocket>(pkmn::make_shared<pocket_impl>(actual));
     }
 
     pokedex::sptr copy_pokedex(pokedex::sptr in)
     {
         pokedex_impl actual = *pkmn::dynamic_pointer_cast<pokedex_impl>(in);
-        return pkmn::make_shared<pokedex_impl>(actual);
+        return pkmn::dynamic_pointer_cast<pokedex>(pkmn::make_shared<pokedex_impl>(actual));
     }
 
     pokemon::sptr copy_pokemon(pokemon::sptr in)
@@ -48,28 +48,28 @@ namespace pkmn
             case 1:
             {
                 pokemon_gen1impl actual = *pkmn::dynamic_pointer_cast<pokemon_gen1impl>(in);
-                return pkmn::make_shared<pokemon_gen1impl>(actual);
+                return pkmn::dynamic_pointer_cast<pokemon>(pkmn::make_shared<pokemon_gen1impl>(actual));
                 break;
             }
 
             case 2:
             {
                 pokemon_gen2impl actual = *pkmn::dynamic_pointer_cast<pokemon_gen2impl>(in);
-                return pkmn::make_shared<pokemon_gen2impl>(actual);
+                return pkmn::dynamic_pointer_cast<pokemon>(pkmn::make_shared<pokemon_gen2impl>(actual));
                 break;
             }
 
             case 3:
             {
                 pokemon_gen3impl actual = *pkmn::dynamic_pointer_cast<pokemon_gen3impl>(in);
-                return pkmn::make_shared<pokemon_gen3impl>(actual);
+                return pkmn::dynamic_pointer_cast<pokemon>(pkmn::make_shared<pokemon_gen3impl>(actual));
                 break;
             }
 
             default:
             {
                 pokemon_ndsimpl actual = *pkmn::dynamic_pointer_cast<pokemon_ndsimpl>(in);
-                return pkmn::make_shared<pokemon_ndsimpl>(actual);
+                return pkmn::dynamic_pointer_cast<pokemon>(pkmn::make_shared<pokemon_ndsimpl>(actual));
                 break;
             }
         }
@@ -78,12 +78,12 @@ namespace pkmn
     trainer::sptr copy_trainer(trainer::sptr in)
     {
         trainer_impl actual = *pkmn::dynamic_pointer_cast<trainer_impl>(in);
-        return pkmn::make_shared<trainer_impl>(actual);
+        return pkmn::dynamic_pointer_cast<trainer>(pkmn::make_shared<trainer_impl>(actual));
     }
 
     prng::sptr copy_prng(prng::sptr in)
     {
         prng_impl actual = *pkmn::dynamic_pointer_cast<prng_impl>(in);
-        return pkmn::make_shared<prng_impl>(actual);
+        return pkmn::dynamic_pointer_cast<prng>(pkmn::make_shared<prng_impl>(actual));
     }
 }
