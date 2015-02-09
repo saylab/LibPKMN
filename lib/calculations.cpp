@@ -99,7 +99,7 @@ namespace pkmn
                                  uint16_t EV, uint8_t IV)
         {
             return get_modern_stat(stat_name, base_stat_value, level,
-                                   nature[stat_name], EV, IV);
+                                   ((stat_name == "HP") ? 1.0 : nature[stat_name]), EV, IV);
         }
 
         std::pair<uint16_t, uint16_t> get_stat_range(const pkmn::pokemon_entry_t& entry,
