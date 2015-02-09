@@ -99,19 +99,6 @@ IF(ENABLE_LIBPKMN)
     TARGET_LINK_LIBRARIES(pkmn ${libpkmn_libs})
 
     ####################################################################
-    # Compiler-specific flags
-    ####################################################################
-    IF(CMAKE_COMPILER_IS_GNUCXX)
-        IF(UNIX)
-            SET_TARGET_PROPERTIES(pkmn PROPERTIES COMPILE_FLAGS "-std=c++0x -fPIC")
-        ELSE() #Cygwin
-            SET_TARGET_PROPERTIES(pkmn PROPERTIES COMPILE_FLAGS "-std=c++0x")
-        ENDIF(UNIX)
-    ELSEIF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        SET_TARGET_PROPERTIES(pkmn PROPERTIES COMPILE_FLAGS "-std=c++11 -fPIC")
-    ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-
-    ####################################################################
     # MSVC needs this setting to export functions in pkmn.dll
     ####################################################################
     SET_TARGET_PROPERTIES(pkmn PROPERTIES DEFINE_SYMBOL "PKMN_DLL_EXPORTS")

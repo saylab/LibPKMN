@@ -72,9 +72,6 @@ ADD_CUSTOM_TARGET(
 ADD_LIBRARY(qt4proxy STATIC ${qt4proxy_sources})
 TARGET_LINK_LIBRARIES(qt4proxy ${qt4proxy_libraries})
 ADD_DEPENDENCIES(qt4proxy qt4_wrappers)
-IF(UNIX)
-    SET_TARGET_PROPERTIES(qt4proxy PROPERTIES COMPILE_FLAGS "-fPIC")
-ENDIF(UNIX)
 
 INCLUDE(LibPKMNPython)
 PYTHON_BUILD_SWIG_MODULE(qt4_swig pkmn/qt4)

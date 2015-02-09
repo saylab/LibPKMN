@@ -93,15 +93,6 @@ MACRO(PYTHON_BUILD_SWIG_MODULE module_name install_dir)
     SET_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_BINARY_DIR}/${module_name}.i PROPERTIES CPLUSPLUS ON)
     SWIG_ADD_MODULE(${module_name} python ${CMAKE_CURRENT_BINARY_DIR}/${module_name}.i)
     ADD_DEPENDENCIES(${SWIG_MODULE_${module_name}_REAL_NAME} python_enums)
-    IF(CMAKE_COMPILER_IS_GNUCXX)
-        IF(UNIX)
-            SET_TARGET_PROPERTIES(${SWIG_MODULE_${module_name}_REAL_NAME} PROPERTIES COMPILE_FLAGS "-std=c++0x -fPIC")
-        ELSE() #Cygwin
-            SET_TARGET_PROPERTIES(${SWIG_MODULE_${module_name}_REAL_NAME} PROPERTIES COMPILE_FLAGS "-std=c++0x")
-        ENDIF(UNIX)
-    ELSEIF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        SET_TARGET_PROPERTIES(${SWIG_MODULE_${module_name}_REAL_NAME} PROPERTIES COMPILE_FLAGS "-std=c++11 -fPIC")
-    ENDIF(CMAKE_COMPILER_IS_GNUCXX)
     SWIG_LINK_LIBRARIES(${module_name} ${LIBPKMN_PYTHON_LIBRARIES})
     
     # Copy init file to binary directory for unit tests

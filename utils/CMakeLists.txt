@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+# Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
 #
 # Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
 # or copy at http://opensource.org/licenses/MIT)
@@ -24,15 +24,6 @@ IF(ENABLE_UTILITIES)
     @ONLY)
     ADD_EXECUTABLE(libpkmn-config-info ${CMAKE_CURRENT_BINARY_DIR}/libpkmn-config-info.cpp)
     TARGET_LINK_LIBRARIES(libpkmn-config-info pkmn)
-    IF(CMAKE_COMPILER_IS_GNUCXX)
-        IF(UNIX)
-            SET_TARGET_PROPERTIES(libpkmn-config-info PROPERTIES COMPILE_FLAGS "-std=c++0x -fPIC")
-        ELSE() #Cygwin
-            SET_TARGET_PROPERTIES(libpkmn-config-info PROPERTIES COMPILE_FLAGS "-std=c++0x")
-        ENDIF(UNIX)
-        ELSEIF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-            SET_TARGET_PROPERTIES(libpkmn-config-info PROPERTIES COMPILE_FLAGS "-std=c++11 -fPIC")
-        ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
     INSTALL(TARGETS libpkmn-config-info RUNTIME DESTINATION ${RUNTIME_DIR} COMPONENT Runtime)
 ENDIF(ENABLE_UTILITIES)

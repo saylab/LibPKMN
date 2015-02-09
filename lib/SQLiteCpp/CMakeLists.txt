@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+# Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
 #
 # Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
 # or copy at http://opensource.org/licenses/MIT)
@@ -22,12 +22,3 @@ SET(SQLiteCpp_sources
 )
 ADD_LIBRARY(SQLiteCpp STATIC ${SQLiteCpp_sources})
 TARGET_LINK_LIBRARIES(SQLiteCpp sqlite3)
-IF(UNIX)
-    IF(CMAKE_COMPILER_IS_GNUCXX)
-        SET_TARGET_PROPERTIES(SQLiteCpp PROPERTIES COMPILE_FLAGS "-fPIC -std=c++0x")
-    ELSEIF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        SET_TARGET_PROPERTIES(SQLiteCpp PROPERTIES COMPILE_FLAGS "-fPIC -std=c++11")
-    ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-ELSEIF(MINGW)
-    SET_TARGET_PROPERTIES(SQLiteCpp PROPERTIES COMPILE_FLAGS "-std=c++11")
-ENDIF(UNIX)

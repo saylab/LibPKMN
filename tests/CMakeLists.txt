@@ -115,16 +115,6 @@ FOREACH(cpp_test ${cpp_test_sources})
     ADD_EXECUTABLE(${cpp_test_name} ${cpp_test})
     TARGET_LINK_LIBRARIES(${cpp_test_name} pkmn ${QT_LIBRARIES} ${QT_QTMAIN_LIBRARY})
 
-    IF(CMAKE_COMPILER_IS_GNUCXX)
-        IF(UNIX)
-            SET_TARGET_PROPERTIES(${cpp_test_name} PROPERTIES COMPILE_FLAGS "-std=c++0x -fPIC")
-        ELSE() #Cygwin
-            SET_TARGET_PROPERTIES(${cpp_test_name} PROPERTIES COMPILE_FLAGS "-std=c++0x")
-        ENDIF(UNIX)
-    ELSEIF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        SET_TARGET_PROPERTIES(${cpp_test_name} PROPERTIES COMPILE_FLAGS "-std=c++11 -fPIC")
-    ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-
     IF(WIN32)
         LIBPKMN_ADD_TEST(${cpp_test_name} "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${cpp_test_name}.exe")
     ELSE()

@@ -66,7 +66,7 @@ ENDIF(UPDATE_SUBMODULES)
 # Getting compilation info
 ########################################################################
 IF(NOT LIBPKMN_USED_AS_SUBMODULE)
-    INCLUDE(${LIBPKMN_SOURCE_DIR}/cmake/Modules/LibPKMNConfigInfo.cmake)
+    INCLUDE(LibPKMNConfigInfo)
     MESSAGE(STATUS "")
 ENDIF(NOT LIBPKMN_USED_AS_SUBMODULE)
 

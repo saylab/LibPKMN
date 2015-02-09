@@ -5,7 +5,9 @@
 # or copy at http://opensource.org/licenses/MIT)
 #
 
-#Extract Git commits from LibPKMN and all submodules
+#
+# Extract Git commits from LibPKMN and all submodules
+#
 
 INCLUDE(CheckCXXSourceCompiles)
 INCLUDE(CheckIncludeFileCXX)
@@ -96,6 +98,31 @@ IF(NOT USE_BOOST_SHARED_PTR)
         MESSAGE(STATUS "STL shared_ptr not found. Defaulting to boost::shared_ptr.")
     ENDIF(NOT HAVE_SHARED_PTR)
 ENDIF(NOT USE_BOOST_SHARED_PTR)
+
+#
+# Set compiler-specific flags.
+#
+IF(MINGW)
+    # Statically link the MinGW runtime
+    CHECK_CXX_COMPILER_FLAG(-static-libgcc HAVE_STATIC_LIBGCC_FLAG)
+    IF(HAVE_STATIC_LIBGCC_FLAG)
+        SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc")
+        SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -static-libgcc")
+        SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -static-libgcc")
+    ENDIF()
+    CHECK_CXX_COMPILER_FLAG(-static-libstdc++ HAVE_STATIC_LIBSTDCXX_FLAG)
+    IF(HAVE_STATIC_LIBSTDCXX_FLAG)
+        SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libstdc++")
+        SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -static-libstdc++")
+        SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -static-libstdc++")
+    ENDIF()
+ELSEIF(CMAKE_COMPILER_IS_GNUCXX)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -fPIC")
+ELSEIF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC")
+ELSEIF(MSVC)
+    ADD_DEFINITIONS(/MP) # Multi-threaded build
+ENDIF(MINGW)
 
 #
 # By this point, any non-supported compiler setup should have errored out, but if
