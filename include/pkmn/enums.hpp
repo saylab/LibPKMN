@@ -4,7 +4,7 @@
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  *
- * This file was generated: 2015-01-14 21:39:42.061692
+ * This file was generated: 2015-02-09 08:37:53.028214
  */
 
 #ifndef INCLUDED_PKMN_ENUMS_HPP
@@ -1636,7 +1636,7 @@ namespace pkmn
             BLUESKY_MAIL,
             MUSIC_MAIL,
             MIRAGE_MAIL,
-            INVALID = 100000,
+            INVALID = 30000,
         };
     }
 
@@ -2274,7 +2274,7 @@ namespace pkmn
             SHADOW_PANIC,
             SHADOW_SHED,
             SHADOW_SKY,
-            INVALID = 100000,
+            INVALID = 30000,
         };
     }
 
@@ -3238,7 +3238,7 @@ namespace pkmn
             YVELTAL,
             ZYGARDE,
             DIANCIE,
-            INVALID,
+            INVALID = 30000,
         };
     }
 

@@ -116,7 +116,7 @@ def get_items(c):
         item_name = str(unidecode(from_db[i][1])).replace("-","_").replace(" ","_").replace(".","").replace("'","").upper()
         items += [(from_db[i][0], item_name)]
 
-    items += [(100000, "INVALID")]
+    items += [(30000, "INVALID")]
 
 def get_moves(c):
     global moves
@@ -129,7 +129,7 @@ def get_moves(c):
         move_name = str(from_db[i][1]).replace("-","_").replace(" ","_").replace("'","").upper().replace("SING","__SING")
         moves += [(from_db[i][0], move_name)]
 
-    moves += [(100000, "INVALID")]
+    moves += [(30000, "INVALID")]
 
 def get_move_damage_classes(c):
     global move_damage_classes
@@ -214,7 +214,7 @@ def get_species(c):
 
         species += [(from_db[i][0], species_name)]
 
-    species += [(10000, "INVALID")]
+    species += [(30000, "INVALID")]
 
 def get_stats(c):
     global stats
@@ -482,7 +482,11 @@ def generate_enums_hpp(output_dir, license):
         {"""
 
     for i in range(len(species)):
-        output += """
+        if i > 0 and species[i][0] > (species[i-1][0]+1):
+            output += """
+            %s = %d,""" % (species[i][1], species[i][0])
+        else:
+            output += """
             %s,""" % species[i][1]
 
     output += """
