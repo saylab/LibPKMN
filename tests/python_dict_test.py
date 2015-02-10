@@ -115,9 +115,9 @@ def string_string_dict_test():
             raise Exception("len(vals) != 3")
         if vals[0] != "xyz":
             raise Exception("vals[0] != \"xyz\"")
-        if vals[1] != "def":
+        if vals[1] != "uvw":
             raise Exception("vals[1] != \"def\"")
-        if vals[2] != "abc":
+        if vals[2] != "rst":
             raise Exception("vals[2] != \"abc\"")
 
         # Make sure clearing works

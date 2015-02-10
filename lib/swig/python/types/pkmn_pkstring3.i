@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -49,6 +49,14 @@
 %extend pkmn::pkstring {
     char* __repr__() {return (char*)((*self).const_char());}
     char* __str__() {return (char*)((*self).const_char());}
+
+    %pythoncode %{
+        def __eq__(self, rhs):
+            return (str(self) == str(rhs))
+
+        def __ne__(self, rhs):
+            return (str(self) != str(rhs))
+    %}
 };
 
 %{
