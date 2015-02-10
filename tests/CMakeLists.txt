@@ -12,7 +12,7 @@ SET(IMAGES_PATH ${LIBPKMN_BINARY_DIR}/share/libpkmn/images)
 FILE(TO_NATIVE_PATH ${IMAGES_PATH} IMAGES_PATH)
 
 #Get SQLite database dir
-SET(DATABASE_PATH ${LIBPKMN_BINARY_DIR}/share/libpkmn/libpkmn.db)
+SET(DATABASE_PATH ${LIBPKMN_BINARY_DIR}/sqlite3/libpkmn.db)
 FILE(TO_NATIVE_PATH ${DATABASE_PATH} DATABASE_PATH)
 
 #Source/binary dirs

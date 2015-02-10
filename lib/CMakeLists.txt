@@ -14,6 +14,7 @@ IF(ENABLE_LIBPKMN)
     INCLUDE_DIRECTORIES(
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/SQLiteCpp
+        ${LIBPKMN_SOURCE_DIR}/sqlite3
     )
 
     ADD_SUBDIRECTORY(SQLiteCpp)
@@ -34,9 +35,9 @@ IF(ENABLE_LIBPKMN)
 
     LIST(APPEND libpkmn_libs
         ${Boost_LIBRARIES}
-        SQLiteCpp
         ${QT_LIBRARIES}
         ${QT_QTMAIN_LIBRARY}
+        sqlite3
     )
 
     #
@@ -77,6 +78,7 @@ IF(ENABLE_LIBPKMN)
         io.cpp
         lists.cpp
         copy_sptrs.cpp
+        ${SQLiteCpp_sources}
         ${conversions_sources}
         ${pokedex_sources}
         ${qt4_sources}
