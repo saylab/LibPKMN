@@ -68,7 +68,7 @@ namespace pkmn
             return;
         }
 
-        uint8_t generation = database::get_generation(version_id);
+        uint16_t generation = database::get_generation(version_id);
 
         std::ostringstream query_stream;
         query_stream << "SELECT generation_id FROM moves WHERE id=" << move_id;
