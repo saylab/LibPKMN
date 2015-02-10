@@ -44,10 +44,13 @@ namespace pkmn
                      << species;
         SQLite::Database db(get_database_path());
         SQLite::Statement query(db, query_stream.str().c_str());
-        if(not query.executeStep())
-            throw std::runtime_error("Invalid Pokémon species.");
-        if(uint8_t(query.getColumn(0)) > generation)
-            throw std::runtime_error("This Pokémon was not present in the given version.");
+        if(species != Species::NONE and species != Species::INVALID)
+        {
+            if(not query.executeStep())
+                throw std::runtime_error("Invalid Pokémon species.");
+            if(uint8_t(query.getColumn(0)) > generation)
+                throw std::runtime_error("This Pokémon was not present in the given version.");
+        }
 
         switch(generation)
         {
@@ -114,7 +117,9 @@ namespace pkmn
         _prng(prng::make(database::get_generation(version_id))),
         _species_id(species_id),
         _form_id(species_id),
-        _version_id(version_id)
+        _version_id(version_id),
+        _none(species_id == Species::NONE),
+        _invalid(species_id == Species::INVALID)
     {
         CONNECT_TO_DB(_db);
 
@@ -128,7 +133,9 @@ namespace pkmn
         _species_id(other._species_id),
         _form_id(other._form_id),
         _version_id(other._version_id),
-        _attributes(other._attributes) {}
+        _attributes(other._attributes),
+        _none(other._none),
+        _invalid(other._invalid) {}
 
     pokemon_impl& pokemon_impl::operator=(const pokemon_impl& other)
     {
@@ -139,6 +146,8 @@ namespace pkmn
         _form_id       = other._form_id;
         _version_id    = other._version_id;
         _attributes    = other._attributes;
+        _none          = other._none;
+        _invalid       = other._invalid;
 
         return *this;
     }

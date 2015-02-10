@@ -30,34 +30,41 @@ namespace pkmn
         /*
          * Populate native struct
          */
-        _raw.pc.species = database::get_pokemon_game_index(_species_id, _version_id);
-        _raw.pc.held_item = 0;
-        _raw.pc.moves[0] = move1;
-        _raw.pc.moves[1] = move2;
-        _raw.pc.moves[2] = move3;
-        _raw.pc.moves[3] = move4;
-        _raw.pc.ot_id = _prng->lcrng() % 65536;
-        // experience determined by level
-        _raw.pc.ev_hp = _prng->lcrng() % 65536;
-        _raw.pc.ev_atk = _prng->lcrng() % 65536;
-        _raw.pc.ev_def = _prng->lcrng() % 65536;
-        _raw.pc.ev_spd = _prng->lcrng() % 65536;
-        _raw.pc.ev_spcl = _prng->lcrng() % 65536;
-        _raw.pc.iv_data = _prng->lcrng() % 65536;
-        for(size_t i = 0; i < 4; i++)
-            _raw.pc.move_pps[i] = database::get_move_pp(_raw.pc.moves[i]);
-        _raw.pc.friendship = 70;
-        _raw.pc.pokerus = 0;
-        if(_version_id == Versions::CRYSTAL)
+        if(_none or _invalid)
         {
-            _raw.pc.caught_data = ((level & 0x3F) << 8);
-            // Trainer male by default, can be set
-            // TODO: met location
+            memset(&_raw, 0x0, sizeof(pkmn::native::gen2_party_pokemon_t));
         }
-        _set_level(level);
-        _raw.status = 0x00;
-        _raw.unused = 0x00; // TODO: check in-game data to see if there is any expected value
-        _set_stats(); // Will populate rest of party portion of struct
+        else
+        {
+            _raw.pc.species = database::get_pokemon_game_index(_species_id, _version_id);
+            _raw.pc.held_item = 0;
+            _raw.pc.moves[0] = move1;
+            _raw.pc.moves[1] = move2;
+            _raw.pc.moves[2] = move3;
+            _raw.pc.moves[3] = move4;
+            _raw.pc.ot_id = _prng->lcrng() % 65536;
+            // experience determined by level
+            _raw.pc.ev_hp = _prng->lcrng() % 65536;
+            _raw.pc.ev_atk = _prng->lcrng() % 65536;
+            _raw.pc.ev_def = _prng->lcrng() % 65536;
+            _raw.pc.ev_spd = _prng->lcrng() % 65536;
+            _raw.pc.ev_spcl = _prng->lcrng() % 65536;
+            _raw.pc.iv_data = _prng->lcrng() % 65536;
+            for(size_t i = 0; i < 4; i++)
+                _raw.pc.move_pps[i] = database::get_move_pp(_raw.pc.moves[i]);
+            _raw.pc.friendship = 70;
+            _raw.pc.pokerus = 0;
+            if(_version_id == Versions::CRYSTAL)
+            {
+                _raw.pc.caught_data = ((level & 0x3F) << 8);
+                // Trainer male by default, can be set
+                // TODO: met location
+            }
+            _set_level(level);
+            _raw.status = 0x00;
+            _raw.unused = 0x00; // TODO: check in-game data to see if there is any expected value
+            _set_stats(); // Will populate rest of party portion of struct
+        }
     }
 
     pokemon_gen2impl::pokemon_gen2impl(const pkmn::native::gen2_pc_pokemon_t& raw,
@@ -68,6 +75,17 @@ namespace pkmn
         _otname("LIBPKMN")
     {
         _raw.pc = raw;
+        _none = false;
+        try
+        {
+            uint16_t pokemon_id = database::get_pokemon_id(_raw.pc.species, Versions::GOLD);
+            _invalid = false;
+        }
+        catch(const std::exception& e)
+        {
+            _invalid = true;
+        }
+
         _set_stats(); // Will populate rest of party portion in struct
     }
 
@@ -81,6 +99,17 @@ namespace pkmn
         _otname(otname)
     {
         _raw.pc = raw;
+        _none = false;
+        try
+        {
+            uint16_t pokemon_id = database::get_pokemon_id(_raw.pc.species, Versions::GOLD);
+            _invalid = false;
+        }
+        catch(const std::exception& e)
+        {
+            _invalid = true;
+        }
+
         _set_stats(); // Will populate rest of party portion in struct
     }
 
@@ -91,7 +120,18 @@ namespace pkmn
         _raw(raw),
         _nickname(UPPERCASE_SPECIES_NAME(raw.pc.species, Versions::GOLD)),
         _otname("LIBPKMN")
-    {};
+    {
+        _none = false;
+        try
+        {
+            uint16_t pokemon_id = database::get_pokemon_id(_raw.pc.species, Versions::GOLD);
+            _invalid = false;
+        }
+        catch(const std::exception& e)
+        {
+            _invalid = true;
+        }
+    }
 
     pokemon_gen2impl::pokemon_gen2impl(const pkmn::native::gen2_party_pokemon_t& raw,
                                        const pkmn::pkstring& nickname,
@@ -102,22 +142,32 @@ namespace pkmn
         _raw(raw),
         _nickname(nickname),
         _otname(otname)
-    {};
+    {
+        _none = false;
+        try
+        {
+            uint16_t pokemon_id = database::get_pokemon_id(_raw.pc.species, Versions::GOLD);
+            _invalid = false;
+        }
+        catch(const std::exception& e)
+        {
+            _invalid = true;
+        }
+    }
 
     pokemon_gen2impl::pokemon_gen2impl(const pokemon_gen2impl& other):
         pokemon_impl(other),
         _raw(other._raw),
         _nickname(other._nickname),
-        _otname(other._otname)
-    {};
+        _otname(other._otname) {};
 
     pokemon_gen2impl& pokemon_gen2impl::operator=(const pokemon_gen2impl& other)
     {
         pokemon_impl::operator=(other);
 
-        _raw = other._raw;
+        _raw      = other._raw;
         _nickname = other._nickname;
-        _otname = other._otname;
+        _otname   = other._otname;
 
         return *this;
     }
@@ -618,7 +668,14 @@ namespace pkmn
 
     pkmn::item_entry_t pokemon_gen2impl::get_held_item() const
     {
-        return _pokedex->get_item_entry(get_item_id());
+        try
+        {
+            return _pokedex->get_item_entry(get_item_id());
+        }
+        catch(const std::exception& e)
+        {
+            return _pokedex->get_item_entry(Items::INVALID);
+        }
     }
 
     void pokemon_gen2impl::set_status(const pkmn::pkstring& status)
@@ -640,7 +697,14 @@ namespace pkmn
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
 
-        return _pokedex->get_move_entry(_raw.pc.moves[pos-1]);
+        try
+        {
+            return _pokedex->get_move_entry(_raw.pc.moves[pos-1]);
+        }
+        catch(const std::exception& e)
+        {
+            return _pokedex->get_move_entry(Moves::INVALID);
+        }
     }
 
     void pokemon_gen2impl::get_moves(pkmn::moveset_t& moves) const

@@ -51,7 +51,7 @@ namespace pkmn
         for(int i = 0; i < 6; i++)
         {
             _party[i] = pokemon::make(Species::NONE, _game_id, 1, Moves::NONE, Moves::NONE,
-                                          Moves::NONE, Moves::NONE);
+                                      Moves::NONE, Moves::NONE);
         }
 
         _bag = bag::make(_game_id);

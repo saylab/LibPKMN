@@ -114,7 +114,7 @@ public class CopySPtrTest
     {
         try
         {
-            PKMN.PokemonSPtr pokemon1 = PKMN.Pokemon.make("Houndoom", "X", 50,
+            PKMN.PokemonSPtr pokemon1 = PKMN.Pokemon.make("Shaymin", "Platinum", 50,
                                                           "None", "None",
                                                           "None", "None");
             PKMN.PokemonSPtr pokemon2 = pokemon1;
@@ -122,14 +122,14 @@ public class CopySPtrTest
                 throw new System.Exception("pokemon1 != pokemon2");
 
             // Set form with pokemon1
-            pokemon1.setForm("Mega");
-            if(pokemon2.getForm() != "Mega")
-                throw new System.Exception("pokemon2.getForm() != \"Mega\"");
+            pokemon1.setForm("Sky");
+            if(pokemon2.getForm() != "Sky")
+                throw new System.Exception("pokemon2.getForm() != \"Sky\"");
 
             // Set form with pokemon2
-            pokemon2.setForm("Standard");
-            if(pokemon1.getForm() != "Standard")
-                throw new System.Exception("pokemon1.getForm() != \"Standard\"");
+            pokemon2.setForm("Land");
+            if(pokemon1.getForm() != "Land")
+                throw new System.Exception("pokemon1.getForm() != \"Land\"");
 
             return true;
         }

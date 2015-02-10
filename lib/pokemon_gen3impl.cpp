@@ -30,62 +30,69 @@ namespace pkmn
         /*
          * Populate native struct
          */
-        _raw.pc.personality = _prng->lcrng();
-        _raw.pc.ot_id = _prng->lcrng();
-
-        pkmn::pkstring nickname = PKSTRING_UPPERCASE(_pokedex_entry.species_name);
-        conversions::export_gen3_text(nickname, _raw.pc.nickname, 10);
-
-        _raw.pc.language = 0x202; // English
-        conversions::export_gen3_text("LIBPKMN", _raw.pc.otname, 7);
-        // TODO: checksum
-
-        _growth = &(_raw.pc.blocks.growth);
-        _attacks = &(_raw.pc.blocks.attacks);
-        _effort = &(_raw.pc.blocks.effort);
-        _misc = &(_raw.pc.blocks.misc);
-
-        _growth->species = database::get_pokemon_game_index(_species_id, _version_id);
-        _growth->held_item = 0;
-        // experience will be determined by level
-        _growth->pp_up = 0; // TODO
-        _growth->friendship = 70;
-        _growth->unknown_0xA; // TODO: check for expected value
-        _attacks->moves[0] = move1;
-        _attacks->moves[1] = move2;
-        _attacks->moves[2] = move3;
-        _attacks->moves[3] = move4;
-        for(size_t i = 0; i < 4; i++)
-            _attacks->move_pps[i] = database::get_move_pp(_attacks->moves[i]);
-        do
+        if(_none or _invalid)
         {
-            _effort->ev_hp    = _prng->lcrng() % 256;
-            _effort->ev_atk   = _prng->lcrng() % 256;
-            _effort->ev_def   = _prng->lcrng() % 256;
-            _effort->ev_spd   = _prng->lcrng() % 256;
-            _effort->ev_spatk = _prng->lcrng() % 256;
-            _effort->ev_spdef = _prng->lcrng() % 256;
+            memset(&_raw, 0x0, sizeof(pkmn::native::gen3_party_pokemon_t));
         }
-        while((_effort->ev_hp  + _effort->ev_atk   + _effort->ev_def +
-               _effort->ev_spd + _effort->ev_spatk + _effort->ev_spdef) > 510);
-        // TODO: Pokerus
-        _misc->met_location = 255; // Fateful encounter
+        else
+        {
+            _raw.pc.personality = _prng->lcrng();
+            _raw.pc.ot_id = _prng->lcrng();
 
-        // Origin info
-        _misc->origin_info = (level & 0x7F);
-        _misc->origin_info |= (uint8_t(database::get_version_game_index(_version_id)) << 6);
-        _misc->origin_info |= (uint8_t(Balls::LUXURY_BALL) << 10);
+            pkmn::pkstring nickname = PKSTRING_UPPERCASE(_pokedex_entry.species_name);
+            conversions::export_gen3_text(nickname, _raw.pc.nickname, 10);
 
-        _misc->iv_egg_ability = _prng->lcrng();
-        _misc->iv_egg_ability &= ~(1<<30); // Not an egg
+            _raw.pc.language = 0x202; // English
+            conversions::export_gen3_text("LIBPKMN", _raw.pc.otname, 7);
+            // TODO: checksum
 
-        _misc->ribbons_obedience = 0;
-        _misc->ribbons_obedience |= (1<<31); // Mew and Deoxys will be obedient
+            _growth = &(_raw.pc.blocks.growth);
+            _attacks = &(_raw.pc.blocks.attacks);
+            _effort = &(_raw.pc.blocks.effort);
+            _misc = &(_raw.pc.blocks.misc);
 
-        _raw.condition = 0; // OK
-        _set_level(level);
-        _set_stats(); // Will populate party portion
-        _set_form();
+            _growth->species = database::get_pokemon_game_index(_species_id, _version_id);
+            _growth->held_item = 0;
+            // experience will be determined by level
+            _growth->pp_up = 0; // TODO
+            _growth->friendship = _pokedex_entry.base_friendship;
+            _growth->unknown_0xA; // TODO: check for expected value
+            _attacks->moves[0] = move1;
+            _attacks->moves[1] = move2;
+            _attacks->moves[2] = move3;
+            _attacks->moves[3] = move4;
+            for(size_t i = 0; i < 4; i++)
+                _attacks->move_pps[i] = database::get_move_pp(_attacks->moves[i]);
+            do
+            {
+                _effort->ev_hp    = _prng->lcrng() % 256;
+                _effort->ev_atk   = _prng->lcrng() % 256;
+                _effort->ev_def   = _prng->lcrng() % 256;
+                _effort->ev_spd   = _prng->lcrng() % 256;
+                _effort->ev_spatk = _prng->lcrng() % 256;
+                _effort->ev_spdef = _prng->lcrng() % 256;
+            }
+            while((_effort->ev_hp  + _effort->ev_atk   + _effort->ev_def +
+                   _effort->ev_spd + _effort->ev_spatk + _effort->ev_spdef) > 510);
+            // TODO: Pokerus
+            _misc->met_location = 255; // Fateful encounter
+
+            // Origin info
+            _misc->origin_info = (level & 0x7F);
+            _misc->origin_info |= (uint8_t(database::get_version_game_index(_version_id)) << 6);
+            _misc->origin_info |= (uint8_t(Balls::LUXURY_BALL) << 10);
+
+            _misc->iv_egg_ability = _prng->lcrng();
+            _misc->iv_egg_ability &= ~(1<<30); // Not an egg
+
+            _misc->ribbons_obedience = 0;
+            _misc->ribbons_obedience |= (1<<31); // Mew and Deoxys will be obedient
+
+            _raw.condition = 0; // OK
+            _set_level(level);
+            _set_stats(); // Will populate party portion
+            _set_form();
+        }
     }
 
     pokemon_gen3impl::pokemon_gen3impl(const pkmn::native::gen3_pc_pokemon_t& raw,
@@ -98,6 +105,16 @@ namespace pkmn
         _attacks = &(_raw.pc.blocks.attacks);
         _effort = &(_raw.pc.blocks.effort);
         _misc = &(_raw.pc.blocks.misc);
+        _none = false;
+        try
+        {
+            uint16_t pokemon_id = database::get_pokemon_id(_growth->species, Versions::EMERALD);
+            _invalid = false;
+        }
+        catch(const std::exception& e)
+        {
+            _invalid = true;
+        }
 
         _set_stats(); // Will populate party portion
     }
@@ -112,6 +129,16 @@ namespace pkmn
         _attacks = &(_raw.pc.blocks.attacks);
         _effort = &(_raw.pc.blocks.effort);
         _misc = &(_raw.pc.blocks.misc);
+        _none = false;
+        try
+        {
+            uint16_t pokemon_id = database::get_pokemon_id(_growth->species, Versions::EMERALD);
+            _invalid = false;
+        }
+        catch(const std::exception& e)
+        {
+            _invalid = true;
+        }
     };
 
     pokemon_gen3impl::pokemon_gen3impl(const pokemon_gen3impl& other):
@@ -128,10 +155,10 @@ namespace pkmn
     {
         pokemon_impl::operator=(other);
 
-        _growth = &(_raw.pc.blocks.growth);
+        _growth  = &(_raw.pc.blocks.growth);
         _attacks = &(_raw.pc.blocks.attacks);
-        _effort = &(_raw.pc.blocks.effort);
-        _misc = &(_raw.pc.blocks.misc);
+        _effort  = &(_raw.pc.blocks.effort);
+        _misc    = &(_raw.pc.blocks.misc);
 
         return *this;
     }
@@ -676,7 +703,14 @@ namespace pkmn
 
     pkmn::item_entry_t pokemon_gen3impl::get_held_item() const
     {
-        return _pokedex->get_item_entry(database::get_item_id(_growth->held_item, _version_id));
+        try
+        {
+            return _pokedex->get_item_entry(database::get_item_id(_growth->held_item, _version_id));
+        }
+        catch(const std::exception& e)
+        {
+            return _pokedex->get_item_entry(Items::INVALID);
+        }
     }
 
     void pokemon_gen3impl::set_status(const pkmn::pkstring& status)
@@ -702,7 +736,14 @@ namespace pkmn
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
 
-        return _pokedex->get_move_entry(_attacks->moves[pos-1]);
+        try
+        {
+            return _pokedex->get_move_entry(_attacks->moves[pos-1]);
+        }
+        catch(const std::exception& e)
+        {
+            return _pokedex->get_move_entry(Moves::INVALID);
+        }
     }
 
     void pokemon_gen3impl::get_moves(pkmn::moveset_t& moves) const

@@ -32,6 +32,77 @@ namespace pkmn
         _blockC = &(_raw.pc.blocks.blockC);
         _blockD = &(_raw.pc.blocks.blockD);
 
+        /*
+         * Populate native struct
+         */
+        if(_none or _invalid)
+        {
+            memset(&_raw, 0x0, sizeof(pkmn::native::nds_party_pokemon_t));
+        }
+        else
+        {
+            _raw.pc.personality = _prng->lcrng();
+            _blockA->species = database::get_pokemon_game_index(_species_id, _version_id);
+            _blockA->held_item = Items::NONE;
+            _blockA->ot_id = _prng->lcrng();
+            // Experience set by level
+            _blockA->friendship = 70;
+            _blockA->ability = (_raw.pc.personality % 2) ?
+                                    database::get_ability_id(_pokedex_entry.abilities.second)
+                                  : database::get_ability_id(_pokedex_entry.abilities.first);
+            _blockA->country = 0x2; // English
+            do
+            {
+                _blockA->ev_hp    = _prng->lcrng() % 256;
+                _blockA->ev_atk   = _prng->lcrng() % 256;
+                _blockA->ev_def   = _prng->lcrng() % 256;
+                _blockA->ev_spd   = _prng->lcrng() % 256;
+                _blockA->ev_spatk = _prng->lcrng() % 256;
+                _blockA->ev_spdef = _prng->lcrng() % 256;
+            }
+            while((_blockA->ev_hp  + _blockA->ev_atk   + _blockA->ev_def +
+                   _blockA->ev_spd + _blockA->ev_spatk + _blockA->ev_spdef) > 510);
+            _blockB->moves[0] = move1;
+            _blockB->moves[1] = move2;
+            _blockB->moves[2] = move3;
+            _blockB->moves[3] = move4;
+            for(size_t i = 0; i < 4; i++)
+                _blockB->move_pps[i] = database::get_move_pp(_blockB->moves[i]);
+            _blockB->iv_isegg_isnicknamed = _prng->lcrng();
+            _blockB->iv_isegg_isnicknamed &= ~(2<<30); // Not an egg, not nicknamed
+
+            // Encounter info
+            _blockB->form_encounterinfo = 1; // Fateful encounter
+            _set_default_gender();
+
+            if(get_generation() == 5)
+                _blockB->nature = (_raw.pc.personality % 24);
+
+            if(_version_id == Versions::PLATINUM)
+            {
+                _blockB->eggmet_plat = 2008; // Distant land
+                _blockB->met_plat = 2008; // Distant land
+            }
+            _blockC->hometown = database::get_version_game_index(_version_id);
+            // TODO: check for expected values in "unknown" fields
+            // TODO: met dates
+            if(_version_id == Versions::DIAMOND or _version_id == Versions::PEARL)
+            {
+                _blockD->eggmet_dp = 2008; // Distant land
+                _blockD->met_dp = 2008; // Distant land
+            }
+            // TODO: Pokerus
+            if(_version_id != Versions::HEARTGOLD and _version_id != Versions::SOULSILVER)
+                _blockD->ball = Balls::LUXURY_BALL;
+            _blockD->metlevel_otgender = (level | ~(1<<31));
+            _blockD->encounter_info = 0; // Special event
+            if(_version_id == Versions::HEARTGOLD or _version_id == Versions::SOULSILVER)
+                _blockD->ball_hgss = Balls::LUXURY_BALL;
+
+            _set_level(level);
+            _set_stats();
+        }
+
         if(get_generation() == 4)
         {
             conversions::export_gen4_text(PKSTRING_UPPERCASE(_pokedex_entry.species_name),
@@ -46,70 +117,6 @@ namespace pkmn
             conversions::export_modern_text("LibPKMN",
                                             _blockD->otname, 7);
         }
-
-        /*
-         * Populate native struct
-         */
-        _raw.pc.personality = _prng->lcrng();
-        _blockA->species = database::get_pokemon_game_index(_species_id, _version_id);
-        _blockA->held_item = Items::NONE;
-        _blockA->ot_id = _prng->lcrng();
-        // Experience set by level
-        _blockA->friendship = 70;
-        _blockA->ability = (_raw.pc.personality % 2) ?
-                                database::get_ability_id(_pokedex_entry.abilities.second)
-                              : database::get_ability_id(_pokedex_entry.abilities.first);
-        _blockA->country = 0x2; // English
-        do
-        {
-            _blockA->ev_hp    = _prng->lcrng() % 256;
-            _blockA->ev_atk   = _prng->lcrng() % 256;
-            _blockA->ev_def   = _prng->lcrng() % 256;
-            _blockA->ev_spd   = _prng->lcrng() % 256;
-            _blockA->ev_spatk = _prng->lcrng() % 256;
-            _blockA->ev_spdef = _prng->lcrng() % 256;
-        }
-        while((_blockA->ev_hp  + _blockA->ev_atk   + _blockA->ev_def +
-               _blockA->ev_spd + _blockA->ev_spatk + _blockA->ev_spdef) > 510);
-        _blockB->moves[0] = move1;
-        _blockB->moves[1] = move2;
-        _blockB->moves[2] = move3;
-        _blockB->moves[3] = move4;
-        for(size_t i = 0; i < 4; i++)
-            _blockB->move_pps[i] = database::get_move_pp(_blockB->moves[i]);
-        _blockB->iv_isegg_isnicknamed = _prng->lcrng();
-        _blockB->iv_isegg_isnicknamed &= ~(2<<30); // Not an egg, not nicknamed
-
-        // Encounter info
-        _blockB->form_encounterinfo = 1; // Fateful encounter
-        _set_default_gender();
-
-        if(get_generation() == 5)
-            _blockB->nature = (_raw.pc.personality % 24);
-
-        if(_version_id == Versions::PLATINUM)
-        {
-            _blockB->eggmet_plat = 2008; // Distant land
-            _blockB->met_plat = 2008; // Distant land
-        }
-        _blockC->hometown = database::get_version_game_index(_version_id);
-        // TODO: check for expected values in "unknown" fields
-        // TODO: met dates
-        if(_version_id == Versions::DIAMOND or _version_id == Versions::PEARL)
-        {
-            _blockD->eggmet_dp = 2008; // Distant land
-            _blockD->met_dp = 2008; // Distant land
-        }
-        // TODO: Pokerus
-        if(_version_id != Versions::HEARTGOLD and _version_id != Versions::SOULSILVER)
-            _blockD->ball = Balls::LUXURY_BALL;
-        _blockD->metlevel_otgender = (level | ~(1<<31));
-        _blockD->encounter_info = 0; // Special event
-        if(_version_id == Versions::HEARTGOLD or _version_id == Versions::SOULSILVER)
-            _blockD->ball_hgss = Balls::LUXURY_BALL;
-
-        _set_level(level);
-        _set_stats();
     }
 
     pokemon_ndsimpl::pokemon_ndsimpl(const pkmn::native::nds_pc_pokemon_t& raw,
@@ -123,6 +130,16 @@ namespace pkmn
         _blockC = &(_raw.pc.blocks.blockC);
         _blockD = &(_raw.pc.blocks.blockD);
         // TODO: set form
+        _none = false;
+        try
+        {
+            uint16_t pokemon_id = database::get_pokemon_id(_blockA->species, Versions::HEARTGOLD);
+            _invalid = false;
+        }
+        catch(const std::exception& e)
+        {
+            _invalid = true;
+        }
 
         _set_stats();
     }
@@ -138,6 +155,16 @@ namespace pkmn
         _blockC = &(_raw.pc.blocks.blockC);
         _blockD = &(_raw.pc.blocks.blockD);
         // TODO: set form
+        _none = false;
+        try
+        {
+            uint16_t pokemon_id = database::get_pokemon_id(_blockA->species, Versions::HEARTGOLD);
+            _invalid = false;
+        }
+        catch(const std::exception& e)
+        {
+            _invalid = true;
+        }
 
         _set_stats();
     }
@@ -766,7 +793,14 @@ namespace pkmn
 
     pkmn::item_entry_t pokemon_ndsimpl::get_held_item() const
     {
-        return _pokedex->get_item_entry(database::get_item_id(_blockA->held_item, _version_id));
+        try
+        {
+            return _pokedex->get_item_entry(database::get_item_id(_blockA->held_item, _version_id));
+        }
+        catch(const std::exception& e)
+        {
+            return _pokedex->get_item_entry(Items::INVALID);
+        }
     }
 
     void pokemon_ndsimpl::set_status(const pkmn::pkstring& status)
@@ -792,7 +826,14 @@ namespace pkmn
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
 
-        return _pokedex->get_move_entry(_blockB->moves[pos-1]);
+        try
+        {
+            return _pokedex->get_move_entry(_blockB->moves[pos-1]);
+        }
+        catch(const std::exception& e)
+        {
+            return _pokedex->get_move_entry(Moves::INVALID);
+        }
     }
 
     void pokemon_ndsimpl::get_moves(pkmn::moveset_t& moves) const

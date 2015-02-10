@@ -115,7 +115,7 @@ def pokedex_test():
 #
 def pokemon_test():
     try:
-        pokemon1 = pkmn.pokemon("Houndoom", "X", 50,
+        pokemon1 = pkmn.pokemon("Shaymin", "Platinum", 50,
                                 "None", "None",
                                 "None", "None")
         pokemon2 = pokemon1
@@ -123,14 +123,14 @@ def pokemon_test():
             raise Exception("not compare_ptrs(pokemon1, pokemon2)")
 
         # Set form with pokemon1
-        pokemon1.set_form("Mega")
-        if pokemon2.get_form() != "Mega":
-            raise Exception("pokemon2.get_form() != \"Mega\"")
+        pokemon1.set_form("Sky")
+        if pokemon2.get_form() != "Sky":
+            raise Exception("pokemon2.get_form() != \"Sky\"")
 
         # Set form with pokemon2
-        pokemon2.set_form("Standard")
-        if pokemon1.get_form() != "Standard":
-            raise Exception("pokemon1.get_form() != \"Standard\"")
+        pokemon2.set_form("Land")
+        if pokemon1.get_form() != "Land":
+            raise Exception("pokemon1.get_form() != \"Land\"")
 
         return True
 
@@ -200,6 +200,8 @@ def trainer_test():
         trainer2.set_name("Red")
         if trainer1.get_name() != "Red":
             raise Exception("trainer1.get_name() != \"Red\"")
+
+        return True
 
     except:
         print

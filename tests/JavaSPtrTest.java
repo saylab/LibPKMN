@@ -122,7 +122,7 @@ public class JavaSPtrTest
     {
         try
         {
-            PokemonSPtr pokemon1 = Pokemon.make("Houndoom", "X", 50,
+            PokemonSPtr pokemon1 = Pokemon.make("Shaymin", "Platinum", 50,
                                                 "None", "None",
                                                 "None", "None");
             PokemonSPtr pokemon2 = pokemon1;
@@ -130,14 +130,14 @@ public class JavaSPtrTest
                 throw new RuntimeException("pokemon1 != pokemon2");
 
             // Set form with pokemon1
-            pokemon1.setForm("Mega");
-            if(!pokemon2.getForm().equals("Mega"))
-                throw new RuntimeException("!pokemon2.getForm().equals(\"Mega\"");
+            pokemon1.setForm("Sky");
+            if(!pokemon2.getForm().equals("Sky"))
+                throw new RuntimeException("!pokemon2.getForm().equals(\"Sky\"");
 
             // Set form with pokemon2
-            pokemon2.setForm("Mega");
-            if(!pokemon1.getForm().equals("Mega"))
-                throw new RuntimeException("!pokemon1.getForm().equals(\"Mega\"");
+            pokemon2.setForm("Land");
+            if(!pokemon1.getForm().equals("Land"))
+                throw new RuntimeException("!pokemon1.getForm().equals(\"Land\"");
 
             return true;
         }
@@ -211,13 +211,13 @@ public class JavaSPtrTest
 
             // Set name with trainer1
             trainer1.setName("Blue");
-            if(trainer2.getName() != "Blue")
-                throw new RuntimeException("trainer2.getName() != \"Blue\"");
+            if(!trainer2.getName().equals("Blue"))
+                throw new RuntimeException("!trainer2.getName().equals(\"Blue\")");
 
             // Set name with trainer2
             trainer2.setName("Red");
-            if(trainer1.getName() != "Red")
-                throw new RuntimeException("trainer1.getName() != \"Red\"");
+            if(!trainer1.getName().equals("Red"))
+                throw new RuntimeException("!trainer1.getName().equals(\"Red\")");
 
             return true;
         }

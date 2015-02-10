@@ -66,11 +66,11 @@ namespace pkmn
             static boost::format _pokemon_form_format;
 
             uint16_t _species_id, _form_id, _version_id;
+            bool _none, _invalid;
             pkmn::dict<pkmn::pkstring, int> _attributes;
             pokedex::sptr _pokedex;
             pkmn::pokemon_entry_t _pokedex_entry;
             prng::sptr    _prng;
-
     };
 }
 
