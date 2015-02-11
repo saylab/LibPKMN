@@ -103,7 +103,14 @@ namespace pkmn
                      << move_id << " AND language_id=9 AND version_group_id="
                      << database::get_version_group_id(version_id);
         SQLite::Statement flavor_text_query(*db, query_stream.str().c_str());
-        description = get_pkstring_from_query(flavor_text_query);
+        try
+        {
+            description = get_pkstring_from_query(flavor_text_query);
+        }
+        catch(const std::exception& e)
+        {
+            description = "Unavailable";
+        }
 
         /*
          * Target

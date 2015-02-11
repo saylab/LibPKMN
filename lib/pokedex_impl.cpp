@@ -52,9 +52,13 @@ namespace pkmn
                                                     uint16_t form_id)
     {
         uint16_t pokemon_id;
-        // Use default form if nothing given
-        if(form_id == 0 or form_id == species_id)
+        if(species_id == Species::NONE or species_id == Species::INVALID)
         {
+            return pokemon_entry_t(_version_id, species_id, species_id);
+        }
+        else if(form_id == 0 or form_id == species_id)
+        {
+            // Use default form if nothing given
             pokemon_id = species_id;
             form_id = species_id;
         }
@@ -97,17 +101,24 @@ namespace pkmn
 
     move_entry_t pokedex_impl::get_move_entry(uint16_t move_id)
     {
-        std::ostringstream query_stream;
-        query_stream << "SELECT generation_id FROM moves WHERE id=" << move_id;
-        if(uint16_t(_db->execAndGet(query_stream.str().c_str())) > _generation)
-            throw std::runtime_error("This move did not exist in this generation.");
-
-        if(not _move_entry_cache[_version_id].has_key(move_id))
+        if(move_id == Moves::NONE or move_id == Moves::INVALID)
         {
-            _move_entry_cache[_version_id][move_id] = move_entry_t(_version_id,
-                                                                   move_id);
+            return move_entry_t(_version_id, move_id);
         }
-        return _move_entry_cache[_version_id][move_id];
+        else
+        {
+            std::ostringstream query_stream;
+            query_stream << "SELECT generation_id FROM moves WHERE id=" << move_id;
+            if(uint16_t(_db->execAndGet(query_stream.str().c_str())) > _generation)
+                throw std::runtime_error("This move did not exist in this generation.");
+
+            if(not _move_entry_cache[_version_id].has_key(move_id))
+            {
+                _move_entry_cache[_version_id][move_id] = move_entry_t(_version_id,
+                                                                       move_id);
+            }
+            return _move_entry_cache[_version_id][move_id];
+        }
     }
 
     move_entry_t pokedex_impl::get_move_entry(const pkmn::pkstring& move_name)
@@ -117,19 +128,26 @@ namespace pkmn
 
     item_entry_t pokedex_impl::get_item_entry(uint16_t item_id)
     {
-        std::ostringstream query_stream;
-        query_stream << "SELECT generation_id FROM item_game_indices WHERE item_id="
-                     << item_id;
-        SQLite::Statement query(*_db, query_stream.str().c_str());
-        if(not query.executeStep())
-            throw std::runtime_error("This item did not exist in this game.");
-
-        if(not _item_entry_cache[_version_id].has_key(item_id))
+        if(item_id == Items::NONE or Items::INVALID)
         {
-            _item_entry_cache[_version_id][item_id] = item_entry_t(_version_id,
-                                                                   item_id);
+            return item_entry_t(_version_id, item_id);
         }
-        return _item_entry_cache[_version_id][item_id];
+        else
+        {
+            std::ostringstream query_stream;
+            query_stream << "SELECT generation_id FROM item_game_indices WHERE item_id="
+                         << item_id;
+            SQLite::Statement query(*_db, query_stream.str().c_str());
+            if(not query.executeStep())
+                throw std::runtime_error("This item did not exist in this game.");
+
+            if(not _item_entry_cache[_version_id].has_key(item_id))
+            {
+                _item_entry_cache[_version_id][item_id] = item_entry_t(_version_id,
+                                                                       item_id);
+            }
+            return _item_entry_cache[_version_id][item_id];
+        }
     }
 
     item_entry_t pokedex_impl::get_item_entry(const pkmn::pkstring& item_name)
