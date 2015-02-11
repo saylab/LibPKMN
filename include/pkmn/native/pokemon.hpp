@@ -4,8 +4,8 @@
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  */
-#ifndef INCLUDED_PKMN_CONVERSIONS_STRUCTS_POKEMON_HPP
-#define INCLUDED_PKMN_CONVERSIONS_STRUCTS_POKEMON_HPP
+#ifndef INCLUDED_PKMN_NATIVE_POKEMON_HPP
+#define INCLUDED_PKMN_NATIVE_POKEMON_HPP
 
 #include <cstdint>
 
@@ -391,4 +391,4 @@ namespace pkmn
     }
 }
 
-#endif /* INCLUDED_PKMN_CONVERSIONS_STRUCTS_POKEMON_HPP */
+#endif /* INCLUDED_PKMN_NATIVE_POKEMON_HPP */

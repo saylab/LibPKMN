@@ -4,8 +4,8 @@
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  */
-#ifndef INCLUDED_PKMN_CONVERSIONS_STRUCTS_GEN4_SAVE_HPP
-#define INCLUDED_PKMN_CONVERSIONS_STRUCTS_GEN4_SAVE_HPP
+#ifndef INCLUDED_PKMN_NATIVE_GEN4_SAVE_HPP
+#define INCLUDED_PKMN_NATIVE_GEN4_SAVE_HPP
 
 #include <cstdint>
 
@@ -42,4 +42,4 @@ namespace pkmn
     }
 }
 
-#endif /* INCLUDED_PKMN_CONVERSIONS_STRUCTS_GEN4_SAVE_HPP */
+#endif /* INCLUDED_PKMN_NATIVE_GEN4_SAVE_HPP */
