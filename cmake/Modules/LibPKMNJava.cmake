@@ -1,18 +1,9 @@
 #
-# Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+# Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
 #
 # Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
 # or copy at http://opensource.org/licenses/MIT)
 #
-
-SET(LIBPKMN_JAVA_INCLUDE_DIRS
-    ${LIBPKMN_SOURCE_DIR}/include
-    ${LIBPKMN_SWIG_SOURCE_DIR}
-    ${LIBPKMN_SWIG_SOURCE_DIR}/java
-    ${LIBPKMN_SWIG_SOURCE_DIR}/java/types
-    ${JAVA_INCLUDE_PATH}
-    ${JNI_INCLUDE_DIRS}
-)
 
 INCLUDE_DIRECTORIES(${LIBPKMN_JAVA_INCLUDE_DIRS})
 
@@ -35,10 +26,10 @@ MACRO(JAVA_BUILD_SWIG_MODULE swig_source java_module_name)
     SET(CMAKE_SWIG_FLAGS -module ${java_module_name} -package "nc.PKMN" ${CMAKE_GLOBAL_SWIG_FLAGS})
     SWIG_ADD_MODULE(${swig_source} java ${CMAKE_CURRENT_BINARY_DIR}/${swig_source}.i)
     ADD_DEPENDENCIES(${SWIG_MODULE_${swig_source}_REAL_NAME} java_enums)
+    ADD_DEPENDENCIES(${SWIG_MODULE_${swig_source}_REAL_NAME} CamelCase_i)
     IF(UNIX)
         SET_TARGET_PROPERTIES(${SWIG_MODULE_${swig_source}_REAL_NAME} PROPERTIES PREFIX "lib")
         SET_TARGET_PROPERTIES(${SWIG_MODULE_${swig_source}_REAL_NAME} PROPERTIES SUFFIX ".so")
-        SET_TARGET_PROPERTIES(${SWIG_MODULE_${swig_source}_REAL_NAME} PROPERTIES COMPILE_FLAGS "-std=c++0x")
     ELSE()
         SET_TARGET_PROPERTIES(${SWIG_MODULE_${swig_source}_REAL_NAME} PROPERTIES PREFIX "")
         SET_TARGET_PROPERTIES(${SWIG_MODULE_${swig_source}_REAL_NAME} PROPERTIES SUFFIX ".dll")

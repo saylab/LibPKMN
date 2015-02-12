@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+# Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
 #
 # Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
 # or copy at http://opensource.org/licenses/MIT)
@@ -11,6 +11,16 @@ FILE(TO_NATIVE_PATH "${LIBPKMN_SOURCE_DIR}/lib/swig" LIBPKMN_SWIG_SOURCE_DIR)
 SET(LIBPKMN_SWIG_SOURCE_DIR ${LIBPKMN_SWIG_SOURCE_DIR} CACHE FILEPATH "LibPKMN SWIG source directory")
 FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN)
 SET(JAVA_INSTALL_DIRECTORY share/java)
+
+SET(LIBPKMN_JAVA_INCLUDE_DIRS
+    ${LIBPKMN_SOURCE_DIR}/include
+    ${LIBPKMN_BINARY_DIR}/lib/swig
+    ${LIBPKMN_SWIG_SOURCE_DIR}
+    ${LIBPKMN_SWIG_SOURCE_DIR}/java
+    ${LIBPKMN_SWIG_SOURCE_DIR}/java/types
+    ${JAVA_INCLUDE_PATH}
+    ${JNI_INCLUDE_DIRS}
+)
 
 SET(JAVA_ENUM_FILES
     ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/Abilities.java
