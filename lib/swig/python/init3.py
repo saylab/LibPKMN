@@ -24,6 +24,7 @@ from . import Version_Groups
 
 from .pkmn_python import *
 from . import calculations
+from . import conversions
 from . import database
 from . import io
 @IMPORT_QT4@

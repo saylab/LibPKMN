@@ -72,5 +72,6 @@ INCLUDE(LibPKMNPython)
 PYTHON_BUILD_SWIG_MODULE(pkmn_python pkmn)
 
 ADD_SUBDIRECTORY(calculations)
+ADD_SUBDIRECTORY(conversions)
 ADD_SUBDIRECTORY(database)
 ADD_SUBDIRECTORY(io)

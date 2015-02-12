@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+# Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
 #
 # Distributed under the MIT License (MIT) (See accompanying FILE LICENSE.txt
 # or copy at http://opensource.org/licenses/MIT)
@@ -77,6 +77,10 @@ MACRO(PYTHON_BUILD_SWIG_MODULE module_name install_dir)
     IF(${module_name} STREQUAL "qt4_swig")
         LIST(APPEND LIBPKMN_PYTHON_LIBRARIES
             qt4proxy
+        )
+    ELSEIF(${module_name} STREQUAL "conversions_python")
+        LIST(APPEND LIBPKMN_PYTHON_LIBRARIES
+            pkmn_conversions_python
         )
     ENDIF(${module_name} STREQUAL "qt4_swig")
 
