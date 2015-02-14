@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -32,8 +32,7 @@ namespace pkmn
      * (INSTALL PREFIX)/share/libpkmn/libpkmn.db
      * </pre>
      *
-     * If the function cannot find the database, it returns the string ":memory:", which creates
-     * a new SQLite database in-memory.
+     * This can be overridden with the LIBPKMN_DATABASE_PATH environment variable.
      *
      * \return path to underlying SQLite database
      */
@@ -45,6 +44,8 @@ namespace pkmn
      * <pre>
      * (INSTALL PREFIX)/share/libpkmn/images
      * </pre>
+     *
+     * This can be overridden with the LIBPKMN_IMAGES_DIR environment variable.
      *
      * \return path to LibPKMN's images directory
      */
