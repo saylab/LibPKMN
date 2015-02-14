@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (c) 2014 Nicholas Corgan (n.corgan@gmail.com)
+# Copyright (c) 2014-2015 Nicholas Corgan (n.corgan@gmail.com)
 #
 # Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
 # or copy at http://opensource.org/licenses/MIT)
@@ -473,23 +473,28 @@ def generate_java_files(output_dir, license):
 
         f.close()
 
+    f = open("PokemonForms.java",'w')
+    f.write(license + "\n\n")
+
+    f.write("package nc.PKMN;\n\n")
+
+    f.write("""public class PokemonForms
+{""")
+
     for i in range(len(forms)):
-        f = open("%sForms.java" % forms[i][0],'w')
-        f.write(license + "\n\n")
-
-        f.write("package nc.PKMN;\n\n");
-
-        f.write("""public class %sForms
-{""" % forms[i][0])
+        f.write("""
+    public class %s
+    {""" % forms[i][0])
 
         for j in range(1,len(forms[i])):
             f.write("""
-    public static final int %s = %d;""" % (forms[i][j][0],forms[i][j][1]))
+        public static final int %s = %d;""" % (forms[i][j][0], forms[i][j][1]))
 
         f.write("""
-}""")
+    }""")
 
-        f.close()
+    f.write("""
+}""")
 
     f = open("Hoenn_Ribbons.java",'w')
     f.write(license + "\n\n")

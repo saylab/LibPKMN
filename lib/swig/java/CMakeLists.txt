@@ -36,66 +36,7 @@ SET(JAVA_ENUM_FILES
     ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/Types.java
     ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/Versions.java
     ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/VersionGroups.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/VenusaurForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/CharizardForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/BlastoiseForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/AlakazamForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/GengarForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/KangaskhanForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/PinsirForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/GyaradosForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/AerodactylForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/MewtwoForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/PichuForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/AmpharosForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/UnownForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/ScizorForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/HeracrossForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/HoundoomForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/TyranitarForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/BlazikenForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/GardevoirForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/MawileForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/AggronForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/MedichamForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/ManectricForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/CastformForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/BanetteForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/AbsolForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/DeoxysForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/BurmyForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/WormadamForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/CherrimForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/ShellosForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/GastrodonForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/GarchompForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/LucarioForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/AbomasnowForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/RotomForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/GiratinaForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/ShayminForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/ArceusForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/BasculinForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/DarmanitanForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/DeerlingForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/SawsbuckForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/TornadusForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/ThundurusForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/LandorusForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/KyuremForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/KeldeoForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/MeloettaForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/GenesectForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/VivillonForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/FlabebeForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/FloetteForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/FlorgesForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/FurfrouForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/MeowsticForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/AegislashForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/PumpkabooForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/GourgeistForms.java
-    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/XerneasForms.java
+    ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/PokemonForms.java
 )
 
 #Generate enums
