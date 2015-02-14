@@ -28,7 +28,6 @@ items = []
 moves = []
 move_damage_classes = []
 natures = []
-ribbons = []
 species = []
 stats = []
 types = []
@@ -152,50 +151,6 @@ def get_natures(c):
     for i in range(len(from_db)):
         nature_name = str(from_db[i][1]).upper()
         natures += [(from_db[i][0], nature_name)]
-
-def get_ribbons():
-    global ribbons
-
-    hoenn_ribbons = ["WORLD","EARTH","NATIONAL","COUNTRY","SKY","LAND","MARINE","EFFORT","ARTIST","VICTORY","WINNING","CHAMPION",
-                     "TOUGH_MASTER","TOUGH_HYPER","TOUGH_SUPER","TOUGH",
-                     "SMART_MASTER","SMART_HYPER","SMART_SUPER","SMART",
-                     "CUTE_MASTER","CUTE_HYPER","CUTE_SUPER","CUTE",
-                     "BEAUTY_MASTER","BEAUTY_HYPER","BEAUTY_SUPER","BEAUTY",
-                     "COOL_MASTER","COOL_HYPER","COOL_SUPER","COOL"]
-
-    sinnoh_ribbons = ["","","","",
-                      "TOUGH_MASTER","TOUGH_HYPER","TOUGH_SUPER","TOUGH",
-                      "SMART_MASTER","SMART_HYPER","SMART_SUPER","SMART",
-                      "CUTE_MASTER","CUTE_HYPER","CUTE_SUPER","CUTE",
-                      "BEAUTY_MASTER","BEAUTY_HYPER","BEAUTY_SUPER","BEAUTY",
-                      "COOL_MASTER","COOL_HYPER","COOL_SUPER","COOL",
-                      "","","","",
-                      "PREMIER","CLASSIC","CARNIVAL","FESTIVAL","BLUE","GREEN","RED","LEGEND","HISTORY","RECORD",
-                      "FOOTPRINT","GORGEOUS_ROYAL","ROYAL","GORGEOUS","SMILE","SNOOZE","RELAX","CARELESS",
-                      "DOWNCAST","SHOCK","ALERT","WORLD_ABILITY","PAIR_ABILITY","MULTI_ABILITY","DOUBLE_ABILITY",
-                      "GREAT_ABILITY","ABILITY","CHAMPION"]
-
-
-    unova_ribbons = ["","","","",
-                     "TOUGH_MASTER","TOUGH_HYPER","TOUGH_SUPER","TOUGH",
-                     "SMART_MASTER","SMART_HYPER","SMART_SUPER","SMART",
-                     "CUTE_MASTER","CUTE_HYPER","CUTE_SUPER","CUTE",
-                     "BEAUTY_MASTER","BEAUTY_HYPER","BEAUTY_SUPER","BEAUTY",
-                     "COOL_MASTER","COOL_HYPER","COOL_SUPER","COOL",
-                     "","","","",
-                     "PREMIER","CLASSIC","WISHING","SOUVENIR","SPECIAL","BIRTHDAY","WORLD_CHAMPION","LEGEND",
-                     "EVENT","RECORD","FOOTPRINT","GORGEOUS_ROYAL","ROYAL","GORGEOUS","SMILE","SNOOZE","RELAX","CARELESS",
-                     "DOWNCAST","SHOCK","ALERT","WORLD_ABILITY","PAIR_ABILITY","MULTI_ABILITY","DOUBLE_ABILITY",
-                     "GREAT_ABILITY","ABILITY","CHAMPION"]
-
-    kalos_ribbons = ["","","","WORLD_CHAMPION","NATIONAL_CHAMPION","REGIONAL_CHAMPION","BATTLE_CHAMPION",
-                     "WISHING","FESTIVAL","SPECIAL","BIRTHDAY","EVENT","PREMIER","CLASSIC","WORLD",
-                     "EARTH","NATIONAL","COUNTRY","LEGEND","RECORD","FOOTPRINT","ARTIST","GORGEOUS_ROYAL",
-                     "ROYAL","GORGEOUS","SMILE","SNOOZE","RELAX","CARELESS","DOWNCAST","SHOCK","ALERT",
-                     "EFFORT","","SKILLFUL_BATTLER","TRAINING","BEST_FRIENDS","SINNOH_CHAMPION","CHAMPION",
-                     "KALOS_CHAMPION"]
-
-    ribbons = [hoenn_ribbons, sinnoh_ribbons, unova_ribbons, kalos_ribbons]
 
 def get_species(c):
     global species
@@ -418,64 +373,6 @@ def generate_enums_hpp(output_dir, license):
         };
     }
 
-    namespace Ribbons
-    {"""
-
-    output += """
-        namespace Hoenn
-        {
-            enum hoenn_ribbons
-            {"""
-
-    for i in range(len(ribbons[0])):
-        if ribbons[0][i] != "":
-            output += """
-                %s = %d,""" % (ribbons[0][i], i)
-
-    output += """
-            };
-        }
-        namespace Sinnoh
-        {
-            enum sinnoh_ribbons
-            {"""
-
-    for i in range(len(ribbons[1])):
-        if ribbons[1][i] != "":
-            output += """
-                %s = %d,""" % (ribbons[1][i], i)
-
-    output += """
-            };
-        }
-        namespace Unova
-        {
-            enum unova_ribbons
-            {"""
-
-    for i in range(len(ribbons[2])):
-        if ribbons[2][i] != "":
-            output += """
-                %s = %d,""" % (ribbons[2][i], i)
-
-    output += """
-            };
-        }
-        namespace Kalos
-        {
-            enum kalos_ribbons
-            {"""
-
-    for i in range(len(ribbons[3])):
-        if ribbons[3][i] != "":
-            output += """
-                %s = %d,""" % (ribbons[3][i], i)
-
-    output += """
-            };
-        }
-    }
-
     namespace Species
     {
         enum species
@@ -606,7 +503,6 @@ if __name__ == "__main__":
     get_moves(c)
     get_move_damage_classes(c)
     get_natures(c)
-    get_ribbons()
     get_species(c)
     get_stats(c)
     get_types(c)

@@ -27,7 +27,6 @@ moves = []
 move_damage_classes = []
 natures = []
 pokeballs = []
-ribbons = []
 species = []
 stats = []
 types = []
@@ -94,50 +93,6 @@ def get_pokeballs():
                  ("FAST_BALL",11),("SPORT_BALL",12),("PREMIER_BALL",13),("REPEAT_BALL",14),("TIMER_BALL",15),
                  ("NEST_BALL",16),("NET_BALL",17),("DIVE_BALL",18),("LUXURY_BALL",19),("HEAL_BALL",20),
                  ("QUICK_BALL",21),("DUSK_BALL",22),("CHERISH_BALL",23),("PARK_BALL",24),("DREAM_BALL",25)]
-
-def get_ribbons():
-    global ribbons
-
-    hoenn_ribbons = ["WORLD","EARTH","NATIONAL","COUNTRY","SKY","LAND","MARINE","EFFORT","ARTIST","VICTORY","WINNING","CHAMPION",
-                     "TOUGH_MASTER","TOUGH_HYPER","TOUGH_SUPER","TOUGH",
-                     "SMART_MASTER","SMART_HYPER","SMART_SUPER","SMART",
-                     "CUTE_MASTER","CUTE_HYPER","CUTE_SUPER","CUTE",
-                     "BEAUTY_MASTER","BEAUTY_HYPER","BEAUTY_SUPER","BEAUTY",
-                     "COOL_MASTER","COOL_HYPER","COOL_SUPER","COOL"]
-
-    sinnoh_ribbons = ["","","","",
-                      "TOUGH_MASTER","TOUGH_HYPER","TOUGH_SUPER","TOUGH",
-                      "SMART_MASTER","SMART_HYPER","SMART_SUPER","SMART",
-                      "CUTE_MASTER","CUTE_HYPER","CUTE_SUPER","CUTE",
-                      "BEAUTY_MASTER","BEAUTY_HYPER","BEAUTY_SUPER","BEAUTY",
-                      "COOL_MASTER","COOL_HYPER","COOL_SUPER","COOL",
-                      "","","","",
-                      "PREMIER","CLASSIC","CARNIVAL","FESTIVAL","BLUE","GREEN","RED","LEGEND","HISTORY","RECORD",
-                      "FOOTPRINT","GORGEOUS_ROYAL","ROYAL","GORGEOUS","SMILE","SNOOZE","RELAX","CARELESS",
-                      "DOWNCAST","SHOCK","ALERT","WORLD_ABILITY","PAIR_ABILITY","MULTI_ABILITY","DOUBLE_ABILITY",
-                      "GREAT_ABILITY","ABILITY","CHAMPION"]
-
-
-    unova_ribbons = ["","","","",
-                     "TOUGH_MASTER","TOUGH_HYPER","TOUGH_SUPER","TOUGH",
-                     "SMART_MASTER","SMART_HYPER","SMART_SUPER","SMART",
-                     "CUTE_MASTER","CUTE_HYPER","CUTE_SUPER","CUTE",
-                     "BEAUTY_MASTER","BEAUTY_HYPER","BEAUTY_SUPER","BEAUTY",
-                     "COOL_MASTER","COOL_HYPER","COOL_SUPER","COOL",
-                     "","","","",
-                     "PREMIER","CLASSIC","WISHING","SOUVENIR","SPECIAL","BIRTHDAY","WORLD_CHAMPION","LEGEND",
-                     "EVENT","RECORD","FOOTPRINT","GORGEOUS_ROYAL","ROYAL","GORGEOUS","SMILE","SNOOZE","RELAX","CARELESS",
-                     "DOWNCAST","SHOCK","ALERT","WORLD_ABILITY","PAIR_ABILITY","MULTI_ABILITY","DOUBLE_ABILITY",
-                     "GREAT_ABILITY","ABILITY","CHAMPION"]
-
-    kalos_ribbons = ["","","","WORLD_CHAMPION","NATIONAL_CHAMPION","REGIONAL_CHAMPION","BATTLE_CHAMPION",
-                     "WISHING","FESTIVAL","SPECIAL","BIRTHDAY","EVENT","PREMIER","CLASSIC","WORLD",
-                     "EARTH","NATIONAL","COUNTRY","LEGEND","RECORD","FOOTPRINT","ARTIST","GORGEOUS_ROYAL",
-                     "ROYAL","GORGEOUS","SMILE","SNOOZE","RELAX","CARELESS","DOWNCAST","SHOCK","ALERT",
-                     "EFFORT","","SKILLFUL_BATTLER","TRAINING","BEST_FRIENDS","SINNOH_CHAMPION","CHAMPION",
-                     "KALOS_CHAMPION"]
-
-    ribbons = [hoenn_ribbons, sinnoh_ribbons, unova_ribbons, kalos_ribbons]
 
 def get_species(c):
     global species
@@ -249,34 +204,6 @@ def generate_python_files(output_dir, python_license):
 
     f.close()
 
-    f = open("Ribbons.py",'w')
-    f.write(python_license + "\n")
-
-    f.write("\nclass Hoenn:")
-    for i in range(len(ribbons[0])):
-        if ribbons[0][i] != "":
-            f.write("\n    %s = %d" % (ribbons[0][i], i))
-    f.write("\n")
-
-    f.write("\nclass Sinnoh:")
-    for i in range(len(ribbons[1])):
-        if ribbons[1][i] != "":
-            f.write("\n    %s = %d" % (ribbons[1][i], i))
-    f.write("\n")
-
-    f.write("\nclass Unova:")
-    for i in range(len(ribbons[2])):
-        if ribbons[2][i] != "":
-            f.write("\n    %s = %d" % (ribbons[2][i], i))
-    f.write("\n")
-
-    f.write("\nclass Kalos:")
-    for i in range(len(ribbons[3])):
-        if ribbons[3][i] != "":
-            f.write("\n    %s = %d" % (ribbons[3][i], i))
-
-    f.close()
-
     f = open("Species.py",'w')
     f.write(python_license + "\n\n")
 
@@ -381,61 +308,6 @@ def generate_cs_files(output_dir, license):
 
     f.close()
 
-    f = open("Ribbons.cs",'w')
-    f.write(license + "\n\n")
-
-    f.write("""namespace PKMN
-{
-    namespace Ribbons
-    {
-        public static class Hoenn
-        {""")
-
-    for i in range(len(ribbons[0])):
-        if ribbons[0][i] != "":
-            f.write("""
-                public const uint %s = %d;""" % (ribbons[0][i],i))
-
-    f.write("""
-        }
-
-        public static class Sinnoh
-        {""")
-
-    for i in range(len(ribbons[1])):
-        if ribbons[1][i] != "":
-            f.write("""
-                public const uint %s = %d;""" % (ribbons[1][i],i))
-
-    f.write("""
-        }
-
-        public static class Unova
-        {""")
-
-    for i in range(len(ribbons[2])):
-        if ribbons[2][i] != "":
-            f.write("""
-                public const uint %s = %d;""" % (ribbons[2][i],i))
-
-    f.write("""
-        }
-
-        public static class Kalos
-        {""")
-
-    for i in range(len(ribbons[3])):
-        if ribbons[3][i] != "":
-            f.write("""
-                public const uint %s = %d;""" % (ribbons[3][i],i))
-
-    f.write("""
-        }
-    }
-}""")
-
-    f.close()
-
 def generate_java_files(output_dir, license):
     os.chdir(output_dir)
 
@@ -492,75 +364,6 @@ def generate_java_files(output_dir, license):
 
         f.write("""
     }""")
-
-    f.write("""
-}""")
-
-    f = open("Hoenn_Ribbons.java",'w')
-    f.write(license + "\n\n")
-
-    f.write("package nc.PKMN;\n\n")
-
-    f.write("""public class Hoenn_Ribbons
-{""")
-
-    for i in range(len(ribbons[0])):
-        f.write("""
-    public static final int %s = %d;""" % (ribbons[0][i],i))
-
-    f.write("""
-}""")
-
-    f.close()
-
-    f = open("Sinnoh_Ribbons.java",'w')
-    f.write(license + "\n\n")
-
-    f.write("package nc.PKMN;\n\n")
-
-    f.write("""public class Sinnoh_Ribbons
-{""")
-
-    for i in range(len(ribbons[1])):
-        if ribbons[1][i] != "":
-            f.write("""
-    public static final int %s = %d;""" % (ribbons[1][i],i))
-
-    f.write("""
-}""")
-
-    f.close()
-
-    f = open("Unova_Ribbons.java",'w')
-    f.write(license + "\n\n")
-
-    f.write("package nc.PKMN;\n\n")
-
-    f.write("""public class Unova_Ribbons
-{""")
-
-    for i in range(len(ribbons[2])):
-        if ribbons[2][i] != "":
-            f.write("""
-    public static final int %s = %d;""" % (ribbons[2][i],i))
-
-    f.write("""
-}""")
-
-    f.close()
-
-    f = open("Kalos_Ribbons.java",'w')
-    f.write(license + "\n\n")
-
-    f.write("package nc.PKMN;\n\n")
-
-    f.write("""public class Kalos_Ribbons
-{""")
-
-    for i in range(len(ribbons[3])):
-        if ribbons[3][i] != "":
-            f.write("""
-    public static final int %s = %d;""" % (ribbons[3][i],i))
 
     f.write("""
 }""")
@@ -627,7 +430,6 @@ if __name__ == "__main__":
     #These don't need the header file
     get_genders()
     get_pokeballs()
-    get_ribbons()
 
     if options.language == "python":
         generate_python_files(options.output_dir, python_license)

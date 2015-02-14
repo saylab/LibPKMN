@@ -15,7 +15,6 @@ from . import Move_Classes
 from . import Moves
 from . import Natures
 from . import PokeBalls
-from . import Ribbons
 from . import Species
 from . import Stats
 from . import Types
