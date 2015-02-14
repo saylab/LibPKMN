@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -63,7 +63,7 @@ namespace pkmn
 
     pkmn::pkstring trainer_impl::get_name() const {return _trainer_name;}
 
-    uint16_t trainer_impl::get_money() const {return _money;}
+    uint32_t trainer_impl::get_money() const {return _money;}
 
     pkmn::pkstring trainer_impl::get_gender() const
     {
@@ -91,9 +91,9 @@ namespace pkmn
                                                                 : _trainer_name;
     }
 
-    void trainer_impl::set_money(uint16_t money)
+    void trainer_impl::set_money(uint32_t money)
     {
-        _money = (money > 999999) ? _money : money;
+        _money = std::min(money, uint32_t(999999));
     }
 
     void trainer_impl::set_gender(const pkmn::pkstring &gender)

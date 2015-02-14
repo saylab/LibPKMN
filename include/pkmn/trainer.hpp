@@ -89,7 +89,7 @@ namespace pkmn
              *
              * \return trainer's money amount
              */
-            virtual uint16_t get_money() const = 0;
+            virtual uint32_t get_money() const = 0;
 
             /*!
              * Return the trainer's gender ("Male" or "Female").
@@ -137,7 +137,7 @@ namespace pkmn
              *
              * \param money new amount of money
              */
-            virtual void set_money(uint16_t money) = 0;
+            virtual void set_money(uint32_t money) = 0;
 
             /*!
              * Set the trainer's new gender. This value must be "Male" or "Female", or the function will do nothing.

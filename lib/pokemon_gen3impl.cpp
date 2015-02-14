@@ -56,7 +56,6 @@ namespace pkmn
             // experience will be determined by level
             _growth->pp_up = 0; // TODO
             _growth->friendship = _pokedex_entry.base_friendship;
-            _growth->unknown_0xA; // TODO: check for expected value
             _attacks->moves[0] = move1;
             _attacks->moves[1] = move2;
             _attacks->moves[2] = move3;

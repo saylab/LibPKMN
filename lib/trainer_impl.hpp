@@ -26,7 +26,7 @@ namespace pkmn
 
             //Get attributes
             pkmn::pkstring get_name() const;
-            uint16_t get_money() const;
+            uint32_t get_money() const;
             pkmn::pkstring get_gender() const;
             uint32_t get_id() const;
             uint16_t get_public_id() const;
@@ -34,7 +34,7 @@ namespace pkmn
 
             //Set attributes
             void set_name(const pkmn::pkstring& name);
-            void set_money(uint16_t money);
+            void set_money(uint32_t money);
             void set_gender(const pkmn::pkstring& gender);
             void set_id(uint32_t id);
             void set_public_id(uint16_t id);

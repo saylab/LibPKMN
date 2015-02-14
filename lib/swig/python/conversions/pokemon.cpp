@@ -67,8 +67,10 @@ namespace pkmn
                 delete[] buffer;
 
             }
-            else
-                throw std::runtime_error("Invalid input.");
+            else throw std::runtime_error("Invalid input.");
+
+            // This should be unnecessary, but Clang throws a warning without it
+            return pokemon::make("None", "Red", 2, "None", "None", "None", "None");
         }
 
         PyObject* export_gen1_pokemon(pokemon::sptr pkmn, bool party)
@@ -136,6 +138,9 @@ namespace pkmn
             }
             else
                 throw std::runtime_error("Invalid input.");
+
+            // This should be unnecessary, but Clang throws a warning without it
+            return pokemon::make("None", "Gold", 2, "None", "None", "None", "None");
         }
 
         PyObject* export_gen2_pokemon(pokemon::sptr pkmn, bool party)
