@@ -59,19 +59,39 @@ namespace pkmn
 
         //! Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/Egg_Group">egg groups</a>.
         pkmn::pkstring_pair_t egg_groups;
+
+        //! Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/Catch_rate">catch rate</a>.
         uint16_t catch_rate;
+
+        //! The base value that determines how much experience is given when this Pokémon faints.
         uint16_t exp_yield;
+
+        //! The level of <a href="http://bulbapedia.bulbagarden.net/wiki/Friendship">friendship</a> this Pokémon has upon capture.
         uint16_t base_friendship;
+
+        //! Pokémon's height.
         float height;
+
+        //! Pokémon's weight.
         float weight;
+
+        //! Percentage of this Pokémon that are male (0.0-1.0).
         float chance_male;
+
+        //! Percentage of this Pokémon that are female (0.0-1.0).
         float chance_female;
+
+        //! Whether or not there are visual differences between male and female Pokémon of this species.
         bool has_gender_differences;
 
+        //! Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/Base_stats">base stats</a>, used to determine its specific stats.
         pkmn::dict<pkmn::pkstring, uint16_t> base_stats;
+
+        //! Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/Effort_value">EV</a> yields.
         pkmn::dict<pkmn::pkstring, uint16_t> ev_yields;
     };
 
+    //! List of Pokémon entries.
     typedef std::vector<pokemon_entry_t> pokemon_entry_vector_t;
 }
 
