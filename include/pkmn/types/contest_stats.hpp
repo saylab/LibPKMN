@@ -11,6 +11,11 @@
 
 namespace pkmn
 {
+    //! Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/Contest">contest</a> stats.
+    /*!
+     * This class represents a Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/Contest">contest</a>
+     * stats. On the C++ level, this struct is packed, matching the in-game representation of these stats.
+     */
     #pragma pack(push,1)
     typedef struct
     {

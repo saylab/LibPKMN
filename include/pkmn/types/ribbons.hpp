@@ -13,9 +13,15 @@
 
 namespace pkmn
 {
+    /*!
+     * This set of booleans represents the <a href="http://bulbapedia.bulbagarden.net/wiki/Ribbon">ribbons</a>
+     * available in the Hoenn region (Generation III, present in Generation III-V native representations).
+     */
     struct PKMN_API hoenn_ribbons_t
     {
         hoenn_ribbons_t() {};
+
+        //! Create an instance using the in-game representation.
         hoenn_ribbons_t(uint32_t ribbonint);
 
         bool cool;
@@ -51,12 +57,21 @@ namespace pkmn
         bool earth;
         bool world;
 
+        //! Implicit conversion to in-game representation
         operator uint32_t();
     };
 
+    /*!
+     * This set of booleans represents the first set of
+     * <a href="http://bulbapedia.bulbagarden.net/wiki/Ribbon">ribbons</a> available
+     * in the Sinnoh region. This separation corresponds to how the ribbons are
+     * stored in-game (Generations IV-VI).
+     */
     struct PKMN_API sinnoh_ribbons1_t
     {
         sinnoh_ribbons1_t() {};
+
+        //! Create an instance using the in-game representation.
         sinnoh_ribbons1_t(uint16_t ribbonint);
 
         bool sinnoh_champ;
@@ -76,12 +91,23 @@ namespace pkmn
         bool gorgeous;
         bool royal;
 
+        //! Implicit conversion to in-game representation
         operator uint16_t();
     };
 
+    /*!
+     * This set of booleans represents the second set of
+     * <a href="http://bulbapedia.bulbagarden.net/wiki/Ribbon">ribbons</a> available
+     * in the Sinnoh region. This separation corresponds to how the ribbons are
+     * stored in-game (Generations IV).
+     *
+     * NOTE: In Generations V-VI, this is replaced by the Unova ribbons.
+     */
     struct PKMN_API sinnoh_ribbons2_t
     {
         sinnoh_ribbons2_t() {};
+
+        //! Create an instance using the in-game representation.
         sinnoh_ribbons2_t(uint16_t ribbonint);
 
         bool gorgeous_royal;
@@ -97,12 +123,21 @@ namespace pkmn
         bool classic;
         bool premier;
 
+        //! Implicit conversion to in-game representation
         operator uint16_t();
     };
 
+    /*!
+     * This set of booleans represents the third set of
+     * <a href="http://bulbapedia.bulbagarden.net/wiki/Ribbon">ribbons</a> available
+     * in the Sinnoh region. This separation corresponds to how the ribbons are
+     * stored in-game (Generations IV-VI).
+     */
     struct PKMN_API sinnoh_ribbons3_t
     {
         sinnoh_ribbons3_t() {};
+
+        //! Create an instance using the in-game representation.
         sinnoh_ribbons3_t(uint32_t ribbonint);
 
         bool cool;
@@ -126,9 +161,13 @@ namespace pkmn
         bool tough_hyper;
         bool tough_master;
 
+        //! Implicit conversion to in-game representation
         operator uint32_t();
     };
 
+    /*!
+     * This struct holds all of a Pokémon's Sinnoh ribbons.
+     */
     struct sinnoh_ribbons_t
     {
         struct sinnoh_ribbons1_t ribbons1;
@@ -136,9 +175,15 @@ namespace pkmn
         struct sinnoh_ribbons3_t ribbons3;
     };
 
+    /*!
+     * This set of booleans the set of ribbons available in the Unova
+     * region.
+     */
     struct PKMN_API unova_ribbons_t
     {
         unova_ribbons_t() {};
+
+        //! Create an instance using the in-game representation.
         unova_ribbons_t(uint16_t ribbonint);
 
         bool gorgeous_royal;
@@ -154,12 +199,19 @@ namespace pkmn
         bool classic;
         bool premier;
 
+        //! Implicit conversion to in-game representation
         operator uint16_t();
     };
 
+    /*!
+     * This set of booleans the set of ribbons available in the Kalos
+     * region.
+     */
     struct PKMN_API kalos_ribbons_t
     {
         kalos_ribbons_t() {};
+
+        //! Create an instance using the in-game representation.
         kalos_ribbons_t(uint64_t ribbonint);
 
         bool kalos_champ;
@@ -207,9 +259,14 @@ namespace pkmn
         bool clever_master;
         bool tough_master;
 
+        //! Implicit conversion to in-game representation
         operator uint64_t();
     };
 
+    /*!
+     * This struct holds all of a Pokémon's possible ribbons (accurate up
+     * to Generation VI).
+     */
     struct ribbons_t
     {
         hoenn_ribbons_t  hoenn;
