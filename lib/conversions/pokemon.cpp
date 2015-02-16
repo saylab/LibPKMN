@@ -10,31 +10,37 @@
 #endif
 
 #include <cstring>
-#include <vector>
 
-#include <boost/assign.hpp>
 #include <boost/format.hpp>
 
+#include <pkmn/calculations.hpp>
 #include <pkmn/enums.hpp>
 #include <pkmn/paths.hpp>
 #include <pkmn/database.hpp>
 #include <pkmn/conversions/pokemon.hpp>
 #include <pkmn/conversions/text.hpp>
-#include <pkmn/types/dict.hpp>
-#include <pkmn/types/prng.hpp>
+#include <pkmn/types/shared_ptr.hpp>
 
 #include "pokemon_gen1impl.hpp"
 #include "pokemon_gen2impl.hpp"
 #include "pokemon_gen3impl.hpp"
 #include "pokemon_ndsimpl.hpp"
 
+#include "internal.hpp"
 #include "utils.hpp"
 #include "../SQLiteCpp/SQLiteC++.h"
+
+#define CONVERT_POKEMON_GAME_INDEX(src,src_id,dst_id) database::get_pokemon_game_index( \
+                                                          database::get_pokemon_id(src_id, src), dst_id)
+
+#define GET_SPECIES_INDEX(src,src_id) database::get_species_id(database::get_pokemon_id(src_id, src))
 
 namespace pkmn
 {
     namespace conversions
     {
+        pkmn::shared_ptr<SQLite::Database> db;
+
         pokemon::sptr import_gen1_pokemon(const native::gen1_pc_pokemon_t& native,
                                           const uint8_t* nickname_buffer,
                                           const uint8_t* otname_buffer,
@@ -185,6 +191,48 @@ namespace pkmn
         {
             // TODO: crypt
             memcpy(&native, pkmn->get_native(), sizeof(native::nds_party_pokemon_t));
+        }
+
+        void gen1_to_gen2(const native::gen1_party_pokemon_t& src, native::gen2_party_pokemon_t& dst)
+        {
+            CONNECT_TO_DB(db);
+
+            dst.pc.species = CONVERT_POKEMON_GAME_INDEX(src.pc.species, Versions::RED, Versions::GOLD);
+            dst.pc.held_item = src.pc.catch_rate;
+            memcpy(&dst.pc.moves, &src.pc.moves, 25);
+
+            std::ostringstream query_stream;
+            query_stream << "SELECT base_happiness FROM pokemon_species WHERE id="
+                         << GET_SPECIES_INDEX(src.pc.species, Versions::RED);
+            SQLite::Statement friendship_query(*db, query_stream.str().c_str());
+            dst.pc.friendship = get_num_from_query<uint8_t>(friendship_query);
+
+            dst.pc.level = src.level;
+
+            dst.status = src.pc.status;
+            dst.current_hp = src.pc.current_hp;
+            dst.max_hp = src.max_hp;
+            memcpy(&dst.atk, &src.atk, 6);
+
+            query_stream.str("");
+            query_stream << "SELECT base_stat FROM pokemon_stats WHERE pokemon_id="
+                         << database::get_pokemon_id(dst.pc.species, Versions::GOLD)
+                         << " AND base_stat IN (4,5)";
+            SQLite::Statement stats_query(*db, query_stream.str().c_str());
+            dst.spatk = calculations::get_retro_stat("Special Attack",
+                                                     get_num_from_query<uint16_t>(stats_query),
+                                                     dst.pc.level,
+                                                     dst.pc.ev_spcl,
+                                                     conversions::get_retro_IV(Stats::SPECIAL,
+                                                                               dst.pc.iv_data)
+                                                    );
+            dst.spdef = calculations::get_retro_stat("Special Defense",
+                                                     get_num_from_query<uint16_t>(stats_query),
+                                                     dst.pc.level,
+                                                     dst.pc.ev_spcl,
+                                                     conversions::get_retro_IV(Stats::SPECIAL,
+                                                                               dst.pc.iv_data)
+                                                    );
         }
     } /* namespace conversions */
 } /* namespace pkmn */
