@@ -240,7 +240,7 @@ namespace pkmn
             CONNECT_TO_DB(db);
 
             // Make sure this species and these moves are valid
-            if(GET_SPECIES_INDEX(src.pc.species, Versions::RED) > 151)
+            if(GET_SPECIES_INDEX(src.pc.species, Versions::GOLD) > 151)
                 throw std::runtime_error("This Pokémon did not exist in Generation I.");
 
             std::ostringstream query_stream;
