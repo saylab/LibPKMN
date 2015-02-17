@@ -103,6 +103,8 @@ if __name__ == "__main__":
             if file.endswith(".hpp") and file not in ignored_files and not root.endswith("conversions") and not root.endswith("native") and not root.endswith("qt4"):
                 output += convert_header(CppHeaderParser.CppHeader(os.path.join(root, file)))
 
+    output += "%rename(pocket) pkmn::item_entry_t::pocket;\n"
+
     os.chdir(options.output_dir)
     f = open("CamelCase.i", 'w')
     f.write(output)
