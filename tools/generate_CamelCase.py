@@ -67,7 +67,7 @@ def generate_new_name(old_name, is_class):
     return new_name
 
 def generate_rename_line(old_name, is_class):
-    return "" if "anon" in old_name.lower() else "%%rename(%s) %s;" % (generate_new_name(old_name, is_class), old_name)
+    return "" if (len(old_name) == 0 or "anon" in old_name.lower()) else "%%rename(%s) %s;" % (generate_new_name(old_name, is_class), old_name)
 
 def convert_header(header):
     output = ""
@@ -82,6 +82,9 @@ def convert_header(header):
         for fcn in header.classes[cls]["methods"]["public"]:
             if "operator" not in fcn["name"].lower() and not fcn["constructor"] and not fcn["destructor"]:
                 output += generate_rename_line(fcn["name"], False) + "\n"
+
+        for var in header.classes[cls]["properties"]["public"]:
+            output += generate_rename_line(str(var["name"]), False) + "\n"
 
     return output
 
