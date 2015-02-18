@@ -11,7 +11,7 @@
 # names for LibPKMN's classes and functions.
 ################################################################
 
-import CppHeaderParser
+from header_converter import CppHeaderParser
 import datetime
 from optparse import OptionParser
 import os

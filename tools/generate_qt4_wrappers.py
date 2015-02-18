@@ -21,7 +21,7 @@ from optparse import OptionParser
 import os
 import sys
 
-import CppHeaderParser
+from header_converter import CppHeaderParser
 
 def generate_cpp(header, license):
     class_name = header.classes[list(header.classes.keys())[0]]["name"]

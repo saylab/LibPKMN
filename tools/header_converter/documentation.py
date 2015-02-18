@@ -8,7 +8,7 @@
 
 import sys
 
-import .CamelCase
+#import .CamelCase
 import CppHeaderParser
 
 """
