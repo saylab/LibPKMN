@@ -16,8 +16,6 @@ import datetime
 from optparse import OptionParser
 import os
 
-CppHeaderParser.ignoreSymbols += ["PKMN_API"]
-
 header_text = """/*
  * This file was generated: %s
  */""" % datetime.datetime.now()

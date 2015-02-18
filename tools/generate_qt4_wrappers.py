@@ -182,7 +182,6 @@ if __name__ == "__main__":
 #""" % time
 
     # Process options and parse headers
-    CppHeaderParser.ignoreSymbols += ["PKMN_API"]
     headers = []
 
     os.chdir(options.qt4_include_dir)
