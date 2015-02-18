@@ -72,7 +72,7 @@ namespace pkmn
         //! Effect of move when used in a <a href="http://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_Contest">contest</a>.
         pkmn::pkstring contest_effect;
 
-        //! Effect of move when used in a <a href="http://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_Super_Contest">contest</a>.
+        //! Effect of move when used in a <a href="http://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_Super_Contest">Super Contest</a>.
         pkmn::pkstring super_contest_effect;
     };
 

@@ -27,13 +27,13 @@
 %include "pkmn_dict.i"
 %include "pkmn_pkstring.i"
 %include "pkmn_nature.i"
+%include "pkmn_pokedex.i"
 %include "pkmn_shared_ptr.i"
 
 %{
     #include "pkmn/bag.hpp"
     #include "pkmn/game_save.hpp"
     #include "pkmn/pocket.hpp"
-    #include "pkmn/pokedex.hpp"
     #include "pkmn/pokemon.hpp"
     #include "pkmn/trainer.hpp"
 
@@ -42,22 +42,15 @@
     #include "pkmn/types/pkstring.hpp"
     #include "pkmn/types/prng.hpp"
     #include "pkmn/types/ribbons.hpp"
-    #include "pkmn/pokedex/pokemon_entry.hpp"
-    #include "pkmn/pokedex/move_entry.hpp"
-    #include "pkmn/pokedex/item_entry.hpp"
 %}
 
 %include "pkmn/types/markings.hpp"
 %include "pkmn/types/prng.hpp"
 %include "pkmn/types/ribbons.hpp"
-%include "pkmn/pokedex/pokemon_entry.hpp"
-%include "pkmn/pokedex/move_entry.hpp"
-%include "pkmn/pokedex/item_entry.hpp"
 
 %include "pkmn/pocket.hpp"
 %include "pkmn/bag.hpp"
 
-%include "pkmn/pokedex.hpp"
 %include "pkmn/pokemon.hpp"
 %include "pkmn/trainer.hpp"
 %include "pkmn/game_save.hpp"
@@ -72,7 +65,6 @@ namespace pkmn
  */
 %template(BytePair)          std::pair<uint8_t, uint8_t>;
 %template(UShortPair)        std::pair<uint16_t, uint16_t>;
-%template(BagSlot)           std::pair<pkmn::item_entry_t, uint16_t>;
 %template(StringPair)        std::pair<pkmn::pkstring, pkmn::pkstring>;
 
 /*
@@ -81,10 +73,7 @@ namespace pkmn
 %template(ByteVector)         std::vector<uint8_t>;
 %template(IntVector)          std::vector<int>;
 %template(UShortVector)       std::vector<uint16_t>;
-%template(ItemList)           std::vector<std::pair<pkmn::item_entry_t, uint16_t> >;
-%template(Moveset)            std::vector<pkmn::move_entry_t>;
 %template(PocketVector)       std::vector<pkmn::pocket::sptr>;
-%template(PokemonEntryVector) std::vector<pkmn::pokemon_entry_t>;
 %template(PokemonTeam)        std::vector<pkmn::pokemon::sptr>;
 %template(StringVector)       std::vector<pkmn::pkstring>;
 
