@@ -17,6 +17,7 @@
 %}
 
 %include "CamelCase.i"
+%include "pkmn_javadocs.i"
 
 %include "stdint.i"
 %include "std_pair.i"

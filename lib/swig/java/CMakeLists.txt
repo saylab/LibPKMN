@@ -52,6 +52,18 @@ ADD_CUSTOM_TARGET(
     DEPENDS ${JAVA_ENUM_FILES}
 )
 
+# Generate javadocs
+ADD_CUSTOM_COMMAND(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pkmn_javadocs.i
+    COMMAND ${PYTHON_EXECUTABLE} ${LIBPKMN_SOURCE_DIR}/tools/generate_javadocs.py --include-dir=${LIBPKMN_SOURCE_DIR}/include --output-dir=${CMAKE_CURRENT_BINARY_DIR}
+    WORKING_DIRECTORY ${LIBPKMN_SOURCE_DIR}/tools
+    COMMENT "Generating Javadocs"
+)
+ADD_CUSTOM_TARGET(
+    javadocs ALL
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pkmn_javadocs.i
+)
+
 #Copy GUI files into JAR directory
 SET(gui_files
     ${CMAKE_CURRENT_SOURCE_DIR}/AbilityListComboBox.java

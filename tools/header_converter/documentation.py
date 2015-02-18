@@ -14,16 +14,16 @@ import CppHeaderParser
 """
 Returns namespace + class name (if applicable) + function name (if applicable).
 """
-def assemble_full_name(cpp_input, fcn):
+def assemble_full_name(cpp_input, is_class):
     full_name = ""
 
-    if cpp_input.has_key("parent"):
+    if cpp_input.get("parent",None) != None:
         return "%s::%s" % (assemble_full_name(cpp_input["parent"], False), cpp_input["name"])
     else:
-        if fcn:
-            return "%s%s" % (cpp_input["namespace"], cpp_input["name"])
-        else:
+        if is_class:
             return "%s::%s" % (cpp_input["namespace"], cpp_input["name"])
+        else:
+            return "%s%s" % (cpp_input["namespace"], cpp_input["name"])
 
     return full_name
 
@@ -67,8 +67,8 @@ class documentation():
             raise Exception("Invalid input.")
 
         self._input = cpp_input
-        self._full_name = assemble_full_name(self._input)
-        self._fcn = (type(self._input) == "CppHeaderParser.CppHeaderParser.CppMethod")
+        self._class = ("CppClass" in str(type(self._input)))
+        self._full_name = assemble_full_name(self._input, self._class)
         self._short_doc = ""
         self._long_doc = ""
         self._returns = ""
@@ -79,13 +79,13 @@ class documentation():
         if doc != "":
             for line in doc.split("\n"):
                 if line.startswith("//!"):
-                    self._short_doc = line.split("/")[2].split("! ")[1]
-                elif line.startswith(" * \\param"):
+                    self._short_doc = line.split("/")[2].split("! ")[1].replace("\"","\\\"")
+                elif line.startswith("* \\param"):
                     self._params[line.split(" ")[2]] = " ".join(line.split(" ")[3:])
-                elif line.startswith(" * \\return"):
+                elif line.startswith("* \\return"):
                     self._returns = " ".join(line.split(" ")[2:])
-                elif line.startswith(" * "):
-                    self._long_doc += "%s\n" % line[2:]
+                elif line.startswith("* "):
+                    self._long_doc += "%s\n" % line[2:].replace("\"","\\\"")
 
     """
     Returns the original C++ Doxygen documentation. CppHeaderParser screws up the input,
@@ -127,7 +127,9 @@ class documentation():
         return output
 
     def _javadoc(self):
-        output = "/**\n * %s\n\n *\n *\n" % self._short_doc
+        output = "/**\n"
+        if self._short_doc != "":
+            output += " * %s\n *\n" % self._short_doc
         if self._long_doc != "":
             for line in self._long_doc.split("\n"):
                 output += " * %s\n" % line
@@ -144,10 +146,10 @@ class documentation():
     Returns a SWIG Javadoc line corresponding to the given class/function.
     """
     def swig_javadoc(self):
-        if self._fcn:
-            return "%%javamethodmodifiers %s() \"\n%s\npublic\";" % (self._full_name, _javadoc())
+        if self._class:
+            return "%%typemap(javaimports) %s \"\n%s\"" % (self._full_name, self._javadoc())
         else:
-            return "%%typemap(javaimports) %s \"\n%s\"" % (self._full_name, _javadoc())
+            return "%%javamethodmodifiers %s() \"\n%s\npublic\";" % (self._full_name, self._javadoc())
 
     """
     Returns a SWIG %feature("docstring") line corresponding to the given class/function.
