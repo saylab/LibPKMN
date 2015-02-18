@@ -12,7 +12,6 @@
 ################################################################
 
 import header_converter
-from header_converter import CppHeaderParser
 import datetime
 from optparse import OptionParser
 import os
@@ -36,7 +35,13 @@ def get_javadocs(header):
 
     for cls in header.classes:
         if header.classes[cls].has_key("doxygen"):
-            output += "%s\n" % header_converter.documentation(header.classes[cls]).swig_javadoc()
+            cls_javadoc = "%s\n" % header_converter.documentation(header.classes[cls]).swig_javadoc()
+            output += cls_javadoc
+
+            if len(header.classes[cls]["typedefs"]["public"]) > 0:
+                full_name = header_converter.assemble_full_name(header.classes[cls], True)
+                cls_javadoc = cls_javadoc.replace(full_name, ("pkmn::shared_ptr<%s>" % full_name))
+                output += cls_javadoc
 
         for fcn in header.classes[cls]["methods"]["public"]:
             if "operator" not in fcn["name"].lower() and not fcn["destructor"] and fcn.has_key("doxygen"):
@@ -60,7 +65,7 @@ if __name__ == "__main__":
     for root, dirs, files in os.walk(os.getcwd()):
         for file in files:
             if file.endswith(".hpp") and file not in ignored_files and not root.endswith("conversions") and not root.endswith("native") and not root.endswith("qt4"):
-                output += "%s\n" % get_javadocs(CppHeaderParser.CppHeader(os.path.join(root, file)))
+                output += "%s\n" % get_javadocs(header_converter.CppHeaderParser.CppHeader(os.path.join(root, file)))
 
     os.chdir(options.output_dir)
     f = open("pkmn_javadocs.i", 'w')

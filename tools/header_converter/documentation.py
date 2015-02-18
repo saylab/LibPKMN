@@ -18,7 +18,16 @@ def assemble_full_name(cpp_input, is_class):
     full_name = ""
 
     if cpp_input.get("parent",None) != None:
-        return "%s::%s" % (assemble_full_name(cpp_input["parent"], True), cpp_input["name"])
+        full_name = "%s::%s" % (assemble_full_name(cpp_input["parent"], True), cpp_input["name"])
+        if not is_class:
+            full_name += "("
+            for param in cpp_input["parameters"]:
+                full_name += "%s %s, " % (param["type"], param["name"])
+            if len(cpp_input["parameters"]) > 0:
+                full_name = full_name[:-2]
+            full_name += ")"
+            if cpp_input["const"]:
+                full_name += " const"
     else:
         if is_class:
             return "%s::%s" % (cpp_input["namespace"], cpp_input["name"])
