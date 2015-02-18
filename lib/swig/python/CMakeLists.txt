@@ -41,6 +41,19 @@ ADD_CUSTOM_TARGET(
     DEPENDS ${py_enum_files}
 )
 
+# Generate Python docstrings
+ADD_CUSTOM_COMMAND(
+    DEPENDS ${LIBPKMN_SOURCE_DIR}/tools/generate_python_docstrings.py
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pkmn_python_docstrings.i
+    COMMAND ${PYTHON_EXECUTABLE} ${LIBPKMN_SOURCE_DIR}/tools/generate_python_docstrings.py --include-dir=${LIBPKMN_SOURCE_DIR}/include --output-dir=${CMAKE_CURRENT_BINARY_DIR}
+    WORKING_DIRECTORY ${LIBPKMN_SOURCE_DIR}/tools
+    COMMENT "Generating Python docstrings"
+)
+ADD_CUSTOM_TARGET(
+    python_docstrings ALL
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pkmn_python_docstrings.i
+)
+
 INCLUDE(LibPKMNPython)
 INSTALL(
     FILES ${py_enum_files}

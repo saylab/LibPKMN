@@ -166,13 +166,13 @@ class documentation():
     def swig_python_docstring(self):
         output = "%%feature(\"docstring\") %s \"" % self._full_name
         if self._short_doc != "":
-            output += "%s\n\n" % self._short_doc
+            output += "%s\n\n" % remove_html(self._short_doc).decode("utf-8").replace(u"\u00e9", "e").encode("utf-8")
         if self._long_doc != "":
-            output += self._long_doc
+            output += remove_html(self._long_doc).decode("utf-8").replace(u"\u00e9", "e").encode("utf-8")
         if len(self._params.keys()) > 0:
             output += "\n\nArgs:\n"
             for key in self._params:
-                output += "    key : \n"
+                output += "    %s : %s\n" % (key, self._params[key].decode("utf-8").replace(u"\u00e9", "e").encode("utf-8)"))
         output += "\""
 
         return output

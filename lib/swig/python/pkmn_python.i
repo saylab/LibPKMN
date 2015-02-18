@@ -11,6 +11,7 @@
 %include "std_pair.i"
 %include "std_vector.i"
 
+%include "pkmn_python_docstrings.i"
 %include "pkmn.i"
 
 %include "pkmn_dict.i"
