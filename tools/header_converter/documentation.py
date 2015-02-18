@@ -18,7 +18,7 @@ def assemble_full_name(cpp_input, is_class):
     full_name = ""
 
     if cpp_input.get("parent",None) != None:
-        return "%s::%s" % (assemble_full_name(cpp_input["parent"], False), cpp_input["name"])
+        return "%s::%s" % (assemble_full_name(cpp_input["parent"], True), cpp_input["name"])
     else:
         if is_class:
             return "%s::%s" % (cpp_input["namespace"], cpp_input["name"])
@@ -149,7 +149,7 @@ class documentation():
         if self._class:
             return "%%typemap(javaimports) %s \"\n%s\"" % (self._full_name, self._javadoc())
         else:
-            return "%%javamethodmodifiers %s() \"\n%s\npublic\";" % (self._full_name, self._javadoc())
+            return "%%javamethodmodifiers %s \"\n%s\npublic\";" % (self._full_name, self._javadoc())
 
     """
     Returns a SWIG %feature("docstring") line corresponding to the given class/function.
