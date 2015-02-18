@@ -66,22 +66,8 @@ ADD_CUSTOM_TARGET(
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pkmn_javadocs.i
 )
 
-#Copy GUI files into JAR directory
-SET(gui_files
-    ${CMAKE_CURRENT_SOURCE_DIR}/AbilityListComboBox.java
-    ${CMAKE_CURRENT_SOURCE_DIR}/NatureListComboBox.java
-    ${CMAKE_CURRENT_SOURCE_DIR}/PokemonListComboBox.java
-    ${CMAKE_CURRENT_SOURCE_DIR}/TypeListComboBox.java
-    ${CMAKE_CURRENT_SOURCE_DIR}/VersionListComboBox.java
-)
-FOREACH(gui_file ${gui_files})
-    GET_FILENAME_COMPONENT(filename ${gui_file} NAME)
-
-    CONFIGURE_FILE(
-        ${gui_file}
-        ${CMAKE_CURRENT_BINARY_DIR}/nc/PKMN/${filename}
-    @ONLY)
-ENDFOREACH(gui_file ${gui_files})
+# Copy GUI files into JAR directory
+ADD_SUBDIRECTORY(ComboBoxes)
 
 INCLUDE(UseSWIG)
 INCLUDE(LibPKMNJava)
