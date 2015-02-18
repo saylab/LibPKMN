@@ -47,9 +47,6 @@ def get_javadocs(header):
             if "operator" not in fcn["name"].lower() and not fcn["destructor"] and fcn.has_key("doxygen"):
                 output += "%s\n" % header_converter.documentation(fcn).swig_javadoc()
 
-        #for var in header.classes[cls]["properties"]["public"]:
-        #    output += "%s\n" % header_converter.documentation(var).swig_javadoc()
-
     return output
 
 if __name__ == "__main__":
@@ -57,6 +54,7 @@ if __name__ == "__main__":
     parser = OptionParser()
     parser.add_option("--include-dir", type="string", help="LibPKMN include directory")
     parser.add_option("--output-dir", type="string", help="CamelCase.i output directory")
+    parser.add_option("--append", action="store_true", help="CamelCase.i output directory")
     (options,args) = parser.parse_args()
 
     output = header_text + "\n\n"
@@ -68,6 +66,6 @@ if __name__ == "__main__":
                 output += "%s\n" % get_javadocs(header_converter.CppHeaderParser.CppHeader(os.path.join(root, file)))
 
     os.chdir(options.output_dir)
-    f = open("pkmn_javadocs.i", 'w')
+    f = open("pkmn_javadocs.i", 'a' if options.append else 'w')
     f.write(output)
     f.close()

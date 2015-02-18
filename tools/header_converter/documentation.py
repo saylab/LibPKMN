@@ -88,7 +88,7 @@ class documentation():
         if doc != "":
             for line in doc.split("\n"):
                 if line.startswith("//!"):
-                    self._short_doc = line.split("/")[2].split("! ")[1].replace("\"","\\\"")
+                    self._short_doc = "/".join(line.split("/")[2:]).split("! ")[1].replace("\"","\\\"")
                 elif line.startswith("* \\param"):
                     self._params[line.split(" ")[2]] = " ".join(line.split(" ")[3:])
                 elif line.startswith("* \\return"):

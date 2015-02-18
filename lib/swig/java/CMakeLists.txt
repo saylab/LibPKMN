@@ -57,6 +57,7 @@ ADD_CUSTOM_COMMAND(
     DEPENDS ${LIBPKMN_SOURCE_DIR}/tools/generate_javadocs.py
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pkmn_javadocs.i
     COMMAND ${PYTHON_EXECUTABLE} ${LIBPKMN_SOURCE_DIR}/tools/generate_javadocs.py --include-dir=${LIBPKMN_SOURCE_DIR}/include --output-dir=${CMAKE_CURRENT_BINARY_DIR}
+    COMMAND ${PYTHON_EXECUTABLE} ${LIBPKMN_SOURCE_DIR}/tools/generate_javadocs.py --include-dir=${LIBPKMN_SOURCE_DIR}/lib/swig/java/types --output-dir=${CMAKE_CURRENT_BINARY_DIR} --append
     WORKING_DIRECTORY ${LIBPKMN_SOURCE_DIR}/tools
     COMMENT "Generating Javadocs"
 )
