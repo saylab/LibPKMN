@@ -103,6 +103,7 @@ namespace pkmn
 
 def generate_py(header, license):
     class_name = header.classes[list(header.classes.keys())[0]]["name"]
+    doxygen = header.classes[class_name]["doxygen"][4:].decode("utf-8").replace(u"\u00e9", "e").encode("utf-8")
 
     python_version_major = sys.version[0]
     if python_version_major == "3":
@@ -119,7 +120,10 @@ from PyQt4 import QtGui
 import sip
 
 class %s(object):
-    def __new__(cls, """ % (import_qt4_swig, class_name))
+    \"\"\"
+    %s
+    \"\"\"
+    def __new__(cls, """ % (import_qt4_swig, class_name, doxygen))
 
     for i,parameter in enumerate(header.classes[class_name]["methods"]["public"][0]["parameters"]):
         if i != 0:
