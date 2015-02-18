@@ -192,7 +192,7 @@ supportedAccessSpecifier = [
 
 #Symbols to ignore, usually special macros
 ignoreSymbols = [
-    'Q_OBJECT',
+    'Q_OBJECT', 'PKMN_API'
 ]
 
 doxygenCommentCache = ""
