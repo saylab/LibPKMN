@@ -50,7 +50,7 @@ namespace pkmn
 
                 return ret;
             }
-            else if(len != sizeof(gen1_party_pokemon_t))
+            else if(len == sizeof(gen1_party_pokemon_t))
             {
                 uint8_t* buffer = new uint8_t[sizeof(gen1_party_pokemon_t)];
 
@@ -66,6 +66,7 @@ namespace pkmn
                 ret->set_trainer_name("LIBPKMN");
                 delete[] buffer;
 
+                return ret;
             }
             else throw std::runtime_error("Invalid input.");
 
