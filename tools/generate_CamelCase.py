@@ -102,6 +102,7 @@ if __name__ == "__main__":
                 output += convert_header(CppHeaderParser.CppHeader(os.path.join(root, file)))
 
     output += "%rename(pocket) pkmn::item_entry_t::pocket;\n"
+    output += "%rename(Pocket) pkmn::pocket;\n"
 
     os.chdir(options.output_dir)
     f = open("CamelCase.i", 'w')
