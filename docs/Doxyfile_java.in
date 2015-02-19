@@ -612,7 +612,15 @@ EXCLUDE_SYMLINKS       = NO
 # for example use the pattern */test/*
 
 EXCLUDE_PATTERNS       = *JNI.java \
-                         PKMN.java
+                         PKMN.java \
+                         Bag.java \
+                         GameSave.java \
+                         Pocket.java \
+                         Pokedex.java \
+                         Pokemon.java \
+                         PRNG.java \
+                         Trainer.java \
+                         pocket.java
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the
@@ -624,7 +632,15 @@ EXCLUDE_SYMBOLS        = delete \
                          __deref__ \
                          finalize \
                          getCPtr \
-                         swigCMemOwn
+                         swigCMemOwn \
+                         Bag \
+                         GameSave \
+                         Pocket \
+                         Pokedex \
+                         Pokemon \
+                         PRNG \
+                         Trainer \
+                         pocket
 
 # The EXAMPLE_PATH tag can be used to specify one or more files or
 # directories that contain example code fragments that are included (see
