@@ -88,6 +88,7 @@ namespace pkmn
                 PyList_SetItem(pyList, i, PyInt_FromLong((long)buffer[i]));
 
             delete[] buffer;
+            Py_INCREF(pyList);
 
             return pyList;
         }
@@ -158,6 +159,7 @@ namespace pkmn
                 PyList_SetItem(pyList, i, PyInt_FromLong((long)buffer[i]));
 
             delete[] buffer;
+            Py_INCREF(pyList);
 
             return pyList;
         }
