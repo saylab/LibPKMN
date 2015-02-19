@@ -16,7 +16,7 @@
 
 %import "pkmn_cs.i"
 
-void getPokemonOfType(std::vector<PokemonEntry>& PKMNVector, const pkmn::pkstring& type1,
+void getPokemonOfType(std::vector<pkmn::cs::PokemonEntry>& PKMNVector, const pkmn::pkstring& type1,
                       const pkmn::pkstring& type2, uint16_t generation, bool lax);
 
 %{
@@ -26,7 +26,7 @@ void getPokemonOfType(std::vector<PokemonEntry>& PKMNVector, const pkmn::pkstrin
     #include "pkmn/lists.hpp"
     #include "entry_wrappers.hpp"
 
-    void getPokemonOfType(std::vector<PokemonEntry>& PKMNVector, const pkmn::pkstring& type1,
+    void getPokemonOfType(std::vector<pkmn::cs::PokemonEntry>& PKMNVector, const pkmn::pkstring& type1,
                           const pkmn::pkstring& type2, uint16_t generation, bool lax){
 
         pkmn::pkstring version_from_gen[] = {"Yellow","Crystal",
@@ -38,7 +38,7 @@ void getPokemonOfType(std::vector<PokemonEntry>& PKMNVector, const pkmn::pkstrin
         get_pokemon_of_type(pkmn_vector, type1, type2, generation, lax);
 
         BOOST_FOREACH(const pkmn::pokemon_entry_t& entry, pkmn_vector){
-            PKMNVector.push_back(PokemonEntry(version_from_gen[generation],
+            PKMNVector.push_back(pkmn::cs::PokemonEntry(version_from_gen[generation],
                                               entry.species_name,
                                               entry.form));
         }

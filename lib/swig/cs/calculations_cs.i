@@ -18,34 +18,34 @@
 
 %import "pkmn_cs.i"
 
-std::pair<uint16_t, uint16_t> getStatRange(const struct PokemonEntry& entry,
-                                           const pkmn::pkstring& game,
-                                           const pkmn::pkstring& statName,
+std::pair<uint16_t, uint16_t> getStatRange(pkmn::cs::PokemonEntry &entry,
+                                           const pkmn::pkstring &game,
+                                           const pkmn::pkstring &statName,
                                            uint8_t level);
 
-bool isStatPossible(const PokemonEntry& entry, const pkmn::pkstring& game,
-                    const pkmn::pkstring& statName, uint16_t statValue,
-                    uint8_t level);
+bool isStatPossible(pkmn::cs::PokemonEntry &entry, const pkmn::pkstring &game,
+                    const pkmn::pkstring &statName, uint16_t statValue,
+                    uint16_t level);
 
 %{
     #include "pkmn/calculations.hpp"
     #include "entry_wrappers.hpp"
 
-    std::pair<uint16_t, uint16_t> getStatRange(const PokemonEntry& entry,
-                                               const pkmn::pkstring& game,
-                                               const pkmn::pkstring& statName,
+    std::pair<uint16_t, uint16_t> getStatRange(pkmn::cs::PokemonEntry &entry,
+                                               const pkmn::pkstring &game,
+                                               const pkmn::pkstring &statName,
                                                uint8_t level){
 
-        pkmn::pokemon_entry_t native_entry(game, entry.speciesName, entry.form);
+        pkmn::pokemon_entry_t native_entry(game, entry.getSpeciesName(), entry.getForm());
         return pkmn::calculations::get_stat_range(native_entry, game,
                                                   statName, level);
     }
 
-    bool isStatPossible(const PokemonEntry& entry, const pkmn::pkstring& game,
-                        const pkmn::pkstring& statName, uint16_t statValue,
-                        uint8_t level){
+    bool isStatPossible(pkmn::cs::PokemonEntry &entry, const pkmn::pkstring &game,
+                        const pkmn::pkstring &statName, uint16_t statValue,
+                        uint16_t level){
 
-        pkmn::pokemon_entry_t native_entry(game, entry.speciesName, entry.form);
+        pkmn::pokemon_entry_t native_entry(game, entry.getSpeciesName(), entry.getForm());
         return pkmn::calculations::is_stat_possible(native_entry, game,
                                                     statName, statValue,
                                                     level);

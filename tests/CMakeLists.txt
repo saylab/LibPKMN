@@ -102,7 +102,7 @@ ENDMACRO(LIBPKMN_ADD_PYTHON_TEST)
 ##################################################
 SET(cpp_test_sources
     dict_test.cpp
-    entry_wrapper_test.cpp
+    #entry_wrapper_test.cpp
     markings_test.cpp
     pkstring_test.cpp
     prng_test.cpp
