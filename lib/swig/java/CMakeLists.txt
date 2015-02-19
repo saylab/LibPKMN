@@ -93,7 +93,6 @@ ADD_CUSTOM_COMMAND(
     DEPENDS ${SWIG_MODULE_io_java_REAL_NAME}
     DEPENDS ${SWIG_MODULE_lists_java_REAL_NAME}
     DEPENDS ${SWIG_MODULE_paths_java_REAL_NAME}
-    DEPENDS ${gui_files}
     DEPENDS java_enums
 )
 ADD_CUSTOM_TARGET(
