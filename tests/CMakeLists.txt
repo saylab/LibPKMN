@@ -184,6 +184,7 @@ ENDIF(ENABLE_JAVA)
 ##################################################
 IF(ENABLE_PYTHON)
     SET(python_test_names
+        python_conversions_test
         python_dict_test
         python_pkstring_test
         python_sptr_test

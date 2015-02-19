@@ -26,10 +26,10 @@ namespace pkmn
         pokemon::sptr import_gen1_pokemon(PyObject* pyList)
         {
             if(!pyList)
-                throw std::runtime_error("Invalid input.");
+                throw std::runtime_error("Invalid input: null pointer.");
 
             if(!PyList_Check(pyList))
-                throw std::runtime_error("Invalid input.");
+                throw std::runtime_error("Invalid input: not a list.");
 
             Py_ssize_t len = PyList_Size(pyList);
             if(len == sizeof(gen1_pc_pokemon_t))
@@ -68,7 +68,7 @@ namespace pkmn
 
                 return ret;
             }
-            else throw std::runtime_error("Invalid input.");
+            else throw std::runtime_error("Invalid input: invalid list.");
 
             // This should be unnecessary, but Clang throws a warning without it
             return pokemon::make("None", "Red", 2, "None", "None", "None", "None");
@@ -77,7 +77,7 @@ namespace pkmn
         PyObject* export_gen1_pokemon(pokemon::sptr pkmn, bool party)
         {
             if(pkmn->get_generation() != 1)
-                throw std::runtime_error("Invalid input.");
+                throw std::runtime_error("Invalid input: wrong generation.");
 
             int len = party ? sizeof(gen1_party_pokemon_t)
                             : sizeof(gen1_pc_pokemon_t);
@@ -97,10 +97,10 @@ namespace pkmn
         pokemon::sptr import_gen2_pokemon(PyObject* pyList)
         {
             if(!pyList)
-                throw std::runtime_error("Invalid input.");
+                throw std::runtime_error("Invalid input: null pointer.");
 
             if(!PyList_Check(pyList))
-                throw std::runtime_error("Invalid input.");
+                throw std::runtime_error("Invalid input: not a list.");
 
             Py_ssize_t len = PyList_Size(pyList);
             if(len == sizeof(gen2_pc_pokemon_t))
@@ -121,7 +121,7 @@ namespace pkmn
 
                 return ret;
             }
-            else if(len != sizeof(gen2_party_pokemon_t))
+            else if(len == sizeof(gen2_party_pokemon_t))
             {
                 uint8_t* buffer = new uint8_t[sizeof(gen2_party_pokemon_t)];
 
@@ -137,9 +137,10 @@ namespace pkmn
                 ret->set_trainer_name("LIBPKMN");
                 delete[] buffer;
 
+                return ret;
             }
             else
-                throw std::runtime_error("Invalid input.");
+                throw std::runtime_error("Invalid input: invalid list.");
 
             // This should be unnecessary, but Clang throws a warning without it
             return pokemon::make("None", "Gold", 2, "None", "None", "None", "None");
@@ -147,8 +148,8 @@ namespace pkmn
 
         PyObject* export_gen2_pokemon(pokemon::sptr pkmn, bool party)
         {
-            if(pkmn->get_generation() != 1)
-                throw std::runtime_error("Invalid input.");
+            if(pkmn->get_generation() != 2)
+                throw std::runtime_error("Invalid input: wrong generation.");
 
             int len = party ? sizeof(gen2_party_pokemon_t)
                             : sizeof(gen2_pc_pokemon_t);
