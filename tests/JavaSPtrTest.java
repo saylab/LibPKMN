@@ -21,7 +21,7 @@ public class JavaSPtrTest
     {
         try
         {
-            BagSPtr bag1 = Bag.make("Gold");
+            BagSPtr bag1 = new BagSPtr("Gold");
             BagSPtr bag2 = bag1;
             if(bag1 != bag2)
                 throw new RuntimeException("bag1 != bag2");
@@ -96,7 +96,7 @@ public class JavaSPtrTest
     {
         try
         {
-            PokedexSPtr pokedex1 = Pokedex.make("Red");
+            PokedexSPtr pokedex1 = new PokedexSPtr("Red");
             PokedexSPtr pokedex2 = pokedex1;
             if(pokedex1 != pokedex2)
                 throw new RuntimeException("pokedex1 != pokedex2");
@@ -122,9 +122,9 @@ public class JavaSPtrTest
     {
         try
         {
-            PokemonSPtr pokemon1 = Pokemon.make("Shaymin", "Platinum", 50,
-                                                "None", "None",
-                                                "None", "None");
+            PokemonSPtr pokemon1 = new PokemonSPtr("Shaymin", "Platinum", 50,
+                                                   "None", "None",
+                                                   "None", "None");
             PokemonSPtr pokemon2 = pokemon1;
             if(pokemon1 != pokemon2)
                 throw new RuntimeException("pokemon1 != pokemon2");
@@ -163,7 +163,7 @@ public class JavaSPtrTest
     {
         try
         {
-            PRNGSPtr prng1 = PRNG.make(3);
+            PRNGSPtr prng1 = new PRNGSPtr(3);
             PRNGSPtr prng2 = prng1;
             if(prng1 != prng2)
                 throw new RuntimeException("prng1 != prng2");
@@ -204,7 +204,7 @@ public class JavaSPtrTest
     {
         try
         {
-            TrainerSPtr trainer1 = Trainer.make("Red", "Red", "Male");
+            TrainerSPtr trainer1 = new TrainerSPtr("Red", "Red", "Male");
             TrainerSPtr trainer2 = trainer1;
             if(trainer1 != trainer2)
                 throw new RuntimeException("trainer1 != trainer2");

@@ -44,7 +44,7 @@ def hide_ctors(filename):
 
 def fix_sptr_file(filename):
     f = open(filename, "r")
-    flines = f.readlines()
+    flines = f.readlines()[:-1]
     f.close()
 
     # Find getGame
@@ -69,7 +69,22 @@ def fix_sptr_file(filename):
     flines[javadoc_start_pos-1] = "// \\endcond\n"
 
     # Add constructors to call base class's factory functions
-    
+    base_class_filename = filename.replace("SPtr","")
+    g = open(base_class_filename, "r")
+    glines = g.readlines()
+    g.close()
+
+    class_name = filename.split(".")[0]
+    for line in glines:
+        if ("public static %s make" % class_name) in line:
+            make_line = line.rstrip("\n").lstrip(" ")
+            fcn_str = "%s\n" % make_line.replace(("static %s make" % class_name), class_name)
+            fcn_str += "    %s fromMake = %s.make(" % (class_name, class_name.replace("SPtr",""))
+            fcn_str += "%s);\n" % make_line.split("(")[1].split(")")[0].replace("String ","").replace("int ","")
+            fcn_str += "    this.swigCPtr = fromMake.swigCPtr;\n"
+            fcn_str += "    this.swigCMemOwn = fromMake.swigCMemOwn;\n}\n"
+            flines += [fcn_str]
+    flines += ["}"]
 
     f = open(filename, "w")
     for line in flines:
