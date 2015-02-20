@@ -20,6 +20,9 @@ def hide_ctors(filename):
     flines = f.readlines()
     f.close()
 
+    if "hide_ctors" in flines[0] or "hide_ctors" in flines[1]:
+        return
+
     # Find protected constructor
     ctor_pos = 0
     found = False
@@ -38,6 +41,7 @@ def hide_ctors(filename):
         flines[ctor_pos+4] = "// \\endcond\n"
 
     f = open(filename, "w")
+    f.write("// hide_ctors\n")
     for line in flines:
         f.write(line)
     f.close()
@@ -46,6 +50,9 @@ def fix_sptr_file(filename):
     f = open(filename, "r")
     flines = f.readlines()[:-1]
     f.close()
+
+    if "fix_sptr_file" in flines[0] or "fix_sptr_file" in flines[1]:
+        return
 
     # Find getGame
     line = flines[0]
@@ -87,6 +94,7 @@ def fix_sptr_file(filename):
     flines += ["}"]
 
     f = open(filename, "w")
+    f.write("// fix_sptr_file\n")
     for line in flines:
         f.write(line)
     f.close()
