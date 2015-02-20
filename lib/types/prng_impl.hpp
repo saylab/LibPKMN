@@ -38,12 +38,12 @@ namespace pkmn
             prng_impl(uint16_t gen);
             ~prng_impl() {};
 
-            void PKMN_INLINE seed_lcrng(const uint64_t seed)
+            void PKMN_INLINE seed_lcrng(const uint32_t seed)
             {
-                _lcrng_seed = (_gen < 5) ? (seed % 4294967295) : seed;
+                _lcrng_seed = seed;
             }
 
-            uint64_t lcrng();
+            uint16_t lcrng();
 
             void PKMN_INLINE seed_arng(const uint32_t seed)
             {
@@ -58,7 +58,7 @@ namespace pkmn
         private:
 
             uint32_t _gen;
-            uint64_t _lcrng_seed;
+            uint32_t _lcrng_seed;
             uint32_t _arng_seed;
             struct mtrng _mtrng;
     };

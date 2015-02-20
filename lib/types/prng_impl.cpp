@@ -33,18 +33,10 @@ namespace pkmn
         seed_arng(rand());
     }
 
-    uint64_t prng_impl::lcrng()
+    uint16_t prng_impl::lcrng()
     {
-        if(_gen < 5)
-        {
-            _lcrng_seed = ((0x41C64E6D * _lcrng_seed) + 0x6073) % 4294967295;
-            return _lcrng_seed;
-        }
-        else
-        {
-            _lcrng_seed = (0x5D588B656C078965 * _lcrng_seed) + 0x0000000000269EC3;
-            return _lcrng_seed;
-        }
+        _lcrng_seed = ((0x41C64E6D * _lcrng_seed) + 0x6073) & 0xFFFFFFFF;
+        return uint16_t(_lcrng_seed >> 16);
     }
 
     uint32_t prng_impl::arng()

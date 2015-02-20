@@ -47,16 +47,12 @@ namespace pkmn
             /*!
              * \param seed new seed
              */
-            virtual void seed_lcrng(const uint64_t seed) = 0;
+            virtual void seed_lcrng(const uint32_t seed) = 0;
 
             /*!
              * Linear Congruential Random Number Generator (LCRNG)
              *
-             * "In Generation III and Generation IV, the games use a 32 bit LCRNG.
-             *
-             *  ...
-             *
-             * This algorithm is used for the following:
+             * "This algorithm is used for the following:
              *  * Encrypting Pokémon data in the save file.
              *  * Generate the personality value of a wild encountered Pokémon.
              *  * Generate the individual values of a wild encountered Pokémon in Generation III and Generation IV.
@@ -64,13 +60,11 @@ namespace pkmn
              *  * Determining the Pokémon Lottery Corner lucky number.
              *  * Determining if an egg will be available at the Pokémon Day Care.
              *
-             * In Generation V and Generation VI, the games instead use a 64 bit LCRNG..."
-             *
              * Excerpt from: <a href="http://bulbapedia.bulbagarden.net/wiki/Pseudorandom_number_generation_in_Pok%C3%A9mon">Bulbapedia</a>
              *
              * \return next LCRNG value
              */
-            virtual uint64_t lcrng() = 0;
+            virtual uint16_t lcrng() = 0;
 
             //! Reseed ARNG.
             /*!
