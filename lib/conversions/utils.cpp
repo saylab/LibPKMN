@@ -171,10 +171,10 @@ namespace pkmn
 
         static const uint8_t gen3_block_orders[24][4] =
         {
-            {G,A,E,M},{G,A,M,E},{G,E,A,M},{G,M,A,E},{G,M,A,E},{G,M,E,A},
-            {A,G,E,M},{A,G,M,E},{E,G,A,M},{M,G,A,E},{A,M,G,E},{A,M,E,G},
-            {A,E,G,M},{E,G,M,A},{E,A,G,M},{E,A,M,G},{E,M,G,A},{E,M,A,G},
-            {M,G,A,E},{M,G,E,A},{E,A,G,M},{M,A,M,G},{M,E,G,A},{M,E,A,G}
+            {G,A,E,M},{G,A,M,E},{G,E,A,M},{G,E,M,A},{G,M,A,E},{G,M,E,A},
+            {A,G,E,M},{A,G,M,E},{A,E,G,M},{A,E,M,G},{A,M,G,E},{A,M,E,G},
+            {E,G,A,M},{E,G,M,A},{E,A,G,M},{E,A,M,G},{E,M,G,A},{E,M,A,G},
+            {M,G,A,E},{M,G,E,A},{M,A,G,E},{M,A,E,G},{M,E,G,A},{M,E,A,G}
         };
 
         uint16_t gen3_crypt(native::gen3_pc_pokemon_t& pkmn)
