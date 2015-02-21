@@ -127,7 +127,7 @@ namespace pkmn
                                           bool is_encrypted)
         {
             native::gen3_pc_pokemon_t _native = native;
-            if(is_encrypted) gen3_crypt(_native);
+            //if(is_encrypted) gen3_crypt(_native);
 
             return pokemon::sptr(new pokemon_gen3impl(_native,
                                                       database::get_version_id(version)));
@@ -138,7 +138,7 @@ namespace pkmn
                                           bool is_encrypted)
         {
             native::gen3_party_pokemon_t _native = native;
-            if(is_encrypted) gen3_crypt(_native.pc);
+            //if(is_encrypted) gen3_crypt(_native.pc);
 
             return pokemon::sptr(new pokemon_gen3impl(_native,
                                                       database::get_version_id(version)));
@@ -148,14 +148,14 @@ namespace pkmn
                                  bool encrypt)
         {
             memcpy(&native, pkmn->get_native(), sizeof(native::gen3_pc_pokemon_t));
-            if(encrypt) native.checksum = gen3_crypt(native);
+            //if(encrypt) native.checksum = gen3_crypt(native);
         }
 
         void export_gen3_pokemon(pokemon::sptr pkmn, native::gen3_party_pokemon_t &native,
                                  bool encrypt)
         {
             memcpy(&native, pkmn->get_native(), sizeof(native::gen3_party_pokemon_t));
-            if(encrypt) native.pc.checksum = gen3_crypt(native.pc);
+            //if(encrypt) native.pc.checksum = gen3_crypt(native.pc);
         }
 
         pokemon::sptr import_nds_pokemon(const native::nds_pc_pokemon_t &native,

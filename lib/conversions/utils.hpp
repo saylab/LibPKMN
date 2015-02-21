@@ -110,8 +110,6 @@ namespace pkmn
 
         void set_modern_IV(uint8_t stat, uint32_t& IVint, uint8_t val);
 
-        uint16_t gen3_crypt(native::gen3_pc_pokemon_t& pkmn);
-
         #define get_gen3_ability_slot(iv_egg_ability) (uint16_t(iv_egg_ability)&  0x1)
 
         #define set_gen3_ability_slot(iv_egg_ability, num) iv_egg_ability = num ? (iv_egg_ability | 1) : ~(iv_egg_ability&  1);

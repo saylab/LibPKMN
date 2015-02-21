@@ -337,6 +337,7 @@ namespace pkmn
             uint8_t blocks8[136];
             uint32_t blocks16[68];
             uint32_t blocks32[34];
+            uint8_t blocks[4][34];
             struct
             {
                 nds_pokemon_blockA_t blockA;
