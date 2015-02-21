@@ -182,6 +182,7 @@ namespace pkmn
         typedef union
         {
             uint8_t blocks8[48];
+            uint8_t blocks16[24];
             uint32_t blocks32[12];
             uint8_t blocks[4][12];
             struct

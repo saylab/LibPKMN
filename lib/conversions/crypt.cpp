@@ -124,5 +124,15 @@ namespace pkmn
 
             pkmn.blocks = blocks;
         }
+
+        void nds_encrypt(native::nds_pc_pokemon_t &pkmn)
+        {
+            nds_crypt(pkmn, true);
+        }
+
+        void nds_decrypt(native::nds_pc_pokemon_t &pkmn)
+        {
+            nds_crypt(pkmn, false);
+        }
     }
 }
