@@ -23,6 +23,8 @@ namespace pkmn
         uint16_t PKMN_API nds_pokemon_checksum(const native::nds_pokemon_blocks_t &pkmn);
 
         uint16_t PKMN_API nds_block_checksum(const uint8_t* block, int len);
+
+        uint16_t PKMN_API gen6_pokemon_checksum(const native::gen6_pokemon_blocks_t &pkmn);
     }
 }
 #endif /* INCLUDED_PKMN_NATIVE_CHECKSUM_HPP */

@@ -96,5 +96,15 @@ namespace pkmn
 
             return sum;
         }
+
+        uint16_t gen6_pokemon_checksum(const native::gen6_pokemon_blocks_t &blocks)
+        {
+            uint32_t checksum = 0;
+
+            for(size_t i = 0; i < sizeof(blocks)/2; i++)
+                checksum += blocks.blocks16[i];
+
+            return uint16_t(checksum & 0xFFFF);
+        }
     }
 }
