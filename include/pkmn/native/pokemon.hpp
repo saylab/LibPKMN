@@ -389,6 +389,152 @@ namespace pkmn
             uint16_t checksum;
             uint8_t unknown[12];
         } nds_pokemon_box_t;
+
+        /*
+         * Generation VI
+         *
+         * Source: http://projectpokemon.org/wiki/Pokemon_X/Y_3DS_Structure
+         */
+        typedef struct
+        {
+            uint16_t species;
+            uint16_t held_item;
+            union
+            {
+                uint32_t ot_id;
+                struct
+                {
+                    uint16_t ot_pid;
+                    uint16_t ot_sid;
+                };
+            };
+            uint32_t exp;
+            uint8_t ability;
+            uint8_t ability_num;
+            uint16_t hits_remaining; // On Training Bag
+            uint32_t personality;
+            uint8_t nature;
+            uint8_t encounter_info;
+            uint8_t ev_hp;
+            uint8_t ev_atk;
+            uint8_t ev_def;
+            uint8_t ev_spd;
+            uint8_t ev_spatk;
+            uint8_t ev_spdef;
+            contest_stats_t contest_stats;
+            uint8_t markings;
+            uint8_t pokerus;
+            uint32_t super_training_medals;
+            uint8_t ribbons[6];
+            uint16_t unused_x36;
+            uint8_t contest_memory_ribbon_count;
+            uint8_t battle_memory_ribbon_count;
+            uint8_t distribution_super_training_flags;
+            uint32_t unused_x3B;
+        } gen6_pokemon_blockA_t;
+
+        typedef struct
+        {
+            uint16_t nickname[24];
+            uint16_t null_terminator;
+            uint16_t moves[4];
+            uint8_t move_pps[4];
+            uint16_t relearn_moves[4];
+            uint8_t secret_super_training_flag;
+            uint8_t unused_x73;
+            uint32_t iv_isegg_isnicknamed;
+        } gen6_pokemon_blockB_t;
+
+        typedef struct
+        {
+            uint8_t latest_not_ot_handler[24];
+            uint16_t null_terminator;
+            uint8_t not_ot_gender;
+            uint8_t current_handler;
+            uint16_t geolocations[5];
+            uint16_t unused_x9E;
+            uint16_t unused_xA0;
+            uint8_t not_ot_friendship;
+            uint8_t not_ot_affection;
+            uint8_t not_ot_memory_intensity;
+            uint8_t not_ot_memory_line;
+            uint8_t not_ot_memory_feeling;
+            uint8_t unused_xA7;
+            uint16_t not_ot_memory_textvar;
+            uint16_t unused_xAA;
+            uint16_t unused_xAC;
+            uint8_t fullness;
+            uint8_t enjoyment;
+        } gen6_pokemon_blockC_t;
+
+        typedef struct
+        {
+            uint8_t otname[24];
+            uint16_t null_terminator;
+            uint8_t ot_friendship;
+            uint8_t ot_affection;
+            uint8_t ot_memory_intensity;
+            uint8_t ot_memory_line;
+            uint16_t ot_memory_textvar;
+            uint8_t ot_memory_feeling;
+            uint8_t eggmet_date[3];
+            uint8_t met_date[3];
+            uint8_t unused_D7;
+            uint16_t eggmet_location;
+            uint16_t met_location;
+            uint8_t ball;
+            uint8_t form_encounterinfo;
+            uint8_t gen4_encounterinfo;
+            uint8_t ot_game;
+            uint8_t ot_country;
+            uint8_t region;
+            uint8_t region_3ds;
+            uint8_t ot_language;
+            uint32_t unused_0xE4;
+        } gen6_pokemon_blockD_t;
+
+        typedef union
+        {
+            uint8_t blocks8[224];
+            uint32_t blocks16[112];
+            uint32_t blocks32[56];
+            uint8_t blocks[4][56];
+            struct
+            {
+                gen6_pokemon_blockA_t blockA;
+                gen6_pokemon_blockB_t blockB;
+                gen6_pokemon_blockC_t blockC;
+                gen6_pokemon_blockD_t blockD;
+            };
+        } gen6_pokemon_blocks_t;
+
+        typedef struct
+        {
+            uint32_t encryption_key;
+            uint16_t placeholder;
+            uint16_t checksum;
+            gen6_pokemon_blocks_t blocks;
+        } gen6_pc_pokemon_t;
+
+        typedef struct
+        {
+            gen6_pc_pokemon_t pc;
+            uint8_t status;
+            uint8_t unknown_xE9;
+            uint16_t unused_xEA;
+            uint8_t level;
+            uint8_t unused_xED;
+            uint16_t unused_xEE;
+            uint16_t current_hp;
+            uint16_t max_hp;
+            uint16_t atk;
+            uint16_t def;
+            uint16_t spd;
+            uint16_t spatk;
+            uint16_t spdef;
+            uint16_t unused_xFE;
+            uint32_t unused_x100;
+        } gen6_party_pokemon_t;
         #pragma pack(pop)
     }
 }
