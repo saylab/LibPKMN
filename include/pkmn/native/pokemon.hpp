@@ -414,7 +414,7 @@ namespace pkmn
             uint16_t hits_remaining; // On Training Bag
             uint32_t personality;
             uint8_t nature;
-            uint8_t encounter_info;
+            uint8_t form_encounterinfo;
             uint8_t ev_hp;
             uint8_t ev_atk;
             uint8_t ev_def;
@@ -435,7 +435,7 @@ namespace pkmn
 
         typedef struct
         {
-            uint16_t nickname[24];
+            uint16_t nickname[12];
             uint16_t null_terminator;
             uint16_t moves[4];
             uint8_t move_pps[4];
@@ -469,7 +469,7 @@ namespace pkmn
 
         typedef struct
         {
-            uint8_t otname[24];
+            uint16_t otname[12];
             uint16_t null_terminator;
             uint8_t ot_friendship;
             uint8_t ot_affection;
@@ -483,7 +483,7 @@ namespace pkmn
             uint16_t eggmet_location;
             uint16_t met_location;
             uint8_t ball;
-            uint8_t form_encounterinfo;
+            uint8_t metlevel_otgender;
             uint8_t gen4_encounterinfo;
             uint8_t ot_game;
             uint8_t ot_country;

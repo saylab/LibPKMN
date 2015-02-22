@@ -67,6 +67,7 @@ IF(ENABLE_LIBPKMN)
         pokemon_gen2impl.cpp
         pokemon_gen3impl.cpp
         pokemon_ndsimpl.cpp
+        pokemon_gen6impl.cpp
         pocket_impl.cpp
         bag_impl.cpp
         trainer_impl.cpp

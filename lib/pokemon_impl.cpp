@@ -24,6 +24,7 @@
 #include "pokemon_gen2impl.hpp"
 #include "pokemon_gen3impl.hpp"
 #include "pokemon_ndsimpl.hpp"
+#include "pokemon_gen6impl.hpp"
 
 #include "internal.hpp"
 #include "SQLiteCpp/SQLiteC++.h"
@@ -64,6 +65,10 @@ namespace pkmn
 
             case 3:
                 return sptr(new pokemon_gen3impl(species, version, level,
+                                                 move1, move2, move3, move4));
+
+            case 6:
+                return sptr(new pokemon_gen6impl(species, version, level,
                                                  move1, move2, move3, move4));
 
             default:

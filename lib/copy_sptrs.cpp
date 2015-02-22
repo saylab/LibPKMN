@@ -18,6 +18,7 @@
 #include "pokemon_gen2impl.hpp"
 #include "pokemon_gen3impl.hpp"
 #include "pokemon_ndsimpl.hpp"
+#include "pokemon_gen6impl.hpp"
 #include "trainer_impl.hpp"
 #include "types/prng_impl.hpp"
 
@@ -63,6 +64,13 @@ namespace pkmn
             {
                 pokemon_gen3impl actual = *pkmn::dynamic_pointer_cast<pokemon_gen3impl>(in);
                 return pkmn::dynamic_pointer_cast<pokemon>(pkmn::make_shared<pokemon_gen3impl>(actual));
+                break;
+            }
+
+            case 6:
+            {
+                pokemon_gen6impl actual = *pkmn::dynamic_pointer_cast<pokemon_gen6impl>(in);
+                return pkmn::dynamic_pointer_cast<pokemon>(pkmn::make_shared<pokemon_gen6impl>(actual));
                 break;
             }
 
