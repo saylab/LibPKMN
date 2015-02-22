@@ -5,6 +5,7 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
+#include <cstddef>
 #include <cstring>
 
 #include <pkmn/enums.hpp>
@@ -88,7 +89,7 @@ namespace pkmn
             bD
         };
 
-        static const int nds_block_orders[24][4] = { 
+        static const int modern_block_orders[24][4] = {
             {bA,bB,bC,bD}, {bA,bB,bD,bC}, {bA,bC,bB,bD}, {bA,bC,bD,bB},
             {bA,bD,bB,bC}, {bA,bD,bC,bB}, {bB,bA,bC,bD}, {bB,bA,bD,bC},
             {bB,bC,bA,bD}, {bB,bC,bD,bA}, {bB,bD,bA,bC}, {bB,bD,bC,bA},
@@ -104,10 +105,10 @@ namespace pkmn
             native::nds_pokemon_blocks_t blocks;
 
             uint8_t index = ((pkmn.personality & 0x3E000) >> 0xD) % 24;
-            uint8_t blockA_index = nds_block_orders[index][bA];
-            uint8_t blockB_index = nds_block_orders[index][bB];
-            uint8_t blockC_index = nds_block_orders[index][bC];
-            uint8_t blockD_index = nds_block_orders[index][bD];
+            uint8_t blockA_index = modern_block_orders[index][bA];
+            uint8_t blockB_index = modern_block_orders[index][bB];
+            uint8_t blockC_index = modern_block_orders[index][bC];
+            uint8_t blockD_index = modern_block_orders[index][bD];
 
             if(encrypt)
             {
@@ -133,12 +134,34 @@ namespace pkmn
             pkmn.blocks = blocks;
         }
 
+        static void nds_crypt(native::nds_party_pokemon_t &pkmn, bool encrypt)
+        {
+            nds_crypt(pkmn.pc, encrypt);
+
+            prng::sptr rng = prng::make(4);
+            rng->seed_lcrng(pkmn.pc.personality);
+
+            uint16_t* pkmn_bytes = reinterpret_cast<uint16_t*>(&pkmn);
+            for(size_t i = offsetof(native::nds_party_pokemon_t, status); i < sizeof(native::nds_party_pokemon_t); i++)
+                pkmn_bytes[i] ^= rng->lcrng();
+        }
+
         void nds_encrypt(native::nds_pc_pokemon_t &pkmn)
         {
             nds_crypt(pkmn, true);
         }
 
         void nds_decrypt(native::nds_pc_pokemon_t &pkmn)
+        {
+            nds_crypt(pkmn, false);
+        }
+
+        void nds_encrypt(native::nds_party_pokemon_t &pkmn)
+        {
+            nds_crypt(pkmn, true);
+        }
+
+        void nds_decrypt(native::nds_party_pokemon_t &pkmn)
         {
             nds_crypt(pkmn, false);
         }

@@ -21,6 +21,10 @@ namespace pkmn
         void PKMN_API nds_encrypt(native::nds_pc_pokemon_t &pkmn);
 
         void PKMN_API nds_decrypt(native::nds_pc_pokemon_t &pkmn);
+
+        void PKMN_API nds_encrypt(native::nds_party_pokemon_t &pkmn);
+
+        void PKMN_API nds_decrypt(native::nds_party_pokemon_t &pkmn);
     }
 }
 #endif /* INCLUDED_PKMN_NATIVE_CRYPT_HPP */
