@@ -165,5 +165,73 @@ namespace pkmn
         {
             nds_crypt(pkmn, false);
         }
+
+        static void gen6_crypt(native::gen6_pc_pokemon_t &pkmn, bool encrypt)
+        {
+            prng::sptr rng = prng::make(6);
+            rng->seed_lcrng(pkmn.encryption_key);
+            native::gen6_pokemon_blocks_t blocks;
+
+            uint8_t index = ((pkmn.encryption_key & 0x3E000) >> 0xD) % 24;
+            uint8_t blockA_index = modern_block_orders[index][bA];
+            uint8_t blockB_index = modern_block_orders[index][bB];
+            uint8_t blockC_index = modern_block_orders[index][bC];
+            uint8_t blockD_index = modern_block_orders[index][bD];
+
+            if(encrypt)
+            {
+                for(size_t i = 0; i < 64; i++)
+                    pkmn.blocks.blocks16[i] ^= rng->lcrng();
+
+                memcpy(&blocks.blocks[blockA_index][0], &pkmn.blocks.blockA, sizeof(native::gen6_pokemon_blockA_t));
+                memcpy(&blocks.blocks[blockB_index][1], &pkmn.blocks.blockB, sizeof(native::gen6_pokemon_blockB_t));
+                memcpy(&blocks.blocks[blockC_index][2], &pkmn.blocks.blockC, sizeof(native::gen6_pokemon_blockC_t));
+                memcpy(&blocks.blocks[blockD_index][3], &pkmn.blocks.blockD, sizeof(native::gen6_pokemon_blockD_t));
+            }
+            else
+            {
+                memcpy(&blocks.blockA, &pkmn.blocks.blocks[blockA_index][0], sizeof(native::gen6_pokemon_blockA_t));
+                memcpy(&blocks.blockB, &pkmn.blocks.blocks[blockB_index][1], sizeof(native::gen6_pokemon_blockB_t));
+                memcpy(&blocks.blockC, &pkmn.blocks.blocks[blockC_index][2], sizeof(native::gen6_pokemon_blockC_t));
+                memcpy(&blocks.blockD, &pkmn.blocks.blocks[blockD_index][3], sizeof(native::gen6_pokemon_blockD_t));
+
+                for(size_t i = 0; i < 64; i++)
+                    pkmn.blocks.blocks16[i] ^= rng->lcrng();
+            }
+
+            pkmn.blocks = blocks;
+        }
+
+        static void gen6_crypt(native::gen6_party_pokemon_t &pkmn, bool encrypt)
+        {
+            gen6_crypt(pkmn.pc, encrypt);
+
+            prng::sptr rng = prng::make(4);
+            rng->seed_lcrng(pkmn.pc.encryption_key);
+
+            uint16_t* pkmn_bytes = reinterpret_cast<uint16_t*>(&pkmn);
+            for(size_t i = offsetof(native::gen6_party_pokemon_t, status); i < sizeof(native::gen6_party_pokemon_t); i++)
+                pkmn_bytes[i] ^= rng->lcrng();
+        }
+
+        void gen6_encrypt(native::gen6_pc_pokemon_t &pkmn)
+        {
+            gen6_crypt(pkmn, true);
+        }
+
+        void gen6_decrypt(native::gen6_pc_pokemon_t &pkmn)
+        {
+            gen6_crypt(pkmn, false);
+        }
+
+        void gen6_encrypt(native::gen6_party_pokemon_t &pkmn)
+        {
+            gen6_crypt(pkmn, true);
+        }
+
+        void gen6_decrypt(native::gen6_party_pokemon_t &pkmn)
+        {
+            gen6_crypt(pkmn, false);
+        }
     }
 }
