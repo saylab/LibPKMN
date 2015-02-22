@@ -7,12 +7,12 @@
 
 #include <cstdlib>
 
-#include <pkmn/conversions/checksum.hpp>
+#include <pkmn/native/checksum.hpp>
 #include <pkmn/native/pokemon.hpp>
 
 namespace pkmn
 {
-    namespace conversions
+    namespace native
     {
         uint16_t gen3_pokemon_checksum(const native::gen3_pokemon_blocks_t &blocks)
         {

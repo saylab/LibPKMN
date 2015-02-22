@@ -5,18 +5,16 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <string>
+#include <cstring>
 
 #include <pkmn/enums.hpp>
-#include <pkmn/conversions/crypt.hpp>
+#include <pkmn/native/crypt.hpp>
 #include <pkmn/native/pokemon.hpp>
 #include <pkmn/types/prng.hpp>
 
-#include "utils.hpp"
-
 namespace pkmn
 {
-    namespace conversions
+    namespace native
     {
         /*
          * Generation III
