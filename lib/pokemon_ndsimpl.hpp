@@ -33,11 +33,13 @@ namespace pkmn
             pkmn::contest_stats_t get_contest_stats() const;
             pkmn::markings_t get_markings() const;
             pkmn::ribbons_t get_ribbons() const;
+            pkmn::super_training_medals_t get_super_training_medals() const;
 
             // Setting Non-battle Info
             void set_contest_stats(const pkmn::contest_stats_t& contest_stats);
             void set_markings(const pkmn::markings_t& markings);
             void set_ribbons(const pkmn::ribbons_t& ribbons);
+            void set_super_training_medals(const pkmn::super_training_medals_t& super_training_medals);
 
             // Getting Trainer Info
             pkmn::pkstring get_nickname() const;

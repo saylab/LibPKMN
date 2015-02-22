@@ -184,6 +184,12 @@ namespace pkmn
         return ribbons;
     }
 
+    // No Super Training in Generation III
+    pkmn::super_training_medals_t pokemon_gen3impl::get_super_training_medals() const
+    {
+        return pkmn::super_training_medals_t();
+    }
+
     /*
      * Setting Non-Battle Info
      */
@@ -203,6 +209,12 @@ namespace pkmn
     {
         pkmn::ribbons_t _ribbons = ribbons;
         _misc->ribbons_obedience = _ribbons.hoenn;
+    }
+
+    // No Super Training in Generation III
+    void pokemon_gen3impl::set_super_training_medals(const pkmn::super_training_medals_t &super_training_medals)
+    {
+        /* NOP */
     }
 
     /*

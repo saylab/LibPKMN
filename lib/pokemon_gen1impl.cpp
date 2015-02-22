@@ -190,6 +190,12 @@ namespace pkmn
         return pkmn::ribbons_t();
     }
 
+    // No Super Training in Generation I
+    pkmn::super_training_medals_t pokemon_gen1impl::get_super_training_medals() const
+    {
+        return pkmn::super_training_medals_t();
+    }
+
     /*
      * Setting Non-battle info
      */
@@ -208,6 +214,12 @@ namespace pkmn
 
     // No ribbons in Generation I
     void pokemon_gen1impl::set_ribbons(const pkmn::ribbons_t& ribbons)
+    {
+        /* NOP */
+    }
+
+    // No Super Training in Generation I
+    void pokemon_gen1impl::set_super_training_medals(const pkmn::super_training_medals_t& super_training_medals)
     {
         /* NOP */
     }

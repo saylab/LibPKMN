@@ -19,6 +19,7 @@
 #include <pkmn/types/pkstring.hpp>
 #include <pkmn/types/ribbons.hpp>
 #include <pkmn/types/shared_ptr.hpp>
+#include <pkmn/types/super_training_medals.hpp>
 
 namespace pkmn
 {
@@ -55,11 +56,13 @@ namespace pkmn
              */
             virtual pkmn::markings_t get_markings() const = 0;
             virtual pkmn::ribbons_t get_ribbons() const = 0;
+            virtual pkmn::super_training_medals_t get_super_training_medals() const = 0;
 
             // Setting Non-battle Info
             virtual void set_contest_stats(const pkmn::contest_stats_t &contest_stats) = 0;
             virtual void set_markings(const pkmn::markings_t &markings) = 0;
             virtual void set_ribbons(const pkmn::ribbons_t &ribbons) = 0;
+            virtual void set_super_training_medals(const pkmn::super_training_medals_t &super_training_medals) = 0;
 
             // Getting Trainer Info
             virtual pkmn::pkstring get_nickname() const = 0;

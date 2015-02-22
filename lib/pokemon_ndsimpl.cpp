@@ -218,6 +218,12 @@ namespace pkmn
         return ribbons;
     }
 
+    // No Super Training in Generation IV-V
+    pkmn::super_training_medals_t pokemon_ndsimpl::get_super_training_medals() const
+    {
+        return pkmn::super_training_medals_t();
+    }
+
     /*
      * Setting Non-Battle Info
      */
@@ -241,6 +247,12 @@ namespace pkmn
         if(get_generation() == 4) _blockA->sinnoh_ribbons2 = _ribbons.sinnoh.ribbons2;
         else                      _blockA->unova_ribbons   = _ribbons.unova;
         _blockC->sinnoh_ribbons3 = _ribbons.sinnoh.ribbons3;
+    }
+
+    // No Super Training in Generation IV-V
+    void pokemon_ndsimpl::set_super_training_medals(const pkmn::super_training_medals_t &super_training_medals)
+    {
+        /* NOP */
     }
 
     /*
