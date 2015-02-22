@@ -16,7 +16,7 @@
 namespace pkmn
 {
     super_training_medals_t::super_training_medals_t(uint32_t medalint)
-    
+    {
         uint8_t* medal_bytes = reinterpret_cast<uint8_t*>(&medalint);
 
         // 0x01 unused
@@ -88,7 +88,7 @@ namespace pkmn
         if(secret_firestone)      medal_bytes[2] |= 0x40;
         if(secret_waterstone)     medal_bytes[2] |= 0x20;
 
-        if(secret_follow_goals)   medal_bytes[3] |= 0x01;
+        if(secret_followgoals)    medal_bytes[3] |= 0x01;
         if(secret_watchout)       medal_bytes[3] |= 0x02;
         if(secret_lightningquick) medal_bytes[3] |= 0x04;
         if(secret_longshots)      medal_bytes[3] |= 0x08;

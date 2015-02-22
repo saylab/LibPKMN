@@ -11,5 +11,5 @@ SET(types_sources
     ${CMAKE_CURRENT_SOURCE_DIR}/pkstring.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/prng_impl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ribbons.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/secret_training_medals.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/super_training_medals.cpp
 PARENT_SCOPE)
