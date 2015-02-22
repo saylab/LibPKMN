@@ -39,7 +39,37 @@ overrides = dict(prng = "PRNG",
                  get_appdata_path = "getAppDataPath",
                  get_libpkmn_commit = "getLibPKMNCommit",
                  get_sqlite3_version = "getSQLite3Version",
-                 get_sqlitecpp_version = "getSQLiteCppVersion"
+                 get_sqlitecpp_version = "getSQLiteCppVersion",
+                 spatk_level1 = "SPAtkLevel1",
+                 hp_level1 = "HPLevel1",
+                 atk_level1 = "AtkLevel1",
+                 spdef_level1 = "SPDefLevel1",
+                 spd_level1 = "SpdLevel1",
+                 def_level1 = "DefLevel1",
+                 spatk_level2 = "SPAtkLevel2",
+                 hp_level2 = "HPLevel2",
+                 atk_level2 = "AtkLevel2",
+                 spdef_level2 = "SPDefLevel2",
+                 spd_level2 = "SpdLevel2",
+                 def_level2 = "DefLevel2",
+                 spatk_level3 = "SPAtkLevel3",
+                 hp_level3 = "HPLevel3",
+                 atk_level3 = "AtkLevel3",
+                 spdef_level3 = "SPDefLevel3",
+                 spd_level3 = "SpdLevel3",
+                 def_level3 = "DefLevel3",
+                 secret_troubles = "secretTroubles",
+                 secret_leafstone = "secretLeafStone",
+                 secret_firestone = "secretFireStone",
+                 secret_waterstone = "secretWaterStone",
+                 secret_followgoals = "secretFollowGoals",
+                 secret_watchout = "secretWatchOut",
+                 secret_lightningquick = "secretLightningQuick",
+                 secret_longshots = "secretLongShots",
+                 secret_scatterbug = "secretScatterbug",
+                 secret_bitbots = "secretBitbots",
+                 secret_hydreigon = "secretHydreigon",
+                 secret_battlebest = "secretBattleBest",
                 )
 
 replacements = dict(Ev = "EV",
@@ -51,7 +81,9 @@ def generate_new_name(old_name, is_class):
     if old_name in overrides:
         return overrides[old_name]
 
-    if old_name.endswith("_t"):
+    if old_name == "super_training_medals_t":
+        old_name = "super_training_medals"
+    elif old_name.endswith("_t"):
         old_name = old_name.replace("_t","")
 
     if is_class:

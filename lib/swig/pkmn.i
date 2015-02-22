@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -73,6 +73,7 @@ namespace pkmn
 %ignore pkmn::sinnoh_ribbons3_t::operator uint32_t;
 %ignore pkmn::unova_ribbons_t::operator uint16_t;
 %ignore pkmn::kalos_ribbons_t::operator uint64_t;
+%ignore pkmn::super_training_medals_t::operator uint32_t;
 
 %{
     #include "pkmn/config.hpp"
