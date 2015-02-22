@@ -42,20 +42,25 @@ namespace pkmn
             for(size_t i = 0; i < 12; i++) pkmn.blocks.blocks32[i] ^= security_key;
 
             uint8_t index = pkmn.personality % 24;
+            uint8_t growth_index  = gen3_block_orders[index][G];
+            uint8_t attacks_index = gen3_block_orders[index][A];
+            uint8_t effort_index  = gen3_block_orders[index][E];
+            uint8_t misc_index    = gen3_block_orders[index][M];
+
             native::gen3_pokemon_blocks_t blocks;
             if(encrypt)
             {
-                memcpy(&blocks.blocks[index][0], &pkmn.blocks.growth, sizeof(native::gen3_pokemon_growth_t));
-                memcpy(&blocks.blocks[index][1], &pkmn.blocks.attacks, sizeof(native::gen3_pokemon_attacks_t));
-                memcpy(&blocks.blocks[index][2], &pkmn.blocks.effort, sizeof(native::gen3_pokemon_effort_t));
-                memcpy(&blocks.blocks[index][3], &pkmn.blocks.misc, sizeof(native::gen3_pokemon_misc_t));
+                memcpy(&blocks.blocks[growth_index][0], &pkmn.blocks.growth, sizeof(native::gen3_pokemon_growth_t));
+                memcpy(&blocks.blocks[attacks_index][1], &pkmn.blocks.attacks, sizeof(native::gen3_pokemon_attacks_t));
+                memcpy(&blocks.blocks[effort_index][2], &pkmn.blocks.effort, sizeof(native::gen3_pokemon_effort_t));
+                memcpy(&blocks.blocks[misc_index][3], &pkmn.blocks.misc, sizeof(native::gen3_pokemon_misc_t));
             }
             else
             {
-                memcpy(&blocks.growth, &pkmn.blocks.blocks[index][0], sizeof(native::gen3_pokemon_growth_t));
-                memcpy(&blocks.attacks, &pkmn.blocks.blocks[index][1], sizeof(native::gen3_pokemon_attacks_t));
-                memcpy(&blocks.effort, &pkmn.blocks.blocks[index][2], sizeof(native::gen3_pokemon_effort_t));
-                memcpy(&blocks.misc, &pkmn.blocks.blocks[index][3], sizeof(native::gen3_pokemon_misc_t));
+                memcpy(&blocks.growth, &pkmn.blocks.blocks[growth_index][0], sizeof(native::gen3_pokemon_growth_t));
+                memcpy(&blocks.attacks, &pkmn.blocks.blocks[attacks_index][1], sizeof(native::gen3_pokemon_attacks_t));
+                memcpy(&blocks.effort, &pkmn.blocks.blocks[effort_index][2], sizeof(native::gen3_pokemon_effort_t));
+                memcpy(&blocks.misc, &pkmn.blocks.blocks[misc_index][3], sizeof(native::gen3_pokemon_misc_t));
             }
 
             pkmn.blocks = blocks;
@@ -94,27 +99,32 @@ namespace pkmn
 
         static void nds_crypt(native::nds_pc_pokemon_t &pkmn, bool encrypt)
         {
-            uint8_t index = ((pkmn.personality & 0x3E000) >> 0xD) % 24;
             prng::sptr rng = prng::make(4);
             rng->seed_lcrng(pkmn.checksum);
             native::nds_pokemon_blocks_t blocks;
+
+            uint8_t index = ((pkmn.personality & 0x3E000) >> 0xD) % 24;
+            uint8_t blockA_index = nds_block_orders[index][bA];
+            uint8_t blockB_index = nds_block_orders[index][bB];
+            uint8_t blockC_index = nds_block_orders[index][bC];
+            uint8_t blockD_index = nds_block_orders[index][bD];
 
             if(encrypt)
             {
                 for(size_t i = 0; i < 64; i++)
                     pkmn.blocks.blocks16[i] ^= rng->lcrng();
 
-                memcpy(&blocks.blocks[index][0], &pkmn.blocks.blockA, sizeof(native::nds_pokemon_blockA_t));
-                memcpy(&blocks.blocks[index][1], &pkmn.blocks.blockB, sizeof(native::nds_pokemon_blockB_t));
-                memcpy(&blocks.blocks[index][2], &pkmn.blocks.blockC, sizeof(native::nds_pokemon_blockC_t));
-                memcpy(&blocks.blocks[index][3], &pkmn.blocks.blockD, sizeof(native::nds_pokemon_blockD_t));
+                memcpy(&blocks.blocks[blockA_index][0], &pkmn.blocks.blockA, sizeof(native::nds_pokemon_blockA_t));
+                memcpy(&blocks.blocks[blockB_index][1], &pkmn.blocks.blockB, sizeof(native::nds_pokemon_blockB_t));
+                memcpy(&blocks.blocks[blockC_index][2], &pkmn.blocks.blockC, sizeof(native::nds_pokemon_blockC_t));
+                memcpy(&blocks.blocks[blockD_index][3], &pkmn.blocks.blockD, sizeof(native::nds_pokemon_blockD_t));
             }
             else
             {
-                memcpy(&blocks.blockA, &pkmn.blocks.blocks[index][0], sizeof(native::nds_pokemon_blockA_t));
-                memcpy(&blocks.blockB, &pkmn.blocks.blocks[index][1], sizeof(native::nds_pokemon_blockB_t));
-                memcpy(&blocks.blockC, &pkmn.blocks.blocks[index][2], sizeof(native::nds_pokemon_blockC_t));
-                memcpy(&blocks.blockD, &pkmn.blocks.blocks[index][3], sizeof(native::nds_pokemon_blockD_t));
+                memcpy(&blocks.blockA, &pkmn.blocks.blocks[blockA_index][0], sizeof(native::nds_pokemon_blockA_t));
+                memcpy(&blocks.blockB, &pkmn.blocks.blocks[blockB_index][1], sizeof(native::nds_pokemon_blockB_t));
+                memcpy(&blocks.blockC, &pkmn.blocks.blocks[blockC_index][2], sizeof(native::nds_pokemon_blockC_t));
+                memcpy(&blocks.blockD, &pkmn.blocks.blocks[blockD_index][3], sizeof(native::nds_pokemon_blockD_t));
 
                 for(size_t i = 0; i < 64; i++)
                     pkmn.blocks.blocks16[i] ^= rng->lcrng();
