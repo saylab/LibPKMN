@@ -495,10 +495,10 @@ namespace pkmn
 
         typedef union
         {
-            uint8_t blocks8[224];
-            uint32_t blocks16[112];
-            uint32_t blocks32[56];
-            uint8_t blocks[4][56];
+            uint8_t blocks8[232];
+            uint32_t blocks16[116];
+            uint32_t blocks32[58];
+            uint8_t blocks[4][58];
             struct
             {
                 gen6_pokemon_blockA_t blockA;
