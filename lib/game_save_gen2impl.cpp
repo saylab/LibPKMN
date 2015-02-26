@@ -26,21 +26,21 @@ namespace pkmn
         _version_id = crystal ? Versions::CRYSTAL : Versions::GOLD;
 
         uint8_t game = crystal ? gen2_games::CRYSTAL : gen2_games::GS;
-        _player_id_offset = offsets[game][gen2_offsets::PLAYER_ID];
-        _player_name_offset = offsets[game][gen2_offsets::PLAYER_NAME];
-        _rival_name_offset = offsets[game][gen2_offsets::RIVAL_NAME];
-        _daylight_savings_offset = offsets[game][gen2_offsets::DAYLIGHT_SAVINGS];
-        _time_played_offset = offsets[game][gen2_offsets::TIME_PLAYED];
-        _money_offset = offsets[game][gen2_offsets::MONEY];
-        _item_bag_offset = offsets[game][gen2_offsets::ITEM_BAG];
-        _current_pokemon_box_num_offset = offsets[game][gen2_offsets::CURRENT_POKEMON_BOX_NUM];
-        _pc_box_names_offset = offsets[game][gen2_offsets::PC_BOX_NAMES];
-        _pokemon_party_offset = offsets[game][gen2_offsets::POKEMON_PARTY];
-        _pokedex_owned_offset = offsets[game][gen2_offsets::POKEDEX_OWNED];
-        _pokedex_seen_offset = offsets[game][gen2_offsets::POKEDEX_SEEN];
-        _current_pokemon_box_offset = offsets[game][gen2_offsets::CURRENT_POKEMON_BOX];
-        _player_gender_offset = offsets[game][gen2_offsets::PLAYER_GENDER];
-        _pokemon_pc_offset = offsets[game][gen2_offsets::POKEMON_PC];
+        _player_id_offset = offsets[game][GEN2_PLAYER_ID];
+        _player_name_offset = offsets[game][GEN2_PLAYER_NAME];
+        _rival_name_offset = offsets[game][GEN2_RIVAL_NAME];
+        _daylight_savings_offset = offsets[game][GEN2_DAYLIGHT_SAVINGS];
+        _time_played_offset = offsets[game][GEN2_TIME_PLAYED];
+        _money_offset = offsets[game][GEN2_MONEY];
+        _item_bag_offset = offsets[game][GEN2_ITEM_BAG];
+        _current_pokemon_box_num_offset = offsets[game][GEN2_CURRENT_POKEMON_BOX_NUM];
+        _pc_box_names_offset = offsets[game][GEN2_PC_BOX_NAMES];
+        _pokemon_party_offset = offsets[game][GEN2_POKEMON_PARTY];
+        _pokedex_owned_offset = offsets[game][GEN2_POKEDEX_OWNED];
+        _pokedex_seen_offset = offsets[game][GEN2_POKEDEX_SEEN];
+        _current_pokemon_box_offset = offsets[game][GEN2_CURRENT_POKEMON_BOX];
+        _player_gender_offset = offsets[game][GEN2_PLAYER_GENDER];
+        _pokemon_pc_offset = offsets[game][GEN2_POKEMON_PC];
 
         load();
     }

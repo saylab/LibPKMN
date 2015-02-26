@@ -20,34 +20,31 @@ namespace pkmn
     /*
      * Source: http://bulbapedia.bulbagarden.net/wiki/Save_data_structure_in_Generation_I#File_structure
      */
-    namespace gen1_offsets
+    enum gen1_offsets
     {
-        enum offsets
-        {
-            PLAYER_NAME             = 0x2598,
-            POKEDEX_OWNED           = 0x25A3,
-            POKEDEX_SEEN            = 0x25B6,
-            ITEM_BAG                = 0x25C9,
-            MONEY                   = 0x25F3,
-            RIVAL_NAME              = 0x25F6,
-            PLAYER_ID               = 0x2605,
-            PIKACHU_FRIENDSHIP      = 0x271C,
-            ITEM_PC                 = 0x27E6,
-            CURRENT_POKEMON_BOX_NUM = 0x284C,
-            TIME_PLAYED             = 0x2CEE,
-            POKEMON_PARTY           = 0x2F2C,
-            CURRENT_POKEMON_BOX     = 0x30C0,
-            CHECKSUM                = 0x3523,
-            POKEMON_PC              = 0x4000
-        };
-    }
+        GEN1_PLAYER_NAME             = 0x2598,
+        GEN1_POKEDEX_OWNED           = 0x25A3,
+        GEN1_POKEDEX_SEEN            = 0x25B6,
+        GEN1_ITEM_BAG                = 0x25C9,
+        GEN1_MONEY                   = 0x25F3,
+        GEN1_RIVAL_NAME              = 0x25F6,
+        GEN1_PLAYER_ID               = 0x2605,
+        GEN1_PIKACHU_FRIENDSHIP      = 0x271C,
+        GEN1_ITEM_PC                 = 0x27E6,
+        GEN1_CURRENT_POKEMON_BOX_NUM = 0x284C,
+        GEN1_TIME_PLAYED             = 0x2CEE,
+        GEN1_POKEMON_PARTY           = 0x2F2C,
+        GEN1_CURRENT_POKEMON_BOX     = 0x30C0,
+        GEN1_CHECKSUM                = 0x3523,
+        GEN1_POKEMON_PC              = 0x4000
+    };
 
     /*
      * Source: http://bulbapedia.bulbagarden.net/wiki/Save_data_structure_in_Generation_I#Checksum
      */
     bool PKMN_INLINE gen1_check(const std::vector<uint8_t> &data)
     {
-        return (data[gen1_offsets::CHECKSUM] == native::get_gen1_save_checksum(data));
+        return (data[GEN1_CHECKSUM] == native::get_gen1_save_checksum(data));
     }
 
     class game_save_gen1impl: public game_save_impl

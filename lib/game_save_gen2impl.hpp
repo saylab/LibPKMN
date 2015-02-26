@@ -26,30 +26,27 @@ namespace pkmn
         };
     }
 
-    namespace gen2_offsets
+    enum offsets
     {
-        enum offsets
-        {
-            PLAYER_ID,
-            PLAYER_NAME,
-            RIVAL_NAME,
-            DAYLIGHT_SAVINGS,
-            TIME_PLAYED,
-            MONEY,
-            ITEM_BAG,
-            ITEM_PC,
-            CURRENT_POKEMON_BOX_NUM,
-            PC_BOX_NAMES,
-            POKEMON_PARTY,
-            POKEDEX_OWNED,
-            POKEDEX_SEEN,
-            CURRENT_POKEMON_BOX,
-            PLAYER_GENDER,
-            POKEMON_PC,
-            CHECKSUM1,
-            CHECKSUM2
-        };
-    }
+        GEN2_PLAYER_ID,
+        GEN2_PLAYER_NAME,
+        GEN2_RIVAL_NAME,
+        GEN2_DAYLIGHT_SAVINGS,
+        GEN2_TIME_PLAYED,
+        GEN2_MONEY,
+        GEN2_ITEM_BAG,
+        GEN2_ITEM_PC,
+        GEN2_CURRENT_POKEMON_BOX_NUM,
+        GEN2_PC_BOX_NAMES,
+        GEN2_POKEMON_PARTY,
+        GEN2_POKEDEX_OWNED,
+        GEN2_POKEDEX_SEEN,
+        GEN2_CURRENT_POKEMON_BOX,
+        GEN2_PLAYER_GENDER,
+        GEN2_POKEMON_PC,
+        GEN2_CHECKSUM1,
+        GEN2_CHECKSUM2
+    };
 
     /*
      * Source: http://bulbapedia.bulbagarden.net/wiki/Save_data_structure_in_Generation_II#File_structure
@@ -67,16 +64,16 @@ namespace pkmn
     {
         std::pair<uint16_t, uint16_t> checksums = native::get_gen2_save_checksums(data, false);
 
-        return ((checksums.first == *reinterpret_cast<const uint16_t*>(&data[offsets[0][gen2_offsets::CHECKSUM1]])) and 
-                (checksums.second == *reinterpret_cast<const uint16_t*>(&data[offsets[0][gen2_offsets::CHECKSUM2]])));
+        return ((checksums.first == *reinterpret_cast<const uint16_t*>(&data[offsets[0][GEN2_CHECKSUM1]])) and
+                (checksums.second == *reinterpret_cast<const uint16_t*>(&data[offsets[0][GEN2_CHECKSUM2]])));
     }
 
     bool PKMN_INLINE crystal_check(const std::vector<uint8_t> &data)
     {
         std::pair<uint16_t, uint16_t> checksums = native::get_gen2_save_checksums(data, true);
 
-        return ((checksums.first == *reinterpret_cast<const uint16_t*>(&data[offsets[1][gen2_offsets::CHECKSUM1]])) and 
-                (checksums.second == *reinterpret_cast<const uint16_t*>(&data[offsets[1][gen2_offsets::CHECKSUM2]])));
+        return ((checksums.first == *reinterpret_cast<const uint16_t*>(&data[offsets[1][GEN2_CHECKSUM1]])) and
+                (checksums.second == *reinterpret_cast<const uint16_t*>(&data[offsets[1][GEN2_CHECKSUM2]])));
     }
 
     class game_save_gen2impl: public game_save_impl

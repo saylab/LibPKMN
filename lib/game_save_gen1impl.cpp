@@ -32,7 +32,7 @@ namespace pkmn
          *
          * There is no known way to distinguish between a Red save and Blue save.
          */
-        _version_id = (_data[gen1_offsets::PIKACHU_FRIENDSHIP] == 0) ? Versions::RED
+        _version_id = (_data[GEN1_PIKACHU_FRIENDSHIP] == 0) ? Versions::RED
                                                                      : Versions::YELLOW;
 
         load();
@@ -40,13 +40,13 @@ namespace pkmn
 
     void game_save_gen1impl::load()
     {
-        _item_bag = reinterpret_cast<native::gen1_item_bag_t*>(&_data[gen1_offsets::ITEM_BAG]);
-        _item_pc = reinterpret_cast<native::gen1_item_pc_t*>(&_data[gen1_offsets::ITEM_PC]);
-        _pokemon_party = reinterpret_cast<native::gen1_pokemon_party_t*>(&_data[gen1_offsets::POKEMON_PARTY]);
-        _pokemon_pc = reinterpret_cast<native::gen1_pokemon_pc_t*>(&_data[gen1_offsets::POKEMON_PC]);
+        _item_bag = reinterpret_cast<native::gen1_item_bag_t*>(&_data[GEN1_ITEM_BAG]);
+        _item_pc = reinterpret_cast<native::gen1_item_pc_t*>(&_data[GEN1_ITEM_PC]);
+        _pokemon_party = reinterpret_cast<native::gen1_pokemon_party_t*>(&_data[GEN1_POKEMON_PARTY]);
+        _pokemon_pc = reinterpret_cast<native::gen1_pokemon_pc_t*>(&_data[GEN1_POKEMON_PC]);
 
         _trainer = trainer::make(Versions::YELLOW,
-                                 conversions::import_gen1_text(&_data[gen1_offsets::PLAYER_NAME], 7),
+                                 conversions::import_gen1_text(&_data[GEN1_PLAYER_NAME], 7),
                                  Genders::MALE);
         conversions::import_gen1_bag(_trainer->get_bag(), _item_bag);
 
@@ -60,9 +60,9 @@ namespace pkmn
         }
         _trainer->set_party(team);
 
-        _trainer->set_id(*reinterpret_cast<uint16_t*>(&_data[gen1_offsets::PLAYER_ID]));
+        _trainer->set_id(*reinterpret_cast<uint16_t*>(&_data[GEN1_PLAYER_ID]));
 
-        _trainer->set_money(conversions::import_gb_money(&_data[gen1_offsets::MONEY]));
+        _trainer->set_money(conversions::import_gb_money(&_data[GEN1_MONEY]));
     }
 
     void game_save_gen1impl::save_as(const pkmn::pkstring& filename)
@@ -86,14 +86,14 @@ namespace pkmn
             }
         }
 
-        *reinterpret_cast<uint16_t*>(&_data[gen1_offsets::PLAYER_ID]) = _trainer->get_public_id();
+        *reinterpret_cast<uint16_t*>(&_data[GEN1_PLAYER_ID]) = _trainer->get_public_id();
 
-        conversions::export_gb_money(_trainer->get_money(), &_data[gen1_offsets::MONEY]);
+        conversions::export_gb_money(_trainer->get_money(), &_data[GEN1_MONEY]);
 
         //Set new checksum
         uint8_t checksum = 255;
-        for(size_t i = 0x2598; i < gen1_offsets::CHECKSUM; i++) checksum -= _data[i];
-        _data[gen1_offsets::CHECKSUM] = checksum;
+        for(size_t i = 0x2598; i < GEN1_CHECKSUM; i++) checksum -= _data[i];
+        _data[GEN1_CHECKSUM] = checksum;
 
         std::ofstream ofile(filename.const_char());
         ofile.write((char*)&_data, _data.size());

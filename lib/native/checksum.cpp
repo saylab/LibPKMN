@@ -20,14 +20,14 @@ namespace pkmn
         uint8_t get_gen1_save_checksum(const std::vector<uint8_t> &data)
         {
             uint8_t checksum;
-            for(size_t i = 0x2598; i < gen1_offsets::CHECKSUM; i++) checksum -= data[i];
+            for(size_t i = 0x2598; i < GEN1_CHECKSUM; i++) checksum -= data[i];
 
             return checksum;
         }
 
         void set_gen1_save_checksum(std::vector<uint8_t> &data)
         {
-            data[gen1_offsets::CHECKSUM] = get_gen1_save_checksum(data);
+            data[GEN1_CHECKSUM] = get_gen1_save_checksum(data);
         }
 
         std::pair<uint16_t, uint16_t> get_gen2_save_checksums(const std::vector<uint8_t> &data,
