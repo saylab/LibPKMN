@@ -20,6 +20,7 @@
 #include <pkmn/pokedex/pokemon_entry.hpp>
 #include <pkmn/conversions/pokemon.hpp>
 #include <pkmn/conversions/text.hpp>
+#include <pkmn/native/checksum.hpp>
 #include <pkmn/native/crypt.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
@@ -148,6 +149,7 @@ namespace pkmn
         void export_gen3_pokemon(pokemon::sptr pkmn, native::gen3_pc_pokemon_t &native,
                                  bool encrypt)
         {
+            set_gen3_pokemon_checksum(native);
             memcpy(&native, pkmn->get_native(), sizeof(native::gen3_pc_pokemon_t));
             if(encrypt) native::gen3_encrypt(native);
         }
@@ -155,6 +157,7 @@ namespace pkmn
         void export_gen3_pokemon(pokemon::sptr pkmn, native::gen3_party_pokemon_t &native,
                                  bool encrypt)
         {
+            set_gen3_pokemon_checksum(native.pc);
             memcpy(&native, pkmn->get_native(), sizeof(native::gen3_party_pokemon_t));
             if(encrypt) native::gen3_encrypt(native.pc);
         }
@@ -184,6 +187,7 @@ namespace pkmn
         void export_nds_pokemon(pokemon::sptr pkmn, native::nds_pc_pokemon_t &native,
                                 bool encrypt)
         {
+            set_nds_pokemon_checksum(native);
             if(encrypt) native::nds_encrypt(native);
             memcpy(&native, pkmn->get_native(), sizeof(native::nds_pc_pokemon_t));
         }
@@ -191,6 +195,7 @@ namespace pkmn
         void export_nds_pokemon(pokemon::sptr pkmn, native::nds_party_pokemon_t &native,
                                 bool encrypt)
         {
+            set_nds_pokemon_checksum(native.pc);
             if(encrypt) native::nds_encrypt(native);
             memcpy(&native, pkmn->get_native(), sizeof(native::nds_party_pokemon_t));
         }
