@@ -14,6 +14,7 @@
 #include <pkmn/database.hpp>
 #include <pkmn/enums.hpp>
 #include <pkmn/paths.hpp>
+#include <pkmn/conversions/misc.hpp>
 #include <pkmn/types/prng.hpp>
 
 #include "pokemon_gen1impl.hpp"
@@ -419,14 +420,7 @@ namespace pkmn
 
     pkmn::dict<pkmn::pkstring, uint16_t> pokemon_gen1impl::get_IVs() const
     {
-        pkmn::dict<pkmn::pkstring, uint16_t> IVs;
-        IVs["HP"]      = conversions::get_retro_IV(Stats::HP,      _raw.pc.iv_data);
-        IVs["Attack"]  = conversions::get_retro_IV(Stats::ATTACK,  _raw.pc.iv_data);
-        IVs["Defense"] = conversions::get_retro_IV(Stats::DEFENSE, _raw.pc.iv_data);
-        IVs["Speed"]   = conversions::get_retro_IV(Stats::SPEED,   _raw.pc.iv_data);
-        IVs["Special"] = conversions::get_retro_IV(Stats::SPECIAL, _raw.pc.iv_data);
-
-        return IVs;
+        return conversions::import_gb_IVs(_raw.pc.iv_data);
     }
 
     /*
@@ -542,7 +536,7 @@ namespace pkmn
             throw std::runtime_error("IV's have a maximum value of 15 in Generation I.");
 
         // Will throw if stat is invalid
-        conversions::set_retro_IV(database::get_stat_id(stat), _raw.pc.iv_data, value);
+        conversions::export_gb_IV(stat, value, _raw.pc.iv_data);
 
         _set_stats();
     }

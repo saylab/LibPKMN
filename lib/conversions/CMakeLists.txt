@@ -7,6 +7,7 @@
 
 SET(conversions_sources
     ${CMAKE_CURRENT_SOURCE_DIR}/items.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/misc.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/pokemon.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PokeText.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text.cpp

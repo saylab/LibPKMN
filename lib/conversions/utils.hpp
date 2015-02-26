@@ -95,10 +95,6 @@ namespace pkmn
             (Forms::Genesect::CHILL_DRIVE, "Chill Drive")
         ;
 
-        uint8_t get_retro_IV(uint8_t stat, const uint16_t iv_data);
-
-        void set_retro_IV(uint8_t stat, uint16_t& iv_data, uint8_t new_iv);
-
         std::string crystal_get_otgender(const uint16_t& caught_data);
 
         unsigned int crystal_get_metlevel(const uint16_t& caught_data);

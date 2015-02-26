@@ -12,6 +12,7 @@
 #include <pkmn/database.hpp>
 #include <pkmn/enums.hpp>
 #include <pkmn/paths.hpp>
+#include <pkmn/conversions/misc.hpp>
 #include <pkmn/types/prng.hpp>
 
 #include "pokemon_gen2impl.hpp"
@@ -398,7 +399,7 @@ namespace pkmn
     {
         float chance_male   = _pokedex_entry.chance_male;
         float chance_female = _pokedex_entry.chance_female;
-        uint8_t ivATK = conversions::get_retro_IV(Stats::ATTACK, _raw.pc.iv_data);
+        uint8_t ivATK = conversions::import_gb_IVs(_raw.pc.iv_data)["Attack"];
 
         if((chance_male + chance_female) == 0.0) return "Genderless";
         else if(chance_male == 1.0) return "Male";
@@ -430,10 +431,12 @@ namespace pkmn
 
     bool pokemon_gen2impl::is_shiny() const
     {
-        uint8_t ivATK  = conversions::get_retro_IV(Stats::ATTACK,   _raw.pc.iv_data);
-        uint8_t ivDEF  = conversions::get_retro_IV(Stats::DEFENSE,  _raw.pc.iv_data);
-        uint8_t ivSPCL = conversions::get_retro_IV(Stats::SPECIAL,  _raw.pc.iv_data);
-        uint8_t ivSPD  = conversions::get_retro_IV(Stats::SPEED,    _raw.pc.iv_data);
+        pkmn::dict<pkmn::pkstring, uint16_t> IVs = conversions::import_gb_IVs(_raw.pc.iv_data);
+
+        uint8_t ivATK  = IVs["Attack"];
+        uint8_t ivDEF  = IVs["Defense"];
+        uint8_t ivSPD  = IVs["Speed"];
+        uint8_t ivSPCL = IVs["Special"];
 
         return (ivSPD == 10 and ivDEF == 10 and ivSPCL == 10 and 
                 (ivATK == 2 or ivATK == 3 or ivATK == 6 or
@@ -469,14 +472,7 @@ namespace pkmn
 
     pkmn::dict<pkmn::pkstring, uint16_t> pokemon_gen2impl::get_IVs() const
     {
-        pkmn::dict<pkmn::pkstring, uint16_t> IVs;
-        IVs["HP"]      = conversions::get_retro_IV(Stats::HP,      _raw.pc.iv_data);
-        IVs["Attack"]  = conversions::get_retro_IV(Stats::ATTACK,  _raw.pc.iv_data);
-        IVs["Defense"] = conversions::get_retro_IV(Stats::DEFENSE, _raw.pc.iv_data);
-        IVs["Speed"]   = conversions::get_retro_IV(Stats::SPEED,   _raw.pc.iv_data);
-        IVs["Special"] = conversions::get_retro_IV(Stats::SPECIAL, _raw.pc.iv_data);
-
-        return IVs;
+        return conversions::import_gb_IVs(_raw.pc.iv_data);
     }
 
     /*
@@ -546,7 +542,7 @@ namespace pkmn
                 new_value = (gender == "Male") ? 15 : 11;
         }
 
-        conversions::set_retro_IV(Stats::ATTACK, _raw.pc.iv_data, new_value);
+        conversions::export_gb_IV("Attack", new_value, _raw.pc.iv_data);
     }
 
     // No natures in Generation II
@@ -573,14 +569,13 @@ namespace pkmn
             {
                 _raw.pc.iv_data++;
 
-                uint8_t ivATK  = conversions::get_retro_IV(Stats::ATTACK,   _raw.pc.iv_data);
-                uint8_t ivDEF  = conversions::get_retro_IV(Stats::DEFENSE,  _raw.pc.iv_data);
-                uint8_t ivSPCL = conversions::get_retro_IV(Stats::SPECIAL,  _raw.pc.iv_data);
-                uint8_t ivSPD  = conversions::get_retro_IV(Stats::SPEED,    _raw.pc.iv_data);
+                pkmn::dict<pkmn::pkstring, uint16_t> IVs = conversions::import_gb_IVs(_raw.pc.iv_data);
 
-                _form_id = database::get_form_id("Unown",
-                                                 calculations::get_gen2_unown_form(ivATK, ivDEF,
-                                                                                   ivSPD, ivSPCL));
+                pkmn::pkstring unown_form = calculations::get_gen2_unown_form(IVs["Attack"],
+                                                                              IVs["Defense"],
+                                                                              IVs["Special"],
+                                                                              IVs["Speed"]);
+                _form_id = database::get_form_id("Unown", unown_form);
             }
 
             _pokedex_entry = _pokedex->get_pokemon_entry(Species::UNOWN, _form_id);
@@ -597,10 +592,10 @@ namespace pkmn
          * affect other things, but we will set the best possible stats
          * that will allow shininess.
          */
-        conversions::set_retro_IV(Stats::ATTACK,  _raw.pc.iv_data, 15);
-        conversions::set_retro_IV(Stats::DEFENSE, _raw.pc.iv_data, 10);
-        conversions::set_retro_IV(Stats::SPEED,   _raw.pc.iv_data, 10);
-        conversions::set_retro_IV(Stats::SPECIAL, _raw.pc.iv_data, 10);
+        conversions::export_gb_IV("Attack",  15, _raw.pc.iv_data);
+        conversions::export_gb_IV("Defense", 10, _raw.pc.iv_data);
+        conversions::export_gb_IV("Speed",   10, _raw.pc.iv_data);
+        conversions::export_gb_IV("Special", 10, _raw.pc.iv_data);
     }
 
     // NOTE: this affects stats
@@ -650,19 +645,18 @@ namespace pkmn
             throw std::runtime_error("IV's have a maximum value of 15 in Generation II.");
 
         // Will throw if stat_name is invalid
-        conversions::set_retro_IV(database::get_stat_id(stat), _raw.pc.iv_data, value);
+        conversions::export_gb_IV(stat, value, _raw.pc.iv_data);
 
         if(_species_id == Species::UNOWN)
         {
-            uint8_t ivATK  = conversions::get_retro_IV(Stats::ATTACK,   _raw.pc.iv_data);
-            uint8_t ivDEF  = conversions::get_retro_IV(Stats::DEFENSE,  _raw.pc.iv_data);
-            uint8_t ivSPCL = conversions::get_retro_IV(Stats::SPECIAL,  _raw.pc.iv_data);
-            uint8_t ivSPD  = conversions::get_retro_IV(Stats::SPEED,    _raw.pc.iv_data);
+            pkmn::dict<pkmn::pkstring, uint16_t> IVs = conversions::import_gb_IVs(_raw.pc.iv_data);
 
-            _form_id = database::get_form_id("Unown",
-                                             calculations::get_gen2_unown_form(ivATK, ivDEF,
-                                                                               ivSPD, ivSPCL));
+            pkmn::pkstring unown_form = calculations::get_gen2_unown_form(IVs["Attack"],
+                                                                          IVs["Defense"],
+                                                                          IVs["Special"],
+                                                                          IVs["Speed"]);
 
+            _form_id = database::get_form_id("Unown", unown_form);
             _pokedex_entry = _pokedex->get_pokemon_entry(Species::UNOWN, _form_id);
         }
 

@@ -18,6 +18,7 @@
 #include <pkmn/paths.hpp>
 #include <pkmn/database.hpp>
 #include <pkmn/pokedex/pokemon_entry.hpp>
+#include <pkmn/conversions/misc.hpp>
 #include <pkmn/conversions/pokemon.hpp>
 #include <pkmn/conversions/text.hpp>
 #include <pkmn/native/checksum.hpp>
@@ -225,19 +226,19 @@ namespace pkmn
                          << database::get_pokemon_id(dst.pc.species, Versions::GOLD)
                          << " AND base_stat IN (4,5)";
             SQLite::Statement stats_query(*db, query_stream.str().c_str());
+            pkmn::dict<pkmn::pkstring, uint16_t> IVs = conversions::import_gb_IVs(dst.pc.iv_data);
+
             dst.spatk = calculations::get_retro_stat("Special Attack",
                                                      get_num_from_query<uint16_t>(stats_query),
                                                      dst.pc.level,
                                                      dst.pc.ev_spcl,
-                                                     conversions::get_retro_IV(Stats::SPECIAL,
-                                                                               dst.pc.iv_data)
+                                                     IVs["Special"]
                                                     );
             dst.spdef = calculations::get_retro_stat("Special Defense",
                                                      get_num_from_query<uint16_t>(stats_query),
                                                      dst.pc.level,
                                                      dst.pc.ev_spcl,
-                                                     conversions::get_retro_IV(Stats::SPECIAL,
-                                                                               dst.pc.iv_data)
+                                                     IVs["Special"]
                                                     );
         }
 
@@ -280,12 +281,13 @@ namespace pkmn
                          << database::get_pokemon_id(dst.pc.species, Versions::RED)
                          << " AND base_stat=9";
             SQLite::Statement stats_query(*db, query_stream.str().c_str());
+            pkmn::dict<pkmn::pkstring, uint16_t> IVs = conversions::import_gb_IVs(dst.pc.iv_data);
+
             dst.spcl = calculations::get_retro_stat("Special",
                                                     get_num_from_query<uint16_t>(stats_query),
                                                     dst.pc.level,
                                                     dst.pc.ev_spcl,
-                                                    conversions::get_retro_IV(Stats::SPECIAL,
-                                                                              dst.pc.iv_data)
+                                                    IVs["Special"]
                                                    );
         }
     } /* namespace conversions */

@@ -10,6 +10,7 @@
 #include <pkmn/enums.hpp>
 
 #include <pkmn/conversions/items.hpp>
+#include <pkmn/conversions/misc.hpp>
 #include <pkmn/conversions/pokemon.hpp>
 #include <pkmn/conversions/text.hpp>
 
@@ -66,13 +67,7 @@ namespace pkmn
 
         _trainer->set_id(*reinterpret_cast<uint16_t*>(&_data[_player_id_offset]));
 
-        uint8_t* raw_money = &_data[_money_offset];
-        _trainer->set_money(   (raw_money[0] >> 4) * 100000
-                            + ((raw_money[0] >> 0) & 0x0F) * 10000
-                            +  (raw_money[1] >> 4) * 1000
-                            + ((raw_money[1] >> 0) & 0x0F) * 100
-                            +  (raw_money[2] >> 4) * 10
-                            + ((raw_money[2] >> 0) & 0x0F));
+        _trainer->set_money(conversions::import_gb_money(&_data[_money_offset]));
     }
 
     void game_save_gen2impl::save_as(const pkmn::pkstring &filename)
@@ -98,11 +93,7 @@ namespace pkmn
 
         *reinterpret_cast<uint16_t*>(&_data[_player_id_offset]) = _trainer->get_public_id();
 
-        uint32_t money = _trainer->get_money();
-        uint8_t* raw_money = &_data[_money_offset];
-        raw_money[0] = ((money / 100000) << 4) | ((money % 100000) / 10000);
-        raw_money[1] = (((money % 10000) / 1000) << 4) | ((money % 1000) / 100);
-        raw_money[2] = (((money % 100) / 10) << 4) | (money % 10);
+        conversions::export_gb_money(_trainer->get_money(), &_data[_money_offset]);
 
         //Set new checksums
         uint32_t checksum1 = 0;
