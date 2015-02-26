@@ -14,7 +14,7 @@ namespace pkmn
 {
     namespace native
     {
-        uint16_t gen3_pokemon_checksum(const native::gen3_pokemon_blocks_t &blocks)
+        uint16_t get_gen3_pokemon_checksum(const native::gen3_pokemon_blocks_t &blocks)
         {
             uint16_t checksum = 0;
 
@@ -24,14 +24,19 @@ namespace pkmn
             return checksum;
         }
 
+        void set_gen3_pokemon_checksum(native::gen3_pc_pokemon_t &pkmn)
+        {
+            pkmn.checksum = get_gen3_pokemon_checksum(pkmn.blocks);
+        }
+
         // Number of bytes to validate for each section
         static const uint16_t gen3_section_sizes[14] = {3884, 3968, 3968, 3968,
                                                         3968, 3968, 3968, 3968,
                                                         3968, 3968, 3968, 3968,
                                                         3968, 2000};
 
-        uint16_t gen3_section_checksum(const native::gen3_save_section_t &section,
-                                       int section_num)
+        uint16_t get_gen3_section_checksum(const native::gen3_save_section_t &section,
+                                           int section_num)
         {
             uint16_t checksum = 0;
 
@@ -41,7 +46,19 @@ namespace pkmn
             return checksum;
         }
 
-        uint16_t nds_pokemon_checksum(const native::nds_pokemon_blocks_t &blocks)
+        void set_gen3_section_checksum(native::gen3_save_section_t &section,
+                                       int section_num)
+        {
+            section.footer.checksum = get_gen3_section_checksum(section, section_num);
+        }
+
+        void set_gen3_save_checksums(native::gen3_save_t* save)
+        {
+            for(size_t i = 0; i < 14; i++)
+                set_gen3_section_checksum(save->sections[0], i);
+        }
+
+        uint16_t get_nds_pokemon_checksum(const native::nds_pokemon_blocks_t &blocks)
         {
             uint32_t checksum = 0;
 
@@ -49,6 +66,11 @@ namespace pkmn
                 checksum += blocks.blocks16[i];
 
             return uint16_t(checksum & 0xFFFF);
+        }
+
+        void set_nds_pokemon_checksum(native::nds_pc_pokemon_t &pkmn)
+        {
+            pkmn.checksum = get_nds_pokemon_checksum(pkmn.blocks);
         }
 
         static const uint16_t nds_seed_table[] =
@@ -87,7 +109,7 @@ namespace pkmn
             0x6E17, 0x7E36, 0x4E55, 0x5E74, 0x2E93, 0x3EB2, 0x0ED1, 0x1EF0
         };
 
-        uint16_t nds_block_checksum(const uint8_t* block, int len)
+        uint16_t get_nds_block_checksum(const uint8_t* block, int len)
         {
             uint16_t sum = 0xFFFF;
 
@@ -97,7 +119,7 @@ namespace pkmn
             return sum;
         }
 
-        uint16_t gen6_pokemon_checksum(const native::gen6_pokemon_blocks_t &blocks)
+        uint16_t get_gen6_pokemon_checksum(const native::gen6_pokemon_blocks_t &blocks)
         {
             uint32_t checksum = 0;
 
@@ -105,6 +127,11 @@ namespace pkmn
                 checksum += blocks.blocks16[i];
 
             return uint16_t(checksum & 0xFFFF);
+        }
+
+        void set_gen6_pokemon_checksum(native::gen6_pc_pokemon_t &pkmn)
+        {
+            pkmn.checksum = get_gen6_pokemon_checksum(pkmn.blocks);
         }
     }
 }
