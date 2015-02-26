@@ -11,6 +11,7 @@
 
 #include "game_save_impl.hpp"
 
+#include <pkmn/native/checksum.hpp>
 #include <pkmn/native/items.hpp>
 #include <pkmn/native/pokemon.hpp>
 
@@ -46,10 +47,7 @@ namespace pkmn
      */
     bool PKMN_INLINE gen1_check(const std::vector<uint8_t> &data)
     {
-        uint8_t checksum = 255;
-        for(size_t i = 0x2598; i < gen1_offsets::CHECKSUM; i++) checksum -= data[i];
-
-        return (checksum == data[gen1_offsets::CHECKSUM]);
+        return (data[gen1_offsets::CHECKSUM] == native::get_gen1_save_checksum(data));
     }
 
     class game_save_gen1impl: public game_save_impl

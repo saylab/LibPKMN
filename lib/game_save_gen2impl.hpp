@@ -11,6 +11,7 @@
 
 #include "game_save_impl.hpp"
 
+#include <pkmn/native/checksum.hpp>
 #include <pkmn/native/items.hpp>
 #include <pkmn/native/pokemon.hpp>
 
@@ -62,36 +63,20 @@ namespace pkmn
     /*
      * Source: http://bulbapedia.bulbagarden.net/wiki/Save_data_structure_in_Generation_II#Checksums
      */
-    bool PKMN_INLINE gs_check(const std::vector<uint8_t>& data)
+    bool PKMN_INLINE gs_check(const std::vector<uint8_t> &data)
     {
-        uint16_t checksum1 = 0;
-        uint16_t checksum2 = 0;
+        std::pair<uint16_t, uint16_t> checksums = native::get_gen2_save_checksums(data, false);
 
-        //Checksum 1
-        for(size_t i = 0x2009; i <= 0x2D68; i++) checksum1 += data[i];
-
-        //Checksum 2
-        for(size_t i = 0x0C6B; i <= 0x17EC; i++) checksum2 += data[i];
-        for(size_t i = 0x3D96; i <= 0x3F3F; i++) checksum2 += data[i];
-        for(size_t i = 0x7E39; i <= 0x7E6C; i++) checksum2 += data[i];
-
-        return ((checksum1 == *reinterpret_cast<const uint16_t*>(&data[offsets[0][gen2_offsets::CHECKSUM1]])) and 
-                (checksum2 == *reinterpret_cast<const uint16_t*>(&data[offsets[0][gen2_offsets::CHECKSUM2]])));
+        return ((checksums.first == *reinterpret_cast<const uint16_t*>(&data[offsets[0][gen2_offsets::CHECKSUM1]])) and 
+                (checksums.second == *reinterpret_cast<const uint16_t*>(&data[offsets[0][gen2_offsets::CHECKSUM2]])));
     }
 
-    bool PKMN_INLINE crystal_check(const std::vector<uint8_t>& data)
+    bool PKMN_INLINE crystal_check(const std::vector<uint8_t> &data)
     {
-        uint16_t checksum1 = 0;
-        uint16_t checksum2 = 0;
+        std::pair<uint16_t, uint16_t> checksums = native::get_gen2_save_checksums(data, true);
 
-        //Checksum 1
-        for(size_t i = 0x2009; i <= 0x2B82; i++) checksum1 += data[i];
-
-        //Checksum 2
-        for(size_t i = 0x1209; i <= 0x1D82; i++) checksum2 += data[i];
-
-        return ((checksum1 == *reinterpret_cast<const uint16_t*>(&data[offsets[1][gen2_offsets::CHECKSUM1]])) and 
-                (checksum2 == *reinterpret_cast<const uint16_t*>(&data[offsets[1][gen2_offsets::CHECKSUM2]])));
+        return ((checksums.first == *reinterpret_cast<const uint16_t*>(&data[offsets[1][gen2_offsets::CHECKSUM1]])) and 
+                (checksums.second == *reinterpret_cast<const uint16_t*>(&data[offsets[1][gen2_offsets::CHECKSUM2]])));
     }
 
     class game_save_gen2impl: public game_save_impl

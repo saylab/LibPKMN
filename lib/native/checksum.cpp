@@ -10,10 +10,53 @@
 #include <pkmn/native/checksum.hpp>
 #include <pkmn/native/pokemon.hpp>
 
+#include "../game_save_gen1impl.hpp"
+#include "../game_save_gen2impl.hpp"
+
 namespace pkmn
 {
     namespace native
     {
+        uint8_t get_gen1_save_checksum(const std::vector<uint8_t> &data)
+        {
+            uint8_t checksum;
+            for(size_t i = 0x2598; i < gen1_offsets::CHECKSUM; i++) checksum -= data[i];
+
+            return checksum;
+        }
+
+        void set_gen1_save_checksum(std::vector<uint8_t> &data)
+        {
+            data[gen1_offsets::CHECKSUM] = get_gen1_save_checksum(data);
+        }
+
+        std::pair<uint16_t, uint16_t> get_gen2_save_checksums(const std::vector<uint8_t> &data,
+                                                              bool crystal)
+        {
+            std::pair<uint16_t, uint16_t> checksums = std::make_pair(0,0);
+
+            if(crystal)
+            {
+                // Checksum 1
+                for(size_t i = 0x2009; i <= 0x2B82; i++) checksums.first += data[i];
+
+                // Checksum 2
+                for(size_t i = 0x1209; i <= 0x1D82; i++) checksums.second += data[i];
+            }
+            else
+            {
+                // Checksum 1
+                for(size_t i = 0x2009; i <= 0x2D68; i++) checksums.first += data[i];
+
+                // Checksum 2
+                for(size_t i = 0x0C6B; i <= 0x17EC; i++) checksums.second += data[i];
+                for(size_t i = 0x3D96; i <= 0x3F3F; i++) checksums.second += data[i];
+                for(size_t i = 0x7E39; i <= 0x7E6C; i++) checksums.second += data[i];
+            }
+
+            return checksums;
+        }
+
         uint16_t get_gen3_pokemon_checksum(const native::gen3_pokemon_blocks_t &blocks)
         {
             uint16_t checksum = 0;

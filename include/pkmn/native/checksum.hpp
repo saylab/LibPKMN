@@ -7,6 +7,10 @@
 #ifndef INCLUDED_PKMN_NATIVE_CHECKSUM_HPP
 #define INCLUDED_PKMN_NATIVE_CHECKSUM_HPP
 
+#include <cstdint>
+#include <utility>
+#include <vector>
+
 #include <pkmn/config.hpp>
 #include <pkmn/native/gen3_save.hpp>
 #include <pkmn/native/pokemon.hpp>
@@ -15,6 +19,13 @@ namespace pkmn
 {
     namespace native
     {
+        uint8_t PKMN_API get_gen1_save_checksum(const std::vector<uint8_t> &data);
+
+        void PKMN_API set_gen1_save_checksum(std::vector<uint8_t> &data);
+
+        std::pair<uint16_t, uint16_t> get_gen2_save_checksums(const std::vector<uint8_t> &data,
+                                                              bool crystal);
+
         uint16_t PKMN_API get_gen3_pokemon_checksum(const native::gen3_pokemon_blocks_t &blocks);
 
         void PKMN_API set_gen3_pokemon_checksum(native::gen3_pc_pokemon_t &pkmn);
