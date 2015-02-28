@@ -5,14 +5,13 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <fstream>
-
 #include <pkmn/enums.hpp>
 #include <pkmn/database.hpp>
 #include <pkmn/conversions/items.hpp>
 #include <pkmn/conversions/misc.hpp>
 #include <pkmn/conversions/pokemon.hpp>
 #include <pkmn/conversions/text.hpp>
+#include <pkmn/native/checksum.hpp>
 
 #include "game_save_gen1impl.hpp"
 
@@ -33,7 +32,7 @@ namespace pkmn
          * There is no known way to distinguish between a Red save and Blue save.
          */
         _version_id = (_data[GEN1_PIKACHU_FRIENDSHIP] == 0) ? Versions::RED
-                                                                     : Versions::YELLOW;
+                                                            : Versions::YELLOW;
 
         load();
     }
@@ -90,10 +89,7 @@ namespace pkmn
 
         conversions::export_gb_money(_trainer->get_money(), &_data[GEN1_MONEY]);
 
-        //Set new checksum
-        uint8_t checksum = 255;
-        for(size_t i = 0x2598; i < GEN1_CHECKSUM; i++) checksum -= _data[i];
-        _data[GEN1_CHECKSUM] = checksum;
+        native::set_gen1_save_checksum(_data);
 
         std::ofstream ofile(filename.const_char());
         ofile.write((char*)&_data, _data.size());

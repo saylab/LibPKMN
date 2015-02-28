@@ -5,14 +5,13 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <boost/format.hpp>
-#include <boost/algorithm/string.hpp>
-
 #include <pkmn/calculations.hpp>
 #include <pkmn/database.hpp>
 #include <pkmn/enums.hpp>
-#include <pkmn/paths.hpp>
+#include <pkmn/conversions/items.hpp>
 #include <pkmn/conversions/misc.hpp>
+#include <pkmn/conversions/pokemon.hpp>
+#include <pkmn/conversions/text.hpp>
 #include <pkmn/types/prng.hpp>
 
 #include "pokemon_gen2impl.hpp"
