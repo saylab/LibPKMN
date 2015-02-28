@@ -101,12 +101,14 @@ IF(ENABLE_LIBPKMN)
     ENDIF(MSVC)
 
     ADD_LIBRARY(pkmn SHARED ${libpkmn_sources})
+    cotire(pkmn)
     TARGET_LINK_LIBRARIES(pkmn ${libpkmn_libs})
 
     ####################################################################
     # MSVC needs this setting to export functions in pkmn.dll
     ####################################################################
     SET_TARGET_PROPERTIES(pkmn PROPERTIES DEFINE_SYMBOL "PKMN_DLL_EXPORTS")
+    SET_TARGET_PROPERTIES(pkmn PROPERTIES DEFINE_SYMBOL "pkmn_EXPORTS")
     INSTALL(TARGETS pkmn
         LIBRARY DESTINATION ${LIBRARY_DIR} COMPONENT Libraries #.so
         ARCHIVE DESTINATION ${LIBRARY_DIR} COMPONENT Libraries #.lib
