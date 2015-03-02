@@ -10,7 +10,7 @@ import python as pkmn
 import sys
 import traceback
 
-def gen1_conversions_test():
+def gen1_pokemon_conversion_test():
     try:
         pk1 = pkmn.pokemon("Pikachu", "Red", 50, "Tackle", "Tail Whip", "Thunder", "Surf")
         exported = pkmn.conversions.export_gen1_pokemon(pk1)
@@ -33,7 +33,7 @@ def gen1_conversions_test():
                                   limit=5, file=sys.stdout)
         return False
 
-def gen2_conversions_test():
+def gen2_pokemon_conversion_test():
     try:
         pk1 = pkmn.pokemon("Pikachu", "Gold", 50, "Tackle", "Tail Whip", "Thunder", "Surf")
         exported = pkmn.conversions.export_gen2_pokemon(pk1)
@@ -56,9 +56,35 @@ def gen2_conversions_test():
                                   limit=5, file=sys.stdout)
         return False
 
+def text_conversion_test():
+    try:
+        gen1_input = "\x8B\xA8\x81\xAF\x8A\xAC\x8D\xF7\xF8\xF9\xFA\xFB\x50\x50\x50"
+        gen1_pkstring = pkmn.conversions.import_gen1_text(gen1_input)
+        if gen1_pkstring != "LiBpKmN12345":
+            raise Exception("gen1_pkstring != \"LiBpKmN12345\"")
+
+        gen2_input = "\x8B\xA8\x81\xAF\x8A\xAC\x8D\xF7\xF8\xF9\xFA\xFB\x50\x50\x50"
+        gen2_pkstring = pkmn.conversions.import_gen2_text(gen2_input)
+        if gen2_pkstring != "LiBpKmN12345":
+            raise Exception("gen2_pkstring != \"LiBpKmN12345\"")
+
+        gen3_input = "\xC6\xDD\xBC\xE4\xC5\xE1\xC8\xA2\xA3\xA4\xA5\xA6\xFF\xFF\xFF"
+        gen3_pkstring = pkmn.conversions.import_gen3_text(gen3_input)
+        if gen3_pkstring != "LiBpKmN12345":
+            raise Exception("gen3_pkstring != \"LiBpKmN12345\"")
+
+        return True
+    except:
+        print
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        traceback.print_exception(exc_type, exc_value, exc_traceback,
+                                  limit=5, file=sys.stdout)
+        return False
+
 if __name__ == "__main__":
 
-    successful = gen1_conversions_test()
-    successful = gen2_conversions_test() and successful
+    successful = gen1_pokemon_conversion_test()
+    successful = gen2_pokemon_conversion_test() and successful
+    successful = text_conversion_test() and successful
 
     sys.exit(0 if successful else 1)
