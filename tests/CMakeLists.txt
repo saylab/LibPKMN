@@ -183,11 +183,15 @@ ENDIF(ENABLE_JAVA)
 ##################################################
 IF(ENABLE_PYTHON)
     SET(python_test_names
-        python_conversions_test
         python_dict_test
         python_pkstring_test
         python_sptr_test
     )
+    IF(${PYTHON_VERSION_MAJOR} EQUAL 2)
+        LIST(APPEND python_test_names
+            python_conversions_test
+        )
+    ENDIF(${PYTHON_VERSION_MAJOR} EQUAL 2)
 
     FILE(TO_NATIVE_PATH "${LIBPKMN_BINARY_DIR}/lib/swig" LIBPKMN_SWIG_DIR)
     SET(LIBPKMN_SWIG_DIR ${LIBPKMN_SWIG_DIR} CACHE FILEPATH "LibPKMN SWIG build directory")
