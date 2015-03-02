@@ -13,19 +13,16 @@ import traceback
 def gen1_conversions_test():
     try:
         pk1 = pkmn.pokemon("Pikachu", "Red", 50, "Tackle", "Tail Whip", "Thunder", "Surf")
-        pylist1 = pkmn.conversions.export_gen1_pokemon(pk1, True)
-        pylist2 = pkmn.conversions.export_gen1_pokemon(pk1, False)
-        pk2 = pkmn.conversions.import_gen1_pokemon(pylist1)
-        pk3 = pkmn.conversions.import_gen1_pokemon(pylist2)
+        exported = pkmn.conversions.export_gen1_pokemon(pk1)
+        pk2 = pkmn.conversions.import_gen1_pokemon(exported)
         entry1 = pk1.get_pokedex_entry()
         entry2 = pk2.get_pokedex_entry()
-        entry3 = pk3.get_pokedex_entry()
 
-        if not (pk1.get_nickname() == pk2.get_nickname() and pk2.get_nickname() == pk3.get_nickname()):
+        if pk1.get_nickname() != pk2.get_nickname():
             raise Exception("pk.get_nickname() mismatch")
-        if not (pk1.get_trainer_name() == pk2.get_trainer_name() and pk2.get_trainer_name() == pk3.get_trainer_name()):
+        if pk1.get_trainer_name() != pk2.get_trainer_name():
             raise Exception("pk.get_trainer_name() mismatch")
-        if not (entry1.species_name == entry2.species_name and entry2.species_name == entry3.species_name):
+        if entry1.species_name != entry2.species_name:
             raise Exception("entry.species_name mismatch")
 
         return True
@@ -39,19 +36,16 @@ def gen1_conversions_test():
 def gen2_conversions_test():
     try:
         pk1 = pkmn.pokemon("Pikachu", "Gold", 50, "Tackle", "Tail Whip", "Thunder", "Surf")
-        pylist1 = pkmn.conversions.export_gen2_pokemon(pk1, True)
-        pylist2 = pkmn.conversions.export_gen2_pokemon(pk1, False)
-        pk2 = pkmn.conversions.import_gen2_pokemon(pylist1)
-        pk3 = pkmn.conversions.import_gen2_pokemon(pylist2)
+        exported = pkmn.conversions.export_gen2_pokemon(pk1)
+        pk2 = pkmn.conversions.import_gen2_pokemon(exported)
         entry1 = pk1.get_pokedex_entry()
         entry2 = pk2.get_pokedex_entry()
-        entry3 = pk3.get_pokedex_entry()
 
-        if not (pk1.get_nickname() == pk2.get_nickname() and pk2.get_nickname() == pk3.get_nickname()):
+        if pk1.get_nickname() != pk2.get_nickname():
             raise Exception("pk.get_nickname() mismatch")
-        if not (pk1.get_trainer_name() == pk2.get_trainer_name() and pk2.get_trainer_name() == pk3.get_trainer_name()):
+        if pk1.get_trainer_name() != pk2.get_trainer_name():
             raise Exception("pk.get_trainer_name() mismatch")
-        if not (entry1.species_name == entry2.species_name and entry2.species_name == entry3.species_name):
+        if entry1.species_name != entry2.species_name:
             raise Exception("entry.species_name mismatch")
 
         return True

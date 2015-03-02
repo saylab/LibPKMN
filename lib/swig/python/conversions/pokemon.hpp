@@ -17,13 +17,13 @@ namespace pkmn
 {
     namespace python
     {
-        pokemon::sptr import_gen1_pokemon(PyObject* pyList);
+        pokemon::sptr import_gen1_pokemon(PyObject* pyobject);
 
-        PyObject* export_gen1_pokemon(pokemon::sptr pkmn, bool party = true);
+        PyObject* export_gen1_pokemon(pokemon::sptr pkmn);
 
-        pokemon::sptr import_gen2_pokemon(PyObject* pyList);
+        pokemon::sptr import_gen2_pokemon(PyObject* pyobject);
 
-        PyObject* export_gen2_pokemon(pokemon::sptr pkmn, bool party = true);
+        PyObject* export_gen2_pokemon(pokemon::sptr pkmn);
     }
 }
 
