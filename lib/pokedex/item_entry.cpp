@@ -114,11 +114,18 @@ namespace pkmn
                          << move_id << " AND version_group_id=" << version_group_id
                          << " AND language_id=9";
             SQLite::Statement description_query(*db, query_stream.str().c_str());
-            pkmn::pkstring move_description = get_pkstring_from_query(description_query);
+            try
+            {
+                pkmn::pkstring move_description = get_pkstring_from_query(description_query);
 
-            description = str(boost::format("%s - %s")
-                                    % database::get_move_name(move_id)
-                                    % move_description);
+                description = str(boost::format("%s - %s")
+                                        % database::get_move_name(move_id)
+                                        % move_description);
+            }
+            catch(const std::exception &e)
+            {
+                description = "Unavailable";
+            }
         }
         else
         {
@@ -126,7 +133,15 @@ namespace pkmn
                          << item_id << " AND version_group_id=" << version_group_id
                          << " AND language_id=9";
             SQLite::Statement description_query(*db, query_stream.str().c_str());
-            description = get_pkstring_from_query(description_query);
+
+            try
+            {
+                description = get_pkstring_from_query(description_query);
+            }
+            catch(const std::exception &e)
+            {
+                description = "Unavailable";
+            }
         }
 
         cost = items_query.getColumn(3); // cost
