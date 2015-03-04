@@ -91,8 +91,8 @@ namespace pkmn
 
         native::set_gen1_save_checksum(_data);
 
-        std::ofstream ofile(filename.const_char());
-        ofile.write((char*)&_data, _data.size());
+        std::ofstream ofile(filename.const_char(), std::ios::out | std::ios::binary);
+        ofile.write((char*)&_data[0], _data.size());
         ofile.close();
         
         _filepath = fs::path(filename);
