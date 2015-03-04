@@ -19,7 +19,7 @@ namespace pkmn
     {
         uint8_t get_gen1_save_checksum(const std::vector<uint8_t> &data)
         {
-            uint8_t checksum;
+            uint8_t checksum = 255;
             for(size_t i = 0x2598; i < GEN1_CHECKSUM; i++) checksum -= data[i];
 
             return checksum;
