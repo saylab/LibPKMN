@@ -96,7 +96,7 @@ namespace pkmn
         native::set_gen2_save_checksums(_data, (_version_id == Versions::CRYSTAL));
 
         std::ofstream ofile(filename.const_char());
-        ofile.write((char*)&_data, _data.size());
+        ofile.write((char*)&_data[0], _data.size());
         ofile.close();
 
         _filepath = fs::path(filename);

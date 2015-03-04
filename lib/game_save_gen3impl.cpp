@@ -13,6 +13,7 @@
 #include <pkmn/conversions/items.hpp>
 #include <pkmn/conversions/pokemon.hpp>
 #include <pkmn/conversions/text.hpp>
+#include <pkmn/native/checksum.hpp>
 
 #include "game_save_gen3impl.hpp"
  
@@ -63,8 +64,26 @@ namespace pkmn
 
     void game_save_gen3impl::save_as(const pkmn::pkstring& filename)
     {
+        conversions::export_gen3_bag(_trainer->get_bag(), _item_storage, _security_key);
+        _save->trainer_info.tid = _trainer->get_id();
+        _save->section1.data32[MONEY/4] = _trainer->get_money() ^ _security_key;
+        native::set_gen3_save_checksums(_save);
+
+        pokemon_team_t team;
+        _trainer->get_party(team);
+        _pokemon_party->count = 0;
+        for(size_t i = 0; i < 6; i++)
+        {
+            if(team[i]->get_species_id() == Species::NONE) break;
+            else
+            {
+                _pokemon_party->count++;
+                conversions::export_gen3_pokemon(team[i], _pokemon_party->party[i]);
+            }
+        }
+
         std::ofstream ofile(filename.const_char());
-        ofile.write((char*)&_data, _data.size());
+        ofile.write((char*)&_save, sizeof(native::gen3_save_t));
         ofile.close();
         
         _filepath = fs::path(filename);
