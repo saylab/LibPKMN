@@ -44,7 +44,7 @@ namespace pkmn
      */
     bool PKMN_INLINE gen1_check(const std::vector<uint8_t> &data)
     {
-        return (*reinterpret_cast<uint16_t*>(data[GEN1_CHECKSUM]) == native::get_gen1_save_checksum(data));
+        return (*reinterpret_cast<const uint16_t*>(&data[GEN1_CHECKSUM]) == native::get_gen1_save_checksum(data));
     }
 
     class game_save_gen1impl: public game_save_impl
