@@ -172,7 +172,7 @@ namespace pkmn
         public:
 
             game_save_gen3impl(const pkmn::pkstring& filename, uint16_t game_id);
-            ~game_save_gen3impl() {free(_save);}
+            ~game_save_gen3impl() {delete _save;}
             
             void load();
             void save_as(const pkmn::pkstring& filename);
