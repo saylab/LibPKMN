@@ -160,14 +160,14 @@ namespace pkmn
         else
         {
             chance_male = gender_val_dict[gender_val];
-            chance_female = 1.0 - chance_male;
+            chance_female = 1.0f - chance_male;
         }
 
         catch_rate = pokemon_species_query.getColumn(9);              // capture_rate
         base_friendship = pokemon_species_query.getColumn(10);        // base_happiness
         has_gender_differences = pokemon_species_query.getColumn(13); // has_gender_differences
 
-        uint8_t generation = database::get_generation(version_id);
+        int generation = database::get_generation(version_id);
         bool old_games     = (generation < 3);
 
         /*

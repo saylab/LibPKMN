@@ -24,7 +24,7 @@ namespace pkmn
         //For now, everything is Ruby until there's a better way
         pokemon::sptr import_from_3gpkm(const pkmn::pkstring& filename)
         {
-            uint32_t filesize = fs::file_size(fs::path(filename));
+            uint32_t filesize = uint32_t(fs::file_size(fs::path(filename)));
             std::ifstream ifile;
 
             if(filesize == sizeof(native::gen3_pc_pokemon_t))
@@ -63,7 +63,7 @@ namespace pkmn
 
         pokemon::sptr import_from_pkm(const pkmn::pkstring& filename)
         {
-            uint32_t filesize = fs::file_size(fs::path(filename));
+            uint32_t filesize = uint8_t(fs::file_size(fs::path(filename)));
             std::ifstream ifile;
 
             if(filesize == sizeof(native::nds_pc_pokemon_t))

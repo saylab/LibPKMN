@@ -172,7 +172,7 @@ namespace pkmn
         
             // Hypnosis varies in accuracy between games
             if(move_id == Moves::HYPNOSIS and (version_id == Versions::DIAMOND or version_id == Versions::PEARL))
-                accuracy = 0.7;
+                accuracy = 0.7f;
 
             query_stream.str("");
             query_stream << "SELECT gen" << generation << "_power FROM old_move_powers WHERE move_id=" << move_id;

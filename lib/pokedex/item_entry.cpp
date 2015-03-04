@@ -67,8 +67,8 @@ namespace pkmn
         if(not query.executeStep())
             throw std::runtime_error("This item did not exist in this game.");
 
-        uint8_t generation        = database::get_generation(version_id);
-        uint16_t version_group_id = database::get_version_group_id(version_id);
+        int generation        = database::get_generation(version_id);
+        int version_group_id = database::get_version_group_id(version_id);
 
         query_stream.str("");
         query_stream << "SELECT * FROM items WHERE id=" << item_id;

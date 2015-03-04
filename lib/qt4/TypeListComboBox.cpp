@@ -21,7 +21,7 @@ namespace pkmn
             std::vector<pkstring> types_vec;
             get_type_list(types_vec, gen);
 
-            for(int i = 0; i < types_vec.size(); i++)
+            for(size_t i = 0; i < types_vec.size(); i++)
                 addItem(QString::fromUtf16(types_vec[i]), QVariant(i));
         }
     } /* namespace qt4 */

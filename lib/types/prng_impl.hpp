@@ -9,6 +9,7 @@
 
 #include <climits>
 #include <cstdint>
+#include <ctime>
 #include <iostream>
 
 #include <pkmn/config.hpp>
@@ -21,8 +22,8 @@ namespace pkmn
     {   
         mtrng()
         {
-            srand(time(NULL));
-            for(size_t i = 0; i < 624; i++) nums[i] = rand();
+            srand((unsigned int)time(NULL));
+            for(size_t i = 0; i < 624; i++) nums[i] = uint32_t(rand());
             pos = 0;
         }
 

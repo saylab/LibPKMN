@@ -46,7 +46,7 @@ namespace pkmn
             for(size_t i = 0; i < item_list.size(); i++)
             {
                 raw_bag->items[i].index = uint8_t(ITEM_GAME_INDEX(item_list, i, Versions::YELLOW));
-                raw_bag->items[i].count = item_list[i].second;
+                raw_bag->items[i].count = uint8_t(item_list[i].second);
             }
         }
 
@@ -93,11 +93,11 @@ namespace pkmn
             pocket::sptr tmhm_pocket = libpkmn_bag->get_pocket("TM/HM");
             for(size_t i = 0; i < 50; i++)
             {
-                raw_bag->tmhm_pocket.tm[i] = tmhm_pocket->get_item_amount((Items::TM01+i));
+                raw_bag->tmhm_pocket.tm[i] = uint8_t(tmhm_pocket->get_item_amount((Items::TM01+i)));
             }
             for(size_t i = 0; i < 7; i++)
             {
-                raw_bag->tmhm_pocket.hm[i] = tmhm_pocket->get_item_amount((Items::HM01+i));
+                raw_bag->tmhm_pocket.hm[i] = uint8_t(tmhm_pocket->get_item_amount((Items::HM01+i)));
             }
 
             item_list_t item_list;
@@ -105,8 +105,8 @@ namespace pkmn
             raw_bag->item_pocket.count = item_list.size();
             for(size_t i = 0; i < item_list.size(); i++)
             {
-                raw_bag->item_pocket.items[i].count = item_list[i].second;
-                raw_bag->item_pocket.items[i].index = ITEM_GAME_INDEX(item_list, i, Versions::CRYSTAL);
+                raw_bag->item_pocket.items[i].count = uint8_t(item_list[i].second);
+                raw_bag->item_pocket.items[i].index = uint8_t(ITEM_GAME_INDEX(item_list, i, Versions::CRYSTAL));
             }
 
             item_list_t keyitem_list;
@@ -114,8 +114,8 @@ namespace pkmn
             raw_bag->key_item_pocket.count = keyitem_list.size();
             for(size_t i = 0; i < item_list.size(); i++)
             {
-                raw_bag->key_item_pocket.items[i].count = keyitem_list[i].second;
-                raw_bag->key_item_pocket.items[i].index = ITEM_GAME_INDEX(keyitem_list, i, Versions::CRYSTAL);
+                raw_bag->key_item_pocket.items[i].count = uint8_t(keyitem_list[i].second);
+                raw_bag->key_item_pocket.items[i].index = uint8_t(ITEM_GAME_INDEX(keyitem_list, i, Versions::CRYSTAL));
             }
 
             item_list_t ball_list;
@@ -123,8 +123,8 @@ namespace pkmn
             raw_bag->ball_pocket.count = ball_list.size();
             for(size_t i = 0; i < item_list.size(); i++)
             {
-                raw_bag->ball_pocket.items[i].count = ball_list[i].second;
-                raw_bag->ball_pocket.items[i].index = ITEM_GAME_INDEX(ball_list, i, Versions::CRYSTAL);
+                raw_bag->ball_pocket.items[i].count = uint8_t(ball_list[i].second);
+                raw_bag->ball_pocket.items[i].index = uint8_t(ITEM_GAME_INDEX(ball_list, i, Versions::CRYSTAL));
             }
         }
 

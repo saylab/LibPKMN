@@ -28,7 +28,7 @@ namespace pkmn
     {
         _gen = gen;
 
-        srand(time(NULL));
+        srand((unsigned int)time(NULL));
         seed_lcrng(rand());
         seed_arng(rand());
     }

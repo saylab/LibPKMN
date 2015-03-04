@@ -28,7 +28,7 @@ namespace pkmn
 {
     game_save::sptr game_save::make(const pkmn::pkstring& filename)
     {
-        std::vector<uint8_t> data(fs::file_size(fs::path(filename.std_string())));
+        std::vector<uint8_t> data((unsigned int)fs::file_size(fs::path(filename.std_string())));
         std::ifstream ifile(filename.const_char(), std::ios::binary);
         ifile.read((char*)&data[0], data.size());
         ifile.close();
@@ -88,7 +88,7 @@ namespace pkmn
     game_save_impl::game_save_impl(const pkmn::pkstring& filename)
     {
         _filepath = fs::path(filename);
-        uint32_t file_size = fs::file_size(filename.std_string());
+        uint32_t file_size = uint32_t(fs::file_size(filename.std_string()));
 
         _data = std::vector<uint8_t>(file_size);
         std::ifstream ifile(filename.const_char(), std::ios::binary);
