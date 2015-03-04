@@ -5,6 +5,8 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
+#include <boost/algorithm/string.hpp>
+
 #include <pkmn/calculations.hpp>
 #include <pkmn/database.hpp>
 #include <pkmn/enums.hpp>
