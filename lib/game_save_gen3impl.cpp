@@ -82,8 +82,9 @@ namespace pkmn
             }
         }
 
+        gen3_crypt_save_sections(_save, _raw_save);
         std::ofstream ofile(filename.const_char());
-        ofile.write((char*)&_save, sizeof(native::gen3_save_t));
+        ofile.write((char*)&_data[0], _data.size());
         ofile.close();
         
         _filepath = fs::path(filename);

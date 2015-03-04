@@ -73,6 +73,9 @@ namespace pkmn
     void game_save_gen2impl::save_as(const pkmn::pkstring &filename)
     {
         conversions::export_gen2_bag(_trainer->get_bag(), _item_bag);
+        *reinterpret_cast<uint16_t*>(&_data[_player_id_offset]) = _trainer->get_public_id();
+        conversions::export_gb_money(_trainer->get_money(), &_data[_money_offset]);
+        native::set_gen2_save_checksums(_data, (_version_id == Versions::CRYSTAL));
 
         pokemon_team_t team;
         _trainer->get_party(team);
@@ -88,12 +91,6 @@ namespace pkmn
                                                  _pokemon_party->otnames[i]);
             }
         }
-
-        *reinterpret_cast<uint16_t*>(&_data[_player_id_offset]) = _trainer->get_public_id();
-
-        conversions::export_gb_money(_trainer->get_money(), &_data[_money_offset]);
-
-        native::set_gen2_save_checksums(_data, (_version_id == Versions::CRYSTAL));
 
         std::ofstream ofile(filename.const_char());
         ofile.write((char*)&_data[0], _data.size());
