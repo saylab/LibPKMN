@@ -10,7 +10,7 @@
  * Python 2.x.
  */
 
-%typecheck(SWIG_TYPECHECK_STRING) const pkmn::pkstring& %{
+%typecheck(SWIG_TYPECHECK_STRING) pkmn::pkstring, const pkmn::pkstring& %{
     if(PyString_Check($input)) $1 = 1;
     else
     {

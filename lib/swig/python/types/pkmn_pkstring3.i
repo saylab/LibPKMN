@@ -14,7 +14,7 @@
     #include <boost/locale/encoding_utf.hpp>
 %}
 
-%typecheck(SWIG_TYPECHECK_STRING) const pkmn::pkstring& %{
+%typecheck(SWIG_TYPECHECK_STRING) pkmn::pkstring, const pkmn::pkstring& %{
     if(PyUnicode_Check($input)) $1 = 1;
     else
     {
