@@ -70,7 +70,9 @@ ADD_CUSTOM_TARGET(
 )
 
 ADD_LIBRARY(qt4proxy STATIC ${qt4proxy_sources})
-cotire(qt4proxy)
+IF(NOT MSVC)
+    cotire(qt4proxy)
+ENDIF(NOT MSVC)
 TARGET_LINK_LIBRARIES(qt4proxy ${qt4proxy_libraries})
 ADD_DEPENDENCIES(qt4proxy qt4_wrappers)
 
