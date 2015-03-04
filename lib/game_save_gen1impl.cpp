@@ -66,8 +66,6 @@ namespace pkmn
 
     void game_save_gen1impl::save_as(const pkmn::pkstring& filename)
     {
-        _filepath = fs::path(filename);
-
         conversions::export_gen1_bag(_trainer->get_bag(), _item_bag);
 
         pokemon_team_t team;
