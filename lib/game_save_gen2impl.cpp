@@ -95,31 +95,7 @@ namespace pkmn
 
         conversions::export_gb_money(_trainer->get_money(), &_data[_money_offset]);
 
-        //Set new checksums
-        uint32_t checksum1 = 0;
-        uint32_t checksum2 = 0;
-
-        if(_version_id == Versions::CRYSTAL)
-        {
-            //Checksum 1
-            for(size_t i = 0x2009; i <= 0x2B82; i++) checksum1 += _data[i];
-
-            //Checksum 2
-            for(size_t i = 0x1209; i <= 0x1D82; i++) checksum2 += _data[i];
-        }
-        else
-        {
-            //Checksum 1
-            for(size_t i = 0x2009; i <= 0x2D68; i++) checksum1 += _data[i];
-
-            //Checksum 2
-            for(size_t i = 0x0C6B; i <= 0x17EC; i++) checksum2 += _data[i];
-            for(size_t i = 0x3D96; i <= 0x3F3F; i++) checksum2 += _data[i];
-            for(size_t i = 0x7E39; i <= 0x7E6C; i++) checksum2 += _data[i];
-        }
-
-        _data[_checksum1_offset] = checksum1;
-        _data[_checksum2_offset] = checksum2;
+        native::set_gen2_save_checksums(_data, (_version_id == Versions::CRYSTAL));
 
         std::ofstream ofile(filename.const_char());
         ofile.write((char*)&_data, _data.size());

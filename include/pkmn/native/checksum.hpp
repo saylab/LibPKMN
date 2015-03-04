@@ -23,8 +23,10 @@ namespace pkmn
 
         void PKMN_API set_gen1_save_checksum(std::vector<uint8_t> &data);
 
-        std::pair<uint16_t, uint16_t> get_gen2_save_checksums(const std::vector<uint8_t> &data,
-                                                              bool crystal);
+        std::pair<uint8_t, uint8_t> get_gen2_save_checksums(const std::vector<uint8_t> &data,
+                                                            bool crystal);
+
+        void PKMN_API set_gen2_save_checksums(std::vector<uint8_t> &data, bool crystal);
 
         uint16_t PKMN_API get_gen3_pokemon_checksum(const native::gen3_pokemon_blocks_t &blocks);
 

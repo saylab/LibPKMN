@@ -30,10 +30,10 @@ namespace pkmn
             data[GEN1_CHECKSUM] = get_gen1_save_checksum(data);
         }
 
-        std::pair<uint16_t, uint16_t> get_gen2_save_checksums(const std::vector<uint8_t> &data,
+        std::pair<uint8_t, uint8_t> get_gen2_save_checksums(const std::vector<uint8_t> &data,
                                                               bool crystal)
         {
-            std::pair<uint16_t, uint16_t> checksums = std::make_pair(0,0);
+            std::pair<uint8_t, uint8_t> checksums = std::make_pair(0,0);
 
             if(crystal)
             {
@@ -55,6 +55,13 @@ namespace pkmn
             }
 
             return checksums;
+        }
+
+        void set_gen2_save_checksums(std::vector<uint8_t> &data, bool crystal)
+        {
+            std::pair<uint8_t, uint8_t> checksums = get_gen2_save_checksums(data, crystal);
+            data[GEN2_CHECKSUM1] = checksums.first;
+            data[GEN2_CHECKSUM2] = checksums.second;
         }
 
         uint16_t get_gen3_pokemon_checksum(const native::gen3_pokemon_blocks_t &blocks)
