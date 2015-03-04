@@ -107,7 +107,7 @@ namespace pkmn
         {
             description = get_pkstring_from_query(flavor_text_query);
         }
-        catch(const std::exception& e)
+        catch(...)
         {
             description = "Unavailable";
         }

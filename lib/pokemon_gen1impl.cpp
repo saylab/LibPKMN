@@ -78,7 +78,7 @@ namespace pkmn
             uint16_t pokemon_id = database::get_pokemon_id(_raw.pc.species, Versions::RED);
             _invalid = false;
         }
-        catch(const std::exception& e)
+        catch(...)
         {
             _invalid = true;
         }
@@ -102,7 +102,7 @@ namespace pkmn
             uint16_t pokemon_id = database::get_pokemon_id(_raw.pc.species, Versions::RED);
             _invalid = false;
         }
-        catch(const std::exception& e)
+        catch(...)
         {
             _invalid = true;
         }
@@ -124,7 +124,7 @@ namespace pkmn
             uint16_t pokemon_id = database::get_pokemon_id(_raw.pc.species, Versions::RED);
             _invalid = false;
         }
-        catch(const std::exception& e)
+        catch(...)
         {
             _invalid = true;
         }
@@ -146,7 +146,7 @@ namespace pkmn
             uint16_t pokemon_id = database::get_pokemon_id(_raw.pc.species, Versions::RED);
             _invalid = false;
         }
-        catch(const std::exception& e)
+        catch(...)
         {
             _invalid = true;
         }
@@ -583,7 +583,7 @@ namespace pkmn
         {
             return _pokedex->get_move_entry(_raw.pc.moves[pos-1]);
         }
-        catch(const std::exception& e)
+        catch(...)
         {
             return _pokedex->get_move_entry(Moves::INVALID);
         }

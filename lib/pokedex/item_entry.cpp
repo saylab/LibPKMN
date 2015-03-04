@@ -122,7 +122,7 @@ namespace pkmn
                                         % database::get_move_name(move_id)
                                         % move_description);
             }
-            catch(const std::exception &e)
+            catch(...)
             {
                 description = "Unavailable";
             }
@@ -138,7 +138,7 @@ namespace pkmn
             {
                 description = get_pkstring_from_query(description_query);
             }
-            catch(const std::exception &e)
+            catch(...)
             {
                 description = "Unavailable";
             }
