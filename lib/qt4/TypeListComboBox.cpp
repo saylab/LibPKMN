@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -21,7 +21,7 @@ namespace pkmn
             std::vector<pkstring> types_vec;
             get_type_list(types_vec, gen);
 
-            for(size_t i = 0; i < types_vec.size(); i++)
+            for(uint16_t i = 0; i < types_vec.size(); i++)
                 addItem(QString::fromUtf16(types_vec[i]), QVariant(i));
         }
     } /* namespace qt4 */
