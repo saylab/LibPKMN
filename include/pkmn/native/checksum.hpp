@@ -46,6 +46,8 @@ namespace pkmn
 
         uint16_t PKMN_API get_nds_block_checksum(const uint8_t* block, int len);
 
+        uint16_t PKMN_API get_nds_block_checksum(const uint8_t* block, int len);
+
         uint16_t PKMN_API get_gen6_pokemon_checksum(const native::gen6_pokemon_blocks_t &pkmn);
 
         void PKMN_API set_gen6_pokemon_checksum(native::gen6_pc_pokemon_t &pkmn);

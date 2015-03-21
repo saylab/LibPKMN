@@ -169,6 +169,29 @@ namespace pkmn
             return sum;
         }
 
+        /*
+         * Ported from PKHeX's PKHex.PKX.ccitt16
+         *
+         * Source: https://github.com/kwsch/PKHeX/blob/1aa77e2c9bdedc33d91ebeccfc30bcff960e92d5/Misc/PKX.cs#L1130
+         */
+        uint16_t get_gen6_block_checksum(const uint8_t* block, int len)
+        {
+            uint16_t crc = 0xFFFF;
+            for(int i = 0; i < len; i++)
+            {
+                crc ^= uint16_t(block[i] << 8);
+                for(int j = 0; j < 8; j++)
+                {
+                    if(crc & 0x8000)
+                        crc = uint16_t((crc << 1) ^ 0x1021);
+                    else
+                        crc <<= 1;
+                }
+            }
+
+            return crc;
+        }
+
         uint16_t get_gen6_pokemon_checksum(const native::gen6_pokemon_blocks_t &blocks)
         {
             uint32_t checksum = 0;
