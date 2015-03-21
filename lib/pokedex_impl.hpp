@@ -22,32 +22,32 @@ namespace pkmn
 
             //Game-specific Info
             pkmn::pkstring get_game() const;
-            uint16_t get_generation() const;
+            int get_generation() const;
 
-            pokemon_entry_t get_pokemon_entry(uint16_t species_id,
-                                              uint16_t form_id = 0);
+            const pokemon_entry_t& get_pokemon_entry(int species_id,
+                                                     int form_id = 0);
 
-            pokemon_entry_t get_pokemon_entry(const pkmn::pkstring& species_name,
-                                              const pkmn::pkstring& form_name = "");
+            const pokemon_entry_t& get_pokemon_entry(const pkmn::pkstring &species_name,
+                                                     const pkmn::pkstring &form_name = "");
 
-            move_entry_t get_move_entry(uint16_t move_id);
+            const move_entry_t& get_move_entry(int move_id);
 
-            move_entry_t get_move_entry(const pkmn::pkstring& move_name);
+            const move_entry_t& get_move_entry(const pkmn::pkstring &move_name);
 
-            item_entry_t get_item_entry(uint16_t item_id);
+            const item_entry_t& get_item_entry(int item_id);
 
-            item_entry_t get_item_entry(const pkmn::pkstring& item_name);
+            const item_entry_t& get_item_entry(const pkmn::pkstring &item_name);
 
-            uint16_t get_game_id() const;
+            int get_game_id() const;
 
         private:
 
-            uint16_t _version_id, _generation, _version_group_id;
+            int _version_id, _generation, _version_group_id;
 
-            static pkmn::dict<uint16_t, pkmn::dict<uint16_t, pokemon_entry_t> > _pokemon_entry_cache;
-            static pkmn::dict<uint16_t, pkmn::dict<uint16_t, move_entry_t> >    _move_entry_cache;
-            static pkmn::dict<uint16_t, pkmn::dict<uint16_t, item_entry_t> >    _item_entry_cache;
-            static pkmn::shared_ptr<SQLite::Database> _db;
+            static pkmn::dict<int, pkmn::dict<int, pokemon_entry_t> > _pokemon_entry_cache;
+            static pkmn::dict<int, pkmn::dict<int, move_entry_t> >    _move_entry_cache;
+            static pkmn::dict<int, pkmn::dict<int, item_entry_t> >    _item_entry_cache;
+            static pkmn::shared_ptr<SQLite::Database>                 _db;
     };
 }
 
