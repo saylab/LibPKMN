@@ -71,8 +71,7 @@ namespace pkmn
         conversions::export_gb_money(_trainer->get_money(), &_data[GEN1_MONEY]);
         native::set_gen1_save_checksum(_data);
 
-        pokemon_team_t team;
-        _trainer->get_party(team);
+        pokemon_team_t team = _trainer->get_party();
         _pokemon_party->count = 0;
         for(size_t i = 0; i < 6; i++)
         {

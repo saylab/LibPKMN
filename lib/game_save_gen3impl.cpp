@@ -69,8 +69,7 @@ namespace pkmn
         _save->section1.data32[MONEY/4] = _trainer->get_money() ^ _security_key;
         native::set_gen3_save_checksums(_save);
 
-        pokemon_team_t team;
-        _trainer->get_party(team);
+        pokemon_team_t team = _trainer->get_party();
         _pokemon_party->count = 0;
         for(size_t i = 0; i < 6; i++)
         {

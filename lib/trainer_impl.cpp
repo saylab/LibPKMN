@@ -19,7 +19,7 @@
 
 namespace pkmn
 {
-    trainer::sptr trainer::make(uint16_t game, const pkmn::pkstring &name, uint16_t gender)
+    trainer::sptr trainer::make(int game, const pkmn::pkstring &name, int gender)
     {
         return sptr(new trainer_impl(game, name, gender));
     }
@@ -31,7 +31,7 @@ namespace pkmn
                     ((gender == "Female") ? Genders::FEMALE : Genders::MALE));
     }
 
-    trainer_impl::trainer_impl(uint16_t game, const pkmn::pkstring &name, uint16_t gender): trainer()
+    trainer_impl::trainer_impl(int game, const pkmn::pkstring &name, int gender): trainer()
     {
         _game_id = game;
         _generation = database::get_generation(_game_id);
@@ -59,11 +59,11 @@ namespace pkmn
 
     pkmn::pkstring trainer_impl::get_game() const {return database::get_version_name(_game_id);}
 
-    uint16_t trainer_impl::get_generation() const {return _generation;}
+    int trainer_impl::get_generation() const {return _generation;}
 
     pkmn::pkstring trainer_impl::get_name() const {return _trainer_name;}
 
-    uint32_t trainer_impl::get_money() const {return _money;}
+    int trainer_impl::get_money() const {return _money;}
 
     pkmn::pkstring trainer_impl::get_gender() const
     {
@@ -91,9 +91,12 @@ namespace pkmn
                                                                 : _trainer_name;
     }
 
-    void trainer_impl::set_money(uint32_t money)
+    void trainer_impl::set_money(int money)
     {
-        _money = std::min(money, uint32_t(999999));
+        if(money < 0 or money > 999999)
+            throw std::runtime_error("Money amount must be 0-999999.");
+
+        _money = money;
     }
 
     void trainer_impl::set_gender(const pkmn::pkstring &gender)
@@ -108,27 +111,28 @@ namespace pkmn
 
     void trainer_impl::set_secret_id(uint16_t id) {_tid.secret_id = id;}
 
-    pokemon::sptr trainer_impl::get_pokemon(uint16_t pos)
+    pokemon::sptr trainer_impl::get_pokemon(int pos)
     {
-        //If invalid position given, return invalid Pokemon
-        if(pos == 0 or pos > 6) return pokemon::make(Species::INVALID, _game_id, 0, Moves::NONE,
-                                                          Moves::NONE, Moves::NONE, Moves::NONE);
-        else return _party[pos-1];
+        if(pos < 1 or pos > 6)
+            throw std::runtime_error("Position must be 1-6.");
+        else
+            return _party[pos-1];
     }
 
-    void trainer_impl::set_pokemon(uint16_t pos, pokemon::sptr pkmn)
+    void trainer_impl::set_pokemon(int pos, pokemon::sptr pkmn)
     {
         //Check for valid position, don't do anything otherwise
         if(pos >= 1 and pos <= 6)
         {
             //TODO: more through check (items, forms, etc)
-            if(database::get_generation(pkmn->get_game_id()) <= _game_id) _party[pos-1] = pkmn;
+            if(database::get_generation(pkmn->get_game_id()) <= _generation)
+                _party[pos-1] = pkmn;
         }
     }
 
-    void trainer_impl::remove_pokemon(uint16_t pos)
+    void trainer_impl::remove_pokemon(int pos)
     {
-        uint16_t actual_pos = (pos > 6) ? 5 : (pos == 0) ? 0 : (pos-1);
+        int actual_pos = (pos > 6) ? 5 : (pos == 0) ? 0 : (pos-1);
 
         pokemon::sptr blank_pokemon = pokemon::make(Species::NONE, _game_id, 0, Moves::NONE,
                                            Moves::NONE, Moves::NONE, Moves::NONE);
@@ -147,20 +151,20 @@ namespace pkmn
         }
     }
 
-    void trainer_impl::get_party(pokemon_team_t &party)
+    const pokemon_team_t& trainer_impl::get_party() const
     {
-        party = _party;
+        return _party;
     }
 
-    //TODO: allow for other trainers' Pokemon
-    void trainer_impl::set_party(pokemon_team_t &party)
+    void trainer_impl::set_party(const pokemon_team_t &party)
     {
-        //Only set party if party and all Pokemon are valid
-        if(party.size() != 6) return;
-        for(size_t i = 0; i < 6; i++) set_pokemon((i+1), party[i]);
+        if(party.size() != 6)
+            throw std::runtime_error("Party must be of size 6.");
+        else
+            _party = party;
     }
 
     bag::sptr trainer_impl::get_bag() const {return _bag;}
 
-    uint16_t trainer_impl::get_game_id() const {return _game_id;}
+    int trainer_impl::get_game_id() const {return _game_id;}
 } /* namespace pkmn */

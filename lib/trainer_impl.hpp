@@ -18,44 +18,44 @@ namespace pkmn
     {
         public:
 
-            trainer_impl(uint16_t game, const pkmn::pkstring& name, uint16_t gender);
+            trainer_impl(int game, const pkmn::pkstring &name, int gender);
 
             //Game-specific Info
             pkmn::pkstring get_game() const;
-            uint16_t get_generation() const;
+            int get_generation() const;
 
             //Get attributes
             pkmn::pkstring get_name() const;
-            uint32_t get_money() const;
+            int get_money() const;
             pkmn::pkstring get_gender() const;
             uint32_t get_id() const;
             uint16_t get_public_id() const;
             uint16_t get_secret_id() const;
 
             //Set attributes
-            void set_name(const pkmn::pkstring& name);
-            void set_money(uint32_t money);
-            void set_gender(const pkmn::pkstring& gender);
+            void set_name(const pkmn::pkstring &name);
+            void set_money(int money);
+            void set_gender(const pkmn::pkstring &gender);
             void set_id(uint32_t id);
             void set_public_id(uint16_t id);
             void set_secret_id(uint16_t id);
 
             //Pokemon
-            pokemon::sptr get_pokemon(uint16_t pos);
-            void set_pokemon(uint16_t pos, pokemon::sptr pkmn);
-            void remove_pokemon(uint16_t pos);
-            void get_party(pokemon_team_t& party);
-            void set_party(pokemon_team_t& party);
+            pokemon::sptr get_pokemon(int pos);
+            void set_pokemon(int pos, pokemon::sptr pkmn);
+            void remove_pokemon(int pos);
+            const pokemon_team_t& get_party() const;
+            void set_party(const pokemon_team_t &party);
 
             //Bag
             bag::sptr get_bag() const;
 
             //Database Info
-            uint16_t get_game_id() const;
+            int get_game_id() const;
 
         protected:
 
-            uint16_t _money, _game_id, _gender_id, _generation;
+            int _money, _game_id, _gender_id, _generation;
 
             union
             {

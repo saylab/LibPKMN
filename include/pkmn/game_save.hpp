@@ -20,7 +20,7 @@ namespace pkmn
         public:
 
             typedef pkmn::shared_ptr<game_save> sptr;
-            static sptr make(const pkmn::pkstring& filename);
+            static sptr make(const pkmn::pkstring &filename);
 
             //Class constructors (should never be called directly)
             game_save() {};
@@ -31,16 +31,16 @@ namespace pkmn
 
             virtual void load() = 0;
             virtual void save() = 0;
-            virtual void save_as(const pkmn::pkstring& filename) = 0;
+            virtual void save_as(const pkmn::pkstring &filename) = 0;
             //virtual bool check() = 0;
 
             virtual trainer::sptr get_trainer() const = 0;
 
-            virtual void get_trainer_party(pokemon_team_t& party) = 0;
-            virtual void set_trainer_party(pokemon_team_t& party) = 0;
+            virtual const pokemon_team_t& get_trainer_party() const = 0;
+            virtual void set_trainer_party(const pokemon_team_t &party) = 0;
 
             virtual pkmn::pkstring get_trainer_name() const = 0;
-            virtual void set_trainer_name(const pkmn::pkstring& trainer_name) = 0;
+            virtual void set_trainer_name(const pkmn::pkstring &trainer_name) = 0;
 
             virtual uint16_t get_game_id() const = 0;            
     };

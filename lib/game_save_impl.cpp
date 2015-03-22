@@ -26,7 +26,7 @@ namespace fs = boost::filesystem;
 
 namespace pkmn
 {
-    game_save::sptr game_save::make(const pkmn::pkstring& filename)
+    game_save::sptr game_save::make(const pkmn::pkstring &filename)
     {
         std::vector<uint8_t> data((unsigned int)fs::file_size(fs::path(filename.std_string())));
         std::ifstream ifile(filename.const_char(), std::ios::binary);
@@ -85,7 +85,7 @@ namespace pkmn
         throw std::runtime_error("This is not a valid save file.");
     }
 
-    game_save_impl::game_save_impl(const pkmn::pkstring& filename)
+    game_save_impl::game_save_impl(const pkmn::pkstring &filename)
     {
         _filepath = fs::path(filename);
         uint32_t file_size = uint32_t(fs::file_size(filename.std_string()));
@@ -121,12 +121,12 @@ namespace pkmn
         return _trainer->get_bag();
     }
 
-    void game_save_impl::get_trainer_party(pokemon_team_t& party)
+    const pokemon_team_t& game_save_impl::get_trainer_party() const
     {
-        _trainer->get_party(party);
+        return _trainer->get_party();
     }
 
-    void game_save_impl::set_trainer_party(pokemon_team_t& party)
+    void game_save_impl::set_trainer_party(const pokemon_team_t &party)
     {
         _trainer->set_party(party);
     }
@@ -136,7 +136,7 @@ namespace pkmn
         return _trainer->get_name();
     }
 
-    void game_save_impl::set_trainer_name(const pkmn::pkstring& trainer_name)
+    void game_save_impl::set_trainer_name(const pkmn::pkstring &trainer_name)
     {
         _trainer->set_name(trainer_name);
     }

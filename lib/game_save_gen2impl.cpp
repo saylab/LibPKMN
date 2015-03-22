@@ -77,8 +77,7 @@ namespace pkmn
         conversions::export_gb_money(_trainer->get_money(), &_data[_money_offset]);
         native::set_gen2_save_checksums(_data, (_version_id == Versions::CRYSTAL));
 
-        pokemon_team_t team;
-        _trainer->get_party(team);
+        pokemon_team_t team = _trainer->get_party();
         _pokemon_party->count = 0;
         for(size_t i = 0; i < 6; i++)
         {
