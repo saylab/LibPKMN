@@ -100,7 +100,7 @@ namespace pkmn
         {
             bag_slot_t bag_slot;
             bag_slot.item   = _pokedex->get_item_entry(item_name);
-            bag_slot.amount = 99;
+            bag_slot.amount = amount;
 
             _item_list.push_back(bag_slot);
         }
