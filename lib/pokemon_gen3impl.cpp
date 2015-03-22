@@ -270,7 +270,7 @@ namespace pkmn
      * Setting Trainer Info
      */
 
-    void pokemon_gen3impl::set_nickname(const pkmn::pkstring& nickname)
+    void pokemon_gen3impl::set_nickname(const pkmn::pkstring &nickname)
     {
         if(nickname.length() > 10)
             throw std::runtime_error("Nicknames can have a maximum of 10 characters in Generation III.");
@@ -278,7 +278,7 @@ namespace pkmn
         conversions::export_gen3_text(nickname, _raw.pc.nickname, 10);
     }
 
-    void pokemon_gen3impl::set_trainer_name(const pkmn::pkstring& trainer_name)
+    void pokemon_gen3impl::set_trainer_name(const pkmn::pkstring &trainer_name)
     {
         if(trainer_name.length() > 7)
             throw std::runtime_error("Trainer names can have a maximum of 7 characters in Generation III.");
@@ -286,7 +286,7 @@ namespace pkmn
         conversions::export_gen3_text(trainer_name, _raw.pc.otname, 7);
     }
 
-    void pokemon_gen3impl::set_trainer_gender(const pkmn::pkstring& gender)
+    void pokemon_gen3impl::set_trainer_gender(const pkmn::pkstring &gender)
     {
         if(gender.std_string() != "Male" and gender.std_string() != "Female")
             throw std::runtime_error("Gender must be male or female.");
@@ -310,13 +310,13 @@ namespace pkmn
         _raw.pc.ot_sid = id;
     }
 
-    void pokemon_gen3impl::set_ball(const pkmn::pkstring& ball)
+    void pokemon_gen3impl::set_ball(const pkmn::pkstring &ball)
     {
         uint8_t ball_id = database::get_ball_id(ball);
         _misc->origin_info = 0x87FF | (ball_id << 10);
     }
 
-    void pokemon_gen3impl::set_original_game(const pkmn::pkstring& game)
+    void pokemon_gen3impl::set_original_game(const pkmn::pkstring &game)
     {
         if(database::get_generation(game) != 3)
             throw std::runtime_error("Original game must be from Generation III.");
@@ -494,7 +494,7 @@ namespace pkmn
      *
      * NOTE: this affects many things
      */
-    void pokemon_gen3impl::set_gender(const pkmn::pkstring& gender)
+    void pokemon_gen3impl::set_gender(const pkmn::pkstring &gender)
     {
         float chance_male = _pokedex_entry.chance_male;
         float chance_female = _pokedex_entry.chance_female;
@@ -516,7 +516,7 @@ namespace pkmn
     }
 
     // NOTE: this affects many things
-    void pokemon_gen3impl::set_nature(const pkmn::pkstring& nature_name)
+    void pokemon_gen3impl::set_nature(const pkmn::pkstring &nature_name)
     {
         // Set personality to nearest value that results in given nature
         int8_t current_nature = (_raw.pc.personality % 24);
@@ -525,7 +525,7 @@ namespace pkmn
     }
 
     // NOTE: this affects many things
-    void pokemon_gen3impl::set_ability(const pkmn::pkstring& ability)
+    void pokemon_gen3impl::set_ability(const pkmn::pkstring &ability)
     {
         // Check to see if Pokemon has this ability
         std::ostringstream query_stream;
@@ -543,7 +543,7 @@ namespace pkmn
         else throw std::runtime_error("Invalid ability for this Pokemon.");
     }
 
-    void pokemon_gen3impl::set_form(const pkmn::pkstring& form)
+    void pokemon_gen3impl::set_form(const pkmn::pkstring &form)
     {
         uint16_t new_form = database::get_form_id(database::get_species_name(_species_id), form);
 
@@ -572,51 +572,23 @@ namespace pkmn
      */
     void pokemon_gen3impl::set_shiny(bool value)
     {
-        
-
-        uint8_t num1_tid = count_ones((_raw.pc.ot_pid >> 3));
-        if(num1_tid == 1 or num1_tid == 3)
+        if(value)
         {
-            if(_raw.pc.ot_pid & (1<<15))
-                _raw.pc.ot_pid &= ~(1<<15);
-            else
-                _raw.pc.ot_pid |= (1<<15);
+            if(not is_shiny())
+            {
+                _raw.pc.ot_id       = pkmn::trainer::LIBPKMN_TRAINER_ID;
+                _raw.pc.personality = pkmn::trainer::LIBPKMN_TRAINER_ID;
+            }
         }
-
-        uint8_t num1_sid = count_ones((_raw.pc.ot_sid >> 3));
-        if(num1_sid == 1 or num1_sid == 3)
+        else
         {
-            if(_raw.pc.ot_sid & (1<<15))
-                _raw.pc.ot_sid &= ~(1<<15);
-            else
-                _raw.pc.ot_sid |= (1<<15);
+            while(is_shiny())
+                _raw.pc.personality = _prng->lcrng();
         }
-
-        uint8_t hid = (_raw.pc.personality & 0xFFFF0000) >> 16;
-        uint8_t num1_hid = count_ones(hid >> 3);
-        if(num1_hid == 1 or num1_hid == 3)
-        {
-            if(hid & (1<<15))
-                hid &= ~(1<<15);
-            else
-                hid |= (1<<15);
-        }
-
-        uint8_t lid = (_raw.pc.personality & 0xFFFF);
-        uint8_t num1_lid = count_ones(lid >> 3);
-        if(num1_lid == 1 or num1_lid == 3)
-        {
-            if(lid & (1<<15))
-                lid &= ~(1<<15);
-            else
-                lid |= (1<<15);
-        }
-
-        _raw.pc.personality = ((hid << 16) | lid);
     }
 
     // NOTE: this affects stats
-    void pokemon_gen3impl::set_EV(const pkmn::pkstring& stat, uint16_t value)
+    void pokemon_gen3impl::set_EV(const pkmn::pkstring &stat, uint16_t value)
     {
         if(stat == "Special")
             throw std::runtime_error("The Special value is only in Generations I-II.");
@@ -692,7 +664,7 @@ namespace pkmn
     }
 
     // NOTE: this affects stats
-    void pokemon_gen3impl::set_IV(const pkmn::pkstring& stat, uint16_t value)
+    void pokemon_gen3impl::set_IV(const pkmn::pkstring &stat, uint16_t value)
     {
         if(stat == "Special")
             throw std::runtime_error("The Special stat is only in Generations I-II.");
@@ -726,7 +698,7 @@ namespace pkmn
         }
     }
 
-    void pokemon_gen3impl::set_status(const pkmn::pkstring& status)
+    void pokemon_gen3impl::set_status(const pkmn::pkstring &status)
     {
         if(not conversions::reverse_modern_statuses.has_key(status))
             throw std::runtime_error("Invalid status given.");
@@ -734,7 +706,7 @@ namespace pkmn
         _raw.condition = conversions::reverse_modern_statuses.at(status);
     }
 
-    void pokemon_gen3impl::set_held_item(const pkmn::pkstring& item_name)
+    void pokemon_gen3impl::set_held_item(const pkmn::pkstring &item_name)
     {
         _growth->held_item = database::get_item_game_index(item_name,
                                                            database::get_version_name(_version_id));
@@ -783,7 +755,7 @@ namespace pkmn
      * Setting Move Info
      */
 
-    void pokemon_gen3impl::set_move(const pkmn::pkstring& move_name, uint8_t pos)
+    void pokemon_gen3impl::set_move(const pkmn::pkstring &move_name, uint8_t pos)
     {   
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");

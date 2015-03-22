@@ -662,45 +662,19 @@ namespace pkmn
      */
     void pokemon_ndsimpl::set_shiny(bool value)
     {
-        uint8_t num1_tid = count_ones((_blockA->ot_pid >> 3));
-        if(num1_tid == 1 or num1_tid == 3)
+        if(value)
         {
-            if(_blockA->ot_pid & (1<<15))
-                _blockA->ot_pid &= ~(1<<15);
-            else
-                _blockA->ot_pid |= (1<<15);
+            if(not is_shiny())
+            {
+                _blockA->ot_id = pkmn::trainer::LIBPKMN_TRAINER_ID;
+                _raw.pc.personality = pkmn::trainer::LIBPKMN_TRAINER_ID;
+            }
         }
-
-        uint8_t num1_sid = count_ones((_blockA->ot_sid >> 3));
-        if(num1_sid == 1 or num1_sid == 3)
+        else
         {
-            if(_blockA->ot_sid & (1<<15))
-                _blockA->ot_sid &= ~(1<<15);
-            else
-                _blockA->ot_sid |= (1<<15);
+            while(is_shiny())
+                _raw.pc.personality = _prng->lcrng();
         }
-
-        uint8_t hid = (_raw.pc.personality & 0xFFFF0000) >> 16; 
-        uint8_t num1_hid = count_ones(hid >> 3); 
-        if(num1_hid == 1 or num1_hid == 3)
-        {
-            if(hid & (1<<15))
-                hid &= ~(1<<15);
-            else
-                hid |= (1<<15);
-        }
-
-        uint8_t lid = (_raw.pc.personality & 0xFFFF);
-        uint8_t num1_lid = count_ones(lid >> 3); 
-        if(num1_lid == 1 or num1_lid == 3)
-        {
-            if(lid & (1<<15))
-                lid &= ~(1<<15);
-            else
-                lid |= (1<<15);
-        }
-
-        _raw.pc.personality = ((hid << 16) | lid);
     }
 
     // NOTE: this affects stats
