@@ -47,25 +47,25 @@ namespace pkmn
                 }
 
                 //! Item's name
-                pkmn::pkstring& getName()
+                const pkmn::pkstring& getName()
                 {
                     return entry.name;
                 }
 
                 //! Type of item (healing, ball, etc).
-                pkmn::pkstring& getCategory()
+                const pkmn::pkstring& getCategory()
                 {
                     return entry.category;
                 }
 
                 //! Name of pocket this item appears in in-game (game-specific).
-                pkmn::pkstring& getPocket()
+                const pkmn::pkstring& getPocket()
                 {
                     return entry.pocket;
                 }
 
                 //! Item description (game-specific).
-                pkmn::pkstring& getDescription()
+                const pkmn::pkstring& getDescription()
                 {
                     return entry.description;
                 }
@@ -87,7 +87,13 @@ namespace pkmn
                 pkmn::item_entry_t entry;
         };
 
-        /*! 
+        typedef struct
+        {
+            pkmn::java::ItemEntry item;
+            int amount;
+        } BagSlot;
+
+        /*!
          * This is the Pokédex entry for a <a href="http://bulbapedia.bulbagarden.net/wiki/Move">move</a>.
          * When returned from a Pokédex, all information is game-specific, taking into account changes
          * in move types, powers, and accuracies.
@@ -112,31 +118,31 @@ namespace pkmn
                 }
 
                 //! Move's name
-                pkmn::pkstring& getName()
+                const pkmn::pkstring& getName()
                 {
                     return entry.name;
                 }
 
                 //! Move's type (generation-specific).
-                pkmn::pkstring& getType()
+                const pkmn::pkstring& getType()
                 {
                     return entry.type;
                 }
 
                 //! Move's description (game_specific).
-                pkmn::pkstring& getDescription()
+                const pkmn::pkstring& getDescription()
                 {
                     return entry.description;
                 }
 
                 //! Move's damage class (Physical, Special, Effect)
-                pkmn::pkstring& getDamageClass()
+                const pkmn::pkstring& getDamageClass()
                 {
                     return entry.damage_class;
                 }
 
                 //! Which Pokémon are affected in a Double/Triple battle.
-                pkmn::pkstring& getTarget()
+                const pkmn::pkstring& getTarget()
                 {
                     return entry.target;
                 }
@@ -166,7 +172,7 @@ namespace pkmn
                 }
 
                 //! Move's effect (paralysis, etc).
-                pkmn::pkstring& getEffect()
+                const pkmn::pkstring& getEffect()
                 {
                     return entry.effect;
                 }
@@ -178,19 +184,19 @@ namespace pkmn
                 }
 
                 //! Move's <a href="http://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_Contest">contest</a> type (Cool, Beauty, Cute, Smart).
-                pkmn::pkstring& getContestType()
+                const pkmn::pkstring& getContestType()
                 {
                     return entry.contest_type;
                 }
 
                 //! Effect of move when used in a <a href="http://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_Contest">contest</a>.
-                pkmn::pkstring& getContestEffect()
+                const pkmn::pkstring& getContestEffect()
                 {
                     return entry.contest_effect;
                 }
 
                 //! Effect of move when used in a <a href="http://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_Super_Contest">Super Contest</a>.
-                pkmn::pkstring& getSuperContestEffect()
+                const pkmn::pkstring& getSuperContestEffect()
                 {
                     return entry.super_contest_effect;
                 }

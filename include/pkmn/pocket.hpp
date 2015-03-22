@@ -7,7 +7,6 @@
 #ifndef INCLUDED_PKMN_POCKET_HPP
 #define INCLUDED_PKMN_POCKET_HPP
 
-#include <utility>
 #include <vector>
 
 #include <pkmn/config.hpp>
@@ -17,8 +16,13 @@
 
 namespace pkmn
 {
-    typedef std::pair<item_entry_t, int> bag_slot_t;
-    typedef std::vector<bag_slot_t>      item_list_t;
+    typedef struct
+    {
+        item_entry_t item;
+        int amount;
+    } bag_slot_t;
+
+    typedef std::vector<bag_slot_t> item_list_t;
 
     class PKMN_API pocket
     {

@@ -68,8 +68,8 @@ namespace pkmn
     {
         BOOST_FOREACH(const bag_slot_t &bag_slot, _item_list)
         {
-            if(bag_slot.first.name == item_name)
-                return bag_slot.second;
+            if(bag_slot.item.name == item_name)
+                return bag_slot.amount;
         }
 
         return 0;
@@ -84,18 +84,23 @@ namespace pkmn
     {
         for(int i = 0; i < _item_list.size(); i++)
         {
-            if(_item_list[i].first.name == item_name)
+            if(_item_list[i].item.name == item_name)
             {
                 if(amount > 0)
-                    _item_list[i].second = std::min(amount, 99);
+                    _item_list[i].amount = std::min(amount, 99);
                 else
                     _item_list.erase(_item_list.begin()+i);
             }
         }
 
         if(_item_list.size() < _pocket_size)
-            _item_list.push_back(std::make_pair(_pokedex->get_item_entry(item_name),
-                                                std::min(amount, 99)));
+        {
+            bag_slot_t bag_slot;
+            bag_slot.item   = _pokedex->get_item_entry(item_name);
+            bag_slot.amount = std::min(amount, 99);
+
+            _item_list.push_back(bag_slot);
+        }
     }
 
     const item_list_t& pocket_impl::get_item_list() const

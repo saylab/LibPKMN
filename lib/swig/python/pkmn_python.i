@@ -63,7 +63,6 @@
  */
 %template(uchar_pair)          std::pair<uint8_t, uint8_t>;
 %template(ushort_pair)         std::pair<uint16_t, uint16_t>;
-%template(bag_slot)            std::pair<pkmn::item_entry_t, uint16_t>;
 %template(string_pair)         std::pair<pkmn::pkstring, pkmn::pkstring>;
 
 /*
@@ -72,7 +71,7 @@
 %template(byte_vector)          std::vector<uint8_t>;
 %template(int_vector)           std::vector<int>;
 %template(ushort_vector)        std::vector<uint16_t>;
-%template(item_list)            std::vector<std::pair<pkmn::item_entry_t, uint16_t> >;
+%template(item_list)            std::vector<pkmn::bag_slot_t>;
 %template(moveset)              std::vector<pkmn::move_entry_t>;
 %template(pocket_vector)        std::vector<pkmn::pocket::sptr>;
 %template(pokemon_entry_vector) std::vector<pkmn::pokemon_entry_t>;

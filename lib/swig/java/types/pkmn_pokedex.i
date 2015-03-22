@@ -16,19 +16,21 @@
     #include "entry_wrappers.hpp"
 %}
 
-%template(BagSlot)            std::pair<pkmn::java::ItemEntry, int>;
-%template(ItemList)           std::vector<std::pair<pkmn::java::ItemEntry, int> >;
+%template(ItemList)           std::vector<pkmn::java::BagSlot>;
 %template(Moveset)            std::vector<pkmn::java::MoveEntry>;
 %template(PokemonEntryVector) std::vector<pkmn::java::PokemonEntry>;
 
 %extend pkmn::pocket{
-    std::vector<std::pair<pkmn::java::ItemEntry, int> > getItemList(){
+    std::vector<pkmn::java::BagSlot> getItemList(){
         pkmn::item_list_t item_list = self->get_item_list();
-        std::vector<std::pair<pkmn::java::ItemEntry, int> > itemList;
+        std::vector<pkmn::java::BagSlot> itemList;
 
         BOOST_FOREACH(const pkmn::bag_slot_t &slot, item_list){
-            itemList.push_back(std::make_pair(pkmn::java::ItemEntry(self->get_game(),slot.first.name),
-                                              slot.second));
+            pkmn::java::BagSlot bagSlot;
+            bagSlot.item   = pkmn::java::ItemEntry(self->get_game(), slot.item.name);
+            bagSlot.amount = slot.amount;
+
+            itemList.push_back(bagSlot);
         }
 
         return itemList;
@@ -87,6 +89,7 @@
 %ignore pkmn::pokemon_entry_t;
 %ignore pkmn::move_entry_t;
 %ignore pkmn::item_entry_t;
+%ignore pkmn::bag_slot_t;
 %ignore pkmn::pocket::get_item_list;
 %ignore pkmn::pokedex::get_pokemon_entry;
 %ignore pkmn::pokedex::get_move_entry;

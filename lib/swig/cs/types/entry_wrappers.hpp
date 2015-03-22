@@ -88,7 +88,13 @@ namespace pkmn
                 pkmn::item_entry_t entry;
         };
 
-        /*! 
+        typedef struct
+        {
+            ItemEntry item;
+            int amount;
+        } BagSlot;
+
+        /*!
          * This is the Pokédex entry for a <a href="http://bulbapedia.bulbagarden.net/wiki/Move">move</a>.
          * When returned from a Pokédex, all information is game-specific, taking into account changes
          * in move types, powers, and accuracies.
