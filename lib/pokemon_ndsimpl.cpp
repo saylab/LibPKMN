@@ -44,9 +44,9 @@ namespace pkmn
             _raw.pc.personality = _prng->lcrng();
             _blockA->species = database::get_pokemon_game_index(_species_id, _version_id);
             _blockA->held_item = Items::NONE;
-            _blockA->ot_id = _prng->lcrng();
+            _blockA->ot_id = pkmn::trainer::LIBPKMN_TRAINER_ID;
             // Experience set by level
-            _blockA->friendship = 70;
+            _blockA->friendship = uint8_t(_pokedex_entry.base_friendship);
             _blockA->ability = (_raw.pc.personality % 2) ?
                                     database::get_ability_id(_pokedex_entry.abilities.second)
                                   : database::get_ability_id(_pokedex_entry.abilities.first);

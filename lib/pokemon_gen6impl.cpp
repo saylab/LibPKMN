@@ -44,7 +44,7 @@ namespace pkmn
             _blockA->personality = _prng->lcrng();
             _blockA->species = database::get_pokemon_game_index(_species_id, _version_id);
             _blockA->held_item = Items::NONE;
-            _blockA->ot_id = _prng->lcrng();
+            _blockA->ot_id = pkmn::trainer::LIBPKMN_TRAINER_ID;
             // Experience set my level
             _blockA->ability = (_blockA->personality % 2) ?
                                   database::get_ability_id(_pokedex_entry.abilities.second)

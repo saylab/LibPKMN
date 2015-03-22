@@ -15,6 +15,7 @@
 #include <boost/format.hpp>
 
 #include <pkmn/pokemon.hpp>
+#include <pkmn/trainer.hpp>
 #include <pkmn/types/prng.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 

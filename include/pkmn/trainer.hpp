@@ -216,6 +216,15 @@ namespace pkmn
 
             //! Return SQLite Database ID of game used to create this item instance
             virtual int get_game_id() const = 0;
+
+            //! Public trainer ID compatible with a modern shiny Pokémon
+            static const uint16_t LIBPKMN_PUBLIC_ID = 46479;
+
+            //! Secret trainer ID compatible with a modern shiny Pokémon
+            static const uint16_t LIBPKMN_SECRET_ID = 2858;
+
+            //! Full trainer ID compatible with a modern shiny Pokémon
+            static const uint32_t LIBPKMN_TRAINER_ID = 3046050602;
     };
 }
 

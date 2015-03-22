@@ -31,6 +31,10 @@
 %include "pkmn_pokedex.i"
 %include "pkmn_shared_ptr.i"
 
+%ignore pkmn::trainer::LIBPKMN_PUBLIC_ID;
+%ignore pkmn::trainer::LIBPKMN_SECRET_ID;
+%ignore pkmn::trainer::LIBPKMN_TRAINER_ID;
+
 %{
     #include "pkmn/bag.hpp"
     #include "pkmn/game_save.hpp"

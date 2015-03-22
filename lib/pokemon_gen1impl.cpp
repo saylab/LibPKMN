@@ -50,7 +50,7 @@ namespace pkmn
             _raw.pc.moves[1] = move2;
             _raw.pc.moves[2] = move3;
             _raw.pc.moves[3] = move4;
-            _raw.pc.ot_id = _prng->lcrng() % 65536;
+            _raw.pc.ot_id = pkmn::trainer::LIBPKMN_PUBLIC_ID;
             // experience determined by level
             _raw.pc.ev_hp = _prng->lcrng() % 65536;
             _raw.pc.ev_atk = _prng->lcrng() % 65536;

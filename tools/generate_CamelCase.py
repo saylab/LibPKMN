@@ -70,6 +70,9 @@ overrides = dict(prng = "PRNG",
                  secret_bitbots = "secretBitbots",
                  secret_hydreigon = "secretHydreigon",
                  secret_battlebest = "secretBattleBest",
+                 LIBPKMN_PUBLIC_ID = "LIBPKMN_PUBLIC_ID",
+                 LIBPKMN_SECRET_ID = "LIBPKMN_SECRET_ID",
+                 LIBPKMN_TRAINER_ID = "LIBPKMN_TRAINER_ID",
                 )
 
 replacements = dict(Ev = "EV",

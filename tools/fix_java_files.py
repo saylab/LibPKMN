@@ -91,6 +91,20 @@ def fix_sptr_file(filename):
             fcn_str += "    this.swigCPtr = fromMake.swigCPtr;\n"
             fcn_str += "    this.swigCMemOwn = fromMake.swigCMemOwn;\n}\n"
             flines += [fcn_str]
+
+    if class_name == "TrainerSPtr":
+        flines += ["/**\n"]
+        flines += [" * Public trainer ID compatible with a modern shiny.\n"]
+        flines += [" */\n"]
+        flines += ["public static final int LIBPKMN_PUBLIC_ID = 46479;\n"]
+        flines += ["/**\n"]
+        flines += [" * Secret trainer ID compatible with a modern shiny.\n"]
+        flines += [" */\n"]
+        flines += ["public static final int LIBPKMN_SECRET_ID = 2858;\n"]
+        flines += ["/**\n"]
+        flines += [" * Full trainer ID compatible with a modern shiny.\n"]
+        flines += [" */\n"]
+        flines += ["public static final long LIBPKMN_TRAINER_ID = 3046050602L;\n"]
     flines += ["}"]
 
     f = open(filename, "w")

@@ -37,7 +37,7 @@ namespace pkmn
         else
         {
             _raw.pc.personality = _prng->lcrng();
-            _raw.pc.ot_id = _prng->lcrng();
+            _raw.pc.ot_id = pkmn::trainer::LIBPKMN_TRAINER_ID;
 
             pkmn::pkstring nickname = PKSTRING_UPPERCASE(_pokedex_entry.species_name);
             conversions::export_gen3_text(nickname, _raw.pc.nickname, 10);
@@ -55,7 +55,7 @@ namespace pkmn
             _growth->held_item = 0;
             // experience will be determined by level
             _growth->pp_up = 0; // TODO
-            _growth->friendship = _pokedex_entry.base_friendship;
+            _growth->friendship = uint8_t(_pokedex_entry.base_friendship);
             _attacks->moves[0] = move1;
             _attacks->moves[1] = move2;
             _attacks->moves[2] = move3;
@@ -572,6 +572,8 @@ namespace pkmn
      */
     void pokemon_gen3impl::set_shiny(bool value)
     {
+        
+
         uint8_t num1_tid = count_ones((_raw.pc.ot_pid >> 3));
         if(num1_tid == 1 or num1_tid == 3)
         {

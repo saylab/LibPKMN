@@ -10,6 +10,7 @@
 #include <pkmn/calculations.hpp>
 #include <pkmn/database.hpp>
 #include <pkmn/enums.hpp>
+#include <pkmn/trainer.hpp>
 #include <pkmn/conversions/items.hpp>
 #include <pkmn/conversions/misc.hpp>
 #include <pkmn/conversions/pokemon.hpp>
@@ -44,7 +45,7 @@ namespace pkmn
             _raw.pc.moves[1] = move2;
             _raw.pc.moves[2] = move3;
             _raw.pc.moves[3] = move4;
-            _raw.pc.ot_id = _prng->lcrng() % 65536;
+            _raw.pc.ot_id = pkmn::trainer::LIBPKMN_PUBLIC_ID;
             // experience determined by level
             _raw.pc.ev_hp = _prng->lcrng() % 65536;
             _raw.pc.ev_atk = _prng->lcrng() % 65536;
@@ -54,7 +55,7 @@ namespace pkmn
             _raw.pc.iv_data = _prng->lcrng() % 65536;
             for(size_t i = 0; i < 4; i++)
                 _raw.pc.move_pps[i] = database::get_move_pp(_raw.pc.moves[i]);
-            _raw.pc.friendship = 70;
+            _raw.pc.friendship = uint8_t(_pokedex_entry.base_friendship);
             _raw.pc.pokerus = 0;
             if(_version_id == Versions::CRYSTAL)
             {
