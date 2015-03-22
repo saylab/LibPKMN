@@ -82,12 +82,15 @@ namespace pkmn
 
     void pocket_impl::set_item_amount(const pkmn::pkstring &item_name, int amount)
     {
+        if(amount < 0 or amount > 99)
+            throw std::runtime_error("Item amount must be 0-99.");
+
         for(int i = 0; i < _item_list.size(); i++)
         {
             if(_item_list[i].item.name == item_name)
             {
                 if(amount > 0)
-                    _item_list[i].amount = std::min(amount, 99);
+                    _item_list[i].amount = amount;
                 else
                     _item_list.erase(_item_list.begin()+i);
             }
@@ -97,7 +100,7 @@ namespace pkmn
         {
             bag_slot_t bag_slot;
             bag_slot.item   = _pokedex->get_item_entry(item_name);
-            bag_slot.amount = std::min(amount, 99);
+            bag_slot.amount = 99;
 
             _item_list.push_back(bag_slot);
         }
