@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <string>
 
-#include "pocket_impl.hpp"
+#include <boost/foreach.hpp>
 
 #include <pkmn/database.hpp>
 #include <pkmn/enums.hpp>
@@ -16,32 +16,35 @@
 #include <pkmn/pocket.hpp>
 #include <pkmn/pokedex.hpp>
 
+#include "pocket_impl.hpp"
+
 namespace pkmn
 {
-    pocket::sptr pocket::make(uint16_t game, const pkmn::pkstring& name, uint16_t size)
+    pocket::sptr pocket::make(int game, const pkmn::pkstring &name, int size)
     {
         return sptr(new pocket_impl(game, name, size));
     }
 
-    pocket::sptr pocket::make(const pkmn::pkstring& game, const pkmn::pkstring& name, uint16_t size)
+    pocket::sptr pocket::make(const pkmn::pkstring &game, const pkmn::pkstring &name, int size)
     {
         return make(database::get_version_id(game), name, size);
     }
 
-    pocket_impl::pocket_impl(uint16_t game, const pkmn::pkstring& name, uint16_t size):
+    pocket_impl::pocket_impl(int game, const pkmn::pkstring &name, int size):
         pocket(),
         _version_id(game),
         _generation(database::get_generation(game)),
         _pocket_size(size),
         _pocket_name(name),
-        _pokedex(pokedex::make(database::get_version_name(game))) {};
+        _pokedex(pokedex::make(database::get_version_name(game)))
+    {};
 
     pkmn::pkstring pocket_impl::get_game() const
     {
         return database::get_version_name(_version_id);
     }
 
-    uint16_t pocket_impl::get_generation() const
+    int pocket_impl::get_generation() const
     {
         return _generation;
     }
@@ -51,68 +54,56 @@ namespace pkmn
         return _pocket_name;
     }
 
-    uint16_t pocket_impl::size() const
+    int pocket_impl::get_size() const
     {
         return _pocket_size;
     }
 
-    void pocket_impl::add_item(const pkmn::pkstring& item_name, uint16_t amount)
+    int pocket_impl::get_item_amount(int item_id) const
     {
-        add_item(database::get_item_id(item_name), amount);
+        return get_item_amount(database::get_item_name(item_id));
     }
 
-    void pocket_impl::add_item(uint16_t item_id, uint16_t amount)
+    int pocket_impl::get_item_amount(const pkmn::pkstring &item_name) const
     {
-        if(database::get_item_game_index(item_id, _version_id) != 0)
+        BOOST_FOREACH(const bag_slot_t &bag_slot, _item_list)
         {
-            if(_item_dict.has_key(item_id) or _item_dict.size() < _pocket_size)
-                _item_dict[item_id] = std::min(int(amount), 99);
+            if(bag_slot.first.name == item_name)
+                return bag_slot.second;
         }
+
+        return 0;
     }
 
-    void pocket_impl::remove_item(const pkmn::pkstring& item_name, uint16_t amount)
+    void pocket_impl::set_item_amount(int item_id, int amount)
     {
-        remove_item(database::get_item_id(item_name), amount);
+        set_item_amount(database::get_item_name(item_id), amount);
     }
 
-    void pocket_impl::remove_item(uint16_t item_id, uint16_t amount)
+    void pocket_impl::set_item_amount(const pkmn::pkstring &item_name, int amount)
     {
-        if(_item_dict.has_key(item_id))
+        for(int i = 0; i < _item_list.size(); i++)
         {
-            if(amount < _item_dict[item_id]) _item_dict[item_id] -= amount;
-            else _item_dict.erase(item_id);
+            if(_item_list[i].first.name == item_name)
+            {
+                if(amount > 0)
+                    _item_list[i].second = std::min(amount, 99);
+                else
+                    _item_list.erase(_item_list.begin()+i);
+            }
         }
+
+        if(_item_list.size() < _pocket_size)
+            _item_list.push_back(std::make_pair(_pokedex->get_item_entry(item_name),
+                                                std::min(amount, 99)));
     }
 
-    uint16_t pocket_impl::get_item_amount(const pkmn::pkstring& item_name) const
+    const item_list_t& pocket_impl::get_item_list() const
     {
-        return get_item_amount(database::get_item_id(item_name));
+        return _item_list;
     }
 
-    uint16_t pocket_impl::get_item_amount(uint16_t item_id) const
-    {
-        return _item_dict.at(item_id, 0);
-    }
-
-    /*
-     * Return list of items with more intuitive interface without exposing
-     * internal memory structure.
-     */
-    void pocket_impl::get_item_list(item_list_t& item_list) const
-    {
-        item_list.clear();
-
-        std::vector<uint16_t> keys = _item_dict.keys();
-        std::vector<uint8_t> vals = _item_dict.vals();
-
-        for(size_t i = 0; i < keys.size(); i++)
-        {
-            item_list.push_back(std::make_pair(_pokedex->get_item_entry(keys[i]),
-                                               vals[i]));
-        }
-    }
-
-    uint16_t pocket_impl::get_game_id() const
+    int pocket_impl::get_game_id() const
     {
         return _version_id;
     }

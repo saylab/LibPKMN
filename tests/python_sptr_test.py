@@ -35,10 +35,10 @@ def bag_pocket_test():
         bag2_pockets = bag2.get_pockets()
 
         # Add items with each possible method
-        bag1.add_item("Potion", 5)
-        bag2.add_item("Master Ball", 10)
-        bag1_pockets["KeyItems"].add_item("Bicycle", 1)
-        bag2_pockets["TM/HM"].add_item("TM01", 15)
+        bag1.set_item_amount("Potion", 5)
+        bag2.set_item_amount("Master Ball", 10)
+        bag1_pockets["KeyItems"].set_item_amount("Bicycle", 1)
+        bag2_pockets["TM/HM"].set_item_amount("TM01", 15)
 
         # Make sure bag1 reports proper amounts
         if bag1.get_item_amount("Potion") != 5:

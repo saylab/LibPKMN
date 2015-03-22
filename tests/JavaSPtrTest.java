@@ -30,10 +30,10 @@ public class JavaSPtrTest
             PocketDict bag2Pockets = bag2.getPockets();
 
             // Add items with each possible method
-            bag1.addItem("Potion", 5);
-            bag2.addItem("Master Ball", 10);
-            bag1Pockets.get("KeyItems").addItem("Bicycle", 1);
-            bag2Pockets.get("TM/HM").addItem("TM01", 15);
+            bag1.setItemAmount("Potion", 5);
+            bag2.setItemAmount("Master Ball", 10);
+            bag1Pockets.get("KeyItems").setItemAmount("Bicycle", 1);
+            bag2Pockets.get("TM/HM").setItemAmount("TM01", 15);
 
             // Make sure bag1 reports proper amounts
             if(bag1.getItemAmount("Potion") != 5)

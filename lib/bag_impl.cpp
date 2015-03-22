@@ -168,24 +168,9 @@ namespace pkmn
 
     int bag_impl::get_generation() const {return _generation;}
 
-    void bag_impl::add_item(const pkmn::pkstring &item_name, int amount)
+    int bag_impl::get_item_amount(int item_id) const
     {
-        add_item(database::get_item_id(item_name), amount);
-    }
-
-    void bag_impl::add_item(int item_id, int amount)
-    {
-        _pockets[_get_pocket_name(item_id)]->add_item(item_id, amount);
-    }
-
-    void bag_impl::remove_item(const pkmn::pkstring &item_name, int amount)
-    {
-        remove_item(database::get_item_id(item_name), amount);
-    }
-
-    void bag_impl::remove_item(int item_id, int amount)
-    {
-        _pockets[_get_pocket_name(item_id)]->remove_item(item_id, amount);
+        return _pockets.at(_get_pocket_name(item_id))->get_item_amount(item_id);
     }
 
     int bag_impl::get_item_amount(const pkmn::pkstring &item_name) const
@@ -193,9 +178,14 @@ namespace pkmn
         return get_item_amount(database::get_item_id(item_name));
     }
 
-    int bag_impl::get_item_amount(int item_id) const
+    void bag_impl::set_item_amount(int item_id, int amount)
     {
-        return _pockets[_get_pocket_name(item_id)]->get_item_amount(item_id);
+        _pockets.at(_get_pocket_name(item_id))->set_item_amount(item_id, amount);
+    }
+
+    void bag_impl::set_item_amount(const pkmn::pkstring &item_name, int amount)
+    {
+        set_item_amount(database::get_item_id(item_name), amount);
     }
 
     pocket::sptr bag_impl::get_pocket(const pkmn::pkstring &name) const {return _pockets[name];}

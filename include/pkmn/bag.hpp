@@ -155,45 +155,15 @@ namespace pkmn
             virtual int get_generation() const = 0;
 
             /*!
-             * Add the specified item to the bag. The bag will automatically choose
-             * the correct pocket in which to place the item.
+             * Return the amount of the given item.
              *
-             * \param item_name item's name
-             * \param amount how many of this item to add
+             * \param item_id SQLite ID of the given item, as defined in <pkmn/enums.hpp>
+             * \return amount of given item
              */
-            virtual void add_item(const pkmn::pkstring &item_name, int amount) = 0;
+            virtual int get_item_amount(int item_id) const = 0;
 
             /*!
-             * Add the specified item to the bag. The bag will automatically choose
-             * the correct pocket in which to place the item.
-             *
-             * \param item_id SQLite ID of the item to insert, as defined in <pkmn/enums.hpp>
-             * \param amount how many of this item to add
-             */
-            virtual void add_item(int item_id, int amount) = 0;
-
-            /*!
-             * Remove the given amount of the given item. If this item is not in the bag
-             * or the user specifies a greater amount than is in the bag, the function
-             * will set the item amount to 0.
-             *
-             * \param item_name name of item to remove
-             * \param amount how many of this item to remove
-             */
-            virtual void remove_item(const pkmn::pkstring &item_name, int amount) = 0;
-
-            /*!
-             * Remove the given amount of the given item. If this item is not in the bag
-             * or the user specifies a greater amount than is in the bag, the function
-             * will set the item amount to 0.
-             *
-             * \param item_id SQLite ID of the item to remove, as defined in <pkmn/enums.hpp>
-             * \param amount how many of this item to remove
-             */
-            virtual void remove_item(int item_id, int amount) = 0;
-
-            /*!
-             * Remove the amount of the given item.
+             * Return the amount of the given item.
              *
              * \param item_name name of given item
              * \return amount of given item
@@ -201,12 +171,20 @@ namespace pkmn
             virtual int get_item_amount(const pkmn::pkstring &item_name) const = 0;
 
             /*!
-             * Remove the amount of the given item.
+             * Set the amount of the given item.
              *
-             * \param item_id SQLite ID of the given item, as defined in <pkmn/enums.hpp>
-             * \return amount of given item
+             * \param item_id SQLite ID of given item
+             * \param amount amount of given item
              */
-            virtual int get_item_amount(int item_id) const = 0;
+            virtual void set_item_amount(int item_id, int amount) = 0;            
+
+            /*!
+             * Set the amount of the given item.
+             *
+             * \param item_name name of given item
+             * \param amount amount of given item
+             */
+            virtual void set_item_amount(const pkmn::pkstring &item_name, int amount) = 0;            
             
             /*!
              * Return the pocket with the given name. Pocket names for each

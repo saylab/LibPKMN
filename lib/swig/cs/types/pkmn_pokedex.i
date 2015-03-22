@@ -26,21 +26,22 @@
     #include "entry_wrappers.hpp"
 %}
 
-%template(BagSlot)            std::pair<pkmn::cs::ItemEntry, uint16_t>;
-%template(ItemList)           std::vector<std::pair<pkmn::cs::ItemEntry, uint16_t> >;
+%template(BagSlot)            std::pair<pkmn::cs::ItemEntry, int>;
+%template(ItemList)           std::vector<std::pair<pkmn::cs::ItemEntry, int> >;
 %template(Moveset)            std::vector<pkmn::cs::MoveEntry>;
 %template(PokemonEntryVector) std::vector<pkmn::cs::PokemonEntry>;
 
 %extend pkmn::pocket{
-    void getItemList(std::vector<std::pair<pkmn::cs::ItemEntry, uint16_t> >& itemList){
-        itemList.clear();
-        pkmn::item_list_t item_list;
-        self->get_item_list(item_list);
+    std::vector<std::pair<pkmn::cs::ItemEntry, int> > getItemList(){
+        pkmn::item_list_t item_list = self->get_item_list();
+        std::vector<std::pair<pkmn::cs::ItemEntry, int> > itemList;
 
-        BOOST_FOREACH(const pkmn::bag_slot_t& slot, item_list){
+        BOOST_FOREACH(const pkmn::bag_slot_t &slot, item_list){
             itemList.push_back(std::make_pair(pkmn::cs::ItemEntry(self->get_game(),slot.first.name),
                                               slot.second));
         }
+
+        return itemList;
     }
 }
 
@@ -49,7 +50,7 @@
         return pkmn::cs::PokemonEntry(self->get_game_id(), speciesID, formID);
     }
 
-    pkmn::cs::PokemonEntry getPokemonEntry(const std::wstring& speciesName, const std::wstring& formName){
+    pkmn::cs::PokemonEntry getPokemonEntry(const std::wstring &speciesName, const std::wstring &formName){
         return pkmn::cs::PokemonEntry(self->get_game(), speciesName, formName);
     }
 
@@ -57,7 +58,7 @@
         return pkmn::cs::MoveEntry(self->get_game_id(), moveID);
     }
 
-    pkmn::cs::MoveEntry getMoveEntry(const std::wstring& moveName){
+    pkmn::cs::MoveEntry getMoveEntry(const std::wstring &moveName){
         return pkmn::cs::MoveEntry(self->get_game(), moveName);
     }
 
@@ -65,7 +66,7 @@
         return pkmn::cs::ItemEntry(self->get_game_id(), itemID);
     }
 
-    pkmn::cs::ItemEntry getItemEntry(const std::wstring& itemName){
+    pkmn::cs::ItemEntry getItemEntry(const std::wstring &itemName){
         return pkmn::cs::ItemEntry(self->get_game(), itemName);
     }
 }
@@ -83,7 +84,7 @@
         return pkmn::cs::MoveEntry(self->get_game(), self->get_move(pos).name);
     }
 
-    void getMoves(std::vector<pkmn::cs::MoveEntry>& moves){
+    void getMoves(std::vector<pkmn::cs::MoveEntry> &moves){
         moves.clear();
         pkmn::moveset_t native_moves;
         self->get_moves(native_moves);

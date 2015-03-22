@@ -29,8 +29,11 @@ namespace pkmn
             void add_item(int item_id, int amount);
             void remove_item(const pkmn::pkstring &item_name, int amount);
             void remove_item(int item_id, int amount);
-            int get_item_amount(const pkmn::pkstring &item_name) const;
+
             int get_item_amount(int item_id) const;
+            int get_item_amount(const pkmn::pkstring &item_name) const;
+            void set_item_amount(int item_id, int amount);
+            void set_item_amount(const pkmn::pkstring &item_name, int amount);
 
             pocket::sptr get_pocket(const pkmn::pkstring &name) const;
             pkmn::dict<pkmn::pkstring, pocket::sptr> get_pockets() const;
