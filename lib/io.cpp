@@ -22,7 +22,7 @@ namespace pkmn
     namespace io
     {
         //For now, everything is Ruby until there's a better way
-        pokemon::sptr import_from_3gpkm(const pkmn::pkstring& filename)
+        pokemon::sptr import_from_3gpkm(const pkmn::pkstring &filename)
         {
             uint32_t filesize = uint32_t(fs::file_size(fs::path(filename)));
             std::ifstream ifile;
@@ -48,7 +48,7 @@ namespace pkmn
             else throw std::runtime_error("This is not a valid .3gpkm file.");
         }
 
-        void export_to_3gpkm(pokemon::sptr pkmn, const pkmn::pkstring& filename)
+        void export_to_3gpkm(pokemon::sptr pkmn, const pkmn::pkstring &filename)
         {
             if(pkmn->get_generation() != 3)
                 throw std::runtime_error("The given Pokémon is not from Generation III.");
@@ -61,7 +61,7 @@ namespace pkmn
             ofile.close();
         }
 
-        pokemon::sptr import_from_pkm(const pkmn::pkstring& filename)
+        pokemon::sptr import_from_pkm(const pkmn::pkstring &filename)
         {
             uint32_t filesize = uint8_t(fs::file_size(fs::path(filename)));
             std::ifstream ifile;
@@ -102,7 +102,7 @@ namespace pkmn
             else throw std::runtime_error("This is not a valid .pkm file.");
         }
 
-        void export_to_pkm(pokemon::sptr pkmn, const pkmn::pkstring& filename)
+        void export_to_pkm(pokemon::sptr pkmn, const pkmn::pkstring &filename)
         {
             if(pkmn->get_generation() != 4 and pkmn->get_generation() != 5)
                 throw std::runtime_error("The given Pokemon is not from Generation IV-V.");

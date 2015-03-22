@@ -26,7 +26,7 @@ namespace pkmn
          * \param pkmn LibPKMN-format Pokémon to export
          * \param filename where to save the .3gpkm file
          */
-        void PKMN_API export_to_3gpkm(pokemon::sptr pkmn, const pkmn::pkstring& filename);
+        void PKMN_API export_to_3gpkm(pokemon::sptr pkmn, const pkmn::pkstring &filename);
 
         //! Imports a .3gpkm file into LibPKMN.
         /*!
@@ -37,7 +37,7 @@ namespace pkmn
          * \param filename the .3gpkm file to import
          * \return imported LibPKMN-format Pokémon
          */
-        pokemon::sptr PKMN_API import_from_3gpkm(const pkmn::pkstring& filename);
+        pokemon::sptr PKMN_API import_from_3gpkm(const pkmn::pkstring &filename);
 
         //! Imports a .pkm file into LibPKMN.
         /*!
@@ -49,7 +49,7 @@ namespace pkmn
          * \param pkmn LibPKMN-format Pokémon to export
          * \param filename where to save the .pkm file
          */
-        void PKMN_API export_to_pkm(pokemon::sptr pkmn, const pkmn::pkstring& filename);
+        void PKMN_API export_to_pkm(pokemon::sptr pkmn, const pkmn::pkstring &filename);
 
         //! Imports a .pkm file into LibPKMN.
         /*!
@@ -60,7 +60,7 @@ namespace pkmn
          * \param filename the .pkm file to import
          * \return imported LibPKMN-format Pokémon
          */
-        pokemon::sptr PKMN_API import_from_pkm(const pkmn::pkstring& filename);
+        pokemon::sptr PKMN_API import_from_pkm(const pkmn::pkstring &filename);
     }
 }
 
