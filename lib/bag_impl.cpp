@@ -24,7 +24,7 @@
 
 namespace pkmn
 {
-    bag::sptr bag::make(uint16_t game)
+    bag::sptr bag::make(int game)
     {
         return sptr(new bag_impl(game));
     }
@@ -42,7 +42,7 @@ namespace pkmn
 
     pkmn::shared_ptr<SQLite::Database> bag_impl::_db;
 
-    bag_impl::bag_impl(uint16_t game): bag()
+    bag_impl::bag_impl(int game): bag()
     {
         CONNECT_TO_DB(_db);
 
@@ -166,34 +166,34 @@ namespace pkmn
 
     pkmn::pkstring bag_impl::get_game() const {return database::get_version_name(_game_id);}
 
-    uint16_t bag_impl::get_generation() const {return _generation;}
+    int bag_impl::get_generation() const {return _generation;}
 
-    void bag_impl::add_item(const pkmn::pkstring &item_name, uint16_t amount)
+    void bag_impl::add_item(const pkmn::pkstring &item_name, int amount)
     {
         add_item(database::get_item_id(item_name), amount);
     }
 
-    void bag_impl::add_item(uint16_t item_id, uint16_t amount)
+    void bag_impl::add_item(int item_id, int amount)
     {
         _pockets[_get_pocket_name(item_id)]->add_item(item_id, amount);
     }
 
-    void bag_impl::remove_item(const pkmn::pkstring &item_name, uint16_t amount)
+    void bag_impl::remove_item(const pkmn::pkstring &item_name, int amount)
     {
         remove_item(database::get_item_id(item_name), amount);
     }
 
-    void bag_impl::remove_item(uint16_t item_id, uint16_t amount)
+    void bag_impl::remove_item(int item_id, int amount)
     {
         _pockets[_get_pocket_name(item_id)]->remove_item(item_id, amount);
     }
 
-    uint16_t bag_impl::get_item_amount(const pkmn::pkstring &item_name) const
+    int bag_impl::get_item_amount(const pkmn::pkstring &item_name) const
     {
         return get_item_amount(database::get_item_id(item_name));
     }
 
-    uint16_t bag_impl::get_item_amount(uint16_t item_id) const
+    int bag_impl::get_item_amount(int item_id) const
     {
         return _pockets[_get_pocket_name(item_id)]->get_item_amount(item_id);
     }
@@ -202,10 +202,10 @@ namespace pkmn
 
     pkmn::dict<pkmn::pkstring, pocket::sptr> bag_impl::get_pockets() const {return _pockets;}
 
-    uint16_t bag_impl::get_game_id() const {return _game_id;}
+    int bag_impl::get_game_id() const {return _game_id;}
 
     //Determine correct pocket for given item
-    pkmn::pkstring bag_impl::_get_pocket_name(uint16_t item_id) const
+    pkmn::pkstring bag_impl::_get_pocket_name(int item_id) const
     {
         std::ostringstream query_stream;
         query_stream << "SELECT name FROM pocket_names WHERE version_group_id="

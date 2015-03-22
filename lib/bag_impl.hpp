@@ -17,34 +17,34 @@ namespace pkmn
     {
         public:
 
-            bag_impl(uint16_t game);
+            bag_impl(int game);
             bag_impl(const bag_impl& other);
             bag_impl& operator=(const bag_impl& other);
             ~bag_impl() {};
 
             pkmn::pkstring get_game() const;
-            uint16_t get_generation() const;
+            int get_generation() const;
 
-            void add_item(const pkmn::pkstring &item_name, uint16_t amount);
-            void add_item(uint16_t item_id, uint16_t amount);
-            void remove_item(const pkmn::pkstring &item_name, uint16_t amount);
-            void remove_item(uint16_t item_id, uint16_t amount);
-            uint16_t get_item_amount(const pkmn::pkstring &item_name) const;
-            uint16_t get_item_amount(uint16_t item_id) const;
+            void add_item(const pkmn::pkstring &item_name, int amount);
+            void add_item(int item_id, int amount);
+            void remove_item(const pkmn::pkstring &item_name, int amount);
+            void remove_item(int item_id, int amount);
+            int get_item_amount(const pkmn::pkstring &item_name) const;
+            int get_item_amount(int item_id) const;
 
             pocket::sptr get_pocket(const pkmn::pkstring &name) const;
             pkmn::dict<pkmn::pkstring, pocket::sptr> get_pockets() const;
 
-            uint16_t get_game_id() const;
+            int get_game_id() const;
 
         private:
 
             static pkmn::shared_ptr<SQLite::Database> _db;
 
-            uint16_t _game_id, _generation;
+            int _game_id, _generation;
             pkmn::dict<pkmn::pkstring, pocket::sptr> _pockets; 
 
-            pkmn::pkstring _get_pocket_name(uint16_t item_id) const;
+            pkmn::pkstring _get_pocket_name(int item_id) const;
     };
 }
 

@@ -123,7 +123,7 @@ namespace pkmn
              * \param game SQLite ID of the desired game, as defined in <pkmn/enums.hpp>
              * \return shared pointer to instance of pkmn::bag from the given game
              */
-            static sptr make(uint16_t game);
+            static sptr make(int game);
 
             /*!
              * This is the class's factory function. It returns a shared_ptr to a bag
@@ -132,7 +132,7 @@ namespace pkmn
              * \param game name of the desired game
              * \return shared pointer to instance of pkmn::trainer with described parameters
              */
-            static sptr make(const pkmn::pkstring& game);
+            static sptr make(const pkmn::pkstring &game);
 
             bag() {};
             virtual ~bag() {};
@@ -152,7 +152,7 @@ namespace pkmn
              *
              * \return game's generation
              */
-            virtual uint16_t get_generation() const = 0;
+            virtual int get_generation() const = 0;
 
             /*!
              * Add the specified item to the bag. The bag will automatically choose
@@ -161,7 +161,7 @@ namespace pkmn
              * \param item_name item's name
              * \param amount how many of this item to add
              */
-            virtual void add_item(const pkmn::pkstring& item_name, uint16_t amount) = 0;
+            virtual void add_item(const pkmn::pkstring &item_name, int amount) = 0;
 
             /*!
              * Add the specified item to the bag. The bag will automatically choose
@@ -170,7 +170,7 @@ namespace pkmn
              * \param item_id SQLite ID of the item to insert, as defined in <pkmn/enums.hpp>
              * \param amount how many of this item to add
              */
-            virtual void add_item(uint16_t item_id, uint16_t amount) = 0;
+            virtual void add_item(int item_id, int amount) = 0;
 
             /*!
              * Remove the given amount of the given item. If this item is not in the bag
@@ -180,7 +180,7 @@ namespace pkmn
              * \param item_name name of item to remove
              * \param amount how many of this item to remove
              */
-            virtual void remove_item(const pkmn::pkstring& item_name, uint16_t amount) = 0;
+            virtual void remove_item(const pkmn::pkstring &item_name, int amount) = 0;
 
             /*!
              * Remove the given amount of the given item. If this item is not in the bag
@@ -190,7 +190,7 @@ namespace pkmn
              * \param item_id SQLite ID of the item to remove, as defined in <pkmn/enums.hpp>
              * \param amount how many of this item to remove
              */
-            virtual void remove_item(uint16_t item_id, uint16_t amount) = 0;
+            virtual void remove_item(int item_id, int amount) = 0;
 
             /*!
              * Remove the amount of the given item.
@@ -198,7 +198,7 @@ namespace pkmn
              * \param item_name name of given item
              * \return amount of given item
              */
-            virtual uint16_t get_item_amount(const pkmn::pkstring& item_name) const = 0;
+            virtual int get_item_amount(const pkmn::pkstring &item_name) const = 0;
 
             /*!
              * Remove the amount of the given item.
@@ -206,7 +206,7 @@ namespace pkmn
              * \param item_id SQLite ID of the given item, as defined in <pkmn/enums.hpp>
              * \return amount of given item
              */
-            virtual uint16_t get_item_amount(uint16_t item_id) const = 0;
+            virtual int get_item_amount(int item_id) const = 0;
             
             /*!
              * Return the pocket with the given name. Pocket names for each
@@ -215,7 +215,7 @@ namespace pkmn
              * \param name name of pocket
              * \return shared_ptr to given pocket
              */
-            virtual pocket::sptr get_pocket(const pkmn::pkstring& name) const = 0;
+            virtual pocket::sptr get_pocket(const pkmn::pkstring &name) const = 0;
 
             /*!
              * Return all of the bag's pockets in a dictionary. Each pocket
@@ -226,7 +226,7 @@ namespace pkmn
             virtual pkmn::dict<pkmn::pkstring, pocket::sptr> get_pockets() const = 0;
 
             //! Return SQLite ID of the game used to create this bag
-            virtual uint16_t get_game_id() const = 0;
+            virtual int get_game_id() const = 0;
     };
 }
 
