@@ -233,7 +233,7 @@ namespace pkmn
 
     pkmn::pkstring pokemon_gen3impl::get_trainer_gender() const
     {
-        return (_misc->origin_info & (1<<31)) ? "Female" : "Male";
+        return (_misc->origin_info & (1<<15)) ? "Female" : "Male";
     }
 
     uint32_t pokemon_gen3impl::get_trainer_id() const
@@ -784,7 +784,7 @@ namespace pkmn
 
     uint16_t pokemon_gen3impl::get_original_game_id() const
     {
-        return database::get_version_id((_misc->origin_info &= ~0xFC3F) >> 6);
+        return database::get_version_id((_misc->origin_info & ~0xFC3F) >> 6);
     }
 
     uint16_t pokemon_gen3impl::get_ability_id() const
