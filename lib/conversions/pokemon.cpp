@@ -35,7 +35,10 @@
 #include "../SQLiteCpp/SQLiteC++.h"
 
 #define CONVERT_POKEMON_GAME_INDEX(src,src_id,dst_id) database::get_pokemon_game_index( \
-                                                          database::get_pokemon_id(src_id, src), dst_id)
+                                                          database::get_pokemon_id(src, src_id), dst_id)
+
+#define CONVERT_ITEM_GAME_INDEX(src,src_id,dst_id) database::get_item_game_index( \
+                                                       database::get_item_id(src, src_id), dst_id)
 
 #define GET_SPECIES_INDEX(src,src_id) database::get_species_id(database::get_pokemon_id(src_id, src))
 
@@ -289,6 +292,78 @@ namespace pkmn
                                                     dst.pc.ev_spcl,
                                                     IVs["Special"]
                                                    );
+        }
+
+        void gen3_to_gen4(const native::gen3_party_pokemon_t &src, native::nds_party_pokemon_t &dst)
+        {
+            CONNECT_TO_DB(db);
+
+            const native::gen3_pokemon_growth_t* gen3_growth = &(src.pc.blocks.growth);
+            const native::gen3_pokemon_attacks_t* gen3_attacks = &(src.pc.blocks.attacks);
+            const native::gen3_pokemon_effort_t* gen3_effort = &(src.pc.blocks.effort);
+            const native::gen3_pokemon_misc_t* gen3_misc = &(src.pc.blocks.misc);
+
+            native::nds_pokemon_blockA_t* gen4_blockA = &(dst.pc.blocks.blockA);
+            native::nds_pokemon_blockB_t* gen4_blockB = &(dst.pc.blocks.blockB);
+            native::nds_pokemon_blockC_t* gen4_blockC = &(dst.pc.blocks.blockC);
+            native::nds_pokemon_blockD_t* gen4_blockD = &(dst.pc.blocks.blockD);
+
+            pokemon_entry_t entry(Versions::HEARTGOLD,
+                                  GET_SPECIES_INDEX(gen4_blockA->species, Versions::HEARTGOLD),
+                                  GET_SPECIES_INDEX(gen4_blockA->species, Versions::HEARTGOLD));
+
+            dst.pc.personality = src.pc.personality;
+            dst.pc.isdecrypted_isegg = 0; // TODO: set decrypted flag
+
+            // Block A
+            gen4_blockA->species = CONVERT_POKEMON_GAME_INDEX(gen3_growth->species, Versions::EMERALD, Versions::HEARTGOLD);
+            gen4_blockA->held_item = CONVERT_ITEM_GAME_INDEX(gen3_growth->held_item, Versions::EMERALD, Versions::HEARTGOLD);
+            gen4_blockA->ot_id = src.pc.ot_id;
+            gen4_blockA->exp = gen3_growth->exp;
+            gen4_blockA->friendship = gen3_growth->friendship;
+            gen4_blockA->ability = (dst.pc.personality % 2) ? database::get_ability_id(entry.abilities.second)
+                                                            : database::get_ability_id(entry.abilities.first);
+            gen4_blockA->markings = src.pc.markings;
+            gen4_blockA->country = uint8_t(src.pc.language - 0x200);
+            memcpy(&(gen4_blockA->ev_hp), &(gen3_effort->ev_hp), (6+sizeof(contest_stats_t)));
+
+            // Block B
+            memcpy(gen4_blockB, gen3_attacks, sizeof(native::gen3_pokemon_attacks_t));
+            for(int i = 0; i < 4; i++)
+                gen4_blockB->move_pp_ups[i] = ((gen3_growth->pp_up & (0x3 << (i*2))) >> (i*2));
+            gen4_blockB->iv_isegg_isnicknamed = gen3_misc->iv_egg_ability & ~1; // Ability elsewhere
+            if(PKSTRING_UPPERCASE(conversions::import_gen3_text(src.pc.nickname, 10)) !=
+               PKSTRING_UPPERCASE(entry.species_name))
+            {
+                gen4_blockB->iv_isegg_isnicknamed |= 1;
+            }
+            gen4_blockB->hoenn_ribbons = gen3_misc->ribbons_obedience & ~1; // Fateful encounter flag elsewhere
+            gen4_blockB->form_encounterinfo = (gen3_misc->ribbons_obedience >> 31); // Fateful encounter
+            gen4_blockB->form_encounterinfo |= ((gen3_misc->origin_info & 0x2) >> 1); // Gender
+            if(entry.chance_male == 0.0 and entry.chance_female == 0.0)
+                gen4_blockB->form_encounterinfo |= 0x4; // Genderless
+            gen4_blockB->eggmet_plat = 55; // Pal Park
+            gen4_blockB->met_plat = 55; // Pal Park
+
+            // Block C
+            conversions::export_gen4_text(conversions::import_gen3_text(src.pc.nickname, 10), gen4_blockC->nickname, 10);
+            gen4_blockC->hometown = ((gen3_misc->origin_info & ~0xFC3F) >> 6);
+
+            // Block D
+            conversions::export_gen4_text(conversions::import_gen3_text(src.pc.otname, 7), gen4_blockD->otname, 7);
+            // TODO: egg met, met
+            gen4_blockD->eggmet_dp = 55; // Pal Park
+            gen4_blockD->met_dp = 55; // Pal Park
+            // TODO: Pokerus
+            gen4_blockD->ball = uint8_t((gen3_misc->origin_info & 0x7800) >> 11);
+            gen4_blockD->metlevel_otgender = uint8_t(gen3_misc->origin_info & 0x7F);
+            if(gen3_misc->origin_info & (1<<15)) gen4_blockD->metlevel_otgender |= (1<<7);
+            gen4_blockD->encounter_info = 0; // Pal Park
+            gen4_blockD->ball_hgss = uint8_t((gen3_misc->origin_info & 0x7800) >> 11);
+
+            // Party info
+            dst.level = src.level;
+            memcpy(&(dst.current_hp), &(src.current_hp), 14);
         }
     } /* namespace conversions */
 } /* namespace pkmn */

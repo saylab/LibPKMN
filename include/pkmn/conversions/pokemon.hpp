@@ -78,6 +78,8 @@ namespace pkmn
         void PKMN_API gen1_to_gen2(const native::gen1_party_pokemon_t &src, native::gen2_party_pokemon_t &dst);
 
         void PKMN_API gen2_to_gen1(const native::gen2_party_pokemon_t &src, native::gen1_party_pokemon_t &dst);
+
+        void PKMN_API gen3_to_gen4(const native::gen3_party_pokemon_t &src, native::nds_party_pokemon_t &dst);
     }
 }
 
