@@ -119,6 +119,9 @@ def convert_header(header):
         for var in header.classes[cls]["properties"]["public"]:
             output += generate_rename_line(str(var["name"]), False) + "\n"
 
+        for enum in header.classes[cls]._public_enums:
+            output += generate_rename_line(str(header.classes[cls]._public_enums[enum]["name"]), True) + "\n"
+
     return output
 
 if __name__ == "__main__":
