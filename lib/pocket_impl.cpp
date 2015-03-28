@@ -85,7 +85,7 @@ namespace pkmn
         if(amount < 0 or amount > 99)
             throw std::runtime_error("Item amount must be 0-99.");
 
-        for(int i = 0; i < _item_list.size(); i++)
+        for(size_t i = 0; i < _item_list.size(); i++)
         {
             if(_item_list[i].item.name == item_name)
             {
@@ -96,7 +96,7 @@ namespace pkmn
             }
         }
 
-        if(_item_list.size() < _pocket_size)
+        if(_item_list.size() < size_t(_pocket_size))
         {
             bag_slot_t bag_slot;
             bag_slot.item   = _pokedex->get_item_entry(item_name);

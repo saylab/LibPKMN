@@ -93,7 +93,7 @@ namespace pkmn
             uint16_t _item_bag_offset, _item_pc_offset, _current_pokemon_box_num_offset;
             uint16_t _pc_box_names_offset, _pokemon_party_offset, _pokedex_owned_offset;
             uint16_t _pokedex_seen_offset, _current_pokemon_box_offset, _player_gender_offset;
-            uint16_t _pokemon_pc_offset, _checksum1_offset, _checksum2_offset;
+            uint16_t _pokemon_pc_offset;
 
             native::gen2_item_bag_t*      _item_bag;
             native::gen2_item_pc_t*       _item_pc;
