@@ -31,6 +31,7 @@
 
     #include "pkmn/types/contest_stats.hpp"
     #include "pkmn/types/markings.hpp"
+    #include "pkmn/types/pokerus.hpp"
     #include "pkmn/types/prng.hpp"
     #include "pkmn/types/ribbons.hpp"
     #include "pkmn/types/super_training_medals.hpp"
@@ -40,6 +41,7 @@
 %}
 
 %include "pkmn/types/markings.hpp"
+%include "pkmn/types/pokerus.hpp"
 %include "pkmn/types/prng.hpp"
 %include "pkmn/types/ribbons.hpp"
 %include "pkmn/types/super_training_medals.hpp"
