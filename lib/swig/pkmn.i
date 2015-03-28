@@ -67,6 +67,7 @@ namespace pkmn
 %ignore pkmn::pkstring::set(const std::string&);
 %ignore pkmn::pkstring::set(const wchar_t*);
 %ignore pkmn::pkstring::set(const std::wstring&);
+%ignore pkmn::pokerus_t::operator uint8_t;
 %ignore pkmn::hoenn_ribbons_t::operator uint32_t;
 %ignore pkmn::sinnoh_ribbons1_t::operator uint16_t;
 %ignore pkmn::sinnoh_ribbons2_t::operator uint16_t;

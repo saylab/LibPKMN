@@ -29,6 +29,7 @@
 %include "pkmn_pkstring.i"
 %include "pkmn_nature.i"
 %include "pkmn_pokedex.i"
+%include "pkmn_pokerus.i"
 %include "pkmn_shared_ptr.i"
 
 %ignore pkmn::trainer::LIBPKMN_PUBLIC_ID;
@@ -45,14 +46,12 @@
     #include "pkmn/types/contest_stats.hpp"
     #include "pkmn/types/markings.hpp"
     #include "pkmn/types/pkstring.hpp"
-    #include "pkmn/types/pokerus.hpp"
     #include "pkmn/types/prng.hpp"
     #include "pkmn/types/ribbons.hpp"
     #include "pkmn/types/super_training_medals.hpp"
 %}
 
 %include "pkmn/types/markings.hpp"
-%include "pkmn/types/pokerus.hpp"
 %include "pkmn/types/prng.hpp"
 %include "pkmn/types/ribbons.hpp"
 %include "pkmn/types/super_training_medals.hpp"
