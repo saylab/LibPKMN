@@ -38,6 +38,8 @@ namespace pkmn
             pkmn::pkstring get_trainer_name() const;
             void set_trainer_name(const pkmn::pkstring& trainer_name);
 
+            PKMN_INLINE const std::vector<uint8_t>& get_raw() const {return _data;}
+
             uint16_t get_game_id() const;
 
         protected:

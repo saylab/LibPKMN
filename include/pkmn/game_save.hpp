@@ -42,6 +42,8 @@ namespace pkmn
             virtual pkmn::pkstring get_trainer_name() const = 0;
             virtual void set_trainer_name(const pkmn::pkstring &trainer_name) = 0;
 
+            virtual const std::vector<uint8_t>& get_raw() const = 0;
+
             virtual uint16_t get_game_id() const = 0;            
     };
 }

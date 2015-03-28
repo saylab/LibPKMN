@@ -49,6 +49,7 @@ namespace pkmn
  * Ignore C++ operators and some duplicate constructors.
  * Their functionality will be replicated in the other languages.
  */
+%ignore pkmn::game_save::get_raw;
 %ignore pkmn::pokemon::get_native;
 %ignore pkmn::dict::operator[];
 %ignore pkmn::markings_t::operator uint8_t;
