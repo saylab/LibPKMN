@@ -361,9 +361,34 @@ namespace pkmn
             gen4_blockD->encounter_info = 0; // Pal Park
             gen4_blockD->ball_hgss = uint8_t((gen3_misc->origin_info & 0x7800) >> 11);
 
+            set_nds_pokemon_checksum(dst.pc);
+
             // Party info
             dst.level = src.level;
             memcpy(&(dst.current_hp), &(src.current_hp), 14);
+        }
+
+        void gen4_to_gen5(const native::nds_party_pokemon_t &src, native::nds_party_pokemon_t &dst)
+        {
+            CONNECT_TO_DB(db);
+
+            const native::nds_pokemon_blockA_t* src_blockA = &(src.pc.blocks.blockA);
+            const native::nds_pokemon_blockB_t* src_blockB = &(src.pc.blocks.blockB);
+            const native::nds_pokemon_blockC_t* src_blockC = &(src.pc.blocks.blockC);
+            const native::nds_pokemon_blockD_t* src_blockD = &(src.pc.blocks.blockD);
+
+            native::nds_pokemon_blockA_t* dst_blockA = &(dst.pc.blocks.blockA);
+            native::nds_pokemon_blockB_t* dst_blockB = &(dst.pc.blocks.blockB);
+            native::nds_pokemon_blockC_t* dst_blockC = &(dst.pc.blocks.blockC);
+            native::nds_pokemon_blockD_t* dst_blockD = &(dst.pc.blocks.blockD);
+
+            dst = src;
+
+            dst_blockA->species = CONVERT_POKEMON_GAME_INDEX(src_blockA->species, Versions::HEARTGOLD, Versions::BLACK_2);
+            dst_blockA->held_item = CONVERT_ITEM_GAME_INDEX(src_blockA->species, Versions::HEARTGOLD, Versions::BLACK_2);
+            dst_blockB->nature = dst.pc.personality % 24;
+
+            set_nds_pokemon_checksum(dst.pc);
         }
     } /* namespace conversions */
 } /* namespace pkmn */
