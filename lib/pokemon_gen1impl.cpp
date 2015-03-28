@@ -197,6 +197,16 @@ namespace pkmn
         return pkmn::super_training_medals_t();
     }
 
+    // No Pokérus in Generation I
+    pkmn::pokerus_t pokemon_gen1impl::get_pokerus() const
+    {
+        pkmn::pokerus_t pokerus;
+        pokerus.strain = pkmn::pokerus_t::A;
+        pokerus.num_days = 0;
+
+        return pokerus;
+    }
+
     /*
      * Setting Non-battle info
      */
@@ -221,6 +231,12 @@ namespace pkmn
 
     // No Super Training in Generation I
     void pokemon_gen1impl::set_super_training_medals(PKMN_UNUSED(const pkmn::super_training_medals_t &super_training_medals))
+    {
+        /* NOP */
+    }
+
+    // No Pokérus in Generation I
+    void pokemon_gen1impl::set_pokerus(PKMN_UNUSED(const pkmn::pokerus_t &pokerus))
     {
         /* NOP */
     }

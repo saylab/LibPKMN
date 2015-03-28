@@ -63,6 +63,7 @@ namespace pkmn
             }
             while((_blockA->ev_hp  + _blockA->ev_atk   + _blockA->ev_def +
                    _blockA->ev_spd + _blockA->ev_spatk + _blockA->ev_spdef) > 510);
+            _blockA->pokerus = pkmn::pokerus_t();
 
             conversions::export_modern_text(_pokedex_entry.species_name,
                                             _blockB->nickname, 12);
@@ -201,6 +202,11 @@ namespace pkmn
         return _blockA->super_training_medals;
     }
 
+    pkmn::pokerus_t pokemon_gen6impl::get_pokerus() const
+    {
+        return _blockA->pokerus;
+    }
+
     /*
      * Setting Non-Battle Info
      */
@@ -228,6 +234,12 @@ namespace pkmn
     {
         pkmn::super_training_medals_t _super_training_medals = super_training_medals;
         _blockA->super_training_medals = _super_training_medals;
+    }
+
+    void pokemon_gen6impl::set_pokerus(const pkmn::pokerus_t &pokerus)
+    {
+        pkmn::pokerus_t _pokerus = pokerus;
+        _blockA->pokerus = _pokerus;
     }
 
     /*

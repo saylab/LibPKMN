@@ -56,7 +56,7 @@ namespace pkmn
             for(size_t i = 0; i < 4; i++)
                 _raw.pc.move_pps[i] = database::get_move_pp(_raw.pc.moves[i]);
             _raw.pc.friendship = uint8_t(_pokedex_entry.base_friendship);
-            _raw.pc.pokerus = 0;
+            _raw.pc.pokerus = pkmn::pokerus_t();
             if(_version_id == Versions::CRYSTAL)
             {
                 _raw.pc.caught_data = ((level  &0x3F) << 8);
@@ -203,6 +203,11 @@ namespace pkmn
         return pkmn::super_training_medals_t();
     }
 
+    pkmn::pokerus_t pokemon_gen2impl::get_pokerus() const
+    {
+        return _raw.pc.pokerus;
+    }
+
     /*
      * Setting Non-battle Info
      */
@@ -229,6 +234,12 @@ namespace pkmn
     void pokemon_gen2impl::set_super_training_medals(PKMN_UNUSED(const pkmn::super_training_medals_t &super_training_medals))
     {
         /* NOP */
+    }
+
+    void pokemon_gen2impl::set_pokerus(const pkmn::pokerus_t &pokerus)
+    {
+        pkmn::pokerus_t _pokerus = pokerus;
+        _raw.pc.pokerus = _pokerus;
     }
 
     /*

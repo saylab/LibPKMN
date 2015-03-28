@@ -73,11 +73,11 @@ namespace pkmn
             }
             while((_effort->ev_hp  + _effort->ev_atk   + _effort->ev_def +
                    _effort->ev_spd + _effort->ev_spatk + _effort->ev_spdef) > 510);
-            // TODO: Pokerus
+            _misc->pokerus = pkmn::pokerus_t();
             _misc->met_location = 255; // Fateful encounter
 
             // Origin info
-            _misc->origin_info = (level  &0x7F);
+            _misc->origin_info = (level & 0x7F);
             _misc->origin_info |= (uint8_t(database::get_version_game_index(_version_id)) << 6);
             _misc->origin_info |= (uint8_t(Balls::LUXURY_BALL) << 10);
 
@@ -89,6 +89,7 @@ namespace pkmn
 
             _raw.condition = 0; // OK
             _set_level(level);
+            _raw.pokerus_time = pkmn::pokerus_t(_misc->pokerus).num_days;
             _set_stats(); // Will populate party portion
             _set_form();
         }
@@ -190,6 +191,11 @@ namespace pkmn
         return pkmn::super_training_medals_t();
     }
 
+    pkmn::pokerus_t pokemon_gen3impl::get_pokerus() const
+    {
+        return _misc->pokerus;
+    }
+
     /*
      * Setting Non-Battle Info
      */
@@ -217,6 +223,12 @@ namespace pkmn
         /* NOP */
     }
 
+    void pokemon_gen3impl::set_pokerus(const pkmn::pokerus_t &pokerus)
+    {
+        pkmn::pokerus_t _pokerus = pokerus;
+        _misc->pokerus = _pokerus;
+    }
+
     /*
      * Getting Trainer Info
      */
@@ -233,7 +245,7 @@ namespace pkmn
 
     pkmn::pkstring pokemon_gen3impl::get_trainer_gender() const
     {
-        return (_misc->origin_info  &(1<<15)) ? "Female" : "Male";
+        return (_misc->origin_info & (1<<15)) ? "Female" : "Male";
     }
 
     uint32_t pokemon_gen3impl::get_trainer_id() const
@@ -253,7 +265,7 @@ namespace pkmn
 
     pkmn::pkstring pokemon_gen3impl::get_ball() const
     {
-        return database::get_ball_name((_misc->origin_info  &0x7800) >> 11);
+        return database::get_ball_name((_misc->origin_info & 0x7800) >> 11);
     }
 
     pkmn::pkstring pokemon_gen3impl::get_original_game() const
@@ -263,7 +275,7 @@ namespace pkmn
 
     uint8_t pokemon_gen3impl::get_met_level() const
     {
-        return (_misc->origin_info  &0x7F);
+        return (_misc->origin_info & 0x7F);
     }
 
     /*
@@ -330,7 +342,7 @@ namespace pkmn
         if(level > 100)
             throw std::runtime_error("Level must be 0-100.");
 
-        _misc->origin_info = 0xFFC0 | (uint8_t(level)  &0x3F);
+        _misc->origin_info = 0xFFC0 | (uint8_t(level) & 0x3F);
     }
 
     /*
@@ -371,9 +383,9 @@ namespace pkmn
         else
         {
             /*
-             * Gender is determined by (personality  &0xFF).
+             * Gender is determined by (personality & 0xFF).
              */
-            uint8_t truncated_pid = (_raw.pc.personality  &0xFF);
+            uint8_t truncated_pid = (_raw.pc.personality & 0xFF);
             if(chance_male == 0.875)     return (truncated_pid > 30)  ? "Male" : "Female";
             else if(chance_male == 0.75) return (truncated_pid > 63)  ? "Male" : "Female";
             else if(chance_male == 0.5)  return (truncated_pid > 126) ? "Male" : "Female";
@@ -508,7 +520,7 @@ namespace pkmn
         else
         {
             /*
-             * Gender is determined by (personality  &0xFF).
+             * Gender is determined by (personality & 0xFF).
              */
             if(gender.std_string() == "Male") _raw.pc.personality |= 0xFF;
             else                              _raw.pc.personality &= 0x00;

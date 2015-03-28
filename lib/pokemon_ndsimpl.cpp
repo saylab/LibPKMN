@@ -91,7 +91,7 @@ namespace pkmn
                 _blockD->eggmet_dp = 2008; // Distant land
                 _blockD->met_dp = 2008; // Distant land
             }
-            // TODO: Pokerus
+            _blockD->pokerus = pkmn::pokerus_t();
             if(_version_id != Versions::HEARTGOLD and _version_id != Versions::SOULSILVER)
                 _blockD->ball = Balls::LUXURY_BALL;
             _blockD->metlevel_otgender = (level | ~(1<<31));
@@ -223,6 +223,11 @@ namespace pkmn
         return pkmn::super_training_medals_t();
     }
 
+    pkmn::pokerus_t pokemon_ndsimpl::get_pokerus() const
+    {
+        return _blockD->pokerus;
+    }
+
     /*
      * Setting Non-Battle Info
      */
@@ -252,6 +257,12 @@ namespace pkmn
     void pokemon_ndsimpl::set_super_training_medals(PKMN_UNUSED(const pkmn::super_training_medals_t &super_training_medals))
     {
         /* NOP */
+    }
+
+    void pokemon_ndsimpl::set_pokerus(const pkmn::pokerus_t &pokerus)
+    {
+        pkmn::pokerus_t _pokerus = pokerus;
+        _blockD->pokerus = _pokerus;
     }
 
     /*
