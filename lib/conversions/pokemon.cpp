@@ -373,14 +373,8 @@ namespace pkmn
             CONNECT_TO_DB(db);
 
             const native::nds_pokemon_blockA_t* src_blockA = &(src.pc.blocks.blockA);
-            const native::nds_pokemon_blockB_t* src_blockB = &(src.pc.blocks.blockB);
-            const native::nds_pokemon_blockC_t* src_blockC = &(src.pc.blocks.blockC);
-            const native::nds_pokemon_blockD_t* src_blockD = &(src.pc.blocks.blockD);
-
             native::nds_pokemon_blockA_t* dst_blockA = &(dst.pc.blocks.blockA);
             native::nds_pokemon_blockB_t* dst_blockB = &(dst.pc.blocks.blockB);
-            native::nds_pokemon_blockC_t* dst_blockC = &(dst.pc.blocks.blockC);
-            native::nds_pokemon_blockD_t* dst_blockD = &(dst.pc.blocks.blockD);
 
             dst = src;
 

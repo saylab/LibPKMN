@@ -113,7 +113,7 @@ namespace pkmn
         _none = false;
         try
         {
-            uint16_t pokemon_id = database::get_pokemon_id(_blockA->species, Versions::X);
+            PKMN_UNUSED(uint16_t pokemon_id) = database::get_pokemon_id(_blockA->species, Versions::X);
             _invalid = false;
         }
         catch(...)
@@ -124,8 +124,8 @@ namespace pkmn
         _set_stats();
     }
 
-    pokemon_gen6impl::pokemon_gen6impl(const pkmn::native::gen6_party_pokemon_t& raw,
-                                     uint8_t version):
+    pokemon_gen6impl::pokemon_gen6impl(const pkmn::native::gen6_party_pokemon_t &raw,
+                                       uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.pc.blocks.blockA.species, version),
                      version),
         _raw(raw)
@@ -138,7 +138,7 @@ namespace pkmn
         _none = false;
         try
         {
-            uint16_t pokemon_id = database::get_pokemon_id(_blockA->species, Versions::HEARTGOLD);
+            PKMN_UNUSED(uint16_t pokemon_id) = database::get_pokemon_id(_blockA->species, Versions::HEARTGOLD);
             _invalid = false;
         }
         catch(...)
@@ -149,7 +149,7 @@ namespace pkmn
         _set_stats();
     }
 
-    pokemon_gen6impl::pokemon_gen6impl(const pokemon_gen6impl& other):
+    pokemon_gen6impl::pokemon_gen6impl(const pokemon_gen6impl &other):
         pokemon_impl(other),
         _raw(other._raw)
     {
@@ -160,7 +160,7 @@ namespace pkmn
         // TODO: set form
     }
 
-    pokemon_gen6impl& pokemon_gen6impl::operator=(const pokemon_gen6impl& other)
+    pokemon_gen6impl &pokemon_gen6impl::operator=(const pokemon_gen6impl &other)
     {
         pokemon_impl::operator=(other);
 
@@ -205,18 +205,18 @@ namespace pkmn
      * Setting Non-Battle Info
      */
 
-    void pokemon_gen6impl::set_contest_stats(const pkmn::contest_stats_t& contest_stats)
+    void pokemon_gen6impl::set_contest_stats(const pkmn::contest_stats_t &contest_stats)
     {
         _blockA->contest_stats = contest_stats;
     }
 
-    void pokemon_gen6impl::set_markings(const pkmn::markings_t& markings)
+    void pokemon_gen6impl::set_markings(const pkmn::markings_t &markings)
     {
         pkmn::markings_t _markings = markings;
         _blockA->markings = _markings;
     }
 
-    void pokemon_gen6impl::set_ribbons(const pkmn::ribbons_t& ribbons)
+    void pokemon_gen6impl::set_ribbons(const pkmn::ribbons_t &ribbons)
     {
         pkmn::ribbons_t _ribbons = ribbons;
         uint64_t ribbonint = _ribbons.kalos;
@@ -246,7 +246,7 @@ namespace pkmn
 
     pkmn::pkstring pokemon_gen6impl::get_trainer_gender() const
     {
-        return (_blockD->metlevel_otgender & (1<<31)) ? "Female" : "Male";
+        return (_blockD->metlevel_otgender  &(1<<31)) ? "Female" : "Male";
     }
 
     uint32_t pokemon_gen6impl::get_trainer_id() const
@@ -276,14 +276,14 @@ namespace pkmn
 
     uint8_t pokemon_gen6impl::get_met_level() const
     {
-        return _blockD->metlevel_otgender & ~(1<<7);
+        return _blockD->metlevel_otgender  &~(1<<7);
     }
 
     /*
      * Setting Trainer Info
      */
 
-    void pokemon_gen6impl::set_nickname(const pkmn::pkstring& nickname)
+    void pokemon_gen6impl::set_nickname(const pkmn::pkstring &nickname)
     {
         if(nickname.length() > 12)
             throw std::runtime_error("Nicknames can have a maximum of 10 characters in Generation VI.");
@@ -296,7 +296,7 @@ namespace pkmn
             _blockB->iv_isegg_isnicknamed |= (1<<31);
     }
 
-    void pokemon_gen6impl::set_trainer_name(const pkmn::pkstring& trainer_name)
+    void pokemon_gen6impl::set_trainer_name(const pkmn::pkstring &trainer_name)
     {
         if(trainer_name.length() > 7)
             throw std::runtime_error("Trainer names can have a maximum of 7 characters in Generation IV-V.");
@@ -304,7 +304,7 @@ namespace pkmn
         conversions::export_modern_text(trainer_name, _blockD->otname, 7);
     }
 
-    void pokemon_gen6impl::set_trainer_gender(const pkmn::pkstring& gender)
+    void pokemon_gen6impl::set_trainer_gender(const pkmn::pkstring &gender)
     {
         if(gender.std_string() != "Male" and gender.std_string() != "Female")
             throw std::runtime_error("Gender must be male or female.");
@@ -330,12 +330,12 @@ namespace pkmn
         _blockA->ot_sid = id;
     }
 
-    void pokemon_gen6impl::set_ball(const pkmn::pkstring& ball)
+    void pokemon_gen6impl::set_ball(const pkmn::pkstring &ball)
     {
         _blockD->ball = database::get_ball_id(ball);
     }
 
-    void pokemon_gen6impl::set_original_game(const pkmn::pkstring& game)
+    void pokemon_gen6impl::set_original_game(const pkmn::pkstring &game)
     {
         uint8_t generation = database::get_generation(game);
         if(generation < 3 or generation > get_generation())
@@ -351,7 +351,7 @@ namespace pkmn
             throw std::runtime_error("Level must be 0-100.");
 
         _blockD->metlevel_otgender &= (1<<7);
-        _blockD->metlevel_otgender |= (level & ~(1<<7));
+        _blockD->metlevel_otgender |= (level  &~(1<<7));
     }
 
     /*
@@ -380,8 +380,8 @@ namespace pkmn
 
     pkmn::pkstring pokemon_gen6impl::get_gender() const
     {
-        if(_blockA->form_encounterinfo & (1<<1))      return "Female";
-        else if(_blockA->form_encounterinfo & (1<<2)) return "Genderless";
+        if(_blockA->form_encounterinfo  &(1<<1))      return "Female";
+        else if(_blockA->form_encounterinfo  &(1<<2)) return "Genderless";
         else                                          return "Male";
     }
 
@@ -478,7 +478,7 @@ namespace pkmn
         _set_stats();
     }
 
-    void pokemon_gen6impl::set_gender(const pkmn::pkstring& gender)
+    void pokemon_gen6impl::set_gender(const pkmn::pkstring &gender)
     {
         float chance_male = _pokedex_entry.chance_male;
         float chance_female = _pokedex_entry.chance_female;
@@ -499,12 +499,12 @@ namespace pkmn
     }
 
     // NOTE: this affects many things in Generation IV
-    void pokemon_gen6impl::set_nature(const pkmn::pkstring& nature_name)
+    void pokemon_gen6impl::set_nature(const pkmn::pkstring &nature_name)
     {
         _blockA->nature = database::get_nature_id(nature_name);
     }
 
-    void pokemon_gen6impl::set_ability(const pkmn::pkstring& ability)
+    void pokemon_gen6impl::set_ability(const pkmn::pkstring &ability)
     {
         std::ostringstream query_stream;
         query_stream << "SELECT generation_id FROM abilities WHERE id="
@@ -516,7 +516,7 @@ namespace pkmn
         // TODO: can we get away with not setting ability_num?
     }
 
-    void pokemon_gen6impl::set_form(const pkmn::pkstring& form)
+    void pokemon_gen6impl::set_form(const pkmn::pkstring &form)
     {
         uint16_t form_id    = database::get_form_id(_pokedex_entry.species_name, form);
         uint8_t  form_index = database::get_form_game_index(form_id);
@@ -607,7 +607,7 @@ namespace pkmn
     }
 
     // NOTE: this affects stats
-    void pokemon_gen6impl::set_EV(const pkmn::pkstring& stat, uint16_t value)
+    void pokemon_gen6impl::set_EV(const pkmn::pkstring &stat, uint16_t value)
     {
         if(stat == "Special")
             throw std::runtime_error("The Special value is only in Generations I-II.");
@@ -683,7 +683,7 @@ namespace pkmn
     }
 
     // NOTE: this affects stats
-    void pokemon_gen6impl::set_IV(const pkmn::pkstring& stat, uint16_t value)
+    void pokemon_gen6impl::set_IV(const pkmn::pkstring &stat, uint16_t value)
     {
         if(stat == "Special")
             throw std::runtime_error("The Special value is only in Generations I-II.");
@@ -717,7 +717,7 @@ namespace pkmn
         }
     }
 
-    void pokemon_gen6impl::set_status(const pkmn::pkstring& status)
+    void pokemon_gen6impl::set_status(const pkmn::pkstring &status)
     {
         if(not conversions::reverse_retro_statuses.has_key(status))
             throw std::runtime_error("Invalid status given.");
@@ -725,7 +725,7 @@ namespace pkmn
         _raw.status = conversions::reverse_retro_statuses.at(status);
     }
 
-    void pokemon_gen6impl::set_held_item(const pkmn::pkstring& item_name)
+    void pokemon_gen6impl::set_held_item(const pkmn::pkstring &item_name)
     {
         _blockA->held_item = database::get_item_game_index(item_name,
                                                            database::get_version_name(_version_id));
@@ -750,7 +750,7 @@ namespace pkmn
         }
     }
 
-    void pokemon_gen6impl::get_moves(pkmn::moveset_t& moves) const
+    void pokemon_gen6impl::get_moves(pkmn::moveset_t &moves) const
     {
         moves.clear();
         for(size_t i = 0; i < 4; i++) moves.push_back(get_move(i+1));
@@ -764,7 +764,7 @@ namespace pkmn
         return _blockB->move_pps[pos-1];
     }
 
-    void pokemon_gen6impl::get_move_PPs(std::vector<uint8_t>& move_PPs) const
+    void pokemon_gen6impl::get_move_PPs(std::vector<uint8_t> &move_PPs) const
     {
         move_PPs.clear();
         for(size_t i = 0; i < 4; i++) move_PPs.push_back(_blockB->move_pps[i+1]); 
@@ -774,7 +774,7 @@ namespace pkmn
      * Setting Move Info
      */
 
-    void pokemon_gen6impl::set_move(const pkmn::pkstring& move_name, uint8_t pos)
+    void pokemon_gen6impl::set_move(const pkmn::pkstring &move_name, uint8_t pos)
     {   
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
@@ -823,7 +823,7 @@ namespace pkmn
 
     const void* pokemon_gen6impl::get_native()
     {
-        return& _raw;
+        return &_raw;
     }
 
     void pokemon_gen6impl::_set_experience(const uint32_t exp)
@@ -875,7 +875,7 @@ namespace pkmn
         else
         {
             /*
-             * Gender is determined by (personality & 0xFF).
+             * Gender is determined by (personality  &0xFF).
              * If the personality is below a certain number, the Pokemon will be female.
              */
             uint8_t truncated_pid = (_blockA->personality & 0xFF);

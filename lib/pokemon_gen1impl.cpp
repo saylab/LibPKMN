@@ -64,7 +64,7 @@ namespace pkmn
         }
     }
 
-    pokemon_gen1impl::pokemon_gen1impl(const pkmn::native::gen1_pc_pokemon_t& raw,
+    pokemon_gen1impl::pokemon_gen1impl(const pkmn::native::gen1_pc_pokemon_t &raw,
                                        uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.species, Versions::RED),
                      version),
@@ -75,7 +75,7 @@ namespace pkmn
         _none = false;
         try
         {
-            uint16_t pokemon_id = database::get_pokemon_id(_raw.pc.species, Versions::RED);
+            PKMN_UNUSED(uint16_t pokemon_id) = database::get_pokemon_id(_raw.pc.species, Versions::RED);
             _invalid = false;
         }
         catch(...)
@@ -86,9 +86,9 @@ namespace pkmn
         _set_stats(); // Will populate party portion of struct
     }
 
-    pokemon_gen1impl::pokemon_gen1impl(const pkmn::native::gen1_pc_pokemon_t& raw,
-                                       const pkmn::pkstring& nickname,
-                                       const pkmn::pkstring& otname,
+    pokemon_gen1impl::pokemon_gen1impl(const pkmn::native::gen1_pc_pokemon_t &raw,
+                                       const pkmn::pkstring &nickname,
+                                       const pkmn::pkstring &otname,
                                        uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.species, Versions::RED),
                      version),
@@ -99,7 +99,7 @@ namespace pkmn
         _none = false;
         try
         {
-            uint16_t pokemon_id = database::get_pokemon_id(_raw.pc.species, Versions::RED);
+            PKMN_UNUSED(uint16_t pokemon_id) = database::get_pokemon_id(_raw.pc.species, Versions::RED);
             _invalid = false;
         }
         catch(...)
@@ -110,7 +110,7 @@ namespace pkmn
         _set_stats(); // Will populate party portion of struct
     }
 
-    pokemon_gen1impl::pokemon_gen1impl(const pkmn::native::gen1_party_pokemon_t& raw,
+    pokemon_gen1impl::pokemon_gen1impl(const pkmn::native::gen1_party_pokemon_t &raw,
                                        uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.pc.species, Versions::RED),
                      version),
@@ -121,7 +121,7 @@ namespace pkmn
         _none = false;
         try
         {
-            uint16_t pokemon_id = database::get_pokemon_id(_raw.pc.species, Versions::RED);
+            PKMN_UNUSED(uint16_t pokemon_id) = database::get_pokemon_id(_raw.pc.species, Versions::RED);
             _invalid = false;
         }
         catch(...)
@@ -130,9 +130,9 @@ namespace pkmn
         }
     }
 
-    pokemon_gen1impl::pokemon_gen1impl(const pkmn::native::gen1_party_pokemon_t& raw,
-                                       const pkmn::pkstring& nickname,
-                                       const pkmn::pkstring& otname,
+    pokemon_gen1impl::pokemon_gen1impl(const pkmn::native::gen1_party_pokemon_t &raw,
+                                       const pkmn::pkstring &nickname,
+                                       const pkmn::pkstring &otname,
                                        uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.pc.species, Versions::RED),
                      version),
@@ -143,7 +143,7 @@ namespace pkmn
         _none = false;
         try
         {
-            uint16_t pokemon_id = database::get_pokemon_id(_raw.pc.species, Versions::RED);
+            PKMN_UNUSED(uint16_t pokemon_id) = database::get_pokemon_id(_raw.pc.species, Versions::RED);
             _invalid = false;
         }
         catch(...)
@@ -152,13 +152,13 @@ namespace pkmn
         }
     }
 
-    pokemon_gen1impl::pokemon_gen1impl(const pokemon_gen1impl& other):
+    pokemon_gen1impl::pokemon_gen1impl(const pokemon_gen1impl &other):
         pokemon_impl(other),
         _raw(other._raw),
         _nickname(other._nickname),
         _otname(other._otname) {};
 
-    pokemon_gen1impl& pokemon_gen1impl::operator=(const pokemon_gen1impl& other)
+    pokemon_gen1impl &pokemon_gen1impl::operator=(const pokemon_gen1impl &other)
     {
         pokemon_impl::operator=(other);
 
@@ -202,25 +202,25 @@ namespace pkmn
      */
 
     // No contests in Generation I
-    void pokemon_gen1impl::set_contest_stats(const pkmn::contest_stats_t& contest_stats)
+    void pokemon_gen1impl::set_contest_stats(PKMN_UNUSED(const pkmn::contest_stats_t &contest_stats))
     {
         /* NOP */
     }
 
     // No markings in Generation I
-    void pokemon_gen1impl::set_markings(const pkmn::markings_t& markings)
+    void pokemon_gen1impl::set_markings(PKMN_UNUSED(const pkmn::markings_t &markings))
     {
         /* NOP */
     }
 
     // No ribbons in Generation I
-    void pokemon_gen1impl::set_ribbons(const pkmn::ribbons_t& ribbons)
+    void pokemon_gen1impl::set_ribbons(PKMN_UNUSED(const pkmn::ribbons_t &ribbons))
     {
         /* NOP */
     }
 
     // No Super Training in Generation I
-    void pokemon_gen1impl::set_super_training_medals(const pkmn::super_training_medals_t& super_training_medals)
+    void pokemon_gen1impl::set_super_training_medals(PKMN_UNUSED(const pkmn::super_training_medals_t &super_training_medals))
     {
         /* NOP */
     }
@@ -285,7 +285,7 @@ namespace pkmn
      * Setting Trainer Info
      */
 
-    void pokemon_gen1impl::set_nickname(const pkmn::pkstring& nickname)
+    void pokemon_gen1impl::set_nickname(const pkmn::pkstring &nickname)
     {
         if(nickname.length() > 10)
             throw std::runtime_error("Nicknames have a maximum of 10 characters.");
@@ -293,7 +293,7 @@ namespace pkmn
         _nickname = nickname;
     }
 
-    void pokemon_gen1impl::set_trainer_name(const pkmn::pkstring& trainer_name)
+    void pokemon_gen1impl::set_trainer_name(const pkmn::pkstring &trainer_name)
     {
         if(trainer_name.length() > 7)
             throw std::runtime_error("Trainer names have a maximum of 7 characters.");
@@ -302,7 +302,7 @@ namespace pkmn
     }
 
     // All trainers are male in Generation I
-    void pokemon_gen1impl::set_trainer_gender(const pkmn::pkstring& gender)
+    void pokemon_gen1impl::set_trainer_gender(PKMN_UNUSED(const pkmn::pkstring &gender))
     {
         /* NOP */
     }
@@ -320,25 +320,25 @@ namespace pkmn
     }
 
     // Trainer ID is only 16 bits, all publicly exposed, in Generation I
-    void pokemon_gen1impl::set_trainer_secret_id(uint16_t id)
+    void pokemon_gen1impl::set_trainer_secret_id(PKMN_UNUSED(uint16_t id))
     {
         /* NOP */
     }
 
     // Ball not recorded in Generation I
-    void pokemon_gen1impl::set_ball(const pkmn::pkstring& ball)
+    void pokemon_gen1impl::set_ball(PKMN_UNUSED(const pkmn::pkstring &ball))
     {
         /* NOP */
     }
 
     // Original game not recorded in Generation I
-    void pokemon_gen1impl::set_original_game(const pkmn::pkstring& game)
+    void pokemon_gen1impl::set_original_game(PKMN_UNUSED(const pkmn::pkstring &game))
     {
         /* NOP */
     }
 
     // Met level not recorded in Generation I
-    void pokemon_gen1impl::set_met_level(uint8_t level)
+    void pokemon_gen1impl::set_met_level(PKMN_UNUSED(uint8_t level))
     {
         /* NOP */
     }
@@ -428,19 +428,19 @@ namespace pkmn
      */
 
     // No personality in Generation I
-    void pokemon_gen1impl::set_personality(uint32_t personality)
+    void pokemon_gen1impl::set_personality(PKMN_UNUSED(uint32_t personality))
     {
         /* NOP */
     }
 
     // No friendship in Generation I
-    void pokemon_gen1impl::set_friendship(uint8_t friendship)
+    void pokemon_gen1impl::set_friendship(PKMN_UNUSED(uint8_t friendship))
     {
         /* NOP */
     }
 
     // NOTE: this changes experience and stats
-    void pokemon_gen1impl::set_level(uint8_t level)
+    void pokemon_gen1impl::set_level(PKMN_UNUSED(uint8_t level))
     {
         /*
          * Pokémon in Generation I-II cannot be level 1.
@@ -462,37 +462,37 @@ namespace pkmn
     }
 
     // No gender in Generation I
-    void pokemon_gen1impl::set_gender(const pkmn::pkstring& gender)
+    void pokemon_gen1impl::set_gender(PKMN_UNUSED(const pkmn::pkstring &gender))
     {
         /* NOP */
     }
 
     // No natures in Generation I
-    void pokemon_gen1impl::set_nature(const pkmn::pkstring& nature_name)
+    void pokemon_gen1impl::set_nature(PKMN_UNUSED(const pkmn::pkstring &nature_name))
     {
         /* NOP */
     }
 
     // No abilities in Generation I
-    void pokemon_gen1impl::set_ability(const pkmn::pkstring& ability)
+    void pokemon_gen1impl::set_ability(PKMN_UNUSED(const pkmn::pkstring &ability))
     {
         /* NOP */
     }
 
     // No alternate forms in Generation I
-    void pokemon_gen1impl::set_form(const pkmn::pkstring& form)
+    void pokemon_gen1impl::set_form(PKMN_UNUSED(const pkmn::pkstring &form))
     {
         /* NOP */
     }
 
     // No shininess in Generation I
-    void pokemon_gen1impl::set_shiny(bool value)
+    void pokemon_gen1impl::set_shiny(PKMN_UNUSED(bool value))
     {
         /* NOP */
     }
 
     // NOTE: this affects stats
-    void pokemon_gen1impl::set_EV(const pkmn::pkstring& stat, uint16_t value)
+    void pokemon_gen1impl::set_EV(const pkmn::pkstring &stat, uint16_t value)
     {
         if(stat == "Special Attack" or stat == "Special Defense")
             throw std::runtime_error("This stat is not present in Generation I.");
@@ -527,7 +527,7 @@ namespace pkmn
     }
 
     // NOTE: this affects stats and other IV's
-    void pokemon_gen1impl::set_IV(const pkmn::pkstring& stat, uint16_t value)
+    void pokemon_gen1impl::set_IV(const pkmn::pkstring &stat, uint16_t value)
     {
         if(stat == "Special Attack" or stat == "Special Defense")
             throw std::runtime_error("This stat is not present in Generation I.");
@@ -556,7 +556,7 @@ namespace pkmn
         return _pokedex->get_item_entry(Items::NONE);
     }
 
-    void pokemon_gen1impl::set_status(const pkmn::pkstring& status)
+    void pokemon_gen1impl::set_status(const pkmn::pkstring &status)
     {
         if(not conversions::reverse_retro_statuses.has_key(status))
             throw std::runtime_error("Invalid status given.");
@@ -565,7 +565,7 @@ namespace pkmn
     }
 
     // No held items in Generation I
-    void pokemon_gen1impl::set_held_item(const pkmn::pkstring& item_name)
+    void pokemon_gen1impl::set_held_item(PKMN_UNUSED(const pkmn::pkstring &item_name))
     {
         /* NOP */
     }
@@ -589,7 +589,7 @@ namespace pkmn
         }
     }
 
-    void pokemon_gen1impl::get_moves(pkmn::moveset_t& moves) const
+    void pokemon_gen1impl::get_moves(pkmn::moveset_t &moves) const
     {
         moves.clear();
         for(size_t i = 0; i < 4; i++)
@@ -604,14 +604,14 @@ namespace pkmn
         return _raw.pc.move_pps[pos-1];
     }
 
-    void pokemon_gen1impl::get_move_PPs(std::vector<uint8_t>& move_PPs) const
+    void pokemon_gen1impl::get_move_PPs(std::vector<uint8_t> &move_PPs) const
     {
         move_PPs.clear();
         for(size_t i = 0; i < 4; i++)
             move_PPs.push_back(_raw.pc.move_pps[i+1]); 
     }
 
-    void pokemon_gen1impl::set_move(const pkmn::pkstring& move_name, uint8_t pos)
+    void pokemon_gen1impl::set_move(const pkmn::pkstring &move_name, uint8_t pos)
     {
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");

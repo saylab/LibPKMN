@@ -170,35 +170,35 @@ namespace pkmn
                     return;
             }
 
-            for(size_t i = 0; i < item_pocket->get_size(); i++)
+            for(int i = 0; i < item_pocket->get_size(); i++)
             {
                 if(raw_item_pocket[i].index == 0 or raw_item_pocket[i].count == 0) break;
                 else item_pocket->set_item_amount(database::get_item_id(raw_item_pocket[i].index,
                                                                         item_pocket->get_game_id()),
                                                   (raw_item_pocket[i].count ^ security_key));
             }
-            for(size_t i = 0; i < keyitem_pocket->get_size(); i++)
+            for(int i = 0; i < keyitem_pocket->get_size(); i++)
             {
                 if(raw_keyitem_pocket[i].index == 0 or raw_keyitem_pocket[i].count == 0) break;
                 else keyitem_pocket->set_item_amount(database::get_item_id(raw_keyitem_pocket[i].index,
                                                                            keyitem_pocket->get_game_id()),
                                                      (raw_keyitem_pocket[i].count ^ security_key));
             }
-            for(size_t i = 0; i < ball_pocket->get_size(); i++)
+            for(int i = 0; i < ball_pocket->get_size(); i++)
             {
                 if(raw_ball_pocket[i].index == 0 or raw_ball_pocket[i].count == 0) break;
                 else ball_pocket->set_item_amount(database::get_item_id(raw_ball_pocket[i].index,
                                                                         ball_pocket->get_game_id()),
                                                   (raw_ball_pocket[i].count ^ security_key));
             }
-            for(size_t i = 0; i < tmhm_pocket->get_size(); i++)
+            for(int i = 0; i < tmhm_pocket->get_size(); i++)
             {
                 if(raw_tmhm_pocket[i].index == 0 or raw_tmhm_pocket[i].count == 0) break;
                 else tmhm_pocket->set_item_amount(database::get_item_id(raw_tmhm_pocket[i].index,
                                                                         tmhm_pocket->get_game_id()),
                                                   (raw_tmhm_pocket[i].count ^ security_key));
             }
-            for(size_t i = 0; i < berry_pocket->get_size(); i++)
+            for(int i = 0; i < berry_pocket->get_size(); i++)
             {
                 if(raw_berry_pocket[i].index == 0 or raw_berry_pocket[i].count == 0) break;
                 else berry_pocket->set_item_amount(database::get_item_id(raw_berry_pocket[i].index,
@@ -307,7 +307,7 @@ namespace pkmn
             const native::modern_item_t* raw_keyitem_pocket    = CONST_RAW_NDS_POCKET(key_items);
 
             // Items
-            for(size_t i = 0; i < item_pocket->get_size(); i++)
+            for(int i = 0; i < item_pocket->get_size(); i++)
             {
                 if(raw_item_pocket[i].index == 0 or raw_item_pocket[i].count == 0) break;
                 else item_pocket->set_item_amount(database::get_item_id(raw_item_pocket[i].index,
@@ -316,7 +316,7 @@ namespace pkmn
             }
 
             // Medicine
-            for(size_t i = 0; i < medicine_pocket->get_size(); i++)
+            for(int i = 0; i < medicine_pocket->get_size(); i++)
             {
                 if(raw_medicine_pocket[i].index == 0 or raw_medicine_pocket[i].count == 0) break;
                 else medicine_pocket->set_item_amount(database::get_item_id(raw_medicine_pocket[i].index,
@@ -325,7 +325,7 @@ namespace pkmn
             }
 
             // Balls
-            for(size_t i = 0; i < ball_pocket->get_size(); i++)
+            for(int i = 0; i < ball_pocket->get_size(); i++)
             {
                 if(raw_ball_pocket[i].index == 0 or raw_ball_pocket[i].count == 0) break;
                 else ball_pocket->set_item_amount(database::get_item_id(raw_ball_pocket[i].index,
@@ -334,7 +334,7 @@ namespace pkmn
             }
 
             // TMs/HMs
-            for(size_t i = 0; i < tmhm_pocket->get_size(); i++)
+            for(int i = 0; i < tmhm_pocket->get_size(); i++)
             {
                 if(raw_tmhm_pocket[i].index == 0 or raw_tmhm_pocket[i].count == 0) break;
                 else tmhm_pocket->set_item_amount(database::get_item_id(raw_tmhm_pocket[i].index,
@@ -343,7 +343,7 @@ namespace pkmn
             }
 
             // Berries
-            for(size_t i = 0; i < berry_pocket->get_size(); i++)
+            for(int i = 0; i < berry_pocket->get_size(); i++)
             {
                 if(raw_berry_pocket[i].index == 0 or raw_berry_pocket[i].count == 0) break;
                 else berry_pocket->set_item_amount(database::get_item_id(raw_berry_pocket[i].index,
@@ -351,8 +351,17 @@ namespace pkmn
                                                    raw_berry_pocket[i].count);
             }
 
+            // Mail
+            for(int i = 0; i < mail_pocket->get_size(); i++)
+            {
+                if(raw_mail_pocket[i].index == 0 or raw_mail_pocket[i].count == 0) break;
+                else mail_pocket->set_item_amount(database::get_item_id(raw_mail_pocket[i].index,
+                                                                         version_id),
+                                                   raw_mail_pocket[i].count);
+            }
+
             // Battle Items
-            for(size_t i = 0; i < battleitem_pocket->get_size(); i++)
+            for(int i = 0; i < battleitem_pocket->get_size(); i++)
             {
                 if(raw_battleitem_pocket[i].index == 0 or raw_battleitem_pocket[i].count == 0) break;
                 else battleitem_pocket->set_item_amount(database::get_item_id(raw_battleitem_pocket[i].index,
@@ -361,7 +370,7 @@ namespace pkmn
             }
 
             // Key Items
-            for(size_t i = 0; i < keyitem_pocket->get_size(); i++)
+            for(int i = 0; i < keyitem_pocket->get_size(); i++)
             {
                 if(raw_keyitem_pocket[i].index == 0 or raw_keyitem_pocket[i].count == 0) break;
                 else keyitem_pocket->set_item_amount(database::get_item_id(raw_keyitem_pocket[i].index,

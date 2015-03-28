@@ -25,7 +25,7 @@ namespace pkmn
 {
     pkmn::shared_ptr<SQLite::Database> db;
 
-    void get_version_list(std::vector<pkmn::pkstring>& game_vec)
+    void get_version_list(std::vector<pkmn::pkstring> &game_vec)
     {
         CONNECT_TO_DB(db);
         game_vec.clear();
@@ -35,7 +35,7 @@ namespace pkmn
         while(query.executeStep()) game_vec.push_back((const char*)query.getColumn(0));
     }
 
-    void get_version_group_list(std::vector<pkmn::pkstring>& game_group_vec)
+    void get_version_group_list(std::vector<pkmn::pkstring> &game_group_vec)
     {
         // Must be done manually
         game_group_vec.clear();
@@ -53,7 +53,7 @@ namespace pkmn
         game_group_vec.push_back("Black 2/White 2");
     }
 
-    void get_item_list(std::vector<pkmn::pkstring>& item_vec, uint16_t game)
+    void get_item_list(std::vector<pkmn::pkstring> &item_vec, uint16_t game)
     {
         CONNECT_TO_DB(db);
         item_vec.clear();
@@ -147,7 +147,7 @@ namespace pkmn
         }
     }
 
-    void get_pokemon_list(std::vector<pkmn::pkstring>& pokemon_vec, uint16_t game)
+    void get_pokemon_list(std::vector<pkmn::pkstring> &pokemon_vec, uint16_t game)
     {
         CONNECT_TO_DB(db);
         pokemon_vec.clear();
@@ -165,7 +165,7 @@ namespace pkmn
         }
     }
 
-    void get_type_list(std::vector<pkmn::pkstring>& type_vec, uint16_t gen)
+    void get_type_list(std::vector<pkmn::pkstring> &type_vec, uint16_t gen)
     {
         CONNECT_TO_DB(db);
         type_vec.clear();
@@ -181,16 +181,20 @@ namespace pkmn
         }
     }
 
-    void get_ability_list(std::vector<pkmn::pkstring>& ability_vec, uint16_t gen)
+    void get_ability_list(std::vector<pkmn::pkstring> &ability_vec, uint16_t gen)
     {
         CONNECT_TO_DB(db);
         ability_vec.clear();
 
-        SQLite::Statement query(*db, "SELECT name FROM ability_names WHERE local_language_id=9");
+        std::ostringstream query_stream;
+        query_stream << "SELECT name FROM ability_names WHERE local_language_id=9 AND ability_id IN "
+                     << "(SELECT id FROM abilities WHERE generation_id <= " << gen << ")";
+        SQLite::Statement query(*db, query_stream.str().c_str());
+
         while(query.executeStep()) ability_vec.push_back((const char*)(query.getColumn(0)));
     }
 
-    void get_nature_list(std::vector<pkmn::pkstring>& nature_vec)
+    void get_nature_list(std::vector<pkmn::pkstring> &nature_vec)
     {
         CONNECT_TO_DB(db);
         nature_vec.clear();
@@ -199,9 +203,9 @@ namespace pkmn
         while(query.executeStep()) nature_vec.push_back((const char*)query.getColumn(0));
     }
 
-    void get_pokemon_of_type(pokemon_entry_vector_t& pkmn_vector,
-                             const pkmn::pkstring& type1,
-                             const pkmn::pkstring& type2,
+    void get_pokemon_of_type(pokemon_entry_vector_t &pkmn_vector,
+                             const pkmn::pkstring &type1,
+                             const pkmn::pkstring &type2,
                              uint16_t generation,
                              bool lax)
     {
@@ -210,7 +214,9 @@ namespace pkmn
 
         std::stringstream query_stream;
         std::vector<int> applicable_ids;
-        int pkmn_id, type1_id, type2_id;
+        int pkmn_id = 0;
+        int type1_id = 0;
+        int type2_id = 0;
 
         // Get type IDs
         query_stream << "SELECT type_id FROM type_names WHERE name='" << type1 << "'";

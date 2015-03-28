@@ -247,7 +247,7 @@ widetext PokeText::toWidetext(const wchar_t* wc, size_t length) {
     }
     return output;
 }
-widetext PokeText::toWidetext(const char* mb, size_t length) {
+widetext PokeText::toWidetext(const char* mb) {
     return boost::locale::conv::utf_to_utf<wchar_t>(mb);
 }
 

@@ -48,7 +48,7 @@ namespace pkmn
             else
             {
                 buffer = new uint8_t[sizeof(gen1_party_pokemon_t)];
-                for(size_t i = 0; i < len; i++)
+                for(Py_ssize_t i = 0; i < len; i++)
                     buffer[i] = uint8_t(PyInt_AsLong(PyList_GetItem(pyobject, i)));
             }
 
@@ -70,7 +70,7 @@ namespace pkmn
             if(pkmn->get_generation() != 1)
                 throw std::runtime_error("Invalid input: wrong generation.");
 
-            int len = sizeof(gen1_party_pokemon_t);
+            size_t len = sizeof(gen1_party_pokemon_t);
             PyObject* pyList = PyList_New(len);
 
             uint8_t* buffer = new uint8_t[len];
@@ -109,7 +109,7 @@ namespace pkmn
             else
             {
                 buffer = new uint8_t[sizeof(gen2_party_pokemon_t)];
-                for(size_t i = 0; i < len; i++)
+                for(Py_ssize_t i = 0; i < len; i++)
                     buffer[i] = uint8_t(PyInt_AsLong(PyList_GetItem(pyobject, i)));
             }
 
@@ -131,7 +131,7 @@ namespace pkmn
             if(pkmn->get_generation() != 2)
                 throw std::runtime_error("Invalid input: wrong generation.");
 
-            int len = sizeof(gen2_party_pokemon_t);
+            size_t len = sizeof(gen2_party_pokemon_t);
             PyObject* pyList = PyList_New(len);
 
             uint8_t* buffer = new uint8_t[len];

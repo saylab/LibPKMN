@@ -77,7 +77,7 @@ namespace pkmn
             _misc->met_location = 255; // Fateful encounter
 
             // Origin info
-            _misc->origin_info = (level & 0x7F);
+            _misc->origin_info = (level  &0x7F);
             _misc->origin_info |= (uint8_t(database::get_version_game_index(_version_id)) << 6);
             _misc->origin_info |= (uint8_t(Balls::LUXURY_BALL) << 10);
 
@@ -94,7 +94,7 @@ namespace pkmn
         }
     }
 
-    pokemon_gen3impl::pokemon_gen3impl(const pkmn::native::gen3_pc_pokemon_t& raw,
+    pokemon_gen3impl::pokemon_gen3impl(const pkmn::native::gen3_pc_pokemon_t &raw,
                                        uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.blocks.growth.species, version),
                      version)
@@ -107,7 +107,7 @@ namespace pkmn
         _none = false;
         try
         {
-            uint16_t pokemon_id = database::get_pokemon_id(_growth->species, Versions::EMERALD);
+            PKMN_UNUSED(uint16_t pokemon_id) = database::get_pokemon_id(_growth->species, Versions::EMERALD);
             _invalid = false;
         }
         catch(...)
@@ -118,7 +118,7 @@ namespace pkmn
         _set_stats(); // Will populate party portion
     }
 
-    pokemon_gen3impl::pokemon_gen3impl(const pkmn::native::gen3_party_pokemon_t& raw,
+    pokemon_gen3impl::pokemon_gen3impl(const pkmn::native::gen3_party_pokemon_t &raw,
                                        uint8_t version):
         pokemon_impl(database::get_pokemon_id(raw.pc.blocks.growth.species, version),
                      version),
@@ -131,7 +131,7 @@ namespace pkmn
         _none = false;
         try
         {
-            uint16_t pokemon_id = database::get_pokemon_id(_growth->species, Versions::EMERALD);
+            PKMN_UNUSED(uint16_t pokemon_id) = database::get_pokemon_id(_growth->species, Versions::EMERALD);
             _invalid = false;
         }
         catch(...)
@@ -140,7 +140,7 @@ namespace pkmn
         }
     };
 
-    pokemon_gen3impl::pokemon_gen3impl(const pokemon_gen3impl& other):
+    pokemon_gen3impl::pokemon_gen3impl(const pokemon_gen3impl &other):
         pokemon_impl(other),
         _raw(other._raw)
     {
@@ -150,7 +150,7 @@ namespace pkmn
         _misc = &(_raw.pc.blocks.misc);
     }
 
-    pokemon_gen3impl& pokemon_gen3impl::operator=(const pokemon_gen3impl& other)
+    pokemon_gen3impl &pokemon_gen3impl::operator=(const pokemon_gen3impl &other)
     {
         pokemon_impl::operator=(other);
 
@@ -194,25 +194,25 @@ namespace pkmn
      * Setting Non-Battle Info
      */
 
-    void pokemon_gen3impl::set_contest_stats(const pkmn::contest_stats_t& contest_stats)
+    void pokemon_gen3impl::set_contest_stats(const pkmn::contest_stats_t &contest_stats)
     {
         _effort->contest_stats = contest_stats;
     }
 
-    void pokemon_gen3impl::set_markings(const pkmn::markings_t& markings)
+    void pokemon_gen3impl::set_markings(const pkmn::markings_t &markings)
     {
         pkmn::markings_t _markings = markings;
         _raw.pc.markings = _markings;
     }
 
-    void pokemon_gen3impl::set_ribbons(const pkmn::ribbons_t& ribbons)
+    void pokemon_gen3impl::set_ribbons(const pkmn::ribbons_t &ribbons)
     {
         pkmn::ribbons_t _ribbons = ribbons;
         _misc->ribbons_obedience = _ribbons.hoenn;
     }
 
     // No Super Training in Generation III
-    void pokemon_gen3impl::set_super_training_medals(const pkmn::super_training_medals_t &super_training_medals)
+    void pokemon_gen3impl::set_super_training_medals(PKMN_UNUSED(const pkmn::super_training_medals_t &super_training_medals))
     {
         /* NOP */
     }
@@ -233,7 +233,7 @@ namespace pkmn
 
     pkmn::pkstring pokemon_gen3impl::get_trainer_gender() const
     {
-        return (_misc->origin_info & (1<<15)) ? "Female" : "Male";
+        return (_misc->origin_info  &(1<<15)) ? "Female" : "Male";
     }
 
     uint32_t pokemon_gen3impl::get_trainer_id() const
@@ -253,7 +253,7 @@ namespace pkmn
 
     pkmn::pkstring pokemon_gen3impl::get_ball() const
     {
-        return database::get_ball_name((_misc->origin_info & 0x7800) >> 11);
+        return database::get_ball_name((_misc->origin_info  &0x7800) >> 11);
     }
 
     pkmn::pkstring pokemon_gen3impl::get_original_game() const
@@ -263,7 +263,7 @@ namespace pkmn
 
     uint8_t pokemon_gen3impl::get_met_level() const
     {
-        return (_misc->origin_info & 0x7F);
+        return (_misc->origin_info  &0x7F);
     }
 
     /*
@@ -330,7 +330,7 @@ namespace pkmn
         if(level > 100)
             throw std::runtime_error("Level must be 0-100.");
 
-        _misc->origin_info = 0xFFC0 | (uint8_t(level) & 0x3F);
+        _misc->origin_info = 0xFFC0 | (uint8_t(level)  &0x3F);
     }
 
     /*
@@ -371,9 +371,9 @@ namespace pkmn
         else
         {
             /*
-             * Gender is determined by (personality & 0xFF).
+             * Gender is determined by (personality  &0xFF).
              */
-            uint8_t truncated_pid = (_raw.pc.personality & 0xFF);
+            uint8_t truncated_pid = (_raw.pc.personality  &0xFF);
             if(chance_male == 0.875)     return (truncated_pid > 30)  ? "Male" : "Female";
             else if(chance_male == 0.75) return (truncated_pid > 63)  ? "Male" : "Female";
             else if(chance_male == 0.5)  return (truncated_pid > 126) ? "Male" : "Female";
@@ -508,7 +508,7 @@ namespace pkmn
         else
         {
             /*
-             * Gender is determined by (personality & 0xFF).
+             * Gender is determined by (personality  &0xFF).
              */
             if(gender.std_string() == "Male") _raw.pc.personality |= 0xFF;
             else                              _raw.pc.personality &= 0x00;
@@ -731,7 +731,7 @@ namespace pkmn
         }
     }
 
-    void pokemon_gen3impl::get_moves(pkmn::moveset_t& moves) const
+    void pokemon_gen3impl::get_moves(pkmn::moveset_t &moves) const
     {
         moves.clear();
         for(size_t i = 0; i < 4; i++) moves.push_back(get_move(i+1));
@@ -745,7 +745,7 @@ namespace pkmn
         return _attacks->move_pps[pos-1];
     }
 
-    void pokemon_gen3impl::get_move_PPs(std::vector<uint8_t>& move_PPs) const
+    void pokemon_gen3impl::get_move_PPs(std::vector<uint8_t> &move_PPs) const
     {
         move_PPs.clear();
         for(size_t i = 0; i < 4; i++) move_PPs.push_back(_attacks->move_pps[i+1]); 

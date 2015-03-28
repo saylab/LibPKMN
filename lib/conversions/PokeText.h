@@ -29,7 +29,7 @@ public:
     static poketext toPoketext(const uint16_t* arr, size_t length);
     //these convert it from native c strings to widetext
     static widetext toWidetext(const wchar_t* wc, size_t length);
-    static widetext toWidetext(const char* mb, size_t length);
+    static widetext toWidetext(const char* mb);
 };
 
 }

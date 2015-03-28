@@ -187,7 +187,7 @@ namespace pkmn
             return pkmn::pkstring(PokeLib::PokeText::convertFrom(pokelib_text));
         }
 
-        void export_gen4_text(const pkmn::pkstring &text, uint16_t* buffer, uint8_t max_len)
+        void export_gen4_text(const pkmn::pkstring &text, uint16_t* buffer, PKMN_UNUSED(uint8_t max_len))
         {
             PokeLib::poketext pokelib_text = PokeLib::PokeText::convertTo(text);
             for(size_t i = 0; i < pokelib_text.size(); i++)

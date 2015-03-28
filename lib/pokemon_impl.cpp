@@ -118,13 +118,13 @@ namespace pkmn
 
     pokemon_impl::pokemon_impl(uint16_t species_id, uint16_t version_id):
         pokemon(),
-        _pokedex(pokedex::make(database::get_version_name(version_id))),
-        _prng(prng::make(database::get_generation(version_id))),
         _species_id(species_id),
         _form_id(species_id),
         _version_id(version_id),
         _none(species_id == Species::NONE),
-        _invalid(species_id == Species::INVALID)
+        _invalid(species_id == Species::INVALID),
+        _pokedex(pokedex::make(database::get_version_name(version_id))),
+        _prng(prng::make(database::get_generation(version_id)))
     {
         CONNECT_TO_DB(_db);
 
@@ -132,15 +132,15 @@ namespace pkmn
     }
 
     pokemon_impl::pokemon_impl(const pokemon_impl& other):
-        _pokedex(copy_pokedex(other._pokedex)),
-        _pokedex_entry(other._pokedex_entry),
-        _prng(copy_prng(other._prng)),
         _species_id(other._species_id),
         _form_id(other._form_id),
         _version_id(other._version_id),
-        _attributes(other._attributes),
         _none(other._none),
-        _invalid(other._invalid) {}
+        _invalid(other._invalid),
+        _attributes(other._attributes),
+        _pokedex(copy_pokedex(other._pokedex)),
+        _pokedex_entry(other._pokedex_entry),
+        _prng(copy_prng(other._prng)) {}
 
     pokemon_impl& pokemon_impl::operator=(const pokemon_impl& other)
     {
