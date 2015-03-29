@@ -16,6 +16,17 @@ namespace pkmn
 {
     namespace io
     {
+        //! Imports a .3gpkm file into LibPKMN.
+        /*!
+         * The .3gpkm file format corresponds to a decrypted Generation III Pokémon.
+         *
+         * This function takes in a .3gpkm file and converts it into a LibPKMN Pokémon.
+         *
+         * \param filename the .3gpkm file to import
+         * \return imported LibPKMN-format Pokémon
+         */
+        pokemon::sptr PKMN_API import_from_3gpkm(const pkmn::pkstring &filename);
+
         //! Exports a LibPKMN-format Pokémon to a .3gpkm file.
         /*!
          * The .3gpkm file format corresponds to a decrypted Generation III Pokémon.
@@ -28,18 +39,18 @@ namespace pkmn
          */
         void PKMN_API export_to_3gpkm(pokemon::sptr pkmn, const pkmn::pkstring &filename);
 
-        //! Imports a .3gpkm file into LibPKMN.
+        //! Imports a .pkm file into LibPKMN.
         /*!
-         * The .3gpkm file format corresponds to a decrypted Generation III Pokémon.
+         * The .pkm file format corresponds to a decrypted Generation IV-V Pokémon.
          *
-         * This function takes in a .3gpkm file and converts it into a LibPKMN Pokémon.
+         * This function takes in a .pkm file and converts it into a LibPKMN Pokémon.
          *
-         * \param filename the .3gpkm file to import
+         * \param filename the .pkm file to import
          * \return imported LibPKMN-format Pokémon
          */
-        pokemon::sptr PKMN_API import_from_3gpkm(const pkmn::pkstring &filename);
+        pokemon::sptr PKMN_API import_from_pkm(const pkmn::pkstring &filename);
 
-        //! Imports a .pkm file into LibPKMN.
+        //! Exports a LibPKMN-format Pokémon into a .pkm file.
         /*!
          * The .pkm file format corresponds to a decrypted Generation IV-V Pokémon.
          *
@@ -51,16 +62,23 @@ namespace pkmn
          */
         void PKMN_API export_to_pkm(pokemon::sptr pkmn, const pkmn::pkstring &filename);
 
-        //! Imports a .pkm file into LibPKMN.
+        //! Imports a .pksql file into LibPKMN.
         /*!
-         * The .pkm file format corresponds to a decrypted Generation IV-V Pokémon.
+         * PKSQL is LibPKMN's Pokémon storage format.
          *
-         * This function takes in a .pkm file and converts it into a LibPKMN Pokémon.
-         *
-         * \param filename the .pkm file to import
-         * \return imported LibPKMN-format Pokémon
+         * \param filename the .pksql file to import
+         * \return imported Pokémon
          */
-        pokemon::sptr PKMN_API import_from_pkm(const pkmn::pkstring &filename);
+        pokemon::sptr import_from_pksql(const pkmn::pkstring &filename);
+
+        //! Exports a Pokémon into a .pksql file.
+        /*!
+         * PKSQL is LibPKMN's Pokémon storage format.
+         *
+         * \param pkmn Pokémon to export
+         * \param filename where to save the .pksql file
+         */
+        void PKMN_API export_to_pksql(pokemon::sptr pkmn, const pkmn::pkstring &filename);
     }
 }
 
