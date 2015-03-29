@@ -31,6 +31,8 @@ namespace pkmn
         strain_t strain;
         int num_days;
 
+        bool is_infected();
+
         //! Convert this struct to its in-game storage method.
         operator uint8_t();
     };

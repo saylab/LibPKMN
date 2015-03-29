@@ -24,6 +24,11 @@ namespace pkmn
         num_days = (native & 0xFF);
     }
 
+    bool pokerus_t::is_infected()
+    {
+        return (num_days > 0);
+    }
+
     pokerus_t::operator uint8_t()
     {
         return (uint8_t(strain << 4) | uint8_t(num_days & 0xFF));
