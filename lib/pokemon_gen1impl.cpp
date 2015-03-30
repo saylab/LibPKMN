@@ -624,7 +624,7 @@ namespace pkmn
     {
         move_PPs.clear();
         for(size_t i = 0; i < 4; i++)
-            move_PPs.push_back(_raw.pc.move_pps[i+1]); 
+            move_PPs.push_back(_raw.pc.move_pps[i]);
     }
 
     void pokemon_gen1impl::set_move(const pkmn::pkstring &move_name, uint8_t pos)

@@ -170,28 +170,29 @@ namespace pkmn
             if(pkmn->get_generation() > 2)
                 pkmn->set_IV("Special Defense", import_query.getColumn(27)); // iv_spdef
             pkmn->set_held_item(database::get_item_name(import_query.getColumn(28))); // held_item_id
-            pkmn->set_move_PP(import_query.getColumn(29), 1); // move1_pp
-            pkmn->set_move_PP(import_query.getColumn(30), 2); // move2_pp
-            pkmn->set_move_PP(import_query.getColumn(31), 3); // move3_pp
-            pkmn->set_move_PP(import_query.getColumn(32), 4); // move4_pp
+            pkmn->set_move_PP(import_query.getColumn(33), 1); // move1_pp
+            pkmn->set_move_PP(import_query.getColumn(34), 2); // move2_pp
+            pkmn->set_move_PP(import_query.getColumn(35), 3); // move3_pp
+            pkmn->set_move_PP(import_query.getColumn(36), 4); // move4_pp
 
-            contest_stats.coolness  = import_query.getColumn(33); // coolness
-            contest_stats.cuteness  = import_query.getColumn(34); // cuteness
-            contest_stats.smartness = import_query.getColumn(35); // smartness
-            contest_stats.toughness = import_query.getColumn(36); // toughness
-            contest_stats.feel      = import_query.getColumn(37); // feel_sheen
+            contest_stats.coolness  = import_query.getColumn(37); // coolness
+            contest_stats.beauty    = import_query.getColumn(38); // coolness
+            contest_stats.cuteness  = import_query.getColumn(39); // cuteness
+            contest_stats.smartness = import_query.getColumn(40); // smartness
+            contest_stats.toughness = import_query.getColumn(41); // toughness
+            contest_stats.feel      = import_query.getColumn(42); // feel_sheen
             pkmn->set_contest_stats(contest_stats);
 
-            pkmn->set_markings(uint8_t(import_query.getColumn(38))); // markings
-            pkmn->set_super_training_medals(uint32_t(import_query.getColumn(39))); // super_training_medals
-            pkmn->set_pokerus(uint8_t(import_query.getColumn(40))); // pokerus
+            pkmn->set_markings(uint8_t(import_query.getColumn(43))); // markings
+            pkmn->set_super_training_medals(uint32_t(import_query.getColumn(44))); // super_training_medals
+            pkmn->set_pokerus(uint8_t(import_query.getColumn(45))); // pokerus
 
-            ribbons.hoenn           = uint32_t(import_query.getColumn(41)); // hoenn_ribbons
-            ribbons.sinnoh.ribbons1 = uint16_t(import_query.getColumn(42)); // sinnoh_ribbons1
-            ribbons.sinnoh.ribbons2 = uint16_t(import_query.getColumn(43)); // sinnoh_ribbons2
-            ribbons.sinnoh.ribbons3 = uint32_t(import_query.getColumn(44)); // sinnoh_ribbons3
-            ribbons.unova           = uint16_t(import_query.getColumn(45)); // unova_ribbons
-            ribbons.kalos           = uint64_t(import_query.getColumn(46)); // kalos_ribbons
+            ribbons.hoenn           = uint32_t(import_query.getColumn(46)); // hoenn_ribbons
+            ribbons.sinnoh.ribbons1 = uint16_t(import_query.getColumn(47)); // sinnoh_ribbons1
+            ribbons.sinnoh.ribbons2 = uint16_t(import_query.getColumn(48)); // sinnoh_ribbons2
+            ribbons.sinnoh.ribbons3 = uint32_t(import_query.getColumn(49)); // sinnoh_ribbons3
+            ribbons.unova           = uint16_t(import_query.getColumn(50)); // unova_ribbons
+            ribbons.kalos           = uint64_t(import_query.getColumn(51)); // kalos_ribbons
             pkmn->set_ribbons(ribbons);
 
             SQLite::Statement attribute_query(pksql, "SELECT * FROM pkmn_attributes");
@@ -213,7 +214,7 @@ namespace pkmn
             pkmn->get_moves(moves);
             pkmn->get_move_PPs(move_PPs);
 
-            SQLite::Database pksql(filename, SQLITE_OPEN_CREATE);
+            SQLite::Database pksql(filename, (SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE));
 
             std::ostringstream export_querystream;
             export_querystream << "CREATE TABLE pkmn (\n"
@@ -268,22 +269,22 @@ namespace pkmn
                                << "    sinnoh_ribbons2       INTEGER NOT NULL,\n"
                                << "    sinnoh_ribbons3       INTEGER NOT NULL,\n"
                                << "    unova_ribbons         INTEGER NOT NULL,\n"
-                               << "    kalos_ribbons         INTEGER NOT NULL,\n"
+                               << "    kalos_ribbons         INTEGER NOT NULL\n"
                                << ");\n";
 
             export_querystream << "INSERT INTO \"pkmn\" VALUES("
                                << pkmn->get_pokemon_id() << ","
                                << pkmn->get_game_id() << ","
-                               << pkmn->get_nickname() << ","
-                               << pkmn->get_trainer_name() << ","
+                               << "'" << pkmn->get_nickname() << "',"
+                               << "'" << pkmn->get_trainer_name() << "',"
                                << (pkmn->get_trainer_gender().std_string() == "Female" ? 0 : 1) << ","
                                << pkmn->get_trainer_id() << ","
                                << database::get_ball_id(pkmn->get_ball()) << ","
                                << pkmn->get_original_game_id() << ","
                                << pkmn->get_met_level() << ","
                                << pkmn->get_personality() << ","
-                               << pkmn->get_friendship() << ","
-                               << pkmn->get_level() << ","
+                               << int(pkmn->get_friendship()) << ","
+                               << int(pkmn->get_level()) << ","
                                << pkmn->get_experience() << ","
                                << (pkmn->get_gender().std_string() == "Female" ? 0 : 1) << ","
                                << pkmn->get_nature_id() << ","
@@ -298,25 +299,26 @@ namespace pkmn
                                << IVs["Attack"] << ","
                                << IVs["Defense"] << ","
                                << IVs["Speed"] << ","
-                               << IVs["Special Attack"] << ","
-                               << IVs["Special Defense"] << ","
+                               << IVs[(pkmn->get_generation() > 2) ? "Special Attack" : "Special"] << ","
+                               << ((pkmn->get_generation() > 2) ? IVs["Special Defense"] : 0) << ","
                                << pkmn->get_item_id() << ","
                                << database::get_move_id(moves[0].name) << ","
                                << database::get_move_id(moves[1].name) << ","
                                << database::get_move_id(moves[2].name) << ","
                                << database::get_move_id(moves[3].name) << ","
-                               << move_PPs[0] << ","
-                               << move_PPs[1] << ","
-                               << move_PPs[2] << ","
-                               << move_PPs[3] << ","
-                               << contest_stats.coolness << ","
-                               << contest_stats.beauty << ","
-                               << contest_stats.cuteness << ","
-                               << contest_stats.smartness << ","
-                               << contest_stats.toughness << ","
-                               << contest_stats.feel << "," // Covers sheen
-                               << uint8_t(pkmn->get_markings()) << ","
+                               << int(move_PPs[0]) << ","
+                               << int(move_PPs[1]) << ","
+                               << int(move_PPs[2]) << ","
+                               << int(move_PPs[3]) << ","
+                               << int(contest_stats.coolness) << ","
+                               << int(contest_stats.beauty) << ","
+                               << int(contest_stats.cuteness) << ","
+                               << int(contest_stats.smartness) << ","
+                               << int(contest_stats.toughness) << ","
+                               << int(contest_stats.feel) << "," // Covers sheen
+                               << int(pkmn->get_markings()) << ","
                                << uint32_t(pkmn->get_super_training_medals()) << ","
+                               << int(pkmn->get_pokerus()) << ","
                                << uint32_t(ribbons.hoenn) << ","
                                << uint16_t(ribbons.sinnoh.ribbons1) << ","
                                << uint16_t(ribbons.sinnoh.ribbons2) << ","
