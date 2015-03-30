@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <sstream>
 
+#include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 
 #include <pkmn/config.hpp>
