@@ -103,10 +103,17 @@ namespace pkmn
             SQLite::Database db(filename);
             int game_id = db.execAndGet("SELECT game_id FROM pkmn;");
 
-            if(database::get_generation(game_id) == 1)
-                return sptr(new pokemon_gen1impl(db));
-            else
-                throw std::runtime_error("Only Generation currently supported.");
+            switch(database::get_generation(game_id))
+            {
+                case 1:
+                    return sptr(new pokemon_gen1impl(db));
+
+                case 2:
+                    return sptr(new pokemon_gen2impl(db));
+
+                default:
+                throw std::runtime_error("Only Generations I-II currently supported.");
+            }
         }
         catch(...) {};
     }
