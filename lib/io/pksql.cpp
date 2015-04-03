@@ -199,7 +199,7 @@ namespace pkmn
             try {pksql = pkmn::database_sptr(new SQLite::Database(filename));}
             catch(...) {return false;}
 
-            return valid(pksql);
+            return pksql::valid(pksql);
 
             return true;
         }
@@ -281,6 +281,9 @@ namespace pkmn
                                                        % id).c_str());
             while(attribute_query.executeStep())
                 pkmn->set_attribute(attribute_query.getColumn(0), attribute_query.getColumn(1));
+
+            if(id > pksql::latest_id)
+                pksql::latest_id = id;
 
             return pkmn;
         }
