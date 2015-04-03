@@ -201,7 +201,7 @@ namespace pkmn
     // No Super Training in Generation II
     pkmn::super_training_medals_t pokemon_gen2impl::get_super_training_medals() const
     {
-        return pkmn::super_training_medals_t();
+        return pkmn::super_training_medals_t(0);
     }
 
     pkmn::pokerus_t pokemon_gen2impl::get_pokerus() const

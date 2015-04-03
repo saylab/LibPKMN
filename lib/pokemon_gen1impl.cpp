@@ -194,7 +194,7 @@ namespace pkmn
     // No Super Training in Generation I
     pkmn::super_training_medals_t pokemon_gen1impl::get_super_training_medals() const
     {
-        return pkmn::super_training_medals_t();
+        return pkmn::super_training_medals_t(0);
     }
 
     // No Pokérus in Generation I
