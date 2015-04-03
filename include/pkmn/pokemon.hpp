@@ -43,6 +43,8 @@ namespace pkmn
             pokemon() {};
             virtual ~pokemon() {};
 
+            static void export_to(sptr pkmn, const pkmn::pkstring &filename);
+
             //! Return the Pokédex entry associated with this species+form
             virtual pkmn::pokemon_entry_t get_pokedex_entry() const = 0;
 

@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE(gen1_pksql_test)
     std::string filename = str(boost::format("pksql_gen1_%d.pksql") % rand());
     fs::path filepath = fs::path(fs::path(pkmn::get_tmp_dir()) / filename);
 
-    pkmn::io::export_to_pksql(pkmn1, filepath.string());
+    pkmn::pokemon::export_to(pkmn1, filename);
     pkmn::pokemon::sptr pkmn2 = pkmn::pokemon::make(filepath.string());
 
     pksql_common_equality_check(pkmn1, pkmn2);
@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_CASE(gen2_pksql_test)
     std::string filename = str(boost::format("pksql_gen2_%d.pksql") % rand());
     fs::path filepath = fs::path(fs::path(pkmn::get_tmp_dir()) / filename);
 
-    pkmn::io::export_to_pksql(pkmn1, filepath.string());
+    pkmn::pokemon::export_to(pkmn1, filename);
     pkmn::pokemon::sptr pkmn2 = pkmn::pokemon::make(filepath.string());
 
     pksql_common_equality_check(pkmn1, pkmn2);

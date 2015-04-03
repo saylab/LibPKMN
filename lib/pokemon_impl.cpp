@@ -168,6 +168,11 @@ namespace pkmn
         return *this;
     }
 
+    void pokemon::export_to(pokemon::sptr pkmn, const pkmn::pkstring &filename)
+    {
+        pkmn::database_sptr output = io::pksql::to(pkmn, filename);
+    }
+
     /*
      * Getting Non-battle info
      */
