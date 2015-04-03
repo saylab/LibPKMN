@@ -10,7 +10,6 @@
 #include <pkmn/native/pokemon.hpp>
 
 #include "pokemon_impl.hpp"
-#include "SQLiteCpp/SQLiteC++.h"
 
 namespace pkmn
 {

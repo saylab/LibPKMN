@@ -169,7 +169,7 @@ namespace pkmn
         _nickname = pkmn_query.getColumn(2); // nickname
         _otname = pkmn_query.getColumn(3); // otname
 
-        _raw.pc.species = database::get_pokemon_game_index(pkmn_query.getColumn(0), Versions::RED);
+        _raw.pc.species = database::get_pokemon_game_index(pkmn_query.getColumn(0), Versions::RED); // pokemon_id
         _raw.pc.types[0] = database::get_type_id(_pokedex_entry.types.first);
         _raw.pc.types[1] = database::get_type_id(_pokedex_entry.types.second);
         _raw.pc.catch_rate = conversions::gen1_catch_rates[_species_id];
@@ -193,8 +193,8 @@ namespace pkmn
         _raw.pc.move_pps[2] = pkmn_query.getColumn(35); // move3_pp
         _raw.pc.move_pps[3] = pkmn_query.getColumn(36); // move4_pp
 
-        _set_stats();
         _set_experience(pkmn_query.getColumn(12)); // experience
+        _set_stats();
 
         SQLite::Statement attributes_query(db, "SELECT * FROM pkmn_attributes");
         while(attributes_query.executeStep())
