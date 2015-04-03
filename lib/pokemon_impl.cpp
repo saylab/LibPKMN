@@ -95,7 +95,7 @@ namespace pkmn
     {
         // Check if PKSQL
         // TODO: .3gpkm, .pkm
-        if(fs::extension(fs::path(filename)) == ".pksql")
+        if(fs::extension(fs::path(filename)) == ".pksql" and io::pksql::valid(filename))
             return io::pksql::from(filename);
         else
             throw std::runtime_error("Invalid file.");
