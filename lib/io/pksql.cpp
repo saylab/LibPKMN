@@ -89,13 +89,13 @@ namespace pkmn
 
         std::string pksql::query(pokemon::sptr pkmn, uint64_t id)
         {
-            pkmn::dict<pkmn::pkstring, uint16_t> EVs = pkmn->get_EVs();
-            pkmn::dict<pkmn::pkstring, uint16_t> IVs = pkmn->get_IVs();
+            pkmn::dict<pkmn::pkstring, int> EVs = pkmn->get_EVs();
+            pkmn::dict<pkmn::pkstring, int> IVs = pkmn->get_IVs();
             pkmn::dict<pkmn::pkstring, int> attributes = pkmn->get_attributes();
             pkmn::contest_stats_t contest_stats = pkmn->get_contest_stats();
             pkmn::ribbons_t ribbons = pkmn->get_ribbons();
             pkmn::moveset_t moves;
-            std::vector<uint8_t> move_PPs;
+            std::vector<int> move_PPs;
             pkmn->get_moves(moves);
             pkmn->get_move_PPs(move_PPs);
 

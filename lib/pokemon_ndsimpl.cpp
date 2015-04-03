@@ -21,10 +21,10 @@
 
 namespace pkmn
 {
-    pokemon_ndsimpl::pokemon_ndsimpl(uint16_t species, uint16_t version,
-                                     uint8_t level,
-                                     uint8_t move1, uint8_t move2,
-                                     uint8_t move3, uint8_t move4):
+    pokemon_ndsimpl::pokemon_ndsimpl(int species, int version,
+                                     int level,
+                                     int move1, int move2,
+                                     int move3, int move4):
         pokemon_impl(species, version)
     {
         _blockA = &(_raw.pc.blocks.blockA);
@@ -46,7 +46,7 @@ namespace pkmn
             _blockA->held_item = Items::NONE;
             _blockA->ot_id = pkmn::trainer::LIBPKMN_TRAINER_ID;
             // Experience set by level
-            _blockA->friendship = uint8_t(_pokedex_entry.base_friendship);
+            _blockA->friendship = int(_pokedex_entry.base_friendship);
             _blockA->ability = (_raw.pc.personality % 2) ?
                                     database::get_ability_id(_pokedex_entry.abilities.second)
                                   : database::get_ability_id(_pokedex_entry.abilities.first);
@@ -120,7 +120,7 @@ namespace pkmn
     }
 
     pokemon_ndsimpl::pokemon_ndsimpl(const pkmn::native::nds_pc_pokemon_t &raw,
-                                     uint8_t version):
+                                     int version):
         pokemon_impl(database::get_pokemon_id(raw.blocks.blockA.species, version),
                      version)
     {
@@ -133,7 +133,7 @@ namespace pkmn
         _none = false;
         try
         {
-            PKMN_UNUSED(uint16_t pokemon_id) = database::get_pokemon_id(_blockA->species, Versions::HEARTGOLD);
+            PKMN_UNUSED(int pokemon_id) = database::get_pokemon_id(_blockA->species, Versions::HEARTGOLD);
             _invalid = false;
         }
         catch(...)
@@ -145,7 +145,7 @@ namespace pkmn
     }
 
     pokemon_ndsimpl::pokemon_ndsimpl(const pkmn::native::nds_party_pokemon_t &raw,
-                                     uint8_t version):
+                                     int version):
         pokemon_impl(database::get_pokemon_id(raw.pc.blocks.blockA.species, version),
                      version),
         _raw(raw)
@@ -157,7 +157,7 @@ namespace pkmn
         _none = false;
         try
         {
-            PKMN_UNUSED(uint16_t pokemon_id) = database::get_pokemon_id(_blockA->species, Versions::HEARTGOLD);
+            PKMN_UNUSED(int pokemon_id) = database::get_pokemon_id(_blockA->species, Versions::HEARTGOLD);
             _invalid = false;
         }
         catch(...)
@@ -179,7 +179,7 @@ namespace pkmn
         // TODO: set form
     }
 
-    pokemon_ndsimpl &pokemon_ndsimpl::operator=(const pokemon_ndsimpl &other)
+    pokemon_ndsimpl& pokemon_ndsimpl::operator=(const pokemon_ndsimpl &other)
     {
         pokemon_impl::operator=(other);
 
@@ -313,7 +313,7 @@ namespace pkmn
         return database::get_version_name(get_original_game_id());
     }
 
-    uint8_t pokemon_ndsimpl::get_met_level() const
+    int pokemon_ndsimpl::get_met_level() const
     {
         return _blockD->metlevel_otgender & ~(1<<7);
     }
@@ -385,7 +385,7 @@ namespace pkmn
 
     void pokemon_ndsimpl::set_original_game(const pkmn::pkstring &game)
     {
-        uint8_t generation = database::get_generation(game);
+        int generation = database::get_generation(game);
         if(generation < 3 or generation > get_generation())
             throw std::runtime_error("Invalid game."); // TODO: more detail
 
@@ -393,7 +393,7 @@ namespace pkmn
     }
 
     // Met level of 0 means Pokemon was hatched
-    void pokemon_ndsimpl::set_met_level(uint8_t level)
+    void pokemon_ndsimpl::set_met_level(int level)
     {
         if(level > 100)
             throw std::runtime_error("Level must be 0-100.");
@@ -411,12 +411,12 @@ namespace pkmn
         return _raw.pc.personality;
     }
 
-    uint8_t pokemon_ndsimpl::get_friendship() const
+    int pokemon_ndsimpl::get_friendship() const
     {
         return _blockA->friendship;
     }
 
-    uint8_t pokemon_ndsimpl::get_level() const
+    int pokemon_ndsimpl::get_level() const
     {
         return _raw.level;
     }
@@ -456,9 +456,9 @@ namespace pkmn
                                               _blockA->ot_pid);
     }
 
-    pkmn::dict<pkmn::pkstring, uint16_t> pokemon_ndsimpl::get_stats() const
+    pkmn::dict<pkmn::pkstring, int> pokemon_ndsimpl::get_stats() const
     {
-        pkmn::dict<pkmn::pkstring, uint16_t> stats;
+        pkmn::dict<pkmn::pkstring, int> stats;
         stats["HP"]              = _raw.max_hp;
         stats["Attack"]          = _raw.atk;
         stats["Defense"]         = _raw.def;
@@ -469,9 +469,9 @@ namespace pkmn
         return stats;
     }
 
-    pkmn::dict<pkmn::pkstring, uint16_t> pokemon_ndsimpl::get_EVs() const
+    pkmn::dict<pkmn::pkstring, int> pokemon_ndsimpl::get_EVs() const
     {
-        pkmn::dict<pkmn::pkstring, uint16_t> EVs;
+        pkmn::dict<pkmn::pkstring, int> EVs;
         EVs["HP"]              = _blockA->ev_hp;
         EVs["Attack"]          = _blockA->ev_atk;
         EVs["Defense"]         = _blockA->ev_def;
@@ -482,9 +482,9 @@ namespace pkmn
         return EVs;
     }
 
-    pkmn::dict<pkmn::pkstring, uint16_t> pokemon_ndsimpl::get_IVs() const
+    pkmn::dict<pkmn::pkstring, int> pokemon_ndsimpl::get_IVs() const
     {
-        pkmn::dict<pkmn::pkstring, uint16_t> IVs;
+        pkmn::dict<pkmn::pkstring, int> IVs;
         IVs["HP"]              = conversions::get_modern_IV(Stats::HP,      _blockB->iv_isegg_isnicknamed);
         IVs["Attack"]          = conversions::get_modern_IV(Stats::ATTACK,  _blockB->iv_isegg_isnicknamed);
         IVs["Defense"]         = conversions::get_modern_IV(Stats::DEFENSE, _blockB->iv_isegg_isnicknamed);
@@ -505,13 +505,13 @@ namespace pkmn
         _raw.pc.personality = personality;
     }
 
-    void pokemon_ndsimpl::set_friendship(uint8_t friendship)
+    void pokemon_ndsimpl::set_friendship(int friendship)
     {
         _blockA->friendship = friendship;
     }
 
     // NOTE: this changes experience and stats
-    void pokemon_ndsimpl::set_level(uint8_t level)
+    void pokemon_ndsimpl::set_level(int level)
     {
         if(level < 1 or level > 100)
             throw std::runtime_error("Level must be 1-100.");
@@ -565,7 +565,7 @@ namespace pkmn
         std::ostringstream query_stream;
         query_stream << "SELECT generation_id FROM abilities WHERE id="
                      << database::get_ability_id(ability);
-        if(uint8_t(_db->execAndGet(query_stream.str().c_str())) > get_generation())
+        if(int(_db->execAndGet(query_stream.str().c_str())) > get_generation())
             throw std::runtime_error("Invalid generation.");
 
         // TODO: check generation
@@ -575,8 +575,8 @@ namespace pkmn
 
     void pokemon_ndsimpl::set_form(const pkmn::pkstring &form)
     {
-        uint16_t form_id    = database::get_form_id(_pokedex_entry.species_name, form);
-        uint8_t  form_index = database::get_form_game_index(form_id);
+        int form_id    = database::get_form_id(_pokedex_entry.species_name, form);
+        int form_index = database::get_form_game_index(form_id);
 
         switch(_species_id)
         {
@@ -689,7 +689,7 @@ namespace pkmn
     }
 
     // NOTE: this affects stats
-    void pokemon_ndsimpl::set_EV(const pkmn::pkstring &stat, uint16_t value)
+    void pokemon_ndsimpl::set_EV(const pkmn::pkstring &stat, int value)
     {
         if(stat == "Special")
             throw std::runtime_error("The Special value is only in Generations I-II.");
@@ -765,7 +765,7 @@ namespace pkmn
     }
 
     // NOTE: this affects stats
-    void pokemon_ndsimpl::set_IV(const pkmn::pkstring &stat, uint16_t value)
+    void pokemon_ndsimpl::set_IV(const pkmn::pkstring &stat, int value)
     {
         if(stat == "Special")
             throw std::runtime_error("The Special value is only in Generations I-II.");
@@ -817,7 +817,7 @@ namespace pkmn
      * Getting Move Info
      */
 
-    pkmn::move_entry_t pokemon_ndsimpl::get_move(uint8_t pos) const
+    pkmn::move_entry_t pokemon_ndsimpl::get_move(int pos) const
     {
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
@@ -838,7 +838,7 @@ namespace pkmn
         for(size_t i = 0; i < 4; i++) moves.push_back(get_move(i+1));
     }
 
-    uint8_t pokemon_ndsimpl::get_move_PP(uint8_t pos) const
+    int pokemon_ndsimpl::get_move_PP(int pos) const
     {
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
@@ -846,7 +846,7 @@ namespace pkmn
         return _blockB->move_pps[pos-1];
     }
 
-    void pokemon_ndsimpl::get_move_PPs(std::vector<uint8_t> &move_PPs) const
+    void pokemon_ndsimpl::get_move_PPs(std::vector<int> &move_PPs) const
     {
         move_PPs.clear();
         for(size_t i = 0; i < 4; i++) move_PPs.push_back(_blockB->move_pps[i+1]); 
@@ -856,7 +856,7 @@ namespace pkmn
      * Setting Move Info
      */
 
-    void pokemon_ndsimpl::set_move(const pkmn::pkstring &move_name, uint8_t pos)
+    void pokemon_ndsimpl::set_move(const pkmn::pkstring &move_name, int pos)
     {   
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
@@ -870,7 +870,7 @@ namespace pkmn
         else throw std::runtime_error("This move does not exist in this generation.");
     }   
 
-    void pokemon_ndsimpl::set_move_PP(uint8_t PP, uint8_t pos)
+    void pokemon_ndsimpl::set_move_PP(int PP, int pos)
     {   
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
@@ -883,22 +883,22 @@ namespace pkmn
      * Database Info
      */
 
-    uint16_t pokemon_ndsimpl::get_original_game_id() const
+    int pokemon_ndsimpl::get_original_game_id() const
     {
         return database::get_version_id(_blockC->hometown);
     }
 
-    uint16_t pokemon_ndsimpl::get_ability_id() const
+    int pokemon_ndsimpl::get_ability_id() const
     {
         return _blockA->ability;
     }
 
-    uint16_t pokemon_ndsimpl::get_item_id() const
+    int pokemon_ndsimpl::get_item_id() const
     {
         return database::get_item_id(_blockA->held_item, _version_id);
     }
 
-    uint16_t pokemon_ndsimpl::get_nature_id() const
+    int pokemon_ndsimpl::get_nature_id() const
     {
         if(get_generation() == 4) return (_raw.pc.personality % 24);
         else return _blockB->nature;
@@ -915,7 +915,7 @@ namespace pkmn
         _raw.level = database::get_level(_species_id, exp);
     }
 
-    void pokemon_ndsimpl::_set_level(const uint8_t level)
+    void pokemon_ndsimpl::_set_level(const int level)
     {
         _raw.level = level;
         _blockA->exp = database::get_experience(_species_id, level);
@@ -923,8 +923,8 @@ namespace pkmn
 
     void pokemon_ndsimpl::_set_stats()
     {
-        pkmn::dict<pkmn::pkstring, uint16_t> stats = _pokedex_entry.base_stats;
-        pkmn::dict<pkmn::pkstring, uint16_t> IVs = get_IVs();
+        pkmn::dict<pkmn::pkstring, int> stats = _pokedex_entry.base_stats;
+        pkmn::dict<pkmn::pkstring, int> IVs = get_IVs();
         pkmn::nature_t nature = get_nature();
 
         _raw.max_hp = calculations::get_modern_stat("HP", stats["HP"], _raw.level,

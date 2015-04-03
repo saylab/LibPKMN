@@ -44,20 +44,20 @@ namespace pkmn
             }
         }
 
-        pkmn::dict<pkmn::pkstring, uint16_t> import_gb_IVs(uint16_t iv_data)
+        pkmn::dict<pkmn::pkstring, int> import_gb_IVs(uint16_t iv_data)
         {
-            pkmn::dict<pkmn::pkstring, uint16_t> IVs = boost::assign::map_list_of
+            pkmn::dict<pkmn::pkstring, int> IVs = boost::assign::map_list_of
                 ("HP",      get_gb_IV(Stats::HP, iv_data))
-                ("Attack",  get_gb_IV(Stats::HP, iv_data))
-                ("Defense", get_gb_IV(Stats::HP, iv_data))
-                ("Speed",   get_gb_IV(Stats::HP, iv_data))
-                ("Special", get_gb_IV(Stats::HP, iv_data))
+                ("Attack",  get_gb_IV(Stats::ATTACK, iv_data))
+                ("Defense", get_gb_IV(Stats::DEFENSE, iv_data))
+                ("Speed",   get_gb_IV(Stats::SPEED, iv_data))
+                ("Special", get_gb_IV(Stats::SPECIAL, iv_data))
             ;
 
             return IVs;
         }
 
-        void export_gb_IV(const pkmn::pkstring &stat, uint8_t value, uint16_t &iv_data)
+        void export_gb_IV(const pkmn::pkstring &stat, int value, uint16_t &iv_data)
         {
             switch(database::get_stat_id(stat))
             {

@@ -34,11 +34,11 @@ namespace fs = boost::filesystem;
 
 namespace pkmn
 {
-    pokemon::sptr pokemon::make(uint16_t species, uint16_t version, uint16_t level,
-                                uint16_t move1,   uint16_t move2,   uint16_t move3,
-                                uint16_t move4)
+    pokemon::sptr pokemon::make(int species, int version, int level,
+                                int move1,   int move2,   int move3,
+                                int move4)
     {
-        uint8_t generation = database::get_generation(version);
+        int generation = database::get_generation(version);
 
         // Check if Pokémon is valid and was present in given version
         std::ostringstream query_stream;
@@ -50,7 +50,7 @@ namespace pkmn
         {
             if(not query.executeStep())
                 throw std::runtime_error("Invalid Pokémon species.");
-            if(uint8_t(query.getColumn(0)) > generation)
+            if(int(query.getColumn(0)) > generation)
                 throw std::runtime_error("This Pokémon was not present in the given version.");
         }
 
@@ -78,7 +78,7 @@ namespace pkmn
         }
     }
 
-    pokemon::sptr pokemon::make(const pkmn::pkstring &name,  const pkmn::pkstring &game, uint16_t level,
+    pokemon::sptr pokemon::make(const pkmn::pkstring &name,  const pkmn::pkstring &game, int level,
                                 const pkmn::pkstring &move1, const pkmn::pkstring &move2,
                                 const pkmn::pkstring &move3, const pkmn::pkstring &move4)
     {
@@ -103,7 +103,7 @@ namespace pkmn
 
     pkmn::shared_ptr<SQLite::Database> pokemon_impl::_db;
 
-    pkmn::dict<uint8_t, std::string> pokemon_impl::_version_dirs = boost::assign::map_list_of
+    pkmn::dict<int, std::string> pokemon_impl::_version_dirs = boost::assign::map_list_of
         (Versions::GOLD,       "gold")
         (Versions::SILVER,     "silver")
         (Versions::CRYSTAL,    "crystal")
@@ -127,7 +127,7 @@ namespace pkmn
     boost::format pokemon_impl::_pokemon_format      = boost::format("%d.png");
     boost::format pokemon_impl::_pokemon_form_format = boost::format("%d-%s.png");
 
-    pokemon_impl::pokemon_impl(uint16_t species_id, uint16_t version_id):
+    pokemon_impl::pokemon_impl(int species_id, int version_id):
         pokemon(),
         _species_id(species_id),
         _form_id(species_id),
@@ -203,7 +203,7 @@ namespace pkmn
         return database::get_version_name(_version_id);
     }
 
-    uint16_t pokemon_impl::get_generation() const
+    int pokemon_impl::get_generation() const
     {
         return database::get_generation(_version_id);
     }
@@ -278,22 +278,22 @@ namespace pkmn
      * Database Info
      */
 
-    uint16_t pokemon_impl::get_species_id() const
+    int pokemon_impl::get_species_id() const
     {
         return _species_id;
     }
 
-    uint16_t pokemon_impl::get_pokemon_id() const
+    int pokemon_impl::get_pokemon_id() const
     {
         return database::get_pokemon_id(_form_id);
     }
 
-    uint16_t pokemon_impl::get_game_id() const
+    int pokemon_impl::get_game_id() const
     {
         return _version_id;
     }
 
-    uint16_t pokemon_impl::get_form_id() const
+    int pokemon_impl::get_form_id() const
     {
         return _form_id;
     }

@@ -240,9 +240,9 @@ namespace pkmn
                                  const pkmn::pkstring& move)
         {
             pkmn::pokemon_entry_t attacker_entry = attacker->get_pokedex_entry();
-            pkmn::dict<pkmn::pkstring, uint16_t> attacker_stats = attacker->get_stats();
+            pkmn::dict<pkmn::pkstring, int> attacker_stats = attacker->get_stats();
             pkmn::pokemon_entry_t defender_entry = defender->get_pokedex_entry();
-            pkmn::dict<pkmn::pkstring, uint16_t> defender_stats = defender->get_stats();
+            pkmn::dict<pkmn::pkstring, int> defender_stats = defender->get_stats();
             pkmn::move_entry_t move_entry        = pkmn::move_entry_t(attacker->get_game(),
                                                                       move);
             pkmn::pkstring attack_stat_name;

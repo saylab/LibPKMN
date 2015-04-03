@@ -7,7 +7,6 @@
 #ifndef INCLUDED_PKMN_TYPES_POKEMON_ENTRY_HPP
 #define INCLUDED_PKMN_TYPES_POKEMON_ENTRY_HPP
 
-#include <cstdint>
 #include <vector>
 
 #include <pkmn/config.hpp>
@@ -27,9 +26,9 @@ namespace pkmn
         pokemon_entry_t() {};
 
         //! Create an entry using the SQLite ID's of the game version, species, and form.
-        pokemon_entry_t(uint16_t version_id,
-                        uint16_t species_id,
-                        uint16_t form_id);
+        pokemon_entry_t(int version_id,
+                        int species_id,
+                        int form_id);
 
         //! Create an entry using the names of the game version, species, and form.
         pokemon_entry_t(const pkmn::pkstring& version_name,
@@ -40,7 +39,7 @@ namespace pkmn
         pkmn::pkstring species_name;
 
         //! Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/National_Pok%C3%A9dex">National Pokédex</a> number.
-        uint16_t pokedex_num;
+        int pokedex_num;
 
         //! Pokémon's form. "Standard" if not in any alternate form.
         pkmn::pkstring form;
@@ -61,13 +60,13 @@ namespace pkmn
         pkmn::pkstring_pair_t egg_groups;
 
         //! Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/Catch_rate">catch rate</a>.
-        uint16_t catch_rate;
+        int catch_rate;
 
         //! The base value that determines how much experience is given when this Pokémon faints.
-        uint16_t exp_yield;
+        int exp_yield;
 
         //! The level of <a href="http://bulbapedia.bulbagarden.net/wiki/Friendship">friendship</a> this Pokémon has upon capture.
-        uint16_t base_friendship;
+        int base_friendship;
 
         //! Pokémon's height.
         float height;
@@ -85,10 +84,10 @@ namespace pkmn
         bool has_gender_differences;
 
         //! Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/Base_stats">base stats</a>, used to determine its specific stats.
-        pkmn::dict<pkmn::pkstring, uint16_t> base_stats;
+        pkmn::dict<pkmn::pkstring, int> base_stats;
 
         //! Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/Effort_value">EV</a> yields.
-        pkmn::dict<pkmn::pkstring, uint16_t> ev_yields;
+        pkmn::dict<pkmn::pkstring, int> ev_yields;
     };
 
     //! List of Pokémon entries.

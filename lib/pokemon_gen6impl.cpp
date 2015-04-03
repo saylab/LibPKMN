@@ -21,10 +21,10 @@
 
 namespace pkmn
 {
-    pokemon_gen6impl::pokemon_gen6impl(uint16_t species, uint16_t version,
-                                       uint8_t level,
-                                       uint8_t move1, uint8_t move2,
-                                       uint8_t move3, uint8_t move4):
+    pokemon_gen6impl::pokemon_gen6impl(int species, int version,
+                                       int level,
+                                       int move1, int move2,
+                                       int move3, int move4):
         pokemon_impl(species, version)
     {
         _blockA = &(_raw.pc.blocks.blockA);
@@ -101,7 +101,7 @@ namespace pkmn
     }
 
     pokemon_gen6impl::pokemon_gen6impl(const pkmn::native::gen6_pc_pokemon_t &raw,
-                                       uint8_t version):
+                                       int version):
         pokemon_impl(database::get_pokemon_id(raw.blocks.blockA.species, version),
                      version)
     {
@@ -126,7 +126,7 @@ namespace pkmn
     }
 
     pokemon_gen6impl::pokemon_gen6impl(const pkmn::native::gen6_party_pokemon_t &raw,
-                                       uint8_t version):
+                                       int version):
         pokemon_impl(database::get_pokemon_id(raw.pc.blocks.blockA.species, version),
                      version),
         _raw(raw)
@@ -161,7 +161,7 @@ namespace pkmn
         // TODO: set form
     }
 
-    pokemon_gen6impl &pokemon_gen6impl::operator=(const pokemon_gen6impl &other)
+    pokemon_gen6impl& pokemon_gen6impl::operator=(const pokemon_gen6impl &other)
     {
         pokemon_impl::operator=(other);
 
@@ -286,7 +286,7 @@ namespace pkmn
         return database::get_version_name(get_original_game_id());
     }
 
-    uint8_t pokemon_gen6impl::get_met_level() const
+    int pokemon_gen6impl::get_met_level() const
     {
         return _blockD->metlevel_otgender  &~(1<<7);
     }
@@ -349,7 +349,7 @@ namespace pkmn
 
     void pokemon_gen6impl::set_original_game(const pkmn::pkstring &game)
     {
-        uint8_t generation = database::get_generation(game);
+        int generation = database::get_generation(game);
         if(generation < 3 or generation > get_generation())
             throw std::runtime_error("Invalid game."); // TODO: more detail
 
@@ -357,7 +357,7 @@ namespace pkmn
     }
 
     // Met level of 0 means Pokemon was hatched
-    void pokemon_gen6impl::set_met_level(uint8_t level)
+    void pokemon_gen6impl::set_met_level(int level)
     {
         if(level > 100)
             throw std::runtime_error("Level must be 0-100.");
@@ -375,12 +375,12 @@ namespace pkmn
         return _blockA->personality;
     }
 
-    uint8_t pokemon_gen6impl::get_friendship() const
+    int pokemon_gen6impl::get_friendship() const
     {
         return _blockC->not_ot_friendship;
     }
 
-    uint8_t pokemon_gen6impl::get_level() const
+    int pokemon_gen6impl::get_level() const
     {
         return _raw.level;
     }
@@ -419,9 +419,9 @@ namespace pkmn
                                               _blockA->ot_pid);
     }
 
-    pkmn::dict<pkmn::pkstring, uint16_t> pokemon_gen6impl::get_stats() const
+    pkmn::dict<pkmn::pkstring, int> pokemon_gen6impl::get_stats() const
     {
-        pkmn::dict<pkmn::pkstring, uint16_t> stats;
+        pkmn::dict<pkmn::pkstring, int> stats;
         stats["HP"]              = _raw.max_hp;
         stats["Attack"]          = _raw.atk;
         stats["Defense"]         = _raw.def;
@@ -432,9 +432,9 @@ namespace pkmn
         return stats;
     }
 
-    pkmn::dict<pkmn::pkstring, uint16_t> pokemon_gen6impl::get_EVs() const
+    pkmn::dict<pkmn::pkstring, int> pokemon_gen6impl::get_EVs() const
     {
-        pkmn::dict<pkmn::pkstring, uint16_t> EVs;
+        pkmn::dict<pkmn::pkstring, int> EVs;
         EVs["HP"]              = _blockA->ev_hp;
         EVs["Attack"]          = _blockA->ev_atk;
         EVs["Defense"]         = _blockA->ev_def;
@@ -445,9 +445,9 @@ namespace pkmn
         return EVs;
     }
 
-    pkmn::dict<pkmn::pkstring, uint16_t> pokemon_gen6impl::get_IVs() const
+    pkmn::dict<pkmn::pkstring, int> pokemon_gen6impl::get_IVs() const
     {
-        pkmn::dict<pkmn::pkstring, uint16_t> IVs;
+        pkmn::dict<pkmn::pkstring, int> IVs;
         IVs["HP"]              = conversions::get_modern_IV(Stats::HP,      _blockB->iv_isegg_isnicknamed);
         IVs["Attack"]          = conversions::get_modern_IV(Stats::ATTACK,  _blockB->iv_isegg_isnicknamed);
         IVs["Defense"]         = conversions::get_modern_IV(Stats::DEFENSE, _blockB->iv_isegg_isnicknamed);
@@ -468,13 +468,13 @@ namespace pkmn
         _blockA->personality = personality;
     }
 
-    void pokemon_gen6impl::set_friendship(uint8_t friendship)
+    void pokemon_gen6impl::set_friendship(int friendship)
     {
         _blockC->not_ot_friendship = friendship;
     }
 
     // NOTE: this changes experience and stats
-    void pokemon_gen6impl::set_level(uint8_t level)
+    void pokemon_gen6impl::set_level(int level)
     {
         if(level < 1 or level > 100)
             throw std::runtime_error("Level must be 1-100.");
@@ -521,7 +521,7 @@ namespace pkmn
         std::ostringstream query_stream;
         query_stream << "SELECT generation_id FROM abilities WHERE id="
                      << database::get_ability_id(ability);
-        if(uint8_t(_db->execAndGet(query_stream.str().c_str())) > get_generation())
+        if(int(_db->execAndGet(query_stream.str().c_str())) > get_generation())
             throw std::runtime_error("Invalid generation.");
 
         _blockA->ability = database::get_ability_id(ability);
@@ -531,7 +531,7 @@ namespace pkmn
     void pokemon_gen6impl::set_form(const pkmn::pkstring &form)
     {
         uint16_t form_id    = database::get_form_id(_pokedex_entry.species_name, form);
-        uint8_t  form_index = database::get_form_game_index(form_id);
+        int  form_index = database::get_form_game_index(form_id);
 
         switch(_species_id)
         {
@@ -619,7 +619,7 @@ namespace pkmn
     }
 
     // NOTE: this affects stats
-    void pokemon_gen6impl::set_EV(const pkmn::pkstring &stat, uint16_t value)
+    void pokemon_gen6impl::set_EV(const pkmn::pkstring &stat, int value)
     {
         if(stat == "Special")
             throw std::runtime_error("The Special value is only in Generations I-II.");
@@ -695,7 +695,7 @@ namespace pkmn
     }
 
     // NOTE: this affects stats
-    void pokemon_gen6impl::set_IV(const pkmn::pkstring &stat, uint16_t value)
+    void pokemon_gen6impl::set_IV(const pkmn::pkstring &stat, int value)
     {
         if(stat == "Special")
             throw std::runtime_error("The Special value is only in Generations I-II.");
@@ -747,7 +747,7 @@ namespace pkmn
      * Getting Move Info
      */
 
-    pkmn::move_entry_t pokemon_gen6impl::get_move(uint8_t pos) const
+    pkmn::move_entry_t pokemon_gen6impl::get_move(int pos) const
     {
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
@@ -768,7 +768,7 @@ namespace pkmn
         for(size_t i = 0; i < 4; i++) moves.push_back(get_move(i+1));
     }
 
-    uint8_t pokemon_gen6impl::get_move_PP(uint8_t pos) const
+    int pokemon_gen6impl::get_move_PP(int pos) const
     {
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
@@ -776,7 +776,7 @@ namespace pkmn
         return _blockB->move_pps[pos-1];
     }
 
-    void pokemon_gen6impl::get_move_PPs(std::vector<uint8_t> &move_PPs) const
+    void pokemon_gen6impl::get_move_PPs(std::vector<int> &move_PPs) const
     {
         move_PPs.clear();
         for(size_t i = 0; i < 4; i++) move_PPs.push_back(_blockB->move_pps[i+1]); 
@@ -786,7 +786,7 @@ namespace pkmn
      * Setting Move Info
      */
 
-    void pokemon_gen6impl::set_move(const pkmn::pkstring &move_name, uint8_t pos)
+    void pokemon_gen6impl::set_move(const pkmn::pkstring &move_name, int pos)
     {   
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
@@ -800,7 +800,7 @@ namespace pkmn
         else throw std::runtime_error("This move does not exist in this generation.");
     }   
 
-    void pokemon_gen6impl::set_move_PP(uint8_t PP, uint8_t pos)
+    void pokemon_gen6impl::set_move_PP(int PP, int pos)
     {   
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
@@ -813,22 +813,22 @@ namespace pkmn
      * Database Info
      */
 
-    uint16_t pokemon_gen6impl::get_original_game_id() const
+    int pokemon_gen6impl::get_original_game_id() const
     {
         return database::get_version_id(_blockD->ot_game);
     }
 
-    uint16_t pokemon_gen6impl::get_ability_id() const
+    int pokemon_gen6impl::get_ability_id() const
     {
         return _blockA->ability;
     }
 
-    uint16_t pokemon_gen6impl::get_item_id() const
+    int pokemon_gen6impl::get_item_id() const
     {
         return database::get_item_id(_blockA->held_item, _version_id);
     }
 
-    uint16_t pokemon_gen6impl::get_nature_id() const
+    int pokemon_gen6impl::get_nature_id() const
     {
         return _blockA->nature;
     }
@@ -844,7 +844,7 @@ namespace pkmn
         _raw.level = database::get_level(_species_id, exp);
     }
 
-    void pokemon_gen6impl::_set_level(const uint8_t level)
+    void pokemon_gen6impl::_set_level(const int level)
     {
         _raw.level = level;
         _blockA->exp = database::get_experience(_species_id, level);
@@ -852,8 +852,8 @@ namespace pkmn
 
     void pokemon_gen6impl::_set_stats()
     {
-        pkmn::dict<pkmn::pkstring, uint16_t> stats = _pokedex_entry.base_stats;
-        pkmn::dict<pkmn::pkstring, uint16_t> IVs = get_IVs();
+        pkmn::dict<pkmn::pkstring, int> stats = _pokedex_entry.base_stats;
+        pkmn::dict<pkmn::pkstring, int> IVs = get_IVs();
         pkmn::nature_t nature = get_nature();
 
         _raw.max_hp = calculations::get_modern_stat("HP", stats["HP"], _raw.level,

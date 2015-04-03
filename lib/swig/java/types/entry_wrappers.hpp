@@ -35,7 +35,7 @@ namespace pkmn
                 ItemEntry() {};
 
                 //! Create an entry using the SQLite ID's of the game version and item.
-                ItemEntry(uint16_t versionID, uint16_t itemID)
+                ItemEntry(int versionID, int itemID)
                 {
                     entry = pkmn::item_entry_t(versionID, itemID);
                 }
@@ -71,13 +71,13 @@ namespace pkmn
                 }
 
                 //! Cost when bought at Poké Mart.
-                uint16_t getCost()
+                int getCost()
                 {
                     return entry.cost;
                 }
 
                 //! Base power when used by the move Fling.
-                uint16_t getFlingPower()
+                int getFlingPower()
                 {
                     return entry.fling_power;
                 }
@@ -106,7 +106,7 @@ namespace pkmn
                 MoveEntry() {};
 
                 //! Create an entry using the SQLite ID's of the game version and item.
-                MoveEntry(uint16_t versionID, uint16_t moveID)
+                MoveEntry(int versionID, int moveID)
                 {
                     entry = pkmn::move_entry_t(versionID, moveID);
                 }
@@ -148,13 +148,13 @@ namespace pkmn
                 }
 
                 //! Move's base power
-                uint16_t getPower()
+                int getPower()
                 {
                     return entry.power;
                 }
 
                 //! Move's base <a href="http://bulbapedia.bulbagarden.net/wiki/PP">PP</a>, without using any items.
-                uint16_t getPP()
+                int getPP()
                 {
                     return entry.pp;
                 }
@@ -166,7 +166,7 @@ namespace pkmn
                 }
 
                 //! Move's <a href="http://bulbapedia.bulbagarden.net/wiki/Priority">move priority</a> (-8 - 8).
-                uint16_t getPriority()
+                int getPriority()
                 {
                     return entry.priority;
                 }
@@ -219,7 +219,7 @@ namespace pkmn
                 PokemonEntry() {};
 
                 //! Create an entry using the SQLite ID's of the game version, species, and form.
-                PokemonEntry(uint16_t versionID, uint16_t speciesID, uint16_t formID)
+                PokemonEntry(int versionID, int speciesID, int formID)
                 {
                     entry = pkmn::pokemon_entry_t(versionID, speciesID, formID);
                 }
@@ -239,7 +239,7 @@ namespace pkmn
                 }
 
                 //! Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/National_Pok%C3%A9dex">National Pokédex</a> number.
-                uint16_t getPokedexNum()
+                int getPokedexNum()
                 {
                     return entry.pokedex_num;
                 }
@@ -281,19 +281,19 @@ namespace pkmn
                 }
 
                 //! Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/Catch_rate">catch rate</a>.
-                uint16_t getCatchRate()
+                int getCatchRate()
                 {
                     return entry.catch_rate;
                 }
 
                 //! The base value that determines how much experience is given when this Pokémon faints.
-                uint16_t getExpYield()
+                int getExpYield()
                 {
                     return entry.exp_yield;
                 }
 
                 //! The level of <a href="http://bulbapedia.bulbagarden.net/wiki/Friendship">friendship</a> this Pokémon has upon capture.
-                uint16_t getBaseFriendship()
+                int getBaseFriendship()
                 {
                     return entry.base_friendship;
                 }
@@ -329,13 +329,13 @@ namespace pkmn
                 }
 
                 //! Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/Base_stats">base stats</a>, used to determine its specific stats.
-                pkmn::dict<pkmn::pkstring, uint16_t>& getBaseStats()
+                pkmn::dict<pkmn::pkstring, int>& getBaseStats()
                 {
                     return entry.base_stats;
                 }
 
                 //! Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/Effort_value">EV</a> yields.
-                pkmn::dict<pkmn::pkstring, uint16_t>& getEVYields()
+                pkmn::dict<pkmn::pkstring, int>& getEVYields()
                 {
                     return entry.ev_yields;
                 }

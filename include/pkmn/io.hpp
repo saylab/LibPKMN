@@ -61,24 +61,6 @@ namespace pkmn
          * \param filename where to save the .pkm file
          */
         void PKMN_API export_to_pkm(pokemon::sptr pkmn, const pkmn::pkstring &filename);
-
-        //! Imports a .pksql file into LibPKMN.
-        /*!
-         * PKSQL is LibPKMN's Pokémon storage format.
-         *
-         * \param filename the .pksql file to import
-         * \return imported Pokémon
-         */
-        pokemon::sptr import_from_pksql(const pkmn::pkstring &filename);
-
-        //! Exports a Pokémon into a .pksql file.
-        /*!
-         * PKSQL is LibPKMN's Pokémon storage format.
-         *
-         * \param pkmn Pokémon to export
-         * \param filename where to save the .pksql file
-         */
-        void PKMN_API export_to_pksql(pokemon::sptr pkmn, const pkmn::pkstring &filename);
     }
 }
 

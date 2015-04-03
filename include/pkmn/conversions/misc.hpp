@@ -17,9 +17,9 @@ namespace pkmn
 {
     namespace conversions
     {
-        pkmn::dict<pkmn::pkstring, uint16_t> import_gb_IVs(uint16_t iv_data);
+        pkmn::dict<pkmn::pkstring, int> PKMN_API import_gb_IVs(uint16_t iv_data);
 
-        void export_gb_IV(const pkmn::pkstring &stat, uint8_t value, uint16_t &iv_data);
+        void PKMN_API export_gb_IV(const pkmn::pkstring &stat, int value, uint16_t &iv_data);
 
         uint32_t PKMN_API import_gb_money(uint8_t* money_buf);
 
