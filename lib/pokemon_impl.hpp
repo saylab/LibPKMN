@@ -31,6 +31,7 @@ namespace pkmn
     {
         public:
 
+            pokemon_impl() {};
             pokemon_impl(uint16_t species_id, uint16_t version_id);
             pokemon_impl(const pokemon_impl& other);
             pokemon_impl& operator=(const pokemon_impl& other);

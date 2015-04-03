@@ -38,6 +38,7 @@ namespace pkmn
                              uint16_t level,
                              const pkmn::pkstring &move1, const pkmn::pkstring &move2,
                              const pkmn::pkstring &move3, const pkmn::pkstring &move4);
+            static sptr make(const pkmn::pkstring &filename);
 
             pokemon() {};
             virtual ~pokemon() {};

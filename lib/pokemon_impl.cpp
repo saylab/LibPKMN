@@ -77,9 +77,9 @@ namespace pkmn
         }
     }
 
-    pokemon::sptr pokemon::make(const pkmn::pkstring& name,  const pkmn::pkstring& game, uint16_t level,
-                                const pkmn::pkstring& move1, const pkmn::pkstring& move2,
-                                const pkmn::pkstring& move3, const pkmn::pkstring& move4)
+    pokemon::sptr pokemon::make(const pkmn::pkstring &name,  const pkmn::pkstring &game, uint16_t level,
+                                const pkmn::pkstring &move1, const pkmn::pkstring &move2,
+                                const pkmn::pkstring &move3, const pkmn::pkstring &move4)
     {
         return make(database::get_species_id(name),
                     database::get_version_id(game),
@@ -88,6 +88,27 @@ namespace pkmn
                     database::get_move_id(move2),
                     database::get_move_id(move3),
                     database::get_move_id(move4));
+    }
+
+    pokemon::sptr pokemon::make(const pkmn::pkstring &filename)
+    {
+        // Check if PKSQL
+        // TODO: .3gpkm, .pkm
+        if(fs::extension(fs::path(filename)) != ".pksql")
+            throw std::runtime_error("Invalid file.");
+
+        // Try to open as a SQLite Database
+        try
+        {
+            SQLite::Database db(filename);
+            int game_id = db.execAndGet("SELECT game_id FROM pkmn;");
+
+            if(database::get_generation(game_id) == 1)
+                return sptr(new pokemon_gen1impl(db));
+            else
+                throw std::runtime_error("Only Generation currently supported.");
+        }
+        catch(...) {};
     }
 
     pkmn::shared_ptr<SQLite::Database> pokemon_impl::_db;
@@ -131,7 +152,7 @@ namespace pkmn
         _pokedex_entry = _pokedex->get_pokemon_entry(_species_id);
     }
 
-    pokemon_impl::pokemon_impl(const pokemon_impl& other):
+    pokemon_impl::pokemon_impl(const pokemon_impl &other):
         _species_id(other._species_id),
         _form_id(other._form_id),
         _version_id(other._version_id),
@@ -142,7 +163,7 @@ namespace pkmn
         _pokedex_entry(other._pokedex_entry),
         _prng(copy_prng(other._prng)) {}
 
-    pokemon_impl& pokemon_impl::operator=(const pokemon_impl& other)
+    pokemon_impl &pokemon_impl::operator=(const pokemon_impl &other)
     {
         _pokedex       = copy_pokedex(other._pokedex);
         _pokedex_entry = other._pokedex_entry;
@@ -192,7 +213,7 @@ namespace pkmn
         return database::get_generation(_version_id);
     }
 
-    int pokemon_impl::get_attribute(const pkmn::pkstring& attribute) const
+    int pokemon_impl::get_attribute(const pkmn::pkstring &attribute) const
     {
         return _attributes.at(attribute);
     }
@@ -202,12 +223,12 @@ namespace pkmn
         return _attributes;
     }
 
-    bool pokemon_impl::has_attribute(const pkmn::pkstring& attribute) const
+    bool pokemon_impl::has_attribute(const pkmn::pkstring &attribute) const
     {
         return _attributes.has_key(attribute);
     }
 
-    void pokemon_impl::set_attribute(const pkmn::pkstring& attribute, int value)
+    void pokemon_impl::set_attribute(const pkmn::pkstring &attribute, int value)
     {
         _attributes[attribute] = value;
     }

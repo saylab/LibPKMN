@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_CASE(gen1_pksql_test)
     fs::path filepath = fs::path(fs::path(pkmn::get_tmp_dir()) / filename);
 
     pkmn::io::export_to_pksql(pkmn1, filepath.string());
-    pkmn::pokemon::sptr pkmn2 = pkmn::io::import_from_pksql(filepath.string());
+    pkmn::pokemon::sptr pkmn2 = pkmn::pokemon::make(filepath.string());
 
     fs::remove(filepath);
 }

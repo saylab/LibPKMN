@@ -10,6 +10,7 @@
 #include <pkmn/native/pokemon.hpp>
 
 #include "pokemon_impl.hpp"
+#include "SQLiteCpp/SQLiteC++.h"
 
 namespace pkmn
 {
@@ -33,6 +34,7 @@ namespace pkmn
                              const pkmn::pkstring& nickname,
                              const pkmn::pkstring& otname,
                              uint8_t version);
+            pokemon_gen1impl(SQLite::Database &db);
             pokemon_gen1impl(const pokemon_gen1impl& other);
             pokemon_gen1impl& operator=(const pokemon_gen1impl& other);
             ~pokemon_gen1impl() {};
