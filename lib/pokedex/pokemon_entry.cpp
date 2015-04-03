@@ -168,7 +168,7 @@ namespace pkmn
         has_gender_differences = pokemon_species_query.getColumn(13); // has_gender_differences
 
         int generation = database::get_generation(version_id);
-        bool old_games     = (generation < 3);
+        bool old_games = (generation < 3);
 
         /*
          * Abilities
@@ -241,7 +241,7 @@ namespace pkmn
         base_stats["Speed"] = pokemon_stats_query.getColumn(0);                   // base_stat
         ev_yields["Speed"]  = pokemon_stats_query.getColumn(old_games ? 0 : 1);   // base_stat, effort
         query_stream.str("");
-        if(old_games)
+        if(generation == 1)
         {
             query_stream << "SELECT base_stat FROM pokemon_stats WHERE pokemon_id="
                          << pokemon_id << " AND stat_id=9";
@@ -255,7 +255,7 @@ namespace pkmn
             SQLite::Statement pokemon_stats_query2(*db, query_stream.str().c_str());
             pokemon_stats_query2.executeStep();
             base_stats["Special Attack"] = pokemon_stats_query2.getColumn(0);     // base_stat
-            ev_yields["Special Attack"]  = pokemon_stats_query2.getColumn(0);     // effort
+            ev_yields[(generation == 2) ? "Special" : "Special Attack"]  = pokemon_stats_query2.getColumn(0);     // effort
         }
 
         /*
