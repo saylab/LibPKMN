@@ -19,6 +19,7 @@ IF(ENABLE_LIBPKMN)
 
     ADD_SUBDIRECTORY(SQLiteCpp)
     ADD_SUBDIRECTORY(conversions)
+    ADD_SUBDIRECTORY(io)
     ADD_SUBDIRECTORY(native)
     ADD_SUBDIRECTORY(pokedex)
     ADD_SUBDIRECTORY(qt4)
@@ -82,6 +83,7 @@ IF(ENABLE_LIBPKMN)
         copy_sptrs.cpp
         ${SQLiteCpp_sources}
         ${conversions_sources}
+        ${io_sources}
         ${native_sources}
         ${pokedex_sources}
         ${qt4_sources}
