@@ -33,7 +33,6 @@ namespace pkmn
                              const pkmn::pkstring& nickname,
                              const pkmn::pkstring& otname,
                              uint8_t version);
-            pokemon_gen1impl(SQLite::Database &db);
             pokemon_gen1impl(const pokemon_gen1impl& other);
             pokemon_gen1impl& operator=(const pokemon_gen1impl& other);
             ~pokemon_gen1impl() {};

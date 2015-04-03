@@ -27,6 +27,7 @@
 #include "pokemon_gen6impl.hpp"
 
 #include "internal.hpp"
+#include "io/pksql.hpp"
 #include "SQLiteCpp/SQLiteC++.h"
 
 namespace fs = boost::filesystem;
@@ -94,28 +95,10 @@ namespace pkmn
     {
         // Check if PKSQL
         // TODO: .3gpkm, .pkm
-        if(fs::extension(fs::path(filename)) != ".pksql")
+        if(fs::extension(fs::path(filename)) == ".pksql")
+            return io::pksql::from(filename);
+        else
             throw std::runtime_error("Invalid file.");
-
-        // Try to open as a SQLite Database
-        try
-        {
-            SQLite::Database db(filename);
-            int game_id = db.execAndGet("SELECT game_id FROM pkmn;");
-
-            switch(database::get_generation(game_id))
-            {
-                case 1:
-                    return sptr(new pokemon_gen1impl(db));
-
-                case 2:
-                    return sptr(new pokemon_gen2impl(db));
-
-                default:
-                throw std::runtime_error("Only Generations I-II currently supported.");
-            }
-        }
-        catch(...) {};
     }
 
     pkmn::shared_ptr<SQLite::Database> pokemon_impl::_db;

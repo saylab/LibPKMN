@@ -19,12 +19,13 @@ namespace pkmn
     {
         class pksql
         {
-            static std::string query(pokemon::sptr pkmn);
+            public:
+                static std::string query(pokemon::sptr pkmn);
 
-            static pokemon::sptr from(const pkmn::pkstring &filename);
+                static pokemon::sptr from(const pkmn::pkstring &filename);
 
-            static pkmn::database_sptr to(pokemon::sptr pkmn,
-                                          const pkmn::pkstring &filename);
+                static pkmn::database_sptr to(pokemon::sptr pkmn,
+                                              const pkmn::pkstring &filename);
         };
     }
 }

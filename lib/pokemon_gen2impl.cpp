@@ -159,63 +159,6 @@ namespace pkmn
         }
     }
 
-    pokemon_gen2impl::pokemon_gen2impl(SQLite::Database &db)
-    {
-        CONNECT_TO_DB(pokemon_impl::_db);
-
-        SQLite::Statement pkmn_query(db, "SELECT * FROM pkmn");
-        pkmn_query.executeStep();
-
-        _species_id = database::get_species_id(int(pkmn_query.getColumn(0))); // pokemon_id
-
-        std::ostringstream form_querystream;
-        form_querystream << "SELECT id FROM pokemon_forms WHERE pokemon_id=" << _species_id;
-        _form_id = _db->execAndGet(form_querystream.str().c_str());
-
-        _version_id = pkmn_query.getColumn(1); // game_id
-        _none = _invalid = false;
-        _pokedex = pokedex::make(database::get_version_name(_version_id));
-        _pokedex_entry = _pokedex->get_pokemon_entry(_species_id, _form_id);
-
-        _nickname = pkmn_query.getColumn(2); // nickname
-        _otname = pkmn_query.getColumn(3); // otname
-
-        _raw.pc.species = database::get_pokemon_game_index(pkmn_query.getColumn(0), Versions::CRYSTAL); // pokemon_id
-        _raw.pc.held_item = database::get_item_game_index(pkmn_query.getColumn(28), Versions::CRYSTAL); // held_item_id
-        _raw.pc.moves[0] = pkmn_query.getColumn(29); // move1_id
-        _raw.pc.moves[1] = pkmn_query.getColumn(30); // move2_id
-        _raw.pc.moves[2] = pkmn_query.getColumn(31); // move3_id
-        _raw.pc.moves[3] = pkmn_query.getColumn(32); // move4_id
-        _raw.pc.ot_id = pkmn_query.getColumn(5); // ot_id
-        _raw.pc.ev_hp = pkmn_query.getColumn(16); // ev_hp
-        _raw.pc.ev_atk = pkmn_query.getColumn(17); // ev_attack
-        _raw.pc.ev_def = pkmn_query.getColumn(18); // ev_defense
-        _raw.pc.ev_spd = pkmn_query.getColumn(19); // ev_speed
-        _raw.pc.ev_spcl = pkmn_query.getColumn(20); // ev_spatk
-        conversions::export_gb_IV("Attack", pkmn_query.getColumn(23), _raw.pc.iv_data); // iv_attack
-        conversions::export_gb_IV("Defense", pkmn_query.getColumn(24), _raw.pc.iv_data); // iv_defense
-        conversions::export_gb_IV("Speed", pkmn_query.getColumn(25), _raw.pc.iv_data); // iv_speed
-        conversions::export_gb_IV("Special", pkmn_query.getColumn(26), _raw.pc.iv_data); // iv_spatk
-        conversions::export_gb_IV("HP", pkmn_query.getColumn(22), _raw.pc.iv_data); // iv_hp
-        _raw.pc.move_pps[0] = pkmn_query.getColumn(33); // move1_pp
-        _raw.pc.move_pps[1] = pkmn_query.getColumn(34); // move2_pp
-        _raw.pc.move_pps[2] = pkmn_query.getColumn(35); // move3_pp
-        _raw.pc.move_pps[3] = pkmn_query.getColumn(36); // move4_pp
-        _raw.pc.friendship = pkmn_query.getColumn(10); // friendship
-        _raw.pc.pokerus = pkmn_query.getColumn(45); // pokerus
-
-        _raw.pc.caught_data = (uint8_t(pkmn_query.getColumn(8)) & 0x3F) << 8; // met_level
-        _raw.pc.caught_data |= ((uint8_t(pkmn_query.getColumn(4)) & 0x1) << 7); // ot_female
-
-        _set_experience(pkmn_query.getColumn(12)); // experience
-        _set_stats();
-
-        SQLite::Statement attributes_query(db, "SELECT * FROM pkmn_attributes");
-        while(attributes_query.executeStep())
-            _attributes.insert(attributes_query.getColumn(0),  // name
-                               attributes_query.getColumn(1)); // value
-    }
-
     pokemon_gen2impl::pokemon_gen2impl(const pokemon_gen2impl &other):
         pokemon_impl(other),
         _raw(other._raw),
