@@ -229,7 +229,6 @@ namespace pkmn
             pkmn->set_met_level(import_query.getColumn(10)); // met_level
             pkmn->set_personality(import_query.getColumn(11)); // personality
             pkmn->set_friendship(import_query.getColumn(12)); // friendship
-            pkmn->set_level(import_query.getColumn(13)); // level
             pkmn->set_experience(import_query.getColumn(14)); // experience
             if(pkmn->get_pokedex_entry().chance_male + pkmn->get_pokedex_entry().chance_female > 0)
                 pkmn->set_gender((int(import_query.getColumn(15)) > 0) ? "Female" : "Male"); // female
