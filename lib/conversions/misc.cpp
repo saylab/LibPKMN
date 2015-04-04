@@ -5,6 +5,8 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
+#include <cstring>
+
 #include <boost/assign.hpp>
 
 #include <pkmn/database.hpp>
@@ -15,6 +17,24 @@ namespace pkmn
 {
     namespace conversions
     {
+        uint32_t import_gb_experience(uint8_t* exp_buf)
+        {
+            return (65536*exp_buf[0]) + (256*exp_buf[1]) + exp_buf[2];
+        }
+
+        void export_gb_experience(uint8_t* exp_buf, uint32_t val)
+        {
+            memset(exp_buf, 0, 3);
+
+            exp_buf[2] = uint8_t(val % 256);
+
+            val -= exp_buf[2];
+            exp_buf[1] = uint8_t((val / 256) % 256);
+
+            val -= exp_buf[1];
+            exp_buf[0] = uint8_t((val / 65536) % 65536);            
+        }
+
         static uint16_t get_gb_IV(int stat, uint16_t iv_data)
         {
             switch(stat)

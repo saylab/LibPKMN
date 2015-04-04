@@ -17,6 +17,10 @@ namespace pkmn
 {
     namespace conversions
     {
+        uint32_t PKMN_API import_gb_experience(uint8_t* exp_buf);
+
+        void PKMN_API export_gb_experience(uint8_t* exp_buf, uint32_t val);
+
         pkmn::dict<pkmn::pkstring, int> PKMN_API import_gb_IVs(uint16_t iv_data);
 
         void PKMN_API export_gb_IV(const pkmn::pkstring &stat, int value, uint16_t &iv_data);

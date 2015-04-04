@@ -383,7 +383,7 @@ namespace pkmn
     // Stored in Base-256 in three bytes
     uint32_t pokemon_gen1impl::get_experience() const
     {
-        return (65536*_raw.pc.exp[0]) + (256*_raw.pc.exp[1]) * _raw.pc.exp[2];
+        return conversions::import_gb_experience((uint8_t*)_raw.pc.exp);
     }
 
     // No gender in Generation I
@@ -689,10 +689,7 @@ namespace pkmn
 
     void pokemon_gen1impl::_set_experience(uint32_t exp)
     {
-        _raw.pc.exp[0] = (exp /= 65536);
-        _raw.pc.exp[1] = (exp /= 256);
-        _raw.pc.exp[2] =  exp;
-
+        conversions::export_gb_experience(_raw.pc.exp, exp);
         _raw.pc.level = database::get_level(_species_id, exp);
         _raw.level    = _raw.pc.level;
     }
@@ -703,9 +700,7 @@ namespace pkmn
         _raw.level = level;
 
         uint32_t exp = database::get_experience(_species_id, level);
-        _raw.pc.exp[0] = (exp /= 65536);
-        _raw.pc.exp[1] = (exp /= 256);
-        _raw.pc.exp[2] =  exp;
+        conversions::export_gb_experience(_raw.pc.exp, exp);
     }
 
     void pokemon_gen1impl::_set_stats()
