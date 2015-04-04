@@ -148,3 +148,54 @@ BOOST_AUTO_TEST_CASE(gen2_pksql_test)
 
     fs::remove(filepath);
 }
+
+BOOST_AUTO_TEST_CASE(gen3_pksql_test)
+{
+    pkmn::pokemon::sptr pkmn1 = pkmn::pokemon::make("Treecko", "Emerald", 50,
+                                                    "Tackle", "Vine Whip",
+                                                    "Sleep Powder", "Razor Leaf");
+
+    std::string filename = str(boost::format("pksql_gen3_%d.pksql") % rand());
+    fs::path filepath = fs::path(fs::path(pkmn::get_tmp_dir()) / filename);
+
+    pkmn::pokemon::export_to(pkmn1, filepath.string());
+    pkmn::pokemon::sptr pkmn2 = pkmn::pokemon::make(filepath.string());
+
+    pksql_equality_check(pkmn1, pkmn2);
+
+    fs::remove(filepath);
+}
+
+BOOST_AUTO_TEST_CASE(gen4_pksql_test)
+{
+    pkmn::pokemon::sptr pkmn1 = pkmn::pokemon::make("Turtwig", "Platinum", 50,
+                                                    "Tackle", "Vine Whip",
+                                                    "Sleep Powder", "Razor Leaf");
+
+    std::string filename = str(boost::format("pksql_gen4_%d.pksql") % rand());
+    fs::path filepath = fs::path(fs::path(pkmn::get_tmp_dir()) / filename);
+
+    pkmn::pokemon::export_to(pkmn1, filepath.string());
+    pkmn::pokemon::sptr pkmn2 = pkmn::pokemon::make(filepath.string());
+
+    pksql_equality_check(pkmn1, pkmn2);
+
+    fs::remove(filepath);
+}
+
+BOOST_AUTO_TEST_CASE(gen5_pksql_test)
+{
+    pkmn::pokemon::sptr pkmn1 = pkmn::pokemon::make("Snivy", "White", 50,
+                                                    "Tackle", "Vine Whip",
+                                                    "Sleep Powder", "Razor Leaf");
+
+    std::string filename = str(boost::format("pksql_gen5_%d.pksql") % rand());
+    fs::path filepath = fs::path(fs::path(pkmn::get_tmp_dir()) / filename);
+
+    pkmn::pokemon::export_to(pkmn1, filepath.string());
+    pkmn::pokemon::sptr pkmn2 = pkmn::pokemon::make(filepath.string());
+
+    pksql_equality_check(pkmn1, pkmn2);
+
+    fs::remove(filepath);
+}
