@@ -27,6 +27,7 @@
 #include "pokemon_gen6impl.hpp"
 
 #include "internal.hpp"
+#include "io/3gpkm.hpp"
 #include "io/pksql.hpp"
 #include "SQLiteCpp/SQLiteC++.h"
 
@@ -93,10 +94,10 @@ namespace pkmn
 
     pokemon::sptr pokemon::make(const pkmn::pkstring &filename)
     {
-        // Check if PKSQL
-        // TODO: .3gpkm, .pkm
         if(fs::extension(fs::path(filename)) == ".pksql" and io::pksql::valid(filename))
             return io::pksql::from(filename);
+        else if(fs::extension(fs::path(filename)) == ".3gpkm" and io::_3gpkm::valid(filename))
+            return io::_3gpkm::from(filename);
         else
             throw std::runtime_error("Invalid file.");
     }
@@ -170,7 +171,27 @@ namespace pkmn
 
     void pokemon::export_to(pokemon::sptr pkmn, const pkmn::pkstring &filename)
     {
-        pkmn::database_sptr output = io::pksql::to(pkmn, filename);
+        std::string ext = fs::extension(fs::path(filename));
+
+        if(ext == ".pksql")
+        {
+            pkmn::database_sptr output = io::pksql::to(pkmn, filename);
+            if(not io::pksql::valid(filename))
+            {
+                fs::remove(fs::path(filename));
+                throw std::runtime_error("Failed to export to PKSQL.");
+            }
+        }
+        else if(ext == ".3gpkm")
+        {
+            io::_3gpkm::to(pkmn, filename);
+            if(not io::_3gpkm::valid(filename))
+            {
+                fs::remove(fs::path(filename));
+                throw std::runtime_error("Failed to export to .3gpkm.");
+            }
+        }
+        else throw std::runtime_error("Extension must be .pksql, .3gpkm, or .pkm.");
     }
 
     /*
