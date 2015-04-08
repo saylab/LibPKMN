@@ -102,6 +102,31 @@ namespace pkmn
             throw std::runtime_error("Invalid file.");
     }
 
+    void pokemon::export_to(pokemon::sptr pkmn, const pkmn::pkstring &filename)
+    {
+        std::string ext = fs::extension(fs::path(filename));
+
+        if(ext == ".pksql")
+        {
+            pkmn::database_sptr output = io::pksql::to(pkmn, filename);
+            if(not io::pksql::valid(filename))
+            {
+                fs::remove(fs::path(filename));
+                throw std::runtime_error("Failed to export to PKSQL.");
+            }
+        }
+        else if(ext == ".3gpkm")
+        {
+            io::_3gpkm::to(pkmn, filename);
+            if(not io::_3gpkm::valid(filename))
+            {
+                fs::remove(fs::path(filename));
+                throw std::runtime_error("Failed to export to .3gpkm.");
+            }
+        }
+        else throw std::runtime_error("Extension must be .pksql, .3gpkm, or .pkm.");
+    }
+
     pkmn::shared_ptr<SQLite::Database> pokemon_impl::_db;
 
     pkmn::dict<int, std::string> pokemon_impl::_version_dirs = boost::assign::map_list_of
@@ -167,31 +192,6 @@ namespace pkmn
         _invalid       = other._invalid;
 
         return *this;
-    }
-
-    void pokemon::export_to(pokemon::sptr pkmn, const pkmn::pkstring &filename)
-    {
-        std::string ext = fs::extension(fs::path(filename));
-
-        if(ext == ".pksql")
-        {
-            pkmn::database_sptr output = io::pksql::to(pkmn, filename);
-            if(not io::pksql::valid(filename))
-            {
-                fs::remove(fs::path(filename));
-                throw std::runtime_error("Failed to export to PKSQL.");
-            }
-        }
-        else if(ext == ".3gpkm")
-        {
-            io::_3gpkm::to(pkmn, filename);
-            if(not io::_3gpkm::valid(filename))
-            {
-                fs::remove(fs::path(filename));
-                throw std::runtime_error("Failed to export to .3gpkm.");
-            }
-        }
-        else throw std::runtime_error("Extension must be .pksql, .3gpkm, or .pkm.");
     }
 
     /*
