@@ -28,14 +28,12 @@ namespace pkmn
                                        int move3, int move4):
         pokemon_impl(species, version)
     {
+        memset(&_raw, 0x0, sizeof(pkmn::native::gen3_party_pokemon_t));
+
         /*
          * Populate native struct
          */
-        if(_none or _invalid)
-        {
-            memset(&_raw, 0x0, sizeof(pkmn::native::gen3_party_pokemon_t));
-        }
-        else
+        if(not _none and not _invalid)
         {
             _raw.pc.personality = _prng->lcrng() | (_prng->lcrng() << 16);
             _raw.pc.ot_id = pkmn::trainer::LIBPKMN_TRAINER_ID;
@@ -119,6 +117,7 @@ namespace pkmn
             _invalid = true;
         }
 
+        _raw.level = database::get_level(_species_id, _growth->exp);
         _set_stats(); // Will populate party portion
     }
 

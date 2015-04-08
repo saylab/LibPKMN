@@ -83,6 +83,8 @@ namespace pkmn
             _invalid = true;
         }
 
+        _raw.pc.level = database::get_level(_species_id, get_experience());
+        _raw.level = database::get_level(_species_id, get_experience());
         _set_stats(); // Will populate party portion of struct
     }
 
@@ -107,6 +109,8 @@ namespace pkmn
             _invalid = true;
         }
 
+        _raw.pc.level = database::get_level(_species_id, get_experience());
+        _raw.level = database::get_level(_species_id, get_experience());
         _set_stats(); // Will populate party portion of struct
     }
 

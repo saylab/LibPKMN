@@ -125,6 +125,7 @@ namespace pkmn
             _invalid = true;
         }
 
+        _raw.level = database::get_level(_species_id, _blockA->exp);
         _set_stats();
     }
 
