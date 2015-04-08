@@ -601,7 +601,7 @@ namespace pkmn
         else
         {
             while(is_shiny())
-                _raw.pc.personality = _prng->lcrng() | (_prng->lcrng() << 16); // TODO: propogate to others
+                _raw.pc.personality = _prng->lcrng() | (_prng->lcrng() << 16);
         }
     }
 

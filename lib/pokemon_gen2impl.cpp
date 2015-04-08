@@ -629,8 +629,8 @@ namespace pkmn
             throw std::runtime_error("Special Attack and Special Defense use the"
                                      "Special EV in Generation II.");
 
-        if(value > 65535)
-            throw std::runtime_error("EV's have a maximum value of 65535 in Generation II.");
+        if(value < 0 or value > 65535)
+            throw std::runtime_error("EV must be 0-65535.");
 
         switch(database::get_stat_id(stat)) // Will throw if stat_name is invalid
         {
@@ -665,8 +665,8 @@ namespace pkmn
             throw std::runtime_error("Special Attack and Special Defense use the"
                                      "Special IV in Generation II.");
 
-        if(value > 15)
-            throw std::runtime_error("IV's have a maximum value of 15 in Generation II.");
+        if(value < 0 or value > 15)
+            throw std::runtime_error("IV must be 0-15.");
 
         // Will throw if stat_name is invalid
         conversions::export_gb_IV(stat, value, _raw.pc.iv_data);
@@ -777,10 +777,7 @@ namespace pkmn
         if(pos < 1 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
 
-        if(PP <= database::get_move_pp(_raw.pc.moves[pos-1]))
-            _raw.pc.move_pps[pos-1] = PP; 
-        else
-            throw std::runtime_error("This move PP is invalid.");
+        _raw.pc.move_pps[pos-1] = PP;
     }
 
     /*

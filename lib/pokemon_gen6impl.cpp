@@ -41,7 +41,7 @@ namespace pkmn
         }
         else
         {
-            _blockA->personality = _prng->lcrng();
+            _blockA->personality = _prng->lcrng() | (_prng->lcrng() << 16);
             _blockA->species = database::get_pokemon_game_index(_species_id, _version_id);
             _blockA->held_item = Items::NONE;
             _blockA->ot_id = pkmn::trainer::LIBPKMN_TRAINER_ID;
@@ -73,7 +73,7 @@ namespace pkmn
             _blockB->moves[3] = move4;
             for(size_t i = 0; i < 4; i++)
                 _blockB->move_pps[i] = database::get_move_pp(_blockB->moves[i]);
-            _blockB->iv_isegg_isnicknamed = _prng->lcrng();
+            _blockB->iv_isegg_isnicknamed = _prng->lcrng() | (_prng->lcrng() << 16);
             _blockB->iv_isegg_isnicknamed &= ~(2<<30); // Not an egg, not nicknamed
             _set_default_gender();
 
@@ -623,70 +623,32 @@ namespace pkmn
     {
         if(stat == "Special")
             throw std::runtime_error("The Special value is only in Generations I-II.");
-        if(value > 255)
-            throw std::runtime_error("EV's have a maximum value of 255 in Generations IV-V.");
-
-        uint16_t sum_of_rest;
+        if(value < 0 or value > 255)
+            throw std::runtime_error("EV must be 0-255.");
 
         switch(database::get_stat_id(stat)) // Will throw if stat is invalid
         {
             case Stats::HP:
-                sum_of_rest = _blockA->ev_atk + _blockA->ev_def + _blockA->ev_spd + _blockA->ev_spatk
-                            + _blockA->ev_spdef;
-                if((sum_of_rest + value) > 510)
-                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
-                                             % (510 - sum_of_rest)));
-
                 _blockA->ev_hp = value;
                 break;
 
             case Stats::ATTACK:
-                sum_of_rest = _blockA->ev_hp + _blockA->ev_def + _blockA->ev_spd + _blockA->ev_spatk
-                            + _blockA->ev_spdef;
-                if((sum_of_rest + value) > 510)
-                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
-                                                 % (510 - sum_of_rest)));
-
                 _blockA->ev_atk = value;
                 break;
 
             case Stats::DEFENSE:
-                sum_of_rest = _blockA->ev_hp + _blockA->ev_atk + _blockA->ev_spd + _blockA->ev_spatk
-                            + _blockA->ev_spdef;
-                if((sum_of_rest + value) > 510)
-                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
-                                                 % (510 - sum_of_rest)));
-
                 _blockA->ev_def = value;
                 break;
 
             case Stats::SPEED:
-                sum_of_rest = _blockA->ev_hp + _blockA->ev_atk + _blockA->ev_def + _blockA->ev_spatk
-                            + _blockA->ev_spdef;
-                if((sum_of_rest + value) > 510)
-                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
-                                                 % (510 - sum_of_rest)));
-
                 _blockA->ev_spd = value;
                 break;
 
             case Stats::SPECIAL_ATTACK:
-                sum_of_rest = _blockA->ev_hp + _blockA->ev_atk + _blockA->ev_def + _blockA->ev_spd
-                            + _blockA->ev_spdef;
-                if((sum_of_rest + value) > 510)
-                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
-                                                 % (510 - sum_of_rest)));
-
                 _blockA->ev_spatk = value;
                 break;
 
             default: // Stats::SPECIAL_DEFENSE
-                sum_of_rest = _blockA->ev_hp + _blockA->ev_atk + _blockA->ev_def + _blockA->ev_spd
-                            + _blockA->ev_spatk;
-                if((sum_of_rest + value) > 510)
-                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
-                                                 % (510 - sum_of_rest)));
-
                 _blockA->ev_spdef = value;
                 break;
         }
@@ -699,8 +661,8 @@ namespace pkmn
     {
         if(stat == "Special")
             throw std::runtime_error("The Special value is only in Generations I-II.");
-        if(value > 31)
-            throw std::runtime_error("IV's have a maximum value of 31 in Generations IV-V.");
+        if(value < 0 or value > 31)
+            throw std::runtime_error("IV must be 0-31.");
 
         // Will throw if stat is invalid
         conversions::set_modern_IV(database::get_stat_id(stat), _blockB->iv_isegg_isnicknamed, value);
@@ -805,8 +767,7 @@ namespace pkmn
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
 
-        if(PP <= database::get_move_pp(_blockB->moves[pos-1])) _blockB->move_pps[pos-1] = PP; 
-        else throw std::runtime_error("This move PP is invalid.");
+        _blockB->move_pps[pos-1] = PP; 
     }
 
     /*

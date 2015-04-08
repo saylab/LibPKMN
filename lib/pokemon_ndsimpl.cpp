@@ -41,15 +41,18 @@ namespace pkmn
         }
         else
         {
-            _raw.pc.personality = _prng->lcrng();
+            _raw.pc.personality = _prng->lcrng() | (_prng->lcrng() << 16);
             _blockA->species = database::get_pokemon_game_index(_species_id, _version_id);
             _blockA->held_item = Items::NONE;
             _blockA->ot_id = pkmn::trainer::LIBPKMN_TRAINER_ID;
             // Experience set by level
-            _blockA->friendship = int(_pokedex_entry.base_friendship);
-            _blockA->ability = (_raw.pc.personality % 2) ?
-                                    database::get_ability_id(_pokedex_entry.abilities.second)
-                                  : database::get_ability_id(_pokedex_entry.abilities.first);
+            _blockA->friendship = _pokedex_entry.base_friendship;
+
+            if(_pokedex_entry.abilities.second == "None" or ((_raw.pc.personality % 2) == 0))
+                _blockA->ability = database::get_ability_id(_pokedex_entry.abilities.first);
+            else
+                _blockA->ability = database::get_ability_id(_pokedex_entry.abilities.second);
+
             _blockA->country = 0x2; // English
             do
             {
@@ -68,7 +71,7 @@ namespace pkmn
             _blockB->moves[3] = move4;
             for(size_t i = 0; i < 4; i++)
                 _blockB->move_pps[i] = database::get_move_pp(_blockB->moves[i]);
-            _blockB->iv_isegg_isnicknamed = _prng->lcrng();
+            _blockB->iv_isegg_isnicknamed = _prng->lcrng() | (_prng->lcrng() << 16);
             _blockB->iv_isegg_isnicknamed &= ~(2<<30); // Not an egg, not nicknamed
 
             // Encounter info
@@ -76,7 +79,7 @@ namespace pkmn
             _set_default_gender();
 
             if(get_generation() == 5)
-                _blockB->nature = (_raw.pc.personality % 24);
+                _blockB->nature = (_raw.pc.personality % 25);
 
             if(_version_id == Versions::PLATINUM)
             {
@@ -94,7 +97,9 @@ namespace pkmn
             _blockD->pokerus = pkmn::pokerus_t();
             if(_version_id != Versions::HEARTGOLD and _version_id != Versions::SOULSILVER)
                 _blockD->ball = Balls::LUXURY_BALL;
-            _blockD->metlevel_otgender = (level | ~(1<<31));
+
+            set_met_level(level);
+
             _blockD->encounter_info = 0; // Special event
             if(_version_id == Versions::HEARTGOLD or _version_id == Versions::SOULSILVER)
                 _blockD->ball_hgss = Balls::LUXURY_BALL;
@@ -210,9 +215,18 @@ namespace pkmn
         pkmn::ribbons_t ribbons;
         ribbons.hoenn   = _blockB->hoenn_ribbons;
         ribbons.sinnoh.ribbons1 = _blockA->sinnoh_ribbons1;
-        if(get_generation() == 4) ribbons.sinnoh.ribbons2 = _blockA->sinnoh_ribbons2;
-        else                      ribbons.unova   = _blockA->unova_ribbons;
+        if(get_generation() == 4)
+        {
+            ribbons.sinnoh.ribbons2 = _blockA->sinnoh_ribbons2;
+            ribbons.unova = 0;
+        }
+        else
+        {
+            ribbons.sinnoh.ribbons2 = 0;
+            ribbons.unova = _blockA->unova_ribbons;
+        }
         ribbons.sinnoh.ribbons3 = _blockC->sinnoh_ribbons3;
+        ribbons.kalos = 0;
 
         return ribbons;
     }
@@ -220,7 +234,7 @@ namespace pkmn
     // No Super Training in Generation IV-V
     pkmn::super_training_medals_t pokemon_ndsimpl::get_super_training_medals() const
     {
-        return pkmn::super_training_medals_t();
+        return pkmn::super_training_medals_t(0);
     }
 
     pkmn::pokerus_t pokemon_ndsimpl::get_pokerus() const
@@ -315,7 +329,7 @@ namespace pkmn
 
     int pokemon_ndsimpl::get_met_level() const
     {
-        return _blockD->metlevel_otgender & ~(1<<7);
+        return (_blockD->metlevel_otgender & 0x7F);
     }
 
     /*
@@ -395,11 +409,11 @@ namespace pkmn
     // Met level of 0 means Pokemon was hatched
     void pokemon_ndsimpl::set_met_level(int level)
     {
-        if(level > 100)
+        if(level < 0 or level > 100)
             throw std::runtime_error("Level must be 0-100.");
 
         _blockD->metlevel_otgender &= (1<<7);
-        _blockD->metlevel_otgender |= (level & ~(1<<7));
+        _blockD->metlevel_otgender |= (uint8_t(level) & ~(1<<7));
     }
 
     /*
@@ -428,15 +442,15 @@ namespace pkmn
 
     pkmn::pkstring pokemon_ndsimpl::get_gender() const
     {
-        if(_blockB->form_encounterinfo  &(1<<1))      return "Female";
-        else if(_blockB->form_encounterinfo  &(1<<2)) return "Genderless";
+        if(_blockB->form_encounterinfo & (1<<1))      return "Female";
+        else if(_blockB->form_encounterinfo & (1<<2)) return "Genderless";
         else                                          return "Male";
     }
 
     pkmn::nature_t pokemon_ndsimpl::get_nature() const
     {
         if(get_generation() == 5) return pkmn::nature_t(_blockB->nature);
-        else return pkmn::nature_t(_raw.pc.personality % 24);
+        else return pkmn::nature_t(_raw.pc.personality % 25);
     }
 
     pkmn::pkstring pokemon_ndsimpl::get_ability() const
@@ -541,7 +555,7 @@ namespace pkmn
         else
         {
             if(gender.std_string() == "Male")
-                _blockB->form_encounterinfo &= ~(1<<1);
+                _blockB->form_encounterinfo &= uint8_t(~(1<<1));
             else
                 _blockB->form_encounterinfo |= (1<<1);
         }
@@ -552,10 +566,9 @@ namespace pkmn
     {
         if(get_generation() == 4)
         {
-            // Set personality to nearest value that results in given nature
-            int8_t current_nature = (_raw.pc.personality % 24);
-            int8_t desired_nature = database::get_nature_id(nature_name);
-            _raw.pc.personality += (current_nature - desired_nature);
+            int desired_nature = database::get_nature_id(nature_name);
+            while((_raw.pc.personality % 25) != desired_nature)
+                _raw.pc.personality--;
         }
         else _blockB->nature = database::get_nature_id(nature_name);
     }
@@ -684,7 +697,7 @@ namespace pkmn
         else
         {
             while(is_shiny())
-                _raw.pc.personality = _prng->lcrng();
+                _raw.pc.personality = _prng->lcrng() | (_prng->lcrng() << 16);
         }
     }
 
@@ -693,70 +706,32 @@ namespace pkmn
     {
         if(stat == "Special")
             throw std::runtime_error("The Special value is only in Generations I-II.");
-        if(value > 255)
-            throw std::runtime_error("EV's have a maximum value of 255 in Generations IV-V.");
-
-        uint16_t sum_of_rest;
+        if(value < 0 or value > 255)
+            throw std::runtime_error("EV must be 0-255.");
 
         switch(database::get_stat_id(stat)) // Will throw if stat is invalid
         {
             case Stats::HP:
-                sum_of_rest = _blockA->ev_atk + _blockA->ev_def + _blockA->ev_spd + _blockA->ev_spatk
-                            + _blockA->ev_spdef;
-                if((sum_of_rest + value) > 510)
-                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
-                                             % (510 - sum_of_rest)));
-
                 _blockA->ev_hp = value;
                 break;
 
             case Stats::ATTACK:
-                sum_of_rest = _blockA->ev_hp + _blockA->ev_def + _blockA->ev_spd + _blockA->ev_spatk
-                            + _blockA->ev_spdef;
-                if((sum_of_rest + value) > 510)
-                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
-                                                 % (510 - sum_of_rest)));
-
                 _blockA->ev_atk = value;
                 break;
 
             case Stats::DEFENSE:
-                sum_of_rest = _blockA->ev_hp + _blockA->ev_atk + _blockA->ev_spd + _blockA->ev_spatk
-                            + _blockA->ev_spdef;
-                if((sum_of_rest + value) > 510)
-                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
-                                                 % (510 - sum_of_rest)));
-
                 _blockA->ev_def = value;
                 break;
 
             case Stats::SPEED:
-                sum_of_rest = _blockA->ev_hp + _blockA->ev_atk + _blockA->ev_def + _blockA->ev_spatk
-                            + _blockA->ev_spdef;
-                if((sum_of_rest + value) > 510)
-                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
-                                                 % (510 - sum_of_rest)));
-
                 _blockA->ev_spd = value;
                 break;
 
             case Stats::SPECIAL_ATTACK:
-                sum_of_rest = _blockA->ev_hp + _blockA->ev_atk + _blockA->ev_def + _blockA->ev_spd
-                            + _blockA->ev_spdef;
-                if((sum_of_rest + value) > 510)
-                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
-                                                 % (510 - sum_of_rest)));
-
                 _blockA->ev_spatk = value;
                 break;
 
             default: // Stats::SPECIAL_DEFENSE
-                sum_of_rest = _blockA->ev_hp + _blockA->ev_atk + _blockA->ev_def + _blockA->ev_spd
-                            + _blockA->ev_spatk;
-                if((sum_of_rest + value) > 510)
-                    throw std::runtime_error(str(boost::format("The maximum possible value to set is %d")
-                                                 % (510 - sum_of_rest)));
-
                 _blockA->ev_spdef = value;
                 break;
         }
@@ -769,8 +744,8 @@ namespace pkmn
     {
         if(stat == "Special")
             throw std::runtime_error("The Special value is only in Generations I-II.");
-        if(value > 31)
-            throw std::runtime_error("IV's have a maximum value of 31 in Generations IV-V.");
+        if(value < 0 or value > 31)
+            throw std::runtime_error("IV must be 0-31.");
 
         // Will throw if stat is invalid
         conversions::set_modern_IV(database::get_stat_id(stat), _blockB->iv_isegg_isnicknamed, value);
@@ -875,8 +850,7 @@ namespace pkmn
         if(pos == 0 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
 
-        if(PP <= database::get_move_pp(_blockB->moves[pos-1])) _blockB->move_pps[pos-1] = PP; 
-        else throw std::runtime_error("This move PP is invalid.");
+        _blockB->move_pps[pos-1] = PP; 
     }
 
     /*
@@ -900,7 +874,7 @@ namespace pkmn
 
     int pokemon_ndsimpl::get_nature_id() const
     {
-        if(get_generation() == 4) return (_raw.pc.personality % 24);
+        if(get_generation() == 4) return (_raw.pc.personality % 25);
         else return _blockB->nature;
     }
 
