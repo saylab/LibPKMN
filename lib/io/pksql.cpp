@@ -303,12 +303,18 @@ namespace pkmn
                 db->exec(pksql::create_tables().c_str());
 
             db->exec(pksql::query(pkmn).c_str());
+
+            if(not pksql::valid(db))
+                throw std::runtime_error("Failed to create valid PKSQL database.");
         }
 
         pkmn::database_sptr pksql::to(pokemon::sptr pkmn, const pkmn::pkstring &filename)
         {
             pkmn::database_sptr db(new SQLite::Database(filename, (SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE)));
             pksql::to(pkmn, db);
+
+            if(not pksql::valid(filename))
+                throw std::runtime_error("Failed to create valid PKSQL file.");
 
             return db;
         }
