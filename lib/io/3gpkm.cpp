@@ -45,6 +45,8 @@ namespace pkmn
                                                                        Versions::EMERALD);
                 for(size_t i = 0; i < 4; i++)
                 {
+                    if(pkmn.pc.blocks.attacks.moves[i] == 0) continue;
+
                     if(int(db.execAndGet(str(boost::format("SELECT generation_id FROM moves WHERE id=%d")
                                          % int(pkmn.pc.blocks.attacks.moves[i])).c_str())) > 3)
                         return false;
@@ -65,13 +67,13 @@ namespace pkmn
             ifile.read((char*)&pkmn, sizeof(native::gen3_pc_pokemon_t));
             ifile.close();
 
-            return conversions::import_gen3_pokemon(pkmn, "Emerald");
+            return conversions::import_gen3_pokemon(pkmn, "Emerald", false);
         }
 
         void _3gpkm::to(pokemon::sptr pkmn, const pkmn::pkstring &filename)
         {
             native::gen3_pc_pokemon_t native;
-            memcpy(&native, pkmn->get_native(), sizeof(native::gen3_pc_pokemon_t));
+            conversions::export_gen3_pokemon(pkmn, native, false);
 
             std::ofstream ofile(filename.const_char(), (std::ofstream::out | std::ofstream::binary));
             ofile.write((char*)&native, sizeof(native::gen3_pc_pokemon_t));
