@@ -700,7 +700,7 @@ namespace pkmn
 
     pkmn::move_entry_t pokemon_gen3impl::get_move(int pos) const
     {
-        if(pos == 0 or pos > 4)
+        if(pos < 1 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
 
         try
@@ -716,7 +716,8 @@ namespace pkmn
     void pokemon_gen3impl::get_moves(pkmn::moveset_t &moves) const
     {
         moves.clear();
-        for(size_t i = 0; i < 4; i++) moves.push_back(get_move(i+1));
+        for(size_t i = 0; i < 4; i++)
+            moves.push_back(get_move(i+1));
     }
 
     int pokemon_gen3impl::get_move_PP(int pos) const
@@ -738,9 +739,15 @@ namespace pkmn
      */
 
     void pokemon_gen3impl::set_move(const pkmn::pkstring &move_name, int pos)
-    {   
+    {
         if(pos < 1 or pos > 4)
             throw std::runtime_error("Move position must be 1-4.");
+
+        if(move_name == "None")
+        {
+            _attacks->moves[pos-1] = 0;
+            return;
+        }
 
         // Make sure move exists in given generation
         std::ostringstream query_stream;

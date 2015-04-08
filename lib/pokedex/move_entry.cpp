@@ -45,7 +45,7 @@ namespace pkmn
 
         // Invalid entry
         invalid_entry = none_entry;
-        none_entry.name = "Invalid";
+        invalid_entry.name = "Invalid";
 
         entries_created = true;
     }

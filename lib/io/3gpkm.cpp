@@ -33,7 +33,7 @@ namespace pkmn
                 return false;
 
             native::gen3_party_pokemon_t pkmn;
-            std::ifstream ifile(filename.const_char(), (std::ifstream::in | std::ifstream::binary));
+            std::ifstream ifile(filename.const_char(), (std::ios::in | std::ios::binary));
             ifile.read((char*)&pkmn, sizeof(native::gen3_party_pokemon_t));
             ifile.close();
 
@@ -62,12 +62,12 @@ namespace pkmn
             if(not _3gpkm::valid(filename))
                 throw std::runtime_error("Invalid .3gpkm file.");
 
-            native::gen3_pc_pokemon_t pkmn;
-            std::ifstream ifile(filename.const_char(), (std::ifstream::in | std::ifstream::binary));
-            ifile.read((char*)&pkmn, sizeof(native::gen3_pc_pokemon_t));
+            native::gen3_pc_pokemon_t native;
+            std::ifstream ifile(filename.const_char(), (std::ios::in | std::ios::binary));
+            ifile.read((char*)&native, sizeof(native::gen3_pc_pokemon_t));
             ifile.close();
 
-            return conversions::import_gen3_pokemon(pkmn, "Emerald", false);
+            return conversions::import_gen3_pokemon(native, "Emerald", false);
         }
 
         void _3gpkm::to(pokemon::sptr pkmn, const pkmn::pkstring &filename)
@@ -75,9 +75,12 @@ namespace pkmn
             native::gen3_pc_pokemon_t native;
             conversions::export_gen3_pokemon(pkmn, native, false);
 
-            std::ofstream ofile(filename.const_char(), (std::ofstream::out | std::ofstream::binary));
+            std::ofstream ofile(filename.const_char(), (std::ios::out | std::ios::binary));
             ofile.write((char*)&native, sizeof(native::gen3_pc_pokemon_t));
             ofile.close();
+
+            if(not _3gpkm::valid(filename))
+                throw std::runtime_error("Failed to create valid .3gpkm file.");
         }
     }
 }

@@ -153,16 +153,17 @@ namespace pkmn
         void export_gen3_pokemon(pokemon::sptr pkmn, native::gen3_pc_pokemon_t &native,
                                  bool encrypt)
         {
-            set_gen3_pokemon_checksum(native);
             memcpy(&native, pkmn->get_native(), sizeof(native::gen3_pc_pokemon_t));
+
+            set_gen3_pokemon_checksum(native);
             if(encrypt) native::gen3_encrypt(native);
         }
 
         void export_gen3_pokemon(pokemon::sptr pkmn, native::gen3_party_pokemon_t &native,
                                  bool encrypt)
         {
-            set_gen3_pokemon_checksum(native.pc);
             memcpy(&native, pkmn->get_native(), sizeof(native::gen3_party_pokemon_t));
+            set_gen3_pokemon_checksum(native.pc);
             if(encrypt) native::gen3_encrypt(native.pc);
         }
 

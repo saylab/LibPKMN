@@ -15,6 +15,8 @@
 #include <pkmn/paths.hpp>
 #include <pkmn/pokemon.hpp>
 
+#include "cpp_equality_checks.hpp"
+
 namespace fs = boost::filesystem;
 
 BOOST_AUTO_TEST_CASE(_3gpkm_test)
@@ -30,6 +32,8 @@ BOOST_AUTO_TEST_CASE(_3gpkm_test)
 
     pkmn::pokemon::export_to(pkmn1, filepath.string());
     pkmn::pokemon::sptr pkmn2 = pkmn::pokemon::make(filepath.string());
+
+    pokemon_equality_check(pkmn1, pkmn2);
 
     fs::remove(filepath);
 }
