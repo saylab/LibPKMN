@@ -513,7 +513,7 @@ namespace pkmn
         if(stat == "Special Attack" or stat == "Special Defense")
             throw std::runtime_error("This stat is not present in Generation I.");
 
-        if(value< 0 or value > 65535)
+        if(value < 0 or value > 65535)
             throw std::runtime_error("EV must be 0-65535.");
 
         switch(database::get_stat_id(stat)) // Will throw if stat is invalid
