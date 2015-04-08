@@ -32,6 +32,11 @@ namespace pkmn
                                                               bool is_encrypted = true);
 
         PyObject* export_gen3_pokemon(pokemon::sptr pkmn, bool encrypt = true);
+
+        pokemon::sptr import_nds_pokemon(PyObject* pyobject, const pkmn::pkstring &version,
+                                                             bool is_encrypted = true);
+
+        PyObject* export_nds_pokemon(pokemon::sptr pkmn, bool encrypt = true);
     }
 }
 

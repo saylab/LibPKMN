@@ -184,5 +184,53 @@ namespace pkmn
 
             return pyList;
         }
+
+        pokemon::sptr import_nds_pokemon(PyObject* pyobject, const pkmn::pkstring &version,
+                                                             bool is_encrypted)
+        {
+            if(!pyobject)
+                throw std::runtime_error("Invalid input: null pointer.");
+
+            // Validate input type
+            if(not PyList_Check(pyobject))
+                throw std::runtime_error("Invalid input: not a list.");
+
+            // Validate input size
+            Py_ssize_t len = PyList_Size(pyobject);
+            if(len != sizeof(nds_pc_pokemon_t) and len != sizeof(nds_party_pokemon_t))
+                throw std::runtime_error("Invalid input size.");
+
+            // Read input
+            uint8_t* buffer = new uint8_t[sizeof(nds_party_pokemon_t)];
+            for(Py_ssize_t i = 0; i < len; i++)
+                buffer[i] = uint8_t(PyInt_AsLong(PyList_GetItem(pyobject, i)));
+
+            nds_party_pokemon_t raw = *reinterpret_cast<nds_party_pokemon_t*>(buffer);
+            pokemon::sptr ret = conversions::import_nds_pokemon(raw.pc, version, false);
+
+            delete[] buffer;
+
+            return ret;
+        }
+
+        PyObject* export_nds_pokemon(pokemon::sptr pkmn, bool encrypt)
+        {
+            if(pkmn->get_generation() != 4 and pkmn->get_generation() != 5)
+                throw std::runtime_error("Invalid input: wrong generation.");
+
+            size_t len = sizeof(nds_party_pokemon_t);
+            PyObject* pyList = PyList_New(len);
+
+            nds_party_pokemon_t raw;
+            conversions::export_nds_pokemon(pkmn, raw, false);
+            uint8_t* buffer = reinterpret_cast<uint8_t*>(&raw);
+
+            for(size_t i = 0; i < len; i++)
+                PyList_SetItem(pyList, i, PyInt_FromLong((long)buffer[i]));
+
+            Py_INCREF(pyList);
+
+            return pyList;
+        }
     } /* namespace conversions */
 } /* namespace pkmn */
