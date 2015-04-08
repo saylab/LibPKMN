@@ -227,13 +227,13 @@ namespace pkmn
             pkmn->set_ball(database::get_ball_name(import_query.getColumn(8))); // ball_id
             pkmn->set_original_game(database::get_version_name(import_query.getColumn(9))); // original_game_id
             pkmn->set_met_level(import_query.getColumn(10)); // met_level
-            pkmn->set_personality(import_query.getColumn(11)); // personality
             pkmn->set_friendship(import_query.getColumn(12)); // friendship
             pkmn->set_experience(import_query.getColumn(14)); // experience
             if(pkmn->get_pokedex_entry().chance_male + pkmn->get_pokedex_entry().chance_female > 0)
                 pkmn->set_gender((int(import_query.getColumn(15)) > 0) ? "Female" : "Male"); // female
             pkmn->set_nature(database::get_nature_name(import_query.getColumn(16))); // nature_id
             pkmn->set_ability(database::get_ability_name(import_query.getColumn(17))); // ability_id
+            pkmn->set_personality(import_query.getColumn(11)); // personality
             pkmn->set_EV("HP", import_query.getColumn(18)); // ev_hp
             pkmn->set_EV("Attack", import_query.getColumn(19)); // ev_attack
             pkmn->set_EV("Defense", import_query.getColumn(20)); // ev_defense
