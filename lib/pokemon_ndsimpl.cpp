@@ -13,6 +13,7 @@
 #include <pkmn/database.hpp>
 #include <pkmn/enums.hpp>
 #include <pkmn/conversions/text.hpp>
+#include <pkmn/native/checksum.hpp>
 #include <pkmn/types/prng.hpp>
 
 #include "internal.hpp"
@@ -122,6 +123,8 @@ namespace pkmn
             conversions::export_modern_text("LibPKMN",
                                             _blockD->otname, 7);
         }
+
+        native::set_nds_pokemon_checksum(_raw.pc);
     }
 
     pokemon_ndsimpl::pokemon_ndsimpl(const pkmn::native::nds_pc_pokemon_t &raw,
@@ -880,6 +883,7 @@ namespace pkmn
 
     const void* pokemon_ndsimpl::get_native()
     {
+        native::set_nds_pokemon_checksum(_raw.pc);
         return &_raw;
     }
 

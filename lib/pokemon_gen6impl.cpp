@@ -13,6 +13,7 @@
 #include <pkmn/database.hpp>
 #include <pkmn/enums.hpp>
 #include <pkmn/conversions/text.hpp>
+#include <pkmn/native/checksum.hpp>
 #include <pkmn/types/prng.hpp>
 
 #include "internal.hpp"
@@ -97,6 +98,8 @@ namespace pkmn
 
             _set_level(level);
             _set_stats();
+
+            native::set_gen6_pokemon_checksum(_raw.pc);
         }
     }
 
@@ -796,6 +799,7 @@ namespace pkmn
 
     const void* pokemon_gen6impl::get_native()
     {
+        native::set_gen6_pokemon_checksum(_raw.pc);
         return &_raw;
     }
 

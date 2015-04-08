@@ -13,6 +13,7 @@
 #include <pkmn/enums.hpp>
 #include <pkmn/paths.hpp>
 #include <pkmn/conversions/text.hpp>
+#include <pkmn/native/checksum.hpp>
 #include <pkmn/types/prng.hpp>
 
 #include "internal.hpp"
@@ -92,6 +93,8 @@ namespace pkmn
             _raw.pokerus_time = pkmn::pokerus_t(_misc->pokerus).num_days;
             _set_stats(); // Will populate party portion
             _set_form();
+
+            native::set_gen3_pokemon_checksum(_raw.pc);
         }
     }
 
@@ -745,7 +748,7 @@ namespace pkmn
         query_stream << "SELECT generation_id FROM moves WHERE id="
                      << database::get_move_id(move_name);
         SQLite::Statement query(*_db, query_stream.str().c_str());
-        if(query.executeStep()) _attacks->moves[pos-1] = int(query.getColumn(0));
+        if(query.executeStep()) _attacks->moves[pos-1] = uint8_t(query.getColumn(0));
         else throw std::runtime_error("This move does not exist in Generation III.");
     }   
 
@@ -783,6 +786,7 @@ namespace pkmn
 
     const void* pokemon_gen3impl::get_native()
     {
+        native::set_gen3_pokemon_checksum(_raw.pc);
         return &_raw;
     }
 
