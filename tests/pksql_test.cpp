@@ -13,8 +13,8 @@
 #include <boost/format.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <pkmn/io.hpp>
 #include <pkmn/paths.hpp>
+#include <pkmn/pokemon.hpp>
 #include <pkmn/native/pokemon.hpp>
 
 namespace fs = boost::filesystem;
