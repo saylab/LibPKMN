@@ -78,7 +78,6 @@ IF(ENABLE_LIBPKMN)
         game_save_gen2impl.cpp
         game_save_gen3impl.cpp
         game_save_gen4impl.cpp
-        io.cpp
         lists.cpp
         copy_sptrs.cpp
         ${SQLiteCpp_sources}
