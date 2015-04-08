@@ -28,6 +28,7 @@
 
 #include "internal.hpp"
 #include "io/3gpkm.hpp"
+#include "io/pkm.hpp"
 #include "io/pksql.hpp"
 #include "SQLiteCpp/SQLiteC++.h"
 
@@ -98,6 +99,8 @@ namespace pkmn
             return io::pksql::from(filename);
         else if(fs::extension(fs::path(filename)) == ".3gpkm" and io::_3gpkm::valid(filename))
             return io::_3gpkm::from(filename);
+        else if(fs::extension(fs::path(filename)) == ".pkm" and io::pkm::valid(filename))
+            return io::pkm::from(filename);
         else
             throw std::runtime_error("Invalid file.");
     }
@@ -122,6 +125,15 @@ namespace pkmn
             {
                 fs::remove(fs::path(filename));
                 throw std::runtime_error("Failed to export to .3gpkm.");
+            }
+        }
+        else if(ext == ".pkm")
+        {
+            io::pkm::to(pkmn, filename);
+            if(not io::pkm::valid(filename))
+            {
+                fs::remove(fs::path(filename));
+                throw std::runtime_error("Failed to export to .pkm.");
             }
         }
         else throw std::runtime_error("Extension must be .pksql, .3gpkm, or .pkm.");

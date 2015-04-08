@@ -37,3 +37,20 @@ BOOST_AUTO_TEST_CASE(_3gpkm_test)
 
     fs::remove(filepath);
 }
+
+BOOST_AUTO_TEST_CASE(pkm_test)
+{
+    pkmn::pokemon::sptr pkmn1 = pkmn::pokemon::make("Turtwig", "Platinum", 50,
+                                                    "Tackle", "Leech Seed",
+                                                    "Razor Leaf", "None");
+
+    std::string filename = str(boost::format("pkm_%d.pkm") % rand());
+    fs::path filepath = fs::path(fs::path(pkmn::get_tmp_dir()) / filename);
+
+    pkmn::pokemon::export_to(pkmn1, filepath.string());
+    pkmn::pokemon::sptr pkmn2 = pkmn::pokemon::make(filepath.string());
+
+    pokemon_equality_check(pkmn1, pkmn2);
+
+    fs::remove(filepath);
+}
