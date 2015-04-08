@@ -557,6 +557,8 @@ namespace pkmn
         }
 
         conversions::export_gb_IV("Attack", new_value, _raw.pc.iv_data);
+
+        _set_stats();
     }
 
     // No natures in Generation II
