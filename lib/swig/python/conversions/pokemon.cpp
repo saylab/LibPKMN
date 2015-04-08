@@ -29,37 +29,22 @@ namespace pkmn
                 throw std::runtime_error("Invalid input: null pointer.");
 
             // Validate input type
-            bool is_string;
-            if(PyList_Check(pyobject)) is_string = false;
-            else if(PyString_Check(pyobject)) is_string = true;
-            else throw std::runtime_error("Invalid input: not a list or string.");
+            if(not PyList_Check(pyobject))
+                throw std::runtime_error("Invalid input: not a list.");
 
             // Validate input size
-            bool is_pc;
-            Py_ssize_t len = is_string ? PyString_Size(pyobject) : PyList_Size(pyobject);
-            if(len == sizeof(gen1_pc_pokemon_t)) is_pc = true;
-            else if(len == sizeof(gen1_party_pokemon_t)) is_pc = false;
-            else throw std::runtime_error("Invalid input size.");
+            Py_ssize_t len = PyList_Size(pyobject);
+            if(len != sizeof(gen1_pc_pokemon_t) and len != sizeof(gen1_party_pokemon_t))
+                throw std::runtime_error("Invalid input size.");
 
             // Read input
-            uint8_t* buffer;
-            if(is_string)
-                buffer = (uint8_t*)PyString_AsString(pyobject);
-            else
-            {
-                buffer = new uint8_t[sizeof(gen1_party_pokemon_t)];
-                for(Py_ssize_t i = 0; i < len; i++)
-                    buffer[i] = uint8_t(PyInt_AsLong(PyList_GetItem(pyobject, i)));
-            }
+            uint8_t* buffer = new uint8_t[sizeof(gen1_party_pokemon_t)];
+            for(Py_ssize_t i = 0; i < len; i++)
+                buffer[i] = uint8_t(PyInt_AsLong(PyList_GetItem(pyobject, i)));
 
             gen1_party_pokemon_t raw = *reinterpret_cast<gen1_party_pokemon_t*>(buffer);
-            pokemon::sptr ret;
+            pokemon::sptr ret = pkmn::conversions::import_gen1_pokemon(raw.pc, buffer, buffer, "Red");
 
-            // Can't use ternary operator with raw vs. raw.pc, so this is necessary
-            if(is_pc) ret = pkmn::conversions::import_gen1_pokemon(raw.pc, buffer, buffer, "Red");
-            else      ret = pkmn::conversions::import_gen1_pokemon(raw, buffer, buffer, "Red");
-
-            if(is_string) delete[] buffer;
             ret->set_nickname(boost::algorithm::to_upper_copy(ret->get_pokedex_entry().species_name.std_wstring()));
             ret->set_trainer_name("LIBPKMN");
             return ret;
@@ -90,37 +75,22 @@ namespace pkmn
                 throw std::runtime_error("Invalid input: null pointer.");
 
             // Validate input type
-            bool is_string;
-            if(PyList_Check(pyobject)) is_string = false;
-            else if(PyString_Check(pyobject)) is_string = true;
-            else throw std::runtime_error("Invalid input: not a list or string.");
+            if(not PyList_Check(pyobject))
+                throw std::runtime_error("Invalid input: not a list.");
 
             // Validate input size
-            bool is_pc;
-            Py_ssize_t len = is_string ? PyString_Size(pyobject) : PyList_Size(pyobject);
-            if(len == sizeof(gen2_pc_pokemon_t)) is_pc = true;
-            else if(len == sizeof(gen2_party_pokemon_t)) is_pc = false;
-            else throw std::runtime_error("Invalid input size.");
+            Py_ssize_t len = PyList_Size(pyobject);
+            if(len != sizeof(gen2_pc_pokemon_t) and len != sizeof(gen2_party_pokemon_t))
+                throw std::runtime_error("Invalid input size.");
 
             // Read input
-            uint8_t* buffer;
-            if(is_string)
-                buffer = (uint8_t*)PyString_AsString(pyobject);
-            else
-            {
-                buffer = new uint8_t[sizeof(gen2_party_pokemon_t)];
-                for(Py_ssize_t i = 0; i < len; i++)
-                    buffer[i] = uint8_t(PyInt_AsLong(PyList_GetItem(pyobject, i)));
-            }
+            uint8_t* buffer = new uint8_t[sizeof(gen2_party_pokemon_t)];
+            for(Py_ssize_t i = 0; i < len; i++)
+                buffer[i] = uint8_t(PyInt_AsLong(PyList_GetItem(pyobject, i)));
 
             gen2_party_pokemon_t raw = *reinterpret_cast<gen2_party_pokemon_t*>(buffer);
-            pokemon::sptr ret;
+            pokemon::sptr ret = pkmn::conversions::import_gen2_pokemon(raw.pc, buffer, buffer, "Crystal");
 
-            // Can't use ternary operator with raw vs. raw.pc, so this is necessary
-            if(is_pc) ret = pkmn::conversions::import_gen2_pokemon(raw.pc, buffer, buffer, "Gold");
-            else      ret = pkmn::conversions::import_gen2_pokemon(raw, buffer, buffer, "Gold");
-
-            if(is_string) delete[] buffer;
             ret->set_nickname(boost::algorithm::to_upper_copy(ret->get_pokedex_entry().species_name.std_wstring()));
             ret->set_trainer_name("LIBPKMN");
             return ret;
