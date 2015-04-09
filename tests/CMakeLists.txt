@@ -135,6 +135,7 @@ IF(ENABLE_CSHARP)
     SET(cs_test_names
         CSharpDictTest
         CSharpMarkingsTest
+        CSharpPokemonTest
         CSharpSPtrTest
         CSharpStringTest
     )

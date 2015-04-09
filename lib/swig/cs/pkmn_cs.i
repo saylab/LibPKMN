@@ -26,6 +26,7 @@
 
 %include "pkmn_nature.i"
 %include "pkmn_pokedex.i"
+%include "pkmn_pokemon.i"
 %include "pkmn_shared_ptr.i"
 
 %{
