@@ -25,6 +25,10 @@ def gen1_pokemon_conversion_test():
         if entry1.species_name != entry2.species_name:
             raise Exception("entry.species_name mismatch")
 
+        # Make sure get_native() method uses right export function
+        if pk1.get_native() != exported:
+            raise Exception("get_native() failed")
+
         return True
     except:
         print
@@ -47,6 +51,10 @@ def gen2_pokemon_conversion_test():
             raise Exception("pk.get_trainer_name() mismatch")
         if entry1.species_name != entry2.species_name:
             raise Exception("entry.species_name mismatch")
+
+        # Make sure get_native() method uses right export function
+        if pk1.get_native() != exported:
+            raise Exception("get_native() failed")
 
         return True
     except:
@@ -71,6 +79,11 @@ def gen3_pokemon_conversion_test():
         if entry1.species_name != entry2.species_name:
             raise Exception("entry.species_name mismatch")
 
+        # Make sure get_native() method uses right export function
+        if pk1.get_native() != exported:
+            raise Exception("get_native() failed")
+
+        return True
     except:
         print
         exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -93,6 +106,11 @@ def nds_pokemon_conversion_test():
         if entry1.species_name != entry2.species_name:
             raise Exception("entry.species_name mismatch")
 
+        # Make sure get_native() method uses right export function
+        if pk1.get_native() != exported:
+            raise Exception("get_native() failed")
+
+        return True
     except:
         print
         exc_type, exc_value, exc_traceback = sys.exc_info()
