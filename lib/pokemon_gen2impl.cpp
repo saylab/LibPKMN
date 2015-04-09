@@ -189,13 +189,21 @@ namespace pkmn
     // No markings in Generation II
     pkmn::markings_t pokemon_gen2impl::get_markings() const
     {
-        return pkmn::markings_t();
+        return pkmn::markings_t(0);
     }
 
     // No ribbons in Generation II
     pkmn::ribbons_t pokemon_gen2impl::get_ribbons() const
     {
-        return pkmn::ribbons_t();
+        pkmn::ribbons_t ribbons;
+        ribbons.hoenn = 0;
+        ribbons.sinnoh.ribbons1 = 0;
+        ribbons.sinnoh.ribbons2 = 0;
+        ribbons.sinnoh.ribbons3 = 0;
+        ribbons.unova = 0;
+        ribbons.kalos = 0;
+
+        return ribbons;
     }
 
     // No Super Training in Generation II
