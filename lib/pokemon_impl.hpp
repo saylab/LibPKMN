@@ -31,7 +31,8 @@ namespace pkmn
     {
         public:
 
-            pokemon_impl(uint16_t species_id, uint16_t version_id);
+            pokemon_impl() {};
+            pokemon_impl(int species_id, int version_id);
             pokemon_impl(const pokemon_impl& other);
             pokemon_impl& operator=(const pokemon_impl& other);
             ~pokemon_impl() {};
@@ -44,7 +45,7 @@ namespace pkmn
 
             // Getting LibPKMN info
             pkmn::pkstring get_game() const;
-            uint16_t get_generation() const;
+            int get_generation() const;
             int get_attribute(const pkmn::pkstring& attribute) const;
             pkmn::dict<pkmn::pkstring, int> get_attributes() const;
             bool has_attribute(const pkmn::pkstring& attribute) const;
@@ -53,20 +54,20 @@ namespace pkmn
             pkmn::pkstring get_sprite_path() const;
 
             // Database Info
-            uint16_t get_species_id() const;
-            uint16_t get_pokemon_id() const;
-            uint16_t get_game_id() const;
-            uint16_t get_form_id() const;
+            int get_species_id() const;
+            int get_pokemon_id() const;
+            int get_game_id() const;
+            int get_form_id() const;
 
         protected:
 
-            static pkmn::shared_ptr<SQLite::Database> _db;
-            static pkmn::dict<uint8_t, std::string> _version_dirs;
+            static pkmn::database_sptr _db;
+            static pkmn::dict<int, std::string> _version_dirs;
             static boost::format _generation_format;
             static boost::format _pokemon_format;
             static boost::format _pokemon_form_format;
 
-            uint16_t _species_id, _form_id, _version_id;
+            int _species_id, _form_id, _version_id;
             bool _none, _invalid;
             pkmn::dict<pkmn::pkstring, int> _attributes;
             pokedex::sptr _pokedex;

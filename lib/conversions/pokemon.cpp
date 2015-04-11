@@ -153,16 +153,17 @@ namespace pkmn
         void export_gen3_pokemon(pokemon::sptr pkmn, native::gen3_pc_pokemon_t &native,
                                  bool encrypt)
         {
-            set_gen3_pokemon_checksum(native);
             memcpy(&native, pkmn->get_native(), sizeof(native::gen3_pc_pokemon_t));
+
+            set_gen3_pokemon_checksum(native);
             if(encrypt) native::gen3_encrypt(native);
         }
 
         void export_gen3_pokemon(pokemon::sptr pkmn, native::gen3_party_pokemon_t &native,
                                  bool encrypt)
         {
-            set_gen3_pokemon_checksum(native.pc);
             memcpy(&native, pkmn->get_native(), sizeof(native::gen3_party_pokemon_t));
+            set_gen3_pokemon_checksum(native.pc);
             if(encrypt) native::gen3_encrypt(native.pc);
         }
 
@@ -229,7 +230,7 @@ namespace pkmn
                          << database::get_pokemon_id(dst.pc.species, Versions::GOLD)
                          << " AND base_stat IN (4,5)";
             SQLite::Statement stats_query(*db, query_stream.str().c_str());
-            pkmn::dict<pkmn::pkstring, uint16_t> IVs = conversions::import_gb_IVs(dst.pc.iv_data);
+            pkmn::dict<pkmn::pkstring, int> IVs = conversions::import_gb_IVs(dst.pc.iv_data);
 
             dst.spatk = calculations::get_retro_stat("Special Attack",
                                                      get_num_from_query<uint16_t>(stats_query),
@@ -284,7 +285,7 @@ namespace pkmn
                          << database::get_pokemon_id(dst.pc.species, Versions::RED)
                          << " AND base_stat=9";
             SQLite::Statement stats_query(*db, query_stream.str().c_str());
-            pkmn::dict<pkmn::pkstring, uint16_t> IVs = conversions::import_gb_IVs(dst.pc.iv_data);
+            pkmn::dict<pkmn::pkstring, int> IVs = conversions::import_gb_IVs(dst.pc.iv_data);
 
             dst.spcl = calculations::get_retro_stat("Special",
                                                     get_num_from_query<uint16_t>(stats_query),

@@ -42,8 +42,8 @@ namespace pkmn
         entries_created = true;
     }
 
-    item_entry_t::item_entry_t(uint16_t version_id,
-                               uint16_t item_id)
+    item_entry_t::item_entry_t(int version_id,
+                               int item_id)
     {   
         CONNECT_TO_DB(db);
         if(not entries_created)
@@ -76,7 +76,7 @@ namespace pkmn
         items_query.executeStep();
 
         name = database::get_item_name(item_id);
-        category = database::get_item_category_name(uint16_t(items_query.getColumn(2))); // category_id
+        category = database::get_item_category_name(int(items_query.getColumn(2))); // category_id
 
         /*
          * Pocket name
@@ -84,7 +84,7 @@ namespace pkmn
         query_stream.str("");
         query_stream << "SELECT name FROM pocket_names WHERE version_group_id="
                      << version_group_id << " AND pocket_id=(SELECT pocket_id" // category_id
-                     << " FROM item_categories WHERE id=" << uint16_t(items_query.getColumn(2))
+                     << " FROM item_categories WHERE id=" << int(items_query.getColumn(2))
                      << ")";
         pocket = db->execAndGet(query_stream.str().c_str());
 
@@ -92,7 +92,7 @@ namespace pkmn
          * Description
          */
         query_stream.str("");
-        uint16_t machine_id;
+        int machine_id;
         bool is_machine = ((item_id >= Items::TM01 and item_id <= Items::HM08)
                            or (item_id >= Items::TM93 and item_id <= Items::TM95)
                            or (item_id >= Items::TM96 and item_id <= Items::TM100));
@@ -107,7 +107,7 @@ namespace pkmn
             query_stream << "SELECT move_id FROM machines WHERE machine_number=" << machine_id
                          << " AND version_group_id=" << version_group_id;
             SQLite::Statement machines_query(*db, query_stream.str().c_str());
-            uint16_t move_id = get_num_from_query<uint16_t>(machines_query);
+            int move_id = get_num_from_query<int>(machines_query);
 
             query_stream.str("");
             query_stream << "SELECT flavor_text FROM move_flavor_text WHERE move_id="
@@ -155,8 +155,8 @@ namespace pkmn
             fling_power = items_query.getColumn(4); // fling_power
     }
 
-    item_entry_t::item_entry_t(const pkmn::pkstring& version_name,
-                               const pkmn::pkstring& item_name)
+    item_entry_t::item_entry_t(const pkmn::pkstring &version_name,
+                               const pkmn::pkstring &item_name)
     {
         item_entry_t(database::get_version_id(version_name),
                      database::get_item_id(item_name));

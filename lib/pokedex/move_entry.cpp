@@ -45,13 +45,13 @@ namespace pkmn
 
         // Invalid entry
         invalid_entry = none_entry;
-        none_entry.name = "Invalid";
+        invalid_entry.name = "Invalid";
 
         entries_created = true;
     }
 
-    move_entry_t::move_entry_t(uint16_t version_id,
-                               uint16_t move_id)
+    move_entry_t::move_entry_t(int version_id,
+                               int move_id)
     {   
         CONNECT_TO_DB(db);
         if(not entries_created)
@@ -68,11 +68,11 @@ namespace pkmn
             return;
         }
 
-        uint16_t generation = database::get_generation(version_id);
+        int generation = database::get_generation(version_id);
 
         std::ostringstream query_stream;
         query_stream << "SELECT generation_id FROM moves WHERE id=" << move_id;
-        if(uint16_t(db->execAndGet(query_stream.str().c_str())) > generation)
+        if(int(db->execAndGet(query_stream.str().c_str())) > generation)
             throw std::runtime_error("This move did not exist in this generation.");
 
         /*
@@ -85,7 +85,7 @@ namespace pkmn
 
         name = database::get_move_name(move_id);
         type = database::get_type_name(moves_query.getColumn(3)); // type_id
-        damage_class = database::get_move_damage_class_name(uint16_t(moves_query.getColumn(9))); // damage_class_id
+        damage_class = database::get_move_damage_class_name(int(moves_query.getColumn(9))); // damage_class_id
 
         power = moves_query.getColumn(4); // power
         pp = moves_query.getColumn(5); // pp
@@ -246,8 +246,8 @@ namespace pkmn
         }
     }
 
-    move_entry_t::move_entry_t(const pkmn::pkstring& version_name,
-                               const pkmn::pkstring& move_name)
+    move_entry_t::move_entry_t(const pkmn::pkstring &version_name,
+                               const pkmn::pkstring &move_name)
     {
         move_entry_t(database::get_version_id(version_name),
                      database::get_move_id(move_name));

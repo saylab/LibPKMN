@@ -70,9 +70,9 @@ namespace pkmn
         entries_created = true;
     }
 
-    pokemon_entry_t::pokemon_entry_t(uint16_t version_id,
-                                     uint16_t species_id,
-                                     uint16_t form_id)
+    pokemon_entry_t::pokemon_entry_t(int version_id,
+                                     int species_id,
+                                     int form_id)
     {
         CONNECT_TO_DB(db);
         if(not entries_created)
@@ -89,7 +89,7 @@ namespace pkmn
             return;
         }
 
-        uint16_t pokemon_id;
+        int pokemon_id;
         std::ostringstream query_stream;
 
         // Use default form if nothing given
@@ -168,7 +168,7 @@ namespace pkmn
         has_gender_differences = pokemon_species_query.getColumn(13); // has_gender_differences
 
         int generation = database::get_generation(version_id);
-        bool old_games     = (generation < 3);
+        bool old_games = (generation < 3);
 
         /*
          * Abilities
@@ -241,7 +241,7 @@ namespace pkmn
         base_stats["Speed"] = pokemon_stats_query.getColumn(0);                   // base_stat
         ev_yields["Speed"]  = pokemon_stats_query.getColumn(old_games ? 0 : 1);   // base_stat, effort
         query_stream.str("");
-        if(old_games)
+        if(generation == 1)
         {
             query_stream << "SELECT base_stat FROM pokemon_stats WHERE pokemon_id="
                          << pokemon_id << " AND stat_id=9";
@@ -255,7 +255,7 @@ namespace pkmn
             SQLite::Statement pokemon_stats_query2(*db, query_stream.str().c_str());
             pokemon_stats_query2.executeStep();
             base_stats["Special Attack"] = pokemon_stats_query2.getColumn(0);     // base_stat
-            ev_yields["Special Attack"]  = pokemon_stats_query2.getColumn(0);     // effort
+            ev_yields[(generation == 2) ? "Special" : "Special Attack"]  = pokemon_stats_query2.getColumn(0);     // effort
         }
 
         /*
@@ -463,11 +463,11 @@ namespace pkmn
         }
     }
 
-    pokemon_entry_t::pokemon_entry_t(const pkmn::pkstring& version_name,
-                                     const pkmn::pkstring& species_name,
-                                     const pkmn::pkstring& form_name)
+    pokemon_entry_t::pokemon_entry_t(const pkmn::pkstring &version_name,
+                                     const pkmn::pkstring &species_name,
+                                     const pkmn::pkstring &form_name)
     {
-        uint16_t form_id;
+        int form_id;
         if(form_name == "Standard" or form_name == species_name or form_name == "")
             form_id = database::get_species_id(species_name);
         else

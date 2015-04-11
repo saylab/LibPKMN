@@ -5,6 +5,8 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
+#include <cstring>
+
 #include <boost/assign.hpp>
 
 #include <pkmn/database.hpp>
@@ -15,6 +17,24 @@ namespace pkmn
 {
     namespace conversions
     {
+        uint32_t import_gb_experience(uint8_t* exp_buf)
+        {
+            return (65536*exp_buf[0]) + (256*exp_buf[1]) + exp_buf[2];
+        }
+
+        void export_gb_experience(uint8_t* exp_buf, uint32_t val)
+        {
+            memset(exp_buf, 0, 3);
+
+            exp_buf[2] = uint8_t(val % 256);
+
+            val -= exp_buf[2];
+            exp_buf[1] = uint8_t((val / 256) % 256);
+
+            val -= exp_buf[1];
+            exp_buf[0] = uint8_t((val / 65536) % 65536);            
+        }
+
         static uint16_t get_gb_IV(int stat, uint16_t iv_data)
         {
             switch(stat)
@@ -44,20 +64,20 @@ namespace pkmn
             }
         }
 
-        pkmn::dict<pkmn::pkstring, uint16_t> import_gb_IVs(uint16_t iv_data)
+        pkmn::dict<pkmn::pkstring, int> import_gb_IVs(uint16_t iv_data)
         {
-            pkmn::dict<pkmn::pkstring, uint16_t> IVs = boost::assign::map_list_of
+            pkmn::dict<pkmn::pkstring, int> IVs = boost::assign::map_list_of
                 ("HP",      get_gb_IV(Stats::HP, iv_data))
-                ("Attack",  get_gb_IV(Stats::HP, iv_data))
-                ("Defense", get_gb_IV(Stats::HP, iv_data))
-                ("Speed",   get_gb_IV(Stats::HP, iv_data))
-                ("Special", get_gb_IV(Stats::HP, iv_data))
+                ("Attack",  get_gb_IV(Stats::ATTACK, iv_data))
+                ("Defense", get_gb_IV(Stats::DEFENSE, iv_data))
+                ("Speed",   get_gb_IV(Stats::SPEED, iv_data))
+                ("Special", get_gb_IV(Stats::SPECIAL, iv_data))
             ;
 
             return IVs;
         }
 
-        void export_gb_IV(const pkmn::pkstring &stat, uint8_t value, uint16_t &iv_data)
+        void export_gb_IV(const pkmn::pkstring &stat, int value, uint16_t &iv_data)
         {
             switch(database::get_stat_id(stat))
             {

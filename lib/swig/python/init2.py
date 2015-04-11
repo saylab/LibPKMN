@@ -25,7 +25,6 @@ from pkmn_python import *
 import calculations
 import conversions
 import database
-import io
 @IMPORT_QT4@
 
 SQLITE3_VERSION = "3.7.14.1"
