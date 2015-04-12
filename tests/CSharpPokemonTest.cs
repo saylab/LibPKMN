@@ -107,5 +107,5 @@ public class PokemonTest
         successful = NDSTest() && successful;
 
         return successful ? 0 : 1;
-    }    
+    }
 }
