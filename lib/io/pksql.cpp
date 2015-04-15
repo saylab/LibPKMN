@@ -311,7 +311,9 @@ namespace pkmn
         pkmn::database_sptr pksql::to(pokemon::sptr pkmn, const pkmn::pkstring &filename)
         {
             pkmn::database_sptr db(new SQLite::Database(filename, (SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE)));
+            db->exec("BEGIN TRANSACTION");
             pksql::to(pkmn, db);
+            db->exec("END TRANSACTION");
 
             if(not pksql::valid(filename))
                 throw std::runtime_error("Failed to create valid PKSQL file.");
