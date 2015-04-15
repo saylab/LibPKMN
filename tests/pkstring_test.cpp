@@ -18,20 +18,30 @@
 BOOST_AUTO_TEST_CASE(pkstring_conversions)
 {
     std::string test_stdstring1 = "Test string";
-    std::wstring test_stdwstring1 = L"Test string";
     pkmn::pkstring test_pkstring1 = test_stdstring1;
+    std::wstring test_stdwstring1 = L"Test string";
     pkmn::pkstring test_pkstring2 = test_stdwstring1;
-    std::basic_string<uint16_t> test_string16_1 = (const uint16_t*)test_pkstring1;
-    std::basic_string<uint16_t> test_string16_2 = (const uint16_t*)test_pkstring2;
 
     BOOST_CHECK(test_pkstring1 == test_stdstring1);
-    BOOST_CHECK(test_pkstring1 == test_stdwstring1);
-    BOOST_CHECK(test_pkstring1 == test_string16_2);
     BOOST_CHECK(test_pkstring2 == test_stdstring1);
+    BOOST_CHECK(test_pkstring1 == test_stdwstring1);
     BOOST_CHECK(test_pkstring2 == test_stdwstring1);
-    BOOST_CHECK(test_pkstring2 == test_string16_1);
     BOOST_CHECK(test_pkstring1 == test_pkstring2);
+
+    std::basic_string<uint16_t> test_string16_1 = test_pkstring1;
+    std::basic_string<uint16_t> test_string16_2 = test_pkstring2;
+    BOOST_CHECK(test_pkstring1 == test_string16_2);
+    BOOST_CHECK(test_pkstring2 == test_string16_1);
     BOOST_CHECK(test_string16_1 == test_string16_2);
+
+    const char* test_const_char = "Test C-str";
+    const wchar_t* test_const_wchar_t = L"Test C-str";
+    pkmn::pkstring test_pkstring3("Test C-str");
+    pkmn::pkstring test_pkstring4(L"Test C-str");
+
+    BOOST_CHECK(test_pkstring3 == test_const_char);
+    BOOST_CHECK(test_pkstring4 == test_const_wchar_t);
+    BOOST_CHECK(test_pkstring3 == test_pkstring4);
 }
 
 /*
