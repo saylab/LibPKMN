@@ -52,13 +52,13 @@
 
     %pythoncode %{
         def __eq__(self, rhs):
-            if isinstance(x, (int, long, float, complex)):
+            if isinstance(rhs, (int, long, float, complex)):
                 return False
             else:
                 return (str(self) == str(rhs))
 
         def __ne__(self, rhs):
-            if isinstance(x, (int, long, float, complex)):
+            if isinstance(rhs, (int, long, float, complex)):
                 return True
             else:
                 return (str(self) != str(rhs))
