@@ -275,6 +275,13 @@ namespace pkmn
                 raw_tmhm_pocket[i].index = ITEM_GAME_INDEX(item_list, i, version_id);
                 raw_tmhm_pocket[i].count = item_list[i].amount ^ security_key;
             }
+
+            item_list = libpkmn_bag->get_pocket(is_frlg ? "Berry Pouch" : "Berries")->get_item_list();
+            for(size_t i = 0; i < item_list.size(); i++)
+            {
+                raw_berry_pocket[i].index = ITEM_GAME_INDEX(item_list, i, version_id);
+                raw_berry_pocket[i].count = item_list[i].amount ^ security_key;
+            }
         }
 
         #define CONST_RAW_NDS_POCKET(field) (is_hgss ? reinterpret_cast<const native::hgss_item_storage_t*>(raw_bag)->field \
