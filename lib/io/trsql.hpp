@@ -20,7 +20,7 @@
  * If the TRSQL format changes, this number must be incremented. If not,
  * any import will fail.
  */
-#define TRSQL_COMPAT_NUM 1
+#define TRSQL_COMPAT_NUM 2
 
 namespace pkmn
 {
@@ -30,9 +30,7 @@ namespace pkmn
         {
             public:
 
-                static std::string create_tables();
-
-                static std::string query(trainer::sptr tr, uint64_t id = latest_id);
+                static void create_tables(pkmn::database_sptr db);
 
                 static bool valid(pkmn::database_sptr db);
 
@@ -44,12 +42,10 @@ namespace pkmn
 
                 static void add_invalid_pokemon(pkmn::database_sptr db, pokemon::sptr pkmn);
 
-                static void to(trainer::sptr tr, pkmn::database_sptr db);
+                static uint64_t to(trainer::sptr tr, pkmn::database_sptr db);
 
                 static pkmn::database_sptr to(trainer::sptr tr,
                                               const pkmn::pkstring &filename);
-
-            private:
 
                 static uint64_t latest_id;
         };

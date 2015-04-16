@@ -25,10 +25,11 @@ namespace pkmn
     {
         uint64_t trsql::latest_id = 1;
 
-        std::string trsql::create_tables()
+        void trsql::create_tables(pkmn::database_sptr db)
         {
+            pksql::create_tables(db);
+
             std::ostringstream table_stream;
-            table_stream << pksql::create_tables() << std::endl;
             table_stream << "CREATE TABLE trainer (\n"
                          << "    id               INTEGER NOT NULL,\n"
                          << "    trsql_compat_num INTEGER NOT NULL,\n"
@@ -39,82 +40,19 @@ namespace pkmn
                          << "    money            INTEGER NOT NULL\n"
                          << ");\n";
 
-            table_stream << "CREATE TABLE trainer_valid_pokemon (\n"
+            table_stream << "CREATE TABLE trainer_pokemon (\n"
                          << "    trainer_id       INTEGER NOT NULL,\n"
                          << "    pokemon_id       INTEGER NOT NULL,\n"
-                         << "    pokemon_position INTEGER NOT NULL\n"
+                         << "    pokemon_position INETGER NOT NULL\n"
                          << ");\n";
 
-            table_stream << "CREATE TABLE trainer_invalid_pokemon (\n"
-                         << "    trainer_id       INTEGER NOT NULL,\n"
-                         << "    raw_pokemon      BLOB NOT NULL,\n"
-                         << "    pokemon_position INETGER NOT NULL,\n"
-                         << "    nickname         VARCHAR(20) NOT NULL,\n"
-                         << "    otname           VARCHAR(20) NOT NULL\n"
-                         << ");\n";
-
-            return table_stream.str();
-        }
-
-        std::string trsql::query(trainer::sptr tr, uint64_t id)
-        {
-            std::vector<std::pair<int, int> > pokemon_ids;
-            pkmn::pokemon_team_t party = tr->get_party();
-
-            std::ostringstream query_stream;
-
-            query_stream << "INSERT INTO \"trainer\" VALUES("
-                         << id << ","
-                         << TRSQL_COMPAT_NUM << ","
-                         << tr->get_game_id() << ","
-                         << tr->get_id() << ","
-                         << "'" << tr->get_name() << "',"
-                         << ((tr->get_gender() == "Female") ? 1 : 0) << ","
-                         << tr->get_money() << ");\n";
-
-            // Trainer's valid Pokemon
-            for(size_t i = 0; i < party.size(); i++)
-            {
-                if(party[i]->get_species_id() == Species::NONE or
-                   party[i]->get_species_id() == Species::INVALID)
-                {
-                    continue;
-                }
-                else
-                {
-                    query_stream << pksql::query(party[i], trsql::latest_id);
-                    query_stream << "INSERT INTO \"trainer_valid_pokemon\" VALUES("
-                                 << id << ","
-                                 << trsql::latest_id++ << ","
-                                 << (i+1) << ");\n";
-                }
-            }
-
-            return query_stream.str();
+            db->exec(table_stream.str().c_str());
         }
 
         bool trsql::valid(pkmn::database_sptr db)
         {
             // Check for correct tables
-            if(not pksql::valid(db) or not db->tableExists("trainer") or not db->tableExists("trainer_valid_pokemon")
-               or not db->tableExists("trainer_invalid_pokemon"))
-            {
-                return false;
-            }
-
-            // Check for at least one entry in "trainer"
-            SQLite::Statement trainer_query(*db, "SELECT * FROM trainer");
-            if(not trainer_query.executeStep())
-                return false;
-
-            // Check for at least one entry in "pkmn"
-            SQLite::Statement pkmn_query(*db, "SELECT * FROM pkmn");
-            if(not pkmn_query.executeStep())
-                return false;
-
-            // Check for at least one entry in "trainer_"
-            SQLite::Statement trainer_pokemon_query(*db, "SELECT * FROM trainer_valid_pokemon");
-            if(not trainer_pokemon_query.executeStep())
+            if(not pksql::valid(db) or not db->tableExists("trainer") or not db->tableExists("trainer_pokemon"))
                 return false;
 
             // Check for valid TRSQL compatibility number
@@ -122,6 +60,16 @@ namespace pkmn
             int id = db->execAndGet("SELECT trsql_compat_num FROM trainer");
             if(id != TRSQL_COMPAT_NUM)
                 throw std::runtime_error("Invalid TRSQL compatibility number.");
+
+            // Check for at least one entry in "trainer"
+            SQLite::Statement trainer_query(*db, "SELECT * FROM trainer");
+            if(not trainer_query.executeStep())
+                return false;
+
+            // Check for at least one entry in "trainer_pokemon"
+            SQLite::Statement trainer_pokemon_query(*db, "SELECT * FROM trainer_pokemon");
+            if(not trainer_pokemon_query.executeStep())
+                return false;
 
             // Check for correct number of columns
             if(trainer_query.getColumnCount() != 7)
@@ -140,7 +88,7 @@ namespace pkmn
             try {trsql = pkmn::database_sptr(new SQLite::Database(filename));}
             catch(...) {return false;}
 
-            return trsql::valid(trsql);
+            if(not trsql::valid(trsql)) return false;
 
             return true;
         }
@@ -162,115 +110,17 @@ namespace pkmn
             tr->set_money(trainer_query.getColumn(6));
 
             // Get valid Pokemon
-            SQLite::Statement trainer_pokemon_query(*db, str(boost::format("SELECT * FROM trainer_valid_pokemon WHERE trainer_id=%d")
+            SQLite::Statement trainer_pokemon_query(*db, str(boost::format("SELECT * FROM trainer_pokemon WHERE trainer_id=%d")
                                                              % id).c_str());
+
             while(trainer_pokemon_query.executeStep())
             {
-                SQLite::Statement pkmn_query(*db, str(boost::format("SELECT id FROM pkmn WHERE id=%d")
-                                                      % trainer_pokemon_query.getColumn(1)).c_str());
+                int trainer_id = trainer_pokemon_query.getColumn(0);
+                int pokemon_id = trainer_pokemon_query.getColumn(1);
+                int pos        = trainer_pokemon_query.getColumn(2);
 
-                tr->set_pokemon(trainer_pokemon_query.getColumn(2),
-                                pksql::from(db,
-                                            db->execAndGet(str(boost::format("SELECT id FROM pkmn WHERE id=%d")
-                                                               % trainer_pokemon_query.getColumn(2)).c_str())
-                                )
-                               );
+                tr->set_pokemon(pos, pksql::from(db, pokemon_id));
             }
-
-            // Get invalid Pokemon
-            SQLite::Statement trainer_invalid_pokemon_query(*db,
-                                                            str(boost::format("SELECT * FROM trainer_invalid_pokemon WHERE trainer_id=%d")
-                                                                % id).c_str()
-                                                           );
-            while(trainer_invalid_pokemon_query.executeStep())
-            {
-                const void* raw = trainer_invalid_pokemon_query.getColumn(1);
-                pokemon::sptr pkmn;
-
-                switch(database::get_generation(game_id))
-                {
-                    case 1:
-                    {
-                        native::gen1_party_pokemon_t native1;
-                        memcpy(&native1, raw, sizeof(native::gen1_party_pokemon_t));
-
-                        uint8_t* nickname_buffer = new uint8_t[15];
-                        conversions::export_gen1_text(trainer_invalid_pokemon_query.getColumn(3),
-                                                      nickname_buffer,
-                                                      10);
-
-                        uint8_t* otname_buffer = new uint8_t[10];
-                        conversions::export_gen1_text(trainer_invalid_pokemon_query.getColumn(4),
-                                                      otname_buffer,
-                                                      7);
-
-                        pkmn = conversions::import_gen1_pokemon(native1,
-                                                                nickname_buffer,
-                                                                otname_buffer,
-                                                                database::get_version_name(game_id)
-                                                               );
-                        delete[] nickname_buffer;
-                        delete[] otname_buffer;
-
-                        break;
-                    }
-
-                    case 2:
-                    {
-                        native::gen2_party_pokemon_t native2;
-                        memcpy(&native2, raw, sizeof(native::gen2_party_pokemon_t));
-
-                        uint8_t* nickname_buffer = new uint8_t[15];
-                        conversions::export_gen2_text(trainer_invalid_pokemon_query.getColumn(3),
-                                                      nickname_buffer,
-                                                      10);
-
-                        uint8_t* otname_buffer = new uint8_t[10];
-                        conversions::export_gen2_text(trainer_invalid_pokemon_query.getColumn(4),
-                                                      otname_buffer,
-                                                      7);
-
-                        pkmn = conversions::import_gen2_pokemon(native2,
-                                                                nickname_buffer,
-                                                                otname_buffer,
-                                                                database::get_version_name(game_id)
-                                                               );
-                        delete[] nickname_buffer;
-                        delete[] otname_buffer;
-
-                        break;
-                    }
-
-                    case 3:
-                    {
-                        native::gen3_party_pokemon_t native3;
-                        memcpy(&native3, raw, sizeof(native::gen3_party_pokemon_t));
-
-                        pkmn = conversions::import_gen3_pokemon(native3,
-                                                                database::get_version_name(game_id),
-                                                                false
-                                                               );
-                        break;
-                    }
-
-                    default:
-                    {
-                        native::nds_party_pokemon_t nativen;
-                        memcpy(&nativen, raw, sizeof(native::nds_party_pokemon_t));
-
-                        pkmn = conversions::import_nds_pokemon(nativen,
-                                                               database::get_version_name(game_id),
-                                                               false
-                                                              );
-                        break;
-                    }
-                }
-
-                tr->set_pokemon(trainer_invalid_pokemon_query.getColumn(2), pkmn);
-            }
-
-            if(id > trsql::latest_id)
-                trsql::latest_id = id;
 
             return tr;
         }
@@ -285,36 +135,45 @@ namespace pkmn
             return trsql::from(db, uint64_t(db->execAndGet("SELECT id FROM trainer")));
         }
 
-        void trsql::to(trainer::sptr tr, pkmn::database_sptr db)
+        uint64_t trsql::to(trainer::sptr tr, pkmn::database_sptr db)
         {
             static int native_sizes[7] = {0,44,48,100,380,380,500};
 
-            if(not db->tableExists("trainer"))
-                db->exec(trsql::create_tables().c_str());
+            if(not db->tableExists("trainer") and not db->tableExists("trainer_pokemon"))
+                trsql::create_tables(db);
 
-            db->exec(trsql::query(tr).c_str());
+            std::ostringstream query_stream;
+            query_stream << "INSERT INTO \"trainer\" VALUES("
+                         << trsql::latest_id << ","
+                         << TRSQL_COMPAT_NUM << ","
+                         << tr->get_game_id() << ","
+                         << tr->get_id() << ","
+                         << "'" << tr->get_name() << "',"
+                         << ((tr->get_gender() == "Female") ? 1 : 0) << ","
+                         << tr->get_money() << ");\n";
+
+            db->exec(query_stream.str().c_str());
 
             // Add any invalid Pokemon
             pokemon_team_t party = tr->get_party();
-            for(size_t i = 0; i < party.size(); i++)
+            for(size_t i = 0; i < 6; i++)
             {
-                if(party[i]->get_species_id() == Species::INVALID)
-                {
-                    std::ostringstream query_stream;
-                    query_stream << "INSERT INTO trainer_invalid_pokemon VALUES("
-                                 << db->execAndGet("SELECT id FROM trainer") << ",?,"
-                                 << (i+1) << ","
-                                 << "'" << party[i]->get_nickname() << "',"
-                                 << "'" << party[i]->get_trainer_name() << "');";
+                int pokemon_id = pksql::to(party[i], db);
 
-                    SQLite::Statement export_query(*db, query_stream.str().c_str());
-                    export_query.bind(1, party[i]->get_native(), native_sizes[party[i]->get_generation()]);
-                    export_query.executeStep();
-                }
+                query_stream.str("");
+                query_stream << "INSERT INTO \"trainer_pokemon\" VALUES("
+                             << trsql::latest_id << ","
+                             << pokemon_id << ","
+                             << (i+1)
+                             << ");";
+
+                db->exec(query_stream.str().c_str());
             }
 
             if(not trsql::valid(db))
                 throw std::runtime_error("Failed to create valid TRSQL database.");
+
+            return trsql::latest_id++;
         }
 
         pkmn::database_sptr trsql::to(trainer::sptr tr, const pkmn::pkstring &filename)

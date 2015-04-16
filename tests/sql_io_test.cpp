@@ -61,6 +61,10 @@ BOOST_AUTO_TEST_CASE(gen1_pksql_test)
 
     pokemon_equality_check(pkmn1, pkmn2);
 
+    BOOST_CHECK(pkmn1->get_nickname() == "GEN1_PKSQL");
+    BOOST_CHECK(pkmn1->get_trainer_name() == "WAT");
+    BOOST_CHECK_EQUAL(pkmn1->get_trainer_id(), 01351);
+
     fs::remove(filepath);
 }
 
@@ -98,6 +102,10 @@ BOOST_AUTO_TEST_CASE(gen2_pksql_test)
     pkmn::pokemon::sptr pkmn2 = pkmn::pokemon::make(filepath.string());
 
     pokemon_equality_check(pkmn1, pkmn2);
+
+    BOOST_CHECK(pkmn1->get_nickname() == "GEN2_PKSQL");
+    BOOST_CHECK(pkmn1->get_trainer_name() == "WAT");
+    BOOST_CHECK_EQUAL(pkmn1->get_trainer_id(), 01351);
 
     fs::remove(filepath);
 }
@@ -275,5 +283,5 @@ BOOST_AUTO_TEST_CASE(trsql_test)
 
     trainer_equality_check(trainer1, trainer2);
 
-    fs::remove(filepath);
+    //fs::remove(filepath);
 }
