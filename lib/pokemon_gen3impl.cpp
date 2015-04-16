@@ -26,7 +26,8 @@ namespace pkmn
                                        int level,
                                        int move1, int move2,
                                        int move3, int move4):
-        pokemon_impl(species, version)
+        pokemon_impl(database::get_pokemon_game_index(species, version),
+                     version, (species == Species::NONE))
     {
         memset(&_raw, 0x0, sizeof(pkmn::native::gen3_party_pokemon_t));
 
@@ -43,7 +44,6 @@ namespace pkmn
 
             _raw.pc.language = 0x202; // English
             conversions::export_gen3_text("LIBPKMN", _raw.pc.otname, 7);
-            // TODO: checksum
 
             _growth = &(_raw.pc.blocks.growth);
             _attacks = &(_raw.pc.blocks.attacks);
@@ -98,24 +98,13 @@ namespace pkmn
 
     pokemon_gen3impl::pokemon_gen3impl(const pkmn::native::gen3_pc_pokemon_t &raw,
                                        int version):
-        pokemon_impl(database::get_pokemon_id(raw.blocks.growth.species, version),
-                     version)
+        pokemon_impl(raw.blocks.growth.species, version, false)
     {
         _raw.pc = raw;
         _growth = &(_raw.pc.blocks.growth);
         _attacks = &(_raw.pc.blocks.attacks);
         _effort = &(_raw.pc.blocks.effort);
         _misc = &(_raw.pc.blocks.misc);
-        _none = false;
-        try
-        {
-            PKMN_UNUSED(int pokemon_id) = database::get_pokemon_id(_growth->species, Versions::EMERALD);
-            _invalid = false;
-        }
-        catch(...)
-        {
-            _invalid = true;
-        }
 
         _raw.level = database::get_level(_species_id, _growth->exp);
         _set_stats(); // Will populate party portion
@@ -123,24 +112,13 @@ namespace pkmn
 
     pokemon_gen3impl::pokemon_gen3impl(const pkmn::native::gen3_party_pokemon_t &raw,
                                        int version):
-        pokemon_impl(database::get_pokemon_id(raw.pc.blocks.growth.species, version),
-                     version),
+        pokemon_impl(raw.pc.blocks.growth.species, version, false),
         _raw(raw)
     {
         _growth = &(_raw.pc.blocks.growth);
         _attacks = &(_raw.pc.blocks.attacks);
         _effort = &(_raw.pc.blocks.effort);
         _misc = &(_raw.pc.blocks.misc);
-        _none = false;
-        try
-        {
-            PKMN_UNUSED(uint16_t pokemon_id) = database::get_pokemon_id(_growth->species, Versions::EMERALD);
-            _invalid = false;
-        }
-        catch(...)
-        {
-            _invalid = true;
-        }
     };
 
     pokemon_gen3impl::pokemon_gen3impl(const pokemon_gen3impl &other):

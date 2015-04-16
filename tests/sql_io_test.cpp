@@ -274,4 +274,6 @@ BOOST_AUTO_TEST_CASE(trsql_test)
     pkmn::trainer::sptr trainer2 = pkmn::trainer::make(filepath.string());
 
     trainer_equality_check(trainer1, trainer2);
+
+    fs::remove(filepath);
 }

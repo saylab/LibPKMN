@@ -527,10 +527,7 @@ namespace pkmn
             query_stream << "SELECT pokemon_id FROM pokemon_game_indices WHERE version_id=" << version_id
                          << " AND game_index=" << game_index;
             SQLite::Statement query(*db, query_stream.str().c_str());
-            if(query.executeStep())
-                return get_num_from_query<uint16_t>(query);
-            else
-                return Species::INVALID;
+            return get_num_from_query<uint16_t>(query);
         }
 
         uint16_t get_pokemon_id(uint16_t game_index, const pkmn::pkstring& version_name)
@@ -552,7 +549,7 @@ namespace pkmn
         uint16_t get_pokemon_game_index(uint16_t pokemon_id, uint16_t version_id)
         {
             CONNECT_TO_DB(db);
-            if(version_id == Versions::NONE) return 0;
+            if(pokemon_id == Species::NONE or version_id == Versions::NONE) return 0;
 
             std::ostringstream query_stream;
             query_stream << "SELECT game_index FROM pokemon_game_indices WHERE pokemon_id=" << pokemon_id

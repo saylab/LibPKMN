@@ -27,7 +27,8 @@ namespace pkmn
                                        int level,
                                        int move1, int move2,
                                        int move3, int move4):
-        pokemon_impl(species, version),
+        pokemon_impl(database::get_pokemon_game_index(species, version),
+                     version, (species == Species::NONE)),
         _nickname(PKSTRING_UPPERCASE(database::get_species_name(species))),
         _otname("LIBPKMN")
     {
@@ -73,91 +74,43 @@ namespace pkmn
 
     pokemon_gen2impl::pokemon_gen2impl(const pkmn::native::gen2_pc_pokemon_t &raw,
                                        int version):
-        pokemon_impl(database::get_pokemon_id(raw.species, version),
-                     version),
+        pokemon_impl(raw.species, version, false),
         _nickname(UPPERCASE_SPECIES_NAME(raw.species, Versions::GOLD)),
         _otname("LIBPKMN")
     {
         _raw.pc = raw;
-        _none = false;
-        try
-        {
-            PKMN_UNUSED(int pokemon_id) = database::get_pokemon_id(_raw.pc.species, Versions::GOLD);
-            _invalid = false;
-        }
-        catch(...)
-        {
-            _invalid = true;
-        }
-
-        _set_stats(); // Will populate rest of party portion in struct
+        if(not _none and not _invalid)
+            _set_stats(); // Will populate rest of party portion in struct
     }
 
     pokemon_gen2impl::pokemon_gen2impl(const pkmn::native::gen2_pc_pokemon_t &raw,
                                        const pkmn::pkstring &nickname,
                                        const pkmn::pkstring &otname,
                                        int version):
-        pokemon_impl(database::get_pokemon_id(raw.species, version),
-                     version),
+        pokemon_impl(raw.species, version, false),
         _nickname(nickname),
         _otname(otname)
     {
         _raw.pc = raw;
-        _none = false;
-        try
-        {
-            PKMN_UNUSED(int pokemon_id) = database::get_pokemon_id(_raw.pc.species, Versions::GOLD);
-            _invalid = false;
-        }
-        catch(...)
-        {
-            _invalid = true;
-        }
-
-        _set_stats(); // Will populate rest of party portion in struct
+        if(not _none and not _invalid)
+            _set_stats(); // Will populate rest of party portion in struct
     }
 
     pokemon_gen2impl::pokemon_gen2impl(const pkmn::native::gen2_party_pokemon_t &raw,
                                        int version):
-        pokemon_impl(database::get_pokemon_id(raw.pc.species, version),
-                     version),
+        pokemon_impl(raw.pc.species, version, false),
         _raw(raw),
         _nickname(UPPERCASE_SPECIES_NAME(raw.pc.species, Versions::GOLD)),
-        _otname("LIBPKMN")
-    {
-        _none = false;
-        try
-        {
-            PKMN_UNUSED(uint16_t pokemon_id) = database::get_pokemon_id(_raw.pc.species, Versions::GOLD);
-            _invalid = false;
-        }
-        catch(...)
-        {
-            _invalid = true;
-        }
-    }
+        _otname("LIBPKMN") {};
 
     pokemon_gen2impl::pokemon_gen2impl(const pkmn::native::gen2_party_pokemon_t &raw,
                                        const pkmn::pkstring &nickname,
                                        const pkmn::pkstring &otname,
                                        int version):
-        pokemon_impl(database::get_pokemon_id(raw.pc.species, version),
-                     version),
+        pokemon_impl(raw.pc.species, version, false),
         _raw(raw),
         _nickname(nickname),
-        _otname(otname)
-    {
-        _none = false;
-        try
-        {
-            PKMN_UNUSED(int pokemon_id) = database::get_pokemon_id(_raw.pc.species, Versions::GOLD);
-            _invalid = false;
-        }
-        catch(...)
-        {
-            _invalid = true;
-        }
-    }
+        _otname(otname) {};
 
     pokemon_gen2impl::pokemon_gen2impl(const pokemon_gen2impl &other):
         pokemon_impl(other),
