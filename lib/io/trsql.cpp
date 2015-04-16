@@ -313,8 +313,8 @@ namespace pkmn
                 }
             }
 
-            //if(not trsql::valid(db))
-            //    throw std::runtime_error("Failed to create valid TRSQL database.");
+            if(not trsql::valid(db))
+                throw std::runtime_error("Failed to create valid TRSQL database.");
         }
 
         pkmn::database_sptr trsql::to(trainer::sptr tr, const pkmn::pkstring &filename)
