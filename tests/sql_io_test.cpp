@@ -13,8 +13,12 @@
 #include <boost/format.hpp>
 #include <boost/test/unit_test.hpp>
 
+#include <pkmn/enums.hpp>
 #include <pkmn/paths.hpp>
 #include <pkmn/pokemon.hpp>
+#include <pkmn/trainer.hpp>
+#include <pkmn/conversions/pokemon.hpp>
+#include <pkmn/conversions/text.hpp>
 #include <pkmn/native/pokemon.hpp>
 
 #include "cpp_equality_checks.hpp"
@@ -216,4 +220,58 @@ BOOST_AUTO_TEST_CASE(gen5_pksql_test)
     pokemon_equality_check(pkmn1, pkmn2);
 
     fs::remove(filepath);
+}
+
+BOOST_AUTO_TEST_CASE(trsql_test)
+{
+    pkmn::pokemon::sptr pkmn1 = pkmn::pokemon::make("Bulbasaur", "Red", 50,
+                                                    "Tackle", "Vine Whip",
+                                                    "Sleep Powder", "Razor Leaf");
+
+    pkmn::pokemon::sptr pkmn2 = pkmn::pokemon::make("Charmander", "Red", 50,
+                                                    "Scratch", "Ember",
+                                                    "Tail Whip", "Slash");
+
+    pkmn::pokemon::sptr pkmn3 = pkmn::pokemon::make("Squirtle", "Red", 50,
+                                                    "Tackle", "Bubble",
+                                                    "Water Gun", "Leech Seed");
+
+    pkmn::pokemon::sptr pkmn4 = pkmn::pokemon::make("Pikachu", "Red", 50,
+                                                    "Thunder", "Thunder Wave",
+                                                    "Flash", "Tail Whip");
+
+    // Invalid
+    pkmn::native::gen1_pc_pokemon_t raw5;
+    memset(&raw5, 0x0, sizeof(pkmn::native::gen1_pc_pokemon_t));
+    raw5.species = 181; // Missingno.
+    raw5.moves[0] = pkmn::Moves::SKY_ATTACK;
+    raw5.moves[1] = pkmn::Moves::WATER_GUN;
+    raw5.moves[2] = pkmn::Moves::WATER_GUN;
+
+    uint8_t* nickname_buffer = new uint8_t[15];
+    pkmn::conversions::export_gen1_text("MISSINGNO.", nickname_buffer, 10);
+
+    uint8_t* otname_buffer = new uint8_t[15];
+    pkmn::conversions::export_gen1_text("LIBPKMN", otname_buffer, 10);
+
+    pkmn::pokemon::sptr pkmn5 = pkmn::conversions::import_gen1_pokemon(raw5, nickname_buffer,
+                                                                       otname_buffer, "Red");
+
+    delete[] nickname_buffer;
+    delete[] otname_buffer;
+
+    pkmn::trainer::sptr trainer1 = pkmn::trainer::make("Red", "LIBPKMN", "Male");
+    trainer1->set_pokemon(1, pkmn1);
+    trainer1->set_pokemon(2, pkmn2);
+    trainer1->set_pokemon(3, pkmn3);
+    trainer1->set_pokemon(4, pkmn4);
+    trainer1->set_pokemon(5, pkmn5);
+
+    std::string filename = str(boost::format("trsql_%d.trsql") % rand());
+    fs::path filepath = fs::path(fs::path(pkmn::get_tmp_dir()) / filename);
+
+    pkmn::trainer::export_to(trainer1, filepath.string());
+    pkmn::trainer::sptr trainer2 = pkmn::trainer::make(filepath.string());
+
+    trainer_equality_check(trainer1, trainer2);
 }

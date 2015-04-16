@@ -191,7 +191,7 @@ namespace pkmn
         _pokedex_entry(other._pokedex_entry),
         _prng(copy_prng(other._prng)) {}
 
-    pokemon_impl &pokemon_impl::operator=(const pokemon_impl &other)
+    pokemon_impl& pokemon_impl::operator=(const pokemon_impl &other)
     {
         _pokedex       = copy_pokedex(other._pokedex);
         _pokedex_entry = other._pokedex_entry;

@@ -76,16 +76,15 @@ namespace pkmn
         try
         {
             PKMN_UNUSED(int pokemon_id) = database::get_pokemon_id(_raw.pc.species, Versions::RED);
+            _raw.pc.level = database::get_level(_species_id, get_experience());
+            _raw.level = database::get_level(_species_id, get_experience());
+            _set_stats(); // Will populate party portion of struct
             _invalid = false;
         }
         catch(...)
         {
             _invalid = true;
         }
-
-        _raw.pc.level = database::get_level(_species_id, get_experience());
-        _raw.level = database::get_level(_species_id, get_experience());
-        _set_stats(); // Will populate party portion of struct
     }
 
     pokemon_gen1impl::pokemon_gen1impl(const pkmn::native::gen1_pc_pokemon_t &raw,
@@ -102,16 +101,15 @@ namespace pkmn
         try
         {
             PKMN_UNUSED(int pokemon_id) = database::get_pokemon_id(_raw.pc.species, Versions::RED);
+            _raw.pc.level = database::get_level(_species_id, get_experience());
+            _raw.level = database::get_level(_species_id, get_experience());
+            _set_stats(); // Will populate party portion of struct
             _invalid = false;
         }
         catch(...)
         {
             _invalid = true;
         }
-
-        _raw.pc.level = database::get_level(_species_id, get_experience());
-        _raw.level = database::get_level(_species_id, get_experience());
-        _set_stats(); // Will populate party portion of struct
     }
 
     pokemon_gen1impl::pokemon_gen1impl(const pkmn::native::gen1_party_pokemon_t &raw,

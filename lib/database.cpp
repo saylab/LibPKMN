@@ -527,7 +527,10 @@ namespace pkmn
             query_stream << "SELECT pokemon_id FROM pokemon_game_indices WHERE version_id=" << version_id
                          << " AND game_index=" << game_index;
             SQLite::Statement query(*db, query_stream.str().c_str());
-            return get_num_from_query<uint16_t>(query);
+            if(query.executeStep())
+                return get_num_from_query<uint16_t>(query);
+            else
+                return Species::INVALID;
         }
 
         uint16_t get_pokemon_id(uint16_t game_index, const pkmn::pkstring& version_name)
