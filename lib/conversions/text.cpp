@@ -187,10 +187,10 @@ namespace pkmn
             return pkmn::pkstring(PokeLib::PokeText::convertFrom(pokelib_text));
         }
 
-        void export_gen4_text(const pkmn::pkstring &text, uint16_t* buffer, PKMN_UNUSED(uint8_t max_len))
+        void export_gen4_text(const pkmn::pkstring &text, uint16_t* buffer, uint8_t max_len)
         {
             PokeLib::poketext pokelib_text = PokeLib::PokeText::convertTo(text);
-            for(size_t i = 0; i < pokelib_text.size(); i++)
+            for(size_t i = 0; i < max_len; i++)
             {
                 buffer[i] = (i < text.length()) ? pokelib_text[i] : 0xFFFF;
             }
@@ -210,9 +210,9 @@ namespace pkmn
         void export_modern_text(const pkmn::pkstring &text, uint16_t* buffer, uint8_t max_len)
         {
             std::basic_string<uint16_t> str = (const uint16_t*)pkmn::pkstring(text);
-            for(size_t i = 0; i < str.size(); i++)
+            for(size_t i = 0; i < max_len; i++)
             {
-                buffer[i] = (i < max_len) ? str[i] : 0xFFFF;
+                buffer[i] = (i < text.length()) ? str[i] : 0xFFFF;
             }
         }
     }
