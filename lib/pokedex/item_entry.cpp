@@ -76,7 +76,7 @@ namespace pkmn
         items_query.executeStep();
 
         name = database::get_item_name(item_id);
-        category = database::get_item_category_name(int(items_query.getColumn(2))); // category_id
+        category = database::get_item_category_name(int(items_query.getColumn("category_id")));
 
         /*
          * Pocket name
@@ -84,7 +84,7 @@ namespace pkmn
         query_stream.str("");
         query_stream << "SELECT name FROM pocket_names WHERE version_group_id="
                      << version_group_id << " AND pocket_id=(SELECT pocket_id" // category_id
-                     << " FROM item_categories WHERE id=" << int(items_query.getColumn(2))
+                     << " FROM item_categories WHERE id=" << int(items_query.getColumn("category_id"))
                      << ")";
         pocket = db->execAndGet(query_stream.str().c_str());
 
@@ -144,7 +144,7 @@ namespace pkmn
             }
         }
 
-        cost = items_query.getColumn(3); // cost
+        cost = items_query.getColumn("cost");
 
         /*
          * Fling power
@@ -152,7 +152,7 @@ namespace pkmn
         if(generation < 4)
             fling_power  = 0;
         else
-            fling_power = items_query.getColumn(4); // fling_power
+            fling_power = items_query.getColumn("fling_power");
     }
 
     item_entry_t::item_entry_t(const pkmn::pkstring &version_name,

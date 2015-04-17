@@ -52,7 +52,7 @@ namespace pkmn
         {
             if(not query.executeStep())
                 throw std::runtime_error("Invalid Pokémon species.");
-            if(int(query.getColumn(0)) > generation)
+            if(int(query.getColumn("generation_id")) > generation)
                 throw std::runtime_error("This Pokémon was not present in the given version.");
         }
 

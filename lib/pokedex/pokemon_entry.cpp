@@ -101,10 +101,10 @@ namespace pkmn
             SQLite::Statement query(*db, query_stream.str().c_str());
             if(query.executeStep())
             {
-                if(database::get_version_group_id(version_id) < int(query.getColumn(1)))
+                if(database::get_version_group_id(version_id) < int(query.getColumn("introduced_in_version_group_id")))
                     throw std::runtime_error("This form did not exist in this version.");
 
-                pokemon_id = query.getColumn(0);
+                pokemon_id = query.getColumn("pokemon_id");
             }
             else throw std::runtime_error("Invalid form.");
         }
@@ -119,11 +119,11 @@ namespace pkmn
         query_stream << "SELECT * FROM pokemon WHERE id=" << pokemon_id;
         SQLite::Statement pokemon_query(*db, query_stream.str().c_str());
         pokemon_query.executeStep();
-        pokedex_num = pokemon_query.getColumn(2);           // species_id
+        pokedex_num = pokemon_query.getColumn("species_id");
         species_name = database::get_species_name(pokedex_num);
-        height = float(pokemon_query.getColumn(3)) / float(10.0); // height
-        weight = float(pokemon_query.getColumn(4)) / float(10.0); // weight
-        exp_yield = pokemon_query.getColumn(5);             // base_experience
+        height = float(pokemon_query.getColumn("height")) / float(10.0);
+        weight = float(pokemon_query.getColumn("weight")) / float(10.0);
+        exp_yield = pokemon_query.getColumn("base_experience");
 
         /*
          * Everything from "pokemon_species" table
@@ -141,7 +141,7 @@ namespace pkmn
          * gender rates are represented in the database. The values
          * are the actual decimal representations of the percentages.
          */
-        pkmn::dict<int8_t, float> gender_val_dict; // Double is percentage male
+        pkmn::dict<int, float> gender_val_dict; // Double is percentage male
         gender_val_dict[-1] = 0.0;
         gender_val_dict[0]  = 1.0;
         gender_val_dict[1]  = 0.875;
@@ -150,7 +150,7 @@ namespace pkmn
         gender_val_dict[6]  = 0.25;
         gender_val_dict[8]  = 0.0;
 
-        int8_t gender_val = pokemon_species_query.getColumn(8); // gender_rate
+        int gender_val = pokemon_species_query.getColumn("gender_rate");
 
         if(gender_val == -1)
         {
@@ -163,9 +163,9 @@ namespace pkmn
             chance_female = 1.0f - chance_male;
         }
 
-        catch_rate = pokemon_species_query.getColumn(9);              // capture_rate
-        base_friendship = pokemon_species_query.getColumn(10);        // base_happiness
-        has_gender_differences = pokemon_species_query.getColumn(13); // has_gender_differences
+        catch_rate = pokemon_species_query.getColumn("capture_rate");
+        base_friendship = pokemon_species_query.getColumn("base_happiness");
+        has_gender_differences = pokemon_species_query.getColumn("has_gender_differences");
 
         int generation = database::get_generation(version_id);
         bool old_games = (generation < 3);
@@ -178,9 +178,9 @@ namespace pkmn
                      << pokemon_id << " AND is_hidden=0";
         SQLite::Statement pokemon_abilities_query(*db, query_stream.str().c_str());
         pokemon_abilities_query.executeStep();
-        abilities.first = database::get_ability_name(pokemon_abilities_query.getColumn(0)); // ability_id
+        abilities.first = database::get_ability_name(pokemon_abilities_query.getColumn("ability_id"));
         if(pokemon_abilities_query.executeStep())
-            abilities.second = database::get_ability_name(pokemon_abilities_query.getColumn(0)); // ability_id
+            abilities.second = database::get_ability_name(pokemon_abilities_query.getColumn("ability_id"));
         else
             abilities.second = "None";
         if(generation < 5)
@@ -192,7 +192,7 @@ namespace pkmn
                          << pokemon_id << " AND is_hidden=1";
             SQLite::Statement pokemon_abilities_query2(*db, query_stream.str().c_str());
             if(pokemon_abilities_query2.executeStep())
-                hidden_ability = database::get_ability_name(pokemon_abilities_query2.getColumn(0));
+                hidden_ability = database::get_ability_name(pokemon_abilities_query2.getColumn("ability_id"));
             else
                 hidden_ability = "None";
         }
@@ -205,9 +205,9 @@ namespace pkmn
                      << pokedex_num;
         SQLite::Statement pokemon_egg_groups_query(*db, query_stream.str().c_str());
         pokemon_egg_groups_query.executeStep();
-        egg_groups.first = database::get_egg_group_name(pokemon_egg_groups_query.getColumn(0));
+        egg_groups.first = database::get_egg_group_name(pokemon_egg_groups_query.getColumn("egg_group_id"));
         if(pokemon_egg_groups_query.executeStep())
-            egg_groups.second = database::get_egg_group_name(pokemon_egg_groups_query.getColumn(0));
+            egg_groups.second = database::get_egg_group_name(pokemon_egg_groups_query.getColumn("egg_group_id"));
         else
             egg_groups.second = "None";
 
@@ -229,24 +229,24 @@ namespace pkmn
                      << pokemon_id << " AND stat_id IN (1,2,3,6)";
         SQLite::Statement pokemon_stats_query(*db, query_stream.str().c_str());
         pokemon_stats_query.executeStep();
-        base_stats["HP"] = pokemon_stats_query.getColumn(0);                      // base_stat
-        ev_yields["HP"]  = pokemon_stats_query.getColumn(old_games ? 0 : 1);      // base_stat, effort
+        base_stats["HP"] = pokemon_stats_query.getColumn("base_stat");
+        ev_yields["HP"]  = pokemon_stats_query.getColumn(old_games ? "base_stat" : "effort");
         pokemon_stats_query.executeStep();
-        base_stats["Attack"] = pokemon_stats_query.getColumn(0);                  // base_stat
-        ev_yields["Attack"]  = pokemon_stats_query.getColumn(old_games ? 0 : 1);  // base_stat, effort
+        base_stats["Attack"] = pokemon_stats_query.getColumn("base_stat");
+        ev_yields["Attack"]  = pokemon_stats_query.getColumn(old_games ? "base_stat" : "effort");
         pokemon_stats_query.executeStep();
-        base_stats["Defense"] = pokemon_stats_query.getColumn(0);                 // base_stat
-        ev_yields["Defense"]  = pokemon_stats_query.getColumn(old_games ? 0 : 1); // base_stat, effort
+        base_stats["Defense"] = pokemon_stats_query.getColumn("base_stat");
+        ev_yields["Defense"]  = pokemon_stats_query.getColumn(old_games ? "base_stat" : "effort");
         pokemon_stats_query.executeStep();
-        base_stats["Speed"] = pokemon_stats_query.getColumn(0);                   // base_stat
-        ev_yields["Speed"]  = pokemon_stats_query.getColumn(old_games ? 0 : 1);   // base_stat, effort
+        base_stats["Speed"] = pokemon_stats_query.getColumn("base_stat");
+        ev_yields["Speed"]  = pokemon_stats_query.getColumn(old_games ?  "base_stat" : "effort");
         query_stream.str("");
         if(generation == 1)
         {
             query_stream << "SELECT base_stat FROM pokemon_stats WHERE pokemon_id="
                          << pokemon_id << " AND stat_id=9";
-            base_stats["Special"] = db->execAndGet(query_stream.str().c_str());  // base_stat
-            ev_yields["Special"]  = db->execAndGet(query_stream.str().c_str());  // base_stat
+            base_stats["Special"] = db->execAndGet(query_stream.str().c_str());
+            ev_yields["Special"]  = db->execAndGet(query_stream.str().c_str());
         }
         else
         {
@@ -254,8 +254,8 @@ namespace pkmn
                          << pokemon_id << " AND stat_id IN (4,5)";
             SQLite::Statement pokemon_stats_query2(*db, query_stream.str().c_str());
             pokemon_stats_query2.executeStep();
-            base_stats["Special Attack"] = pokemon_stats_query2.getColumn(0);     // base_stat
-            ev_yields[(generation == 2) ? "Special" : "Special Attack"]  = pokemon_stats_query2.getColumn(0);     // effort
+            base_stats["Special Attack"] = pokemon_stats_query2.getColumn("base_stat");
+            ev_yields[(generation == 2) ? "Special" : "Special Attack"]  = pokemon_stats_query2.getColumn("effort");
         }
 
         /*
@@ -266,9 +266,9 @@ namespace pkmn
                      << pokemon_id;
         SQLite::Statement pokemon_types_query(*db, query_stream.str().c_str());
         pokemon_types_query.executeStep();
-        types.first = database::get_type_name(pokemon_types_query.getColumn(0)); // type_id
+        types.first = database::get_type_name(pokemon_types_query.getColumn("type_id"));
         if(pokemon_types_query.executeStep())
-            types.second = database::get_type_name(pokemon_types_query.getColumn(0));
+            types.second = database::get_type_name(pokemon_types_query.getColumn("type_id"));
         else
             types.second = "None";
 

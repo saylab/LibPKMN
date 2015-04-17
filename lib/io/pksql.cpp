@@ -86,13 +86,13 @@ namespace pkmn
                                                     % id).c_str());
             import_query.executeStep();
 
-            int version_id = import_query.getColumn(3);
+            int version_id = import_query.getColumn("game_id");
             pkmn::pkstring version_name = database::get_version_name(version_id);
             int generation = database::get_generation(version_id);
-            pkmn::pkstring nickname = import_query.getColumn(4);
-            pkmn::pkstring trainer_name = import_query.getColumn(5);
-            pkmn::pkstring trainer_gender = bool(import_query.getColumn(6)) ? "Female" : "Male";
-            const void* raw = import_query.getColumn(7);
+            pkmn::pkstring nickname = import_query.getColumn("nickname");
+            pkmn::pkstring trainer_name = import_query.getColumn("otname");
+            pkmn::pkstring trainer_gender = bool(import_query.getColumn("otfemale")) ? "Female" : "Male";
+            const void* raw = import_query.getColumn("raw");
 
             pokemon::sptr pkmn;
             switch(generation)

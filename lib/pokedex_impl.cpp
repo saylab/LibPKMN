@@ -74,10 +74,10 @@ namespace pkmn
             SQLite::Statement query(*_db, query_stream.str().c_str());
             if(query.executeStep())
             {
-                if(database::get_version_group_id(_version_id) < int(query.getColumn(1)))
+                if(database::get_version_group_id(_version_id) < int(query.getColumn("introduced_in_version_group_id")))
                     throw std::runtime_error("This form did not exist in this version.");
 
-                pokemon_id = query.getColumn(0);
+                pokemon_id = query.getColumn("pokemon_id");
             }
             else throw std::runtime_error("Invalid form.");
         }

@@ -607,7 +607,7 @@ namespace pkmn
                      << database::get_move_id(move_name);
         SQLite::Statement query(*_db, query_stream.str().c_str());
         if(query.executeStep())
-            _raw.pc.moves[pos-1] = int(query.getColumn(0));
+            _raw.pc.moves[pos-1] = int(query.getColumn("generation_id"));
         else
             throw std::runtime_error("This move does not exist in Generation I.");
     }

@@ -401,7 +401,7 @@ namespace pkmn
                          << " AND is_hidden=0 AND slot=1";
             ability_id = _db->execAndGet(query_stream.str().c_str());
         }
-        else ability_id = query.getColumn(0);
+        else ability_id = query.getColumn("ability_id");
 
         return database::get_ability_name(ability_id);
     }
@@ -533,7 +533,7 @@ namespace pkmn
         SQLite::Statement query(*_db, query_stream.str().c_str());
         if(query.executeStep())
         {
-            uint8_t ability_slot = uint8_t(query.getColumn(0)) - 1;
+            uint8_t ability_slot = uint8_t(query.getColumn("slot")) - 1;
             uint8_t current_ability_slot = get_gen3_ability_slot(_misc->iv_egg_ability) + 1;
 
             if(ability_slot != current_ability_slot) _raw.pc.personality++;
@@ -732,7 +732,7 @@ namespace pkmn
         query_stream << "SELECT generation_id FROM moves WHERE id="
                      << database::get_move_id(move_name);
         SQLite::Statement query(*_db, query_stream.str().c_str());
-        if(query.executeStep()) _attacks->moves[pos-1] = uint8_t(query.getColumn(0));
+        if(query.executeStep()) _attacks->moves[pos-1] = uint8_t(query.getColumn("generation_id"));
         else throw std::runtime_error("This move does not exist in Generation III.");
     }   
 

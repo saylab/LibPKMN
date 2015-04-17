@@ -98,16 +98,16 @@ namespace pkmn
             SQLite::Statement trainer_query(*db, str(boost::format("SELECT * FROM trainer WHERE id=%d")
                                                      % id).c_str());
             trainer_query.executeStep();
-            int game_id = trainer_query.getColumn(2); // game_id
+            int game_id = trainer_query.getColumn("game_id");
 
             trainer::sptr tr = trainer::make(
                                    game_id,
-                                   trainer_query.getColumn(4), // name,
-                                   ((int(trainer_query.getColumn(5)) == 1) ? Genders::FEMALE : Genders::MALE) // gender
+                                   trainer_query.getColumn("name"),
+                                   ((int(trainer_query.getColumn("female")) == 1) ? Genders::FEMALE : Genders::MALE)
                                );
 
-            tr->set_id(trainer_query.getColumn(3));
-            tr->set_money(trainer_query.getColumn(6));
+            tr->set_id(trainer_query.getColumn("trainer_id"));
+            tr->set_money(trainer_query.getColumn("money"));
 
             // Get valid Pokemon
             SQLite::Statement trainer_pokemon_query(*db, str(boost::format("SELECT * FROM trainer_pokemon WHERE trainer_id=%d")
@@ -115,9 +115,9 @@ namespace pkmn
 
             while(trainer_pokemon_query.executeStep())
             {
-                int trainer_id = trainer_pokemon_query.getColumn(0);
-                int pokemon_id = trainer_pokemon_query.getColumn(1);
-                int pos        = trainer_pokemon_query.getColumn(2);
+                int trainer_id = trainer_pokemon_query.getColumn("trainer_id");
+                int pokemon_id = trainer_pokemon_query.getColumn("pokemon_id");
+                int pos        = trainer_pokemon_query.getColumn("pokemon_position");
 
                 tr->set_pokemon(pos, pksql::from(db, pokemon_id));
             }

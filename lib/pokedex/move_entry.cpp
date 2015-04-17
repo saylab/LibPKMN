@@ -84,16 +84,16 @@ namespace pkmn
         moves_query.executeStep();
 
         name = database::get_move_name(move_id);
-        type = database::get_type_name(moves_query.getColumn(3)); // type_id
-        damage_class = database::get_move_damage_class_name(int(moves_query.getColumn(9))); // damage_class_id
+        type = database::get_type_name(moves_query.getColumn("type_id"));
+        damage_class = database::get_move_damage_class_name(int(moves_query.getColumn("damage_class_id")));
 
-        power = moves_query.getColumn(4); // power
-        pp = moves_query.getColumn(5); // pp
-        accuracy = float(moves_query.getColumn(6)) / float(100.0); // accuracy
-        priority = moves_query.getColumn(7); // priority
+        power = moves_query.getColumn("power");
+        pp = moves_query.getColumn("pp");
+        accuracy = float(moves_query.getColumn("accuracy")) / float(100.0);
+        priority = moves_query.getColumn("priority");
 
         // effect = 
-        effect_chance = float(moves_query.getColumn(11)) / float(100.0); // effect_chance
+        effect_chance = float(moves_query.getColumn("effect_chance")) / float(100.0);
 
         /*
          * Description
@@ -117,7 +117,7 @@ namespace pkmn
          */
         query_stream.str("");
         query_stream << "SELECT name FROM move_target_prose WHERE move_target_id="
-                     << moves_query.getColumn(8) << " AND local_language_id=9"; // target_id
+                     << moves_query.getColumn("target_id") << " AND local_language_id=9";
         SQLite::Statement move_target_prose_query(*db, query_stream.str().c_str());
         target = get_pkstring_from_query(move_target_prose_query);
 
@@ -127,7 +127,7 @@ namespace pkmn
          */
         query_stream.str("");
         query_stream << "SELECT short_effect FROM move_effect_prose WHERE move_effect_id="
-                     << moves_query.getColumn(10);  // effect_id
+                     << moves_query.getColumn("effect_id");
         SQLite::Statement move_effect_prose_query(*db, query_stream.str().c_str());
         effect = get_pkstring_from_query(move_effect_prose_query);
 
@@ -136,7 +136,7 @@ namespace pkmn
          */
         query_stream.str("");
         query_stream << "SELECT name FROM contest_type_names WHERE contest_type_id="
-                     << moves_query.getColumn(12) << " AND local_language_id=9"; // contest_type_id
+                     << moves_query.getColumn("contest_type_id") << " AND local_language_id=9";
         SQLite::Statement contest_type_names_query(*db, query_stream.str().c_str());
         contest_type = get_pkstring_from_query(contest_type_names_query);
 
@@ -145,7 +145,7 @@ namespace pkmn
          */
         query_stream.str("");
         query_stream << "SELECT flavor_text FROM contest_effect_prose WHERE contest_effect_id="
-                     << moves_query.getColumn(13) << " AND local_language_id=9"; // contest_effect_id
+                     << moves_query.getColumn("contest_effect_id") << " AND local_language_id=9";
         SQLite::Statement contest_effect_prose_query(*db, query_stream.str().c_str());
         contest_effect = get_pkstring_from_query(contest_effect_prose_query);
 
@@ -154,8 +154,8 @@ namespace pkmn
          */
         query_stream.str("");
         query_stream << "SELECT flavor_text FROM super_contest_effect_prose"
-                     << " WHERE super_contest_effect_id=" << moves_query.getColumn(14)
-                     << " AND local_language_id=9"; // super_contest_effect_id
+                     << " WHERE super_contest_effect_id=" << moves_query.getColumn("super_contest_effect_id")
+                     << " AND local_language_id=9";
         SQLite::Statement super_contest_effect_prose_query(*db, query_stream.str().c_str());
         super_contest_effect = get_pkstring_from_query(super_contest_effect_prose_query);
 
@@ -222,7 +222,7 @@ namespace pkmn
             query_stream << "SELECT name FROM old_move_names WHERE move_id=" << move_id;
             SQLite::Statement name_query(*db, query_stream.str().c_str());
             if(name_query.executeStep())
-                name = name_query.getColumn(0);
+                name = name_query.getColumn("name");
 
             if(generation != 4)
                 super_contest_effect = "None";
