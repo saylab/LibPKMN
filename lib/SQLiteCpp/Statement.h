@@ -4,6 +4,7 @@
  * @brief   A prepared SQLite Statement is a compiled SQL query ready to be executed, pointing to a row of result.
  *
  * Copyright (c) 2012-2013 Sebastien Rombauts (sebastien.rombauts@gmail.com)
+ *               2015      Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -219,6 +220,11 @@ public:
      *          and use or copy this data for any later usage.
      */
     Column  getColumn(const int aIndex); // throw(SQLite::Exception);
+
+#ifdef SQLITE_ENABLE_COLUMN_METADATA
+    //! Return a copy of the column data specified by its name
+    Column getColumn(const std::string &name);
+#endif
 
     /**
      * @brief Test if the column value is NULL

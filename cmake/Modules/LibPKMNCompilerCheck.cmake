@@ -126,6 +126,8 @@ ELSEIF(MSVC)
     ADD_DEFINITIONS(/MP) # Multi-threaded build
 ENDIF(MINGW)
 
+ADD_DEFINITIONS(-DSQLITE_ENABLE_COLUMN_METADATA)
+
 #
 # By this point, any non-supported compiler setup should have errored out, but if
 # not, print a warning.
