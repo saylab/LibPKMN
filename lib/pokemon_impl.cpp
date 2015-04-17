@@ -165,17 +165,36 @@ namespace pkmn
     boost::format pokemon_impl::_pokemon_format      = boost::format("%d.png");
     boost::format pokemon_impl::_pokemon_form_format = boost::format("%d-%s.png");
 
-    pokemon_impl::pokemon_impl(int species_id, int version_id):
+    pokemon_impl::pokemon_impl(int game_index, int version_id, bool none):
         pokemon(),
-        _species_id(species_id),
-        _form_id(species_id),
         _version_id(version_id),
-        _none(species_id == Species::NONE),
-        _invalid(species_id == Species::INVALID),
+        _none(none),
         _pokedex(pokedex::make(database::get_version_name(version_id))),
         _prng(prng::make(database::get_generation(version_id)))
     {
         CONNECT_TO_DB(_db);
+
+        if(none)
+        {
+            _species_id = Species::NONE;
+            _form_id = Species::NONE;
+            _invalid = false;
+        }
+        else
+        {
+            try
+            {
+                _species_id = database::get_pokemon_id(game_index, version_id);
+                _invalid = false;
+            }
+            catch(...)
+            {
+                _species_id = Species::INVALID;
+                _invalid = true;
+            }
+
+            _form_id = _species_id;
+        }
 
         _pokedex_entry = _pokedex->get_pokemon_entry(_species_id);
     }
@@ -191,7 +210,7 @@ namespace pkmn
         _pokedex_entry(other._pokedex_entry),
         _prng(copy_prng(other._prng)) {}
 
-    pokemon_impl &pokemon_impl::operator=(const pokemon_impl &other)
+    pokemon_impl& pokemon_impl::operator=(const pokemon_impl &other)
     {
         _pokedex       = copy_pokedex(other._pokedex);
         _pokedex_entry = other._pokedex_entry;

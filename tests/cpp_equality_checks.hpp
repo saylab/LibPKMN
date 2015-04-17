@@ -12,12 +12,25 @@
 #include <boost/foreach.hpp>
 #include <boost/test/unit_test.hpp>
 
+#include <pkmn/enums.hpp>
 #include <pkmn/pokemon.hpp>
+#include <pkmn/trainer.hpp>
+
+static int native_sizes[7] = {0,44,48,100,380,380,500};
 
 void pokemon_equality_check(pkmn::pokemon::sptr pkmn1, pkmn::pokemon::sptr pkmn2)
 {
     BOOST_CHECK_EQUAL(pkmn1->get_species_id(), pkmn2->get_species_id());
     BOOST_CHECK_EQUAL(pkmn1->get_game_id(), pkmn2->get_game_id());
+
+    if(pkmn1->get_species_id() == pkmn::Species::NONE)
+        return;
+    else if(pkmn1->get_species_id() == pkmn::Species::INVALID)
+    {
+        BOOST_CHECK(!memcmp(pkmn1->get_native(), pkmn2->get_native(), native_sizes[pkmn1->get_generation()]));
+        return;
+    }
+
     BOOST_CHECK_EQUAL(pkmn1->get_original_game_id(), pkmn2->get_original_game_id());
     BOOST_CHECK_EQUAL(pkmn1->get_pokemon_id(), pkmn2->get_pokemon_id());
     BOOST_CHECK_EQUAL(pkmn1->get_ability_id(), pkmn2->get_ability_id());
@@ -106,6 +119,22 @@ void pokemon_equality_check(pkmn::pokemon::sptr pkmn1, pkmn::pokemon::sptr pkmn2
     {
         BOOST_CHECK_EQUAL(pkmn1_attributes.at(key), pkmn1_attributes.at(key,(pkmn1_attributes.at(key)-1)));
     }
+}
+
+void trainer_equality_check(pkmn::trainer::sptr trainer1, pkmn::trainer::sptr trainer2)
+{
+    BOOST_CHECK_EQUAL(trainer1->get_game_id(), trainer2->get_game_id());
+    BOOST_CHECK(trainer1->get_name() == trainer2->get_name());
+    BOOST_CHECK(trainer1->get_gender() == trainer2->get_gender());
+    BOOST_CHECK_EQUAL(trainer1->get_id(), trainer2->get_id());
+    BOOST_CHECK_EQUAL(trainer1->get_money(), trainer2->get_money());
+
+    pkmn::pokemon_team_t party1 = trainer1->get_party();
+    pkmn::pokemon_team_t party2 = trainer2->get_party();
+
+    BOOST_CHECK_EQUAL(party1.size(), party2.size());
+    for(size_t i = 0; i < party1.size(); i++)
+        pokemon_equality_check(party1[i], party2[i]);
 }
 
 #endif /* __INCLUDED_CPP_EQUALITY_CHECKS_HPP__ */

@@ -26,7 +26,8 @@ namespace pkmn
                                      int level,
                                      int move1, int move2,
                                      int move3, int move4):
-        pokemon_impl(species, version)
+        pokemon_impl(database::get_pokemon_game_index(species, version),
+                     version, (species == Species::NONE))
     {
         _blockA = &(_raw.pc.blocks.blockA);
         _blockB = &(_raw.pc.blocks.blockB);
@@ -129,8 +130,7 @@ namespace pkmn
 
     pokemon_ndsimpl::pokemon_ndsimpl(const pkmn::native::nds_pc_pokemon_t &raw,
                                      int version):
-        pokemon_impl(database::get_pokemon_id(raw.blocks.blockA.species, version),
-                     version)
+        pokemon_impl(raw.blocks.blockA.species, version, false)
     {
         _raw.pc = raw;
         _blockA = &(_raw.pc.blocks.blockA);
@@ -138,16 +138,6 @@ namespace pkmn
         _blockC = &(_raw.pc.blocks.blockC);
         _blockD = &(_raw.pc.blocks.blockD);
         // TODO: set form
-        _none = false;
-        try
-        {
-            PKMN_UNUSED(int pokemon_id) = database::get_pokemon_id(_blockA->species, Versions::HEARTGOLD);
-            _invalid = false;
-        }
-        catch(...)
-        {
-            _invalid = true;
-        }
 
         _raw.level = database::get_level(_species_id, _blockA->exp);
         _set_stats();
@@ -155,26 +145,13 @@ namespace pkmn
 
     pokemon_ndsimpl::pokemon_ndsimpl(const pkmn::native::nds_party_pokemon_t &raw,
                                      int version):
-        pokemon_impl(database::get_pokemon_id(raw.pc.blocks.blockA.species, version),
-                     version),
+        pokemon_impl(raw.pc.blocks.blockA.species, version, false),
         _raw(raw)
     {
         _blockA = &(_raw.pc.blocks.blockA);
         _blockB = &(_raw.pc.blocks.blockB);
         _blockC = &(_raw.pc.blocks.blockC);
         _blockD = &(_raw.pc.blocks.blockD);
-        _none = false;
-        try
-        {
-            PKMN_UNUSED(int pokemon_id) = database::get_pokemon_id(_blockA->species, Versions::HEARTGOLD);
-            _invalid = false;
-        }
-        catch(...)
-        {
-            _invalid = true;
-        }
-
-        _set_stats();
     }
 
     pokemon_ndsimpl::pokemon_ndsimpl(const pokemon_ndsimpl &other):

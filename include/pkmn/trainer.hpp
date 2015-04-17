@@ -56,9 +56,13 @@ namespace pkmn
              */
             static sptr make(const pkmn::pkstring &game, const pkmn::pkstring &name, const pkmn::pkstring &gender);
 
+            static sptr make(const pkmn::pkstring &filename);
+
             //! Class constructor (use factory function instead)
             trainer() {};
             virtual ~trainer() {};
+
+            static void export_to(sptr tr, const pkmn::pkstring &filename);
 
             /*!
              * Return the name of the game from which this trainer was created.

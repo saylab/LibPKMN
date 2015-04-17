@@ -32,7 +32,7 @@ namespace pkmn
         public:
 
             pokemon_impl() {};
-            pokemon_impl(int species_id, int version_id);
+            pokemon_impl(int game_index, int version_id, bool none = false);
             pokemon_impl(const pokemon_impl& other);
             pokemon_impl& operator=(const pokemon_impl& other);
             ~pokemon_impl() {};
