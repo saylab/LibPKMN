@@ -99,9 +99,15 @@ namespace pkmn
                 return stdstring16.c_str();
             };
 
+#ifndef PKMN_PLATFORM_WIN32
             //! Implicit typecast between pkmn::pkstring and const wchar_t*.
             PKMN_INLINE operator const wchar_t*() const {
                 return stdwstring.c_str();
+            }
+#endif
+
+            PKMN_INLINE operator std::string() const {
+                return stdstring;
             }
 
             //! Implicit typecast between pkmn::pkstring and std::basic_string<uint16_t>.
