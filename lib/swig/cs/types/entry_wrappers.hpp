@@ -5,8 +5,8 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-#ifndef INCLUDED_JAVA_ENTRY_WRAPPERS_HPP
-#define INCLUDED_JAVA_ENTRY_WRAPPERS_HPP
+#ifndef INCLUDED_CS_ENTRY_WRAPPERS_HPP
+#define INCLUDED_CS_ENTRY_WRAPPERS_HPP
 
 #include <string>
 #include <utility>
@@ -348,4 +348,4 @@ namespace pkmn
     }
 }
 
-#endif /* INCLUDED_JAVA_ENTRY_WRAPPERS_HPP */
+#endif /* INCLUDED_CS_ENTRY_WRAPPERS_HPP */
