@@ -104,11 +104,12 @@ namespace pkmn
             PKMN_INLINE operator const wchar_t*() const {
                 return stdwstring.c_str();
             }
-#endif
+#else
 
             PKMN_INLINE operator std::string() const {
                 return stdstring;
             }
+#endif
 
             //! Implicit typecast between pkmn::pkstring and std::basic_string<uint16_t>.
             PKMN_INLINE operator std::basic_string<uint16_t>() const {
