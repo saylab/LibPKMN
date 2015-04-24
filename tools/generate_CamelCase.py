@@ -132,7 +132,7 @@ if __name__ == "__main__":
     os.chdir(options.include_dir)
     for root, dirs, files in os.walk(os.getcwd()):
         for file in files:
-            if file.endswith(".hpp") and file not in ignored_files and not root.endswith("conversions") and not root.endswith("native") and not root.endswith("qt4"):
+            if file.endswith(".hpp") and file not in ignored_files and not root.endswith("native") and not root.endswith("qt4"):
                 output += convert_header(CppHeaderParser.CppHeader(os.path.join(root, file)))
 
     output += "%rename(pocket) pkmn::item_entry_t::pocket;\n"

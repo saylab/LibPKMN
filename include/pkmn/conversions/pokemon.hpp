@@ -15,6 +15,7 @@ namespace pkmn
 {
     namespace conversions
     {
+#ifndef SWIG
         pokemon::sptr PKMN_API import_gen1_pokemon(const native::gen1_pc_pokemon_t &native,
                                                    const uint8_t* nickname_buffer,
                                                    const uint8_t* otname_buffer,
@@ -77,17 +78,20 @@ namespace pkmn
 
         void PKMN_API gen1_to_gen2(const native::gen1_party_pokemon_t &src, native::gen2_party_pokemon_t &dst);
 
-        pokemon::sptr PKMN_API gen1_to_gen2(pokemon::sptr src);
-
         void PKMN_API gen2_to_gen1(const native::gen2_party_pokemon_t &src, native::gen1_party_pokemon_t &dst);
-
-        pokemon::sptr PKMN_API gen2_to_gen1(pokemon::sptr src);
 
         void PKMN_API gen3_to_gen4(const native::gen3_party_pokemon_t &src, native::nds_party_pokemon_t &dst);
 
+        void PKMN_API gen4_to_gen5(const native::nds_party_pokemon_t &src, native::nds_party_pokemon_t &dst);
+#endif /* SWIG */
+
+        pokemon::sptr PKMN_API gen1_to_gen2(pokemon::sptr src);
+
+        pokemon::sptr PKMN_API gen2_to_gen1(pokemon::sptr src);
+
         pokemon::sptr PKMN_API gen3_to_gen4(pokemon::sptr src);
 
-        void PKMN_API gen4_to_gen5(const native::nds_party_pokemon_t &src, native::nds_party_pokemon_t &dst);
+        pokemon::sptr PKMN_API gen4_to_gen5(pokemon::sptr src);
     }
 }
 

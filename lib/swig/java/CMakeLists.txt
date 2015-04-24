@@ -75,6 +75,7 @@ INCLUDE(LibPKMNJava)
 JAVA_BUILD_SWIG_MODULE(pkmn_java PKMN)
 JAVA_BUILD_SWIG_MODULE(buildinfo_java BuildInfo)
 JAVA_BUILD_SWIG_MODULE(calculations_java Calculations)
+JAVA_BUILD_SWIG_MODULE(conversions_java Conversions)
 JAVA_BUILD_SWIG_MODULE(database_java Database)
 JAVA_BUILD_SWIG_MODULE(lists_java Lists)
 JAVA_BUILD_SWIG_MODULE(paths_java Paths)
@@ -88,6 +89,7 @@ ADD_CUSTOM_COMMAND(
     DEPENDS ${SWIG_MODULE_pkmn_java_REAL_NAME}
     DEPENDS ${SWIG_MODULE_buildinfo_java_REAL_NAME}
     DEPENDS ${SWIG_MODULE_calculations_java_REAL_NAME}
+    DEPENDS ${SWIG_MODULE_conversions_java_REAL_NAME}
     DEPENDS ${SWIG_MODULE_database_java_REAL_NAME}
     DEPENDS ${SWIG_MODULE_lists_java_REAL_NAME}
     DEPENDS ${SWIG_MODULE_paths_java_REAL_NAME}

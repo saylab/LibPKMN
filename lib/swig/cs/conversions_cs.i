@@ -5,17 +5,12 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-%feature("autodoc", "1");
-
 %include "exception.i"
-%include "ignores.i"
+
+%import "pkmn_cs.i"
 
 %{
     #include "pkmn/conversions/pokemon.hpp"
-    #include "pokemon.hpp"
-%} 
-
-%import "pkmn_python.i"
+%}
 
 %include "pkmn/conversions/pokemon.hpp"
-%include "pokemon.hpp"

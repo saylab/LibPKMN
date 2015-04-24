@@ -17,17 +17,6 @@
 
 namespace pkmn
 {
-    /*
-     * Easiest way to get SWIG to see these functions
-     */
-    namespace conversions
-    {
-        extern pokemon::sptr gen1_to_gen2(pokemon::sptr src);
-        extern pokemon::sptr gen2_to_gen1(pokemon::sptr src);
-        extern pokemon::sptr gen3_to_gen4(pokemon::sptr src);
-        extern pokemon::sptr gen4_to_gen5(pokemon::sptr src);
-    }
-
     namespace python
     {
         pokemon::sptr import_gen1_pokemon(PyObject* pyobject, const pkmn::pkstring &nickname = "",

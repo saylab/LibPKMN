@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+# Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
 #
 # Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
 # or copy at http://opensource.org/licenses/MIT)
@@ -67,6 +67,7 @@ INCLUDE(LibPKMNCSharp)
 CSHARP_BUILD_SWIG_MODULE(pkmn_cs pkmn_cs PKMN)
 CSHARP_BUILD_SWIG_MODULE(buildinfo_cs buildinfo_cs BuildInfo)
 CSHARP_BUILD_SWIG_MODULE(calculations_cs calculations_cs Calculations)
+CSHARP_BUILD_SWIG_MODULE(conversions_cs conversions_cs Conversions)
 CSHARP_BUILD_SWIG_MODULE(database_cs database_cs Database)
 CSHARP_BUILD_SWIG_MODULE(lists_cs lists_cs Lists)
 CSHARP_BUILD_SWIG_MODULE(paths_cs paths_cs Paths)
@@ -96,6 +97,7 @@ ADD_DEPENDENCIES(pkmn-cs
     ${SWIG_MODULE_pkmn_cs_REAL_NAME}
     ${SWIG_MODULE_buildinfo_cs_REAL_NAME}
     ${SWIG_MODULE_calculations_cs_REAL_NAME}
+    ${SWIG_MODULE_conversions_cs_REAL_NAME}
     ${SWIG_MODULE_database_cs_REAL_NAME}
     ${SWIG_MODULE_lists_cs_REAL_NAME}
     ${SWIG_MODULE_paths_cs_REAL_NAME}
