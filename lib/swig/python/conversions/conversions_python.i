@@ -11,10 +11,8 @@
 
 %{
     #include "pokemon.hpp"
-    #include "text.hpp"
 %} 
 
 %import "pkmn_python.i"
 
 %include "pokemon.hpp"
-%include "text.hpp"
