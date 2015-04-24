@@ -25,36 +25,31 @@
 
 %typemap(cscode) pkmn::shared_ptr<pkmn::pokemon> %{
     public byte[] getNative() {
-        ByteVector fromCpp;
+        ByteVector fromCpp = getNativeBase();
 
         switch(getGeneration()){
             case 1:
                 byte[] ret1 = new byte[44]; // sizeof(pkmn::native::gen1_party_pokemon_t)
-                fromCpp = getNativeBase();
                 fromCpp.CopyTo(ret1);
                 return ret1;
 
             case 2:
                 byte[] ret2 = new byte[48]; // sizeof(pkmn::native::gen2_party_pokemon_t)
-                fromCpp = getNativeBase();
                 fromCpp.CopyTo(ret2);
                 return ret2;
 
             case 3:
                 byte[] ret3 = new byte[100]; // sizeof(pkmn::native::gen3_party_pokemon_t)
-                fromCpp = getNativeBase();
                 fromCpp.CopyTo(ret3);
                 return ret3;
 
             case 6:
                 byte[] ret6 = new byte[500]; // sizeof(pkmn::native::gen6_party_pokemon_t)
-                fromCpp = getNativeBase();
                 fromCpp.CopyTo(ret6);
                 return ret6;
 
             default:
                 byte[] retn = new byte[380]; // sizeof(pkmn::native::nds_party_pokemon_t)
-                fromCpp = getNativeBase();
                 fromCpp.CopyTo(retn);
                 return retn;
         }
