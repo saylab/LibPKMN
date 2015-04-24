@@ -246,6 +246,21 @@ namespace pkmn
                                                     );
         }
 
+        pokemon::sptr gen1_to_gen2(pokemon::sptr src)
+        {
+            if(src->get_generation() != 1)
+                throw std::runtime_error("Invalid generation.");
+
+            native::gen1_party_pokemon_t raw_src;
+            native::gen2_party_pokemon_t raw_dst;
+            uint8_t nickname[10];
+            uint8_t otname[7];
+
+            export_gen1_pokemon(src, raw_src, nickname, otname);
+            gen1_to_gen2(raw_src, raw_dst);
+            return import_gen2_pokemon(raw_dst, nickname, otname, "Crystal");
+        }
+
         void gen2_to_gen1(const native::gen2_party_pokemon_t &src, native::gen1_party_pokemon_t &dst)
         {
             CONNECT_TO_DB(db);
@@ -293,6 +308,21 @@ namespace pkmn
                                                     dst.pc.ev_spcl,
                                                     IVs["Special"]
                                                    );
+        }
+
+        pokemon::sptr gen2_to_gen1(pokemon::sptr src)
+        {
+            if(src->get_generation() != 2)
+                throw std::runtime_error("Invalid generation.");
+
+            native::gen2_party_pokemon_t raw_src;
+            native::gen1_party_pokemon_t raw_dst;
+            uint8_t nickname[10];
+            uint8_t otname[7];
+
+            export_gen2_pokemon(src, raw_src, nickname, otname);
+            gen2_to_gen1(raw_src, raw_dst);
+            return import_gen1_pokemon(raw_dst, nickname, otname, "Yellow");
         }
 
         void gen3_to_gen4(const native::gen3_party_pokemon_t &src, native::nds_party_pokemon_t &dst)
@@ -369,6 +399,19 @@ namespace pkmn
             memcpy(&(dst.current_hp), &(src.current_hp), 14);
         }
 
+        pokemon::sptr gen3_to_gen4(pokemon::sptr src)
+        {
+            if(src->get_generation() != 3)
+                throw std::runtime_error("Invalid generation.");
+
+            native::gen3_party_pokemon_t raw_src;
+            native::nds_party_pokemon_t raw_dst;
+
+            export_gen3_pokemon(src, raw_src, false);
+            gen3_to_gen4(raw_src, raw_dst);
+            return import_nds_pokemon(raw_dst, "Diamond", false);
+        }
+
         void gen4_to_gen5(const native::nds_party_pokemon_t &src, native::nds_party_pokemon_t &dst)
         {
             CONNECT_TO_DB(db);
@@ -384,6 +427,19 @@ namespace pkmn
             dst_blockB->nature = dst.pc.personality % 24;
 
             set_nds_pokemon_checksum(dst.pc);
+        }
+
+        pokemon::sptr gen4_to_gen5(pokemon::sptr src)
+        {
+            if(src->get_generation() != 4)
+                throw std::runtime_error("Invalid generation.");
+
+            native::nds_party_pokemon_t raw_src;
+            native::nds_party_pokemon_t raw_dst;
+
+            export_nds_pokemon(src, raw_src, false);
+            gen4_to_gen5(raw_src, raw_dst);
+            return import_nds_pokemon(raw_dst, "Black", false);
         }
     } /* namespace conversions */
 } /* namespace pkmn */
