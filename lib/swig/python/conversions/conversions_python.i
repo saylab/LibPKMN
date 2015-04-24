@@ -8,6 +8,7 @@
 %feature("autodoc", "1");
 
 %include "exception.i"
+%include "ignores.i"
 
 %{
     #include "pokemon.hpp"
