@@ -6,6 +6,7 @@
 #
 
 SET(types_sources
+    ${CMAKE_CURRENT_SOURCE_DIR}/datetime.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/markings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/nature.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/pkstring.cpp

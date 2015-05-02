@@ -43,7 +43,6 @@ namespace pkmn
             uint8_t minutes;
             uint8_t seconds;
         } nds_time_t;
-        typedef struct
         #pragma pack(pop)
     }
 }
