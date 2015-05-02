@@ -387,7 +387,7 @@ namespace pkmn
 
     int pokemon_gen6impl::get_friendship() const
     {
-        return _blockC->not_ot_friendship;
+        return IS_OURS ? _blockD->ot_friendship : _blockC->not_ot_friendship;
     }
 
     int pokemon_gen6impl::get_level() const
@@ -480,7 +480,10 @@ namespace pkmn
 
     void pokemon_gen6impl::set_friendship(int friendship)
     {
-        _blockC->not_ot_friendship = friendship;
+        if(IS_OURS)
+            _blockD->ot_friendship = friendship;
+        else
+            _blockC->not_ot_friendship = friendship;
     }
 
     // NOTE: this changes experience and stats
