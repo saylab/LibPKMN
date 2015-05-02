@@ -9,7 +9,7 @@
 
 #include <cstdint>
 #include <pkmn/config.hpp>
-#include <pkmn/native/time.hpp>
+#include <pkmn/native/datetime.hpp>
 
 namespace pkmn
 {
@@ -20,7 +20,7 @@ namespace pkmn
         datetime_t(const native::gen1_time_t &gen1_time);
         datetime_t(const native::gen2_time_t &gen2_time);
         datetime_t(const native::gen3_time_t &gen3_time);
-        datetime_t(const native::nds_time_t  &nds_time);
+        datetime_t(const native::date_t  &date);
 
         int year;
         int month;
@@ -34,7 +34,7 @@ namespace pkmn
         operator native::gen1_time_t();
         operator native::gen2_time_t();
         operator native::gen3_time_t();
-        operator native::nds_time_t();
+        operator native::date_t();
     };
 }
 

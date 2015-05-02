@@ -56,9 +56,9 @@ namespace pkmn
         hours(gen3_time.hours), minutes(gen3_time.minutes), seconds(gen3_time.seconds)
     {}
 
-    datetime_t::datetime_t(const native::nds_time_t &nds_time):
-        year(0), month(0), day(0),
-        hours(nds_time.hours), minutes(nds_time.minutes), seconds(nds_time.seconds)
+    datetime_t::datetime_t(const native::date_t &date):
+        year(2000+date.year), month(date.month), day(date.day),
+        hours(0), minutes(0), seconds(0)
     {}
 
     datetime_t::operator uint32_t()
@@ -102,13 +102,13 @@ namespace pkmn
         return gen3_time;
     }
 
-    datetime_t::operator native::nds_time_t()
+    datetime_t::operator native::date_t()
     {
-        native::nds_time_t nds_time;
-        nds_time.hours   = hours;
-        nds_time.minutes = minutes;
-        nds_time.seconds = seconds;
+        native::date_t date;
+        date.year  = uint8_t(year - 2000);
+        date.month = month;
+        date.day   = day;
 
-        return nds_time;
+        return date;
     }
 } /* namespace pkmn */
