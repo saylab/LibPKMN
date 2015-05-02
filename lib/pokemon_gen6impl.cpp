@@ -20,6 +20,8 @@
 #include "pokemon_gen6impl.hpp"
 #include "conversions/utils.hpp"
 
+#define IS_OURS (_blockC->current_handler == 0)
+
 namespace pkmn
 {
     pokemon_gen6impl::pokemon_gen6impl(int species, int version,
@@ -43,6 +45,9 @@ namespace pkmn
         }
         else
         {
+            /*
+             * Block A
+             */
             _blockA->personality = _prng->lcrng() | (_prng->lcrng() << 16);
             _blockA->species = database::get_pokemon_game_index(_species_id, _version_id);
             _blockA->held_item = Items::NONE;
@@ -67,6 +72,9 @@ namespace pkmn
                    _blockA->ev_spd + _blockA->ev_spatk + _blockA->ev_spdef) > 510);
             _blockA->pokerus = pkmn::pokerus_t();
 
+            /*
+             * Block B
+             */
             conversions::export_modern_text(_pokedex_entry.species_name,
                                             _blockB->nickname, 12);
             _blockB->moves[0] = move1;
@@ -79,6 +87,18 @@ namespace pkmn
             _blockB->iv_isegg_isnicknamed &= ~(2<<30); // Not an egg, not nicknamed
             _set_default_gender();
 
+            /*
+             * Block C
+             */
+            conversions::export_modern_text("LibPKMN",
+                                            (uint16_t*)_blockC->latest_not_ot_handler, 7);
+            _blockC->not_ot_gender = 0; // Male
+            _blockC->current_handler = 0; // This is ours
+            _blockC->not_ot_friendship = _pokedex_entry.base_friendship;
+
+            /*
+             * Block D
+             */
             conversions::export_modern_text("LibPKMN",
                                             _blockD->otname, 7);
             _blockD->ot_friendship = _pokedex_entry.base_friendship;
@@ -235,12 +255,14 @@ namespace pkmn
 
     pkmn::pkstring pokemon_gen6impl::get_trainer_name() const
     {
-        return conversions::import_modern_text(_blockD->otname, 7);
+        return IS_OURS ? conversions::import_modern_text(_blockD->otname, 7)
+                       : conversions::import_modern_text((const uint16_t*)_blockC->latest_not_ot_handler, 7);
     }
 
     pkmn::pkstring pokemon_gen6impl::get_trainer_gender() const
     {
-        return (_blockD->metlevel_otgender & (1<<31)) ? "Female" : "Male";
+        return IS_OURS ? ((_blockD->metlevel_otgender & (1<<31)) ? "Female" : "Male")
+                       : ((_blockC->not_ot_gender == 0) ? "Male" : "Female");
     }
 
     uint32_t pokemon_gen6impl::get_trainer_id() const
@@ -295,7 +317,10 @@ namespace pkmn
         if(trainer_name.length() > 7)
             throw std::runtime_error("Trainer names can have a maximum of 7 characters in Generation IV-V.");
 
-        conversions::export_modern_text(trainer_name, _blockD->otname, 7);
+        if(IS_OURS)
+            conversions::export_modern_text(trainer_name, _blockD->otname, 7);
+        else
+            conversions::export_modern_text(trainer_name, (uint16_t*)_blockC->latest_not_ot_handler, 7);
     }
 
     void pokemon_gen6impl::set_trainer_gender(const pkmn::pkstring &gender)
@@ -312,16 +337,19 @@ namespace pkmn
     void pokemon_gen6impl::set_trainer_id(uint32_t id)
     {
         _blockA->ot_id = id;
+        _blockC->current_handler = (id == trainer::LIBPKMN_TRAINER_ID) ? 0 : 1;
     }
 
     void pokemon_gen6impl::set_trainer_public_id(uint16_t id)
     {
         _blockA->ot_pid = id;
+        _blockC->current_handler = (id == trainer::LIBPKMN_PUBLIC_ID) ? 0 : 1;
     }
 
     void pokemon_gen6impl::set_trainer_secret_id(uint16_t id)
     {
         _blockA->ot_sid = id;
+        _blockC->current_handler = (id == trainer::LIBPKMN_SECRET_ID) ? 0 : 1;
     }
 
     void pokemon_gen6impl::set_ball(const pkmn::pkstring &ball)
@@ -341,7 +369,7 @@ namespace pkmn
     // Met level of 0 means Pokemon was hatched
     void pokemon_gen6impl::set_met_level(int level)
     {
-        if(level > 100)
+        if(level < 0 or level > 100)
             throw std::runtime_error("Level must be 0-100.");
 
         _blockD->metlevel_otgender &= (1<<7);
@@ -780,6 +808,13 @@ namespace pkmn
     {
         native::set_gen6_pokemon_checksum(_raw.pc);
         return &_raw;
+    }
+
+    void pokemon_gen6impl::_set_attributes()
+    {
+        _attributes.insert("contest-memory-ribbon-count", _blockA->contest_memory_ribbon_count);
+        _attributes.insert("battle-memory-ribbon-count", _blockA->battle_memory_ribbon_count);
+        _attributes.insert("distribution-super-training-flags", _blockA->distribution_super_training_flags);
     }
 
     void pokemon_gen6impl::_set_experience(const uint32_t exp)

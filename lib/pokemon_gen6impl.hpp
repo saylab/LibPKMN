@@ -124,6 +124,7 @@ namespace pkmn
             pkmn::native::gen6_pokemon_blockC_t *_blockC;
             pkmn::native::gen6_pokemon_blockD_t *_blockD;
 
+            void _set_attributes();
             void _set_experience(uint32_t exp);
             void _set_level(int level);
             void _set_default_gender();
