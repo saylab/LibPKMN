@@ -155,8 +155,6 @@ namespace pkmn
                                  bool encrypt)
         {
             memcpy(&native, pkmn->get_native(), sizeof(native::gen3_pc_pokemon_t));
-
-            set_gen3_pokemon_checksum(native);
             if(encrypt) native::gen3_encrypt(native);
         }
 
@@ -164,7 +162,6 @@ namespace pkmn
                                  bool encrypt)
         {
             memcpy(&native, pkmn->get_native(), sizeof(native::gen3_party_pokemon_t));
-            set_gen3_pokemon_checksum(native.pc);
             if(encrypt) native::gen3_encrypt(native.pc);
         }
 
@@ -193,17 +190,15 @@ namespace pkmn
         void export_nds_pokemon(pokemon::sptr pkmn, native::nds_pc_pokemon_t &native,
                                 bool encrypt)
         {
-            set_nds_pokemon_checksum(native);
-            if(encrypt) native::nds_encrypt(native);
             memcpy(&native, pkmn->get_native(), sizeof(native::nds_pc_pokemon_t));
+            if(encrypt) native::nds_encrypt(native);
         }
 
         void export_nds_pokemon(pokemon::sptr pkmn, native::nds_party_pokemon_t &native,
                                 bool encrypt)
         {
-            set_nds_pokemon_checksum(native.pc);
-            if(encrypt) native::nds_encrypt(native);
             memcpy(&native, pkmn->get_native(), sizeof(native::nds_party_pokemon_t));
+            if(encrypt) native::nds_encrypt(native);
         }
 
         pokemon::sptr import_gen6_pokemon(const native::gen6_pc_pokemon_t &native,
@@ -227,6 +222,21 @@ namespace pkmn
             return pokemon::sptr(new pokemon_gen6impl(_native,
                                                       database::get_version_id(version)));
         }
+
+        void export_gen6_pokemon(pokemon::sptr pkmn, native::gen6_pc_pokemon_t &native,
+                                 bool encrypt)
+        {
+            memcpy(&native, pkmn->get_native(), sizeof(native::gen6_pc_pokemon_t));
+            if(encrypt) native::gen6_encrypt(native);
+        }
+
+        void export_gen6_pokemon(pokemon::sptr pkmn, native::gen6_party_pokemon_t &native,
+                                 bool encrypt)
+        {
+            memcpy(&native, pkmn->get_native(), sizeof(native::gen6_party_pokemon_t));
+            if(encrypt) native::gen6_encrypt(native);
+        }
+
 
         void gen1_to_gen2(const native::gen1_party_pokemon_t &src, native::gen2_party_pokemon_t &dst)
         {

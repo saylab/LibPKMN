@@ -76,6 +76,12 @@ namespace pkmn
         void PKMN_API export_nds_pokemon(pokemon::sptr pkmn, native::nds_party_pokemon_t &native,
                                          bool encrypt = true);
 
+        void PKMN_API export_gen6_pokemon(pokemon::sptr pkmn, native::gen6_pc_pokemon_t &native,
+                                          bool encrypt = true);
+
+        void PKMN_API export_gen6_pokemon(pokemon::sptr pkmn, native::gen6_party_pokemon_t &native,
+                                          bool encrypt = true);
+
         pokemon::sptr PKMN_API import_gen6_pokemon(const native::gen6_pc_pokemon_t &native,
                                                    const pkmn::pkstring &version,
                                                    bool is_encrypted = true);
