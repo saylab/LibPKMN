@@ -139,7 +139,16 @@ namespace pkmn
                 throw std::runtime_error("Failed to export to .pkm.");
             }
         }
-        else throw std::runtime_error("Extension must be .pksql, .3gpkm, or .pkm.");
+        else if(ext == ".pkx")
+        {
+            io::pkx::to(pkmn, filename);
+            if(not io::pkx::valid(filename))
+            {
+                fs::remove(fs::path(filename));
+                throw std::runtime_error("Failed to export to .pkx.");
+            }
+        }
+        else throw std::runtime_error("Extension must be one of the following: .pksql, .3gpkm, .pkm, .pkx.");
     }
 
     pkmn::shared_ptr<SQLite::Database> pokemon_impl::_db;
