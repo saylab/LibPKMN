@@ -9,6 +9,7 @@
 
 #include <pkmn/config.hpp>
 #include <pkmn/pokemon.hpp>
+#include <pkmn/trainer.hpp>
 #include <pkmn/native/pokemon.hpp>
 
 namespace pkmn
@@ -75,6 +76,14 @@ namespace pkmn
         void PKMN_API export_nds_pokemon(pokemon::sptr pkmn, native::nds_party_pokemon_t &native,
                                          bool encrypt = true);
 
+        pokemon::sptr PKMN_API import_gen6_pokemon(const native::gen6_pc_pokemon_t &native,
+                                                   const pkmn::pkstring &version,
+                                                   bool is_encrypted = true);
+
+        pokemon::sptr PKMN_API import_gen6_pokemon(const native::gen6_party_pokemon_t &native,
+                                                   const pkmn::pkstring &version,
+                                                   bool is_encrypted = true);
+
         void PKMN_API gen1_to_gen2(const native::gen1_party_pokemon_t &src, native::gen2_party_pokemon_t &dst);
 
         void PKMN_API gen2_to_gen1(const native::gen2_party_pokemon_t &src, native::gen1_party_pokemon_t &dst);
@@ -82,6 +91,16 @@ namespace pkmn
         void PKMN_API gen3_to_gen4(const native::gen3_party_pokemon_t &src, native::nds_party_pokemon_t &dst);
 
         void PKMN_API gen4_to_gen5(const native::nds_party_pokemon_t &src, native::nds_party_pokemon_t &dst);
+
+        void PKMN_API gen5_to_gen6(const native::nds_party_pokemon_t &src, native::gen6_party_pokemon_t &dst,
+                                   uint32_t new_otid = trainer::LIBPKMN_TRAINER_ID,
+                                   const pkmn::pkstring &new_otname = "LibPKMN",
+                                   bool new_ot_female = false);
+
+        void PKMN_API gen6_to_gen6(const native::gen6_party_pokemon_t &src, native::gen6_party_pokemon_t dst,
+                                   uint32_t new_otid = trainer::LIBPKMN_TRAINER_ID,
+                                   const pkmn::pkstring &new_otname = "LibPKMN",
+                                   bool new_ot_female = false);
     }
 }
 

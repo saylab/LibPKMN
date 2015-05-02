@@ -29,6 +29,7 @@
 #include "pokemon_gen2impl.hpp"
 #include "pokemon_gen3impl.hpp"
 #include "pokemon_ndsimpl.hpp"
+#include "pokemon_gen6impl.hpp"
 
 #include "internal.hpp"
 #include "utils.hpp"
@@ -203,6 +204,28 @@ namespace pkmn
             set_nds_pokemon_checksum(native.pc);
             if(encrypt) native::nds_encrypt(native);
             memcpy(&native, pkmn->get_native(), sizeof(native::nds_party_pokemon_t));
+        }
+
+        pokemon::sptr import_gen6_pokemon(const native::gen6_pc_pokemon_t &native,
+                                          const pkmn::pkstring &version,
+                                          bool is_encrypted)
+        {
+            native::gen6_pc_pokemon_t _native = native;
+            if(is_encrypted) native::gen6_decrypt(_native);
+
+            return pokemon::sptr(new pokemon_gen6impl(_native,
+                                                      database::get_version_id(version)));
+        }
+
+        pokemon::sptr import_gen6_pokemon(const native::gen6_party_pokemon_t &native,
+                                          const pkmn::pkstring &version,
+                                          bool is_encrypted)
+        {
+            native::gen6_party_pokemon_t _native = native;
+            if(is_encrypted) native::gen6_decrypt(_native);
+
+            return pokemon::sptr(new pokemon_gen6impl(_native,
+                                                      database::get_version_id(version)));
         }
 
         void gen1_to_gen2(const native::gen1_party_pokemon_t &src, native::gen2_party_pokemon_t &dst)
@@ -380,10 +403,107 @@ namespace pkmn
             dst = src;
 
             dst_blockA->species = CONVERT_POKEMON_GAME_INDEX(src_blockA->species, Versions::HEARTGOLD, Versions::BLACK_2);
-            dst_blockA->held_item = CONVERT_ITEM_GAME_INDEX(src_blockA->species, Versions::HEARTGOLD, Versions::BLACK_2);
+            dst_blockA->held_item = CONVERT_ITEM_GAME_INDEX(src_blockA->held_item, Versions::HEARTGOLD, Versions::BLACK_2);
             dst_blockB->nature = dst.pc.personality % 24;
 
             set_nds_pokemon_checksum(dst.pc);
+        }
+
+        void gen5_to_gen6(const native::nds_party_pokemon_t &src, native::gen6_party_pokemon_t &dst,
+                          uint32_t new_otid, const pkmn::pkstring &new_otname, bool new_ot_female)
+        {
+            CONNECT_TO_DB(db);
+
+            const native::nds_pokemon_blockA_t* src_blockA = &(src.pc.blocks.blockA);
+            const native::nds_pokemon_blockB_t* src_blockB = &(src.pc.blocks.blockB);
+            const native::nds_pokemon_blockC_t* src_blockC = &(src.pc.blocks.blockC);
+            const native::nds_pokemon_blockD_t* src_blockD = &(src.pc.blocks.blockD);
+
+            native::gen6_pokemon_blockA_t* dst_blockA      = &(dst.pc.blocks.blockA);
+            native::gen6_pokemon_blockB_t* dst_blockB      = &(dst.pc.blocks.blockB);
+            native::gen6_pokemon_blockC_t* dst_blockC      = &(dst.pc.blocks.blockC);
+            native::gen6_pokemon_blockD_t* dst_blockD      = &(dst.pc.blocks.blockD);
+
+            // Block A
+            dst_blockA->species = CONVERT_POKEMON_GAME_INDEX(src_blockA->species, Versions::BLACK_2, Versions::X);
+            dst_blockA->held_item = CONVERT_ITEM_GAME_INDEX(src_blockA->held_item, Versions::BLACK_2, Versions::X);
+            dst_blockA->ot_id = src_blockA->ot_id;
+            dst_blockA->exp = src_blockA->exp;
+            dst_blockA->ability = src_blockA->ability;
+            SQLite::Statement ability_query(*db, "SELECT slot FROM pokemon_abilities WHERE pokemon_id=? "
+                                                 "AND ability_id=?");
+            ability_query.bind(1, GET_SPECIES_INDEX(Versions::X, dst_blockA->species));
+            ability_query.bind(2, dst_blockA->ability);
+            ability_query.executeStep();
+            dst_blockA->ability_num = uint8_t(ability_query.getColumn(0)) - 1;
+            dst_blockA->hits_remaining = 50;
+            dst_blockA->personality = src.pc.personality;
+            dst_blockA->nature = src_blockB->nature;
+            dst_blockA->form_encounterinfo = src_blockB->form_encounterinfo;
+            memcpy(&(dst_blockA->ev_hp), &(src_blockA->ev_hp), 12);
+            dst_blockA->markings = src_blockA->markings;
+            dst_blockA->pokerus = src_blockD->pokerus;
+            dst_blockA->super_training_medals = 0;
+            memset(dst_blockA->ribbons, 0, 6); // TODO
+            memset(&(dst_blockA->unused_x36), 0, 5);
+
+            // Block B
+            conversions::export_modern_text(conversions::import_modern_text(src_blockC->nickname, 10), dst_blockB->nickname, 12);
+            memcpy(dst_blockB->moves, src_blockB->moves, 16);
+            // TODO: relearn move ID's, probably some database queries here
+            dst_blockB->secret_super_training_flag = 0;
+            dst_blockB->iv_isegg_isnicknamed = src_blockB->iv_isegg_isnicknamed;
+
+            // Block C
+            conversions::export_modern_text(new_otname, (uint16_t*)(dst_blockC->latest_not_ot_handler), 7);
+            dst_blockC->not_ot_gender = new_ot_female ? 1 : 0;
+            dst_blockC->current_handler = 1; // Not OT
+            SQLite::Statement friendship_query(*db, "SELECT base_happiness FROM pokemon_species WHERE id=?");
+            friendship_query.bind(1, GET_SPECIES_INDEX(Versions::X, dst_blockA->species));
+            friendship_query.executeStep();
+            dst_blockC->not_ot_friendship = uint8_t(friendship_query.getColumn(0));
+            memset(&(dst_blockC->not_ot_affection), 0, 13);
+
+            // Block D
+            conversions::export_modern_text(conversions::import_modern_text(src_blockD->otname, 7), dst_blockD->otname, 7);
+            // TODO: dates, locations
+            dst_blockD->ball = src_blockD->ball;
+            dst_blockD->metlevel_otgender = src_blockD->metlevel_otgender;
+            dst_blockD->gen4_encounterinfo = src_blockD->encounter_info;
+            dst_blockD->ot_game = src_blockC->hometown;
+            // TODO: region ID's
+
+            // Battle Stats
+            dst.status = 0;
+            dst.level = src.level;
+            memcpy(&(dst.current_hp), &(src.current_hp), 14);
+        }
+
+        void gen6_to_gen6(const native::gen6_party_pokemon_t &src, native::gen6_party_pokemon_t &dst,
+                          uint32_t new_otid, const pkmn::pkstring &new_otname, bool new_ot_female)
+        {
+            const native::gen6_pokemon_blockA_t* src_blockA = &(src.pc.blocks.blockA);
+            const native::gen6_pokemon_blockB_t* src_blockB = &(src.pc.blocks.blockB);
+            const native::gen6_pokemon_blockC_t* src_blockC = &(src.pc.blocks.blockC);
+            const native::gen6_pokemon_blockD_t* src_blockD = &(src.pc.blocks.blockD);
+
+            native::gen6_pokemon_blockA_t* dst_blockA       = &(dst.pc.blocks.blockA);
+            native::gen6_pokemon_blockB_t* dst_blockB       = &(dst.pc.blocks.blockB);
+            native::gen6_pokemon_blockC_t* dst_blockC       = &(dst.pc.blocks.blockC);
+            native::gen6_pokemon_blockD_t* dst_blockD       = &(dst.pc.blocks.blockD);
+
+            dst = src;
+
+            bool dst_is_ot = (src_blockA->ot_id == new_otid);
+            dst_blockC->current_handler = dst_is_ot ? 1 : 0;
+
+            if(not dst_is_ot)
+            {
+                conversions::export_modern_text(new_otname, (uint16_t*)(dst_blockC->latest_not_ot_handler), 7);
+                dst_blockC->not_ot_gender = new_ot_female ? 1 : 0;
+            }
+
+            // TODO: affection, met time/location, etc
         }
     } /* namespace conversions */
 } /* namespace pkmn */

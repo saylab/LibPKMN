@@ -121,6 +121,7 @@ namespace pkmn
             _set_stats();
 
             native::set_gen6_pokemon_checksum(_raw.pc);
+            _set_attributes();
         }
     }
 
@@ -137,6 +138,7 @@ namespace pkmn
 
         _raw.level = database::get_level(_species_id, _blockA->exp);
         _set_stats();
+        _set_attributes();
     }
 
     pokemon_gen6impl::pokemon_gen6impl(const pkmn::native::gen6_party_pokemon_t &raw,
@@ -149,6 +151,8 @@ namespace pkmn
         _blockC = &(_raw.pc.blocks.blockC);
         _blockD = &(_raw.pc.blocks.blockD);
         // TODO: set form
+
+        _set_attributes();
     }
 
     pokemon_gen6impl::pokemon_gen6impl(const pokemon_gen6impl &other):
@@ -160,6 +164,8 @@ namespace pkmn
         _blockC = &(_raw.pc.blocks.blockC);
         _blockD = &(_raw.pc.blocks.blockD);
         // TODO: set form
+
+        _set_attributes();
     }
 
     pokemon_gen6impl& pokemon_gen6impl::operator=(const pokemon_gen6impl &other)
