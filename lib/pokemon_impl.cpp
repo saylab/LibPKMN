@@ -29,6 +29,7 @@
 #include "internal.hpp"
 #include "io/3gpkm.hpp"
 #include "io/pkm.hpp"
+#include "io/pkx.hpp"
 #include "io/pksql.hpp"
 #include "SQLiteCpp/SQLiteC++.h"
 
@@ -101,6 +102,8 @@ namespace pkmn
             return io::_3gpkm::from(filename);
         else if(fs::extension(fs::path(filename)) == ".pkm" and io::pkm::valid(filename))
             return io::pkm::from(filename);
+        else if(fs::extension(fs::path(filename)) == ".pkx" and io::pkx::valid(filename))
+            return io::pkx::from(filename);
         else
             throw std::runtime_error("Invalid file.");
     }

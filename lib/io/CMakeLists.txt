@@ -8,6 +8,7 @@
 SET(io_sources
     ${CMAKE_CURRENT_SOURCE_DIR}/3gpkm.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/pkm.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/pkx.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/pksql.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/trsql.cpp
 PARENT_SCOPE)
