@@ -146,6 +146,7 @@ namespace pkmn
     {
         pokemon_impl::operator=(other);
 
+        _raw = other._raw;
         _blockA = &(_raw.pc.blocks.blockA);
         _blockB = &(_raw.pc.blocks.blockB);
         _blockC = &(_raw.pc.blocks.blockC);
@@ -239,7 +240,7 @@ namespace pkmn
 
     pkmn::pkstring pokemon_gen6impl::get_trainer_gender() const
     {
-        return (_blockD->metlevel_otgender  &(1<<31)) ? "Female" : "Male";
+        return (_blockD->metlevel_otgender & (1<<31)) ? "Female" : "Male";
     }
 
     uint32_t pokemon_gen6impl::get_trainer_id() const
@@ -269,7 +270,7 @@ namespace pkmn
 
     int pokemon_gen6impl::get_met_level() const
     {
-        return _blockD->metlevel_otgender  &~(1<<7);
+        return _blockD->metlevel_otgender & ~(1<<7);
     }
 
     /*
@@ -344,7 +345,7 @@ namespace pkmn
             throw std::runtime_error("Level must be 0-100.");
 
         _blockD->metlevel_otgender &= (1<<7);
-        _blockD->metlevel_otgender |= (level  &~(1<<7));
+        _blockD->metlevel_otgender |= (level & ~(1<<7));
     }
 
     /*
@@ -373,8 +374,8 @@ namespace pkmn
 
     pkmn::pkstring pokemon_gen6impl::get_gender() const
     {
-        if(_blockA->form_encounterinfo  &(1<<1))      return "Female";
-        else if(_blockA->form_encounterinfo  &(1<<2)) return "Genderless";
+        if(_blockA->form_encounterinfo & (1<<1))      return "Female";
+        else if(_blockA->form_encounterinfo & (1<<2)) return "Genderless";
         else                                          return "Male";
     }
 
@@ -511,8 +512,8 @@ namespace pkmn
 
     void pokemon_gen6impl::set_form(const pkmn::pkstring &form)
     {
-        uint16_t form_id    = database::get_form_id(_pokedex_entry.species_name, form);
-        int  form_index = database::get_form_game_index(form_id);
+        int form_id    = database::get_form_id(_pokedex_entry.species_name, form);
+        int form_index = database::get_form_game_index(form_id);
 
         switch(_species_id)
         {
@@ -830,7 +831,7 @@ namespace pkmn
         else
         {
             /*
-             * Gender is determined by (personality  &0xFF).
+             * Gender is determined by (personality & 0xFF).
              * If the personality is below a certain number, the Pokemon will be female.
              */
             uint8_t truncated_pid = (_blockA->personality & 0xFF);
