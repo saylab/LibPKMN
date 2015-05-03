@@ -59,8 +59,6 @@
 /*
  * std::pair templates
  */
-%template(BytePair)     std::pair<uint8_t, uint8_t>;
-%template(UShortPair)   std::pair<uint16_t, uint16_t>;
 %template(UIntPair)     std::pair<unsigned int, unsigned int>;
 %template(StringPair)   std::pair<std::wstring, std::wstring>;
 
@@ -69,7 +67,6 @@
  */
 %template(ByteVector)   std::vector<uint8_t>;
 %template(IntVector)    std::vector<int>;
-%template(UShortVector) std::vector<uint16_t>;
 %template(PocketVector) std::vector<pkmn::pocket::sptr>;
 %template(PokemonTeam)  std::vector<pkmn::pokemon::sptr>;
 %template(StringVector) std::vector<pkmn::pkstring>;
@@ -78,7 +75,6 @@
  * pkmn::dict templates
  */
 CS_PKMN_DICT(StringIntDict, pkmn::pkstring, int, string, int, StringVector, IntVector)
-CS_PKMN_DICT(StringUShortDict, pkmn::pkstring, uint16_t, string, ushort, StringVector, UShortVector)
 CS_PKMN_DICT(StringStringDict, pkmn::pkstring, pkmn::pkstring, string, string, StringVector, StringVector)
 CS_PKMN_DICT(PocketDict, pkmn::pkstring, pkmn::pocket::sptr, string, PocketSPtr, StringVector, PocketVector)
 
