@@ -5,8 +5,8 @@
  * or copy at http://opensource.org/licenses/MIT)
  */
 
-#ifndef INCLUDED_JAVA_ENTRY_WRAPPERS_HPP
-#define INCLUDED_JAVA_ENTRY_WRAPPERS_HPP
+#ifndef INCLUDED_CS_ENTRY_WRAPPERS_HPP
+#define INCLUDED_CS_ENTRY_WRAPPERS_HPP
 
 #include <string>
 #include <utility>
@@ -260,13 +260,13 @@ namespace pkmn
                 //! Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/Type">type(s)</a> (generation-specific).
                 std::pair<std::wstring, std::wstring> getTypes()
                 {
-                    return std::make_pair(entry.types.first, entry.types.second);
+                    return std::make_pair(entry.types.first.std_wstring(), entry.types.second.std_wstring());
                 }
 
                 //! Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/Ability">abilities</a> (both "None" pre-Generation III).
                 std::pair<std::wstring, std::wstring> getAbilities()
                 {
-                    return std::make_pair(entry.abilities.first, entry.abilities.second);
+                    return std::make_pair(entry.abilities.first.std_wstring(), entry.abilities.second.std_wstring());
                 }
 
                 //! Pokémon's hidden <a href="http://bulbapedia.bulbagarden.net/wiki/Ability">ability</a> ("None" pre-Generation V).
@@ -278,7 +278,7 @@ namespace pkmn
                 //! Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/Egg_Group">egg groups</a>.
                 std::pair<std::wstring, std::wstring> getEggGroups()
                 {
-                    return std::make_pair(entry.egg_groups.first, entry.egg_groups.second);
+                    return std::make_pair(entry.egg_groups.first.std_wstring(), entry.egg_groups.second.std_wstring());
                 }
 
                 //! Pokémon's <a href="http://bulbapedia.bulbagarden.net/wiki/Catch_rate">catch rate</a>.
@@ -348,4 +348,4 @@ namespace pkmn
     }
 }
 
-#endif /* INCLUDED_JAVA_ENTRY_WRAPPERS_HPP */
+#endif /* INCLUDED_CS_ENTRY_WRAPPERS_HPP */

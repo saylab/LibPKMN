@@ -105,7 +105,6 @@ SET(cpp_test_sources
     io_test.cpp
     markings_test.cpp
     pkstring_test.cpp
-    pksql_test.cpp
     prng_test.cpp
     sptr_test.cpp
     text_conversion_test.cpp

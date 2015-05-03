@@ -25,13 +25,13 @@ namespace pkmn
 {
     namespace calculations
     {
-        uint8_t get_ability_num(uint32_t personality)
+        int get_ability_num(uint32_t personality)
         {
             return personality % 2;
         }
 
-        std::pair<uint8_t, uint8_t> get_hidden_power(uint8_t ivHP, uint8_t ivATK, uint8_t ivDEF,
-                                                     uint8_t ivSATK, uint8_t ivSDEF, uint8_t ivSPD)
+        std::pair<int, int> get_hidden_power(int ivHP, int ivATK, int ivDEF,
+                                             int ivSATK, int ivSDEF, int ivSPD)
         {
             ivHP %= 4;
             ivATK %= 4;
@@ -59,10 +59,10 @@ namespace pkmn
             return std::make_pair(power, type);
         }
 
-        uint16_t get_retro_stat(const pkmn::pkstring& stat_name,
-                                uint16_t base_stat_value,
-                                uint8_t level,
-                                uint16_t EV, uint8_t IV)
+        int get_retro_stat(const pkmn::pkstring &stat_name,
+                           int base_stat_value,
+                           int level,
+                           int EV, int IV)
         {
             if(stat_name == "HP")
             {
@@ -76,10 +76,10 @@ namespace pkmn
             }
         }
 
-        static uint16_t get_modern_stat(const pkmn::pkstring& stat_name,
-                                        uint16_t base_stat_value,
-                                        uint8_t level, float nature_mod,
-                                        uint16_t EV, uint8_t IV)
+        static int get_modern_stat(const pkmn::pkstring &stat_name,
+                                   int base_stat_value,
+                                   int level, float nature_mod,
+                                   int EV, int IV)
         {
             if(stat_name == "HP")
             {
@@ -93,21 +93,21 @@ namespace pkmn
             }
         }
 
-        uint16_t get_modern_stat(const pkmn::pkstring& stat_name,
-                                 uint16_t base_stat_value,
-                                 uint8_t level, const pkmn::nature_t& nature,
-                                 uint16_t EV, uint8_t IV)
+        int get_modern_stat(const pkmn::pkstring &stat_name,
+                                 int base_stat_value,
+                                 int level, const pkmn::nature_t &nature,
+                                 int EV, int IV)
         {
             return get_modern_stat(stat_name, base_stat_value, level,
                                    ((stat_name == "HP") ? 1.0 : nature[stat_name]), EV, IV);
         }
 
-        std::pair<uint16_t, uint16_t> get_stat_range(const pkmn::pokemon_entry_t& entry,
-                                                     const pkmn::pkstring& game,
-                                                     const pkmn::pkstring& stat_name,
-                                                     uint8_t level)
+        std::pair<int, int> get_stat_range(const pkmn::pokemon_entry_t &entry,
+                                           const pkmn::pkstring &game,
+                                           const pkmn::pkstring &stat_name,
+                                           int level)
         {
-            std::pair<uint16_t, uint16_t> stat_range;
+            std::pair<int, int> stat_range;
 
             if(database::get_generation(database::get_version_id(game)) < 3)
             {
@@ -127,14 +127,14 @@ namespace pkmn
             return stat_range;
         }
 
-        bool is_stat_possible(const pkmn::pokemon_entry_t& entry,
-                              const pkmn::pkstring& game,
-                              const pkmn::pkstring& stat_name,
-                              uint16_t stat_value,
-                              uint8_t level)
+        bool is_stat_possible(const pkmn::pokemon_entry_t &entry,
+                              const pkmn::pkstring &game,
+                              const pkmn::pkstring &stat_name,
+                              int stat_value,
+                              int level)
         {
-            std::pair<uint16_t, uint16_t> stat_range = get_stat_range(entry, game, stat_name,
-                                                                      level);
+            std::pair<int, int> stat_range = get_stat_range(entry, game, stat_name,
+                                                            level);
             return((stat_value >= stat_range.first) and
                    (stat_value <= stat_range.second));
         }
@@ -144,8 +144,8 @@ namespace pkmn
             return pkmn::nature_t(personality % 24);
         }
 
-        bool get_gen2_shiny(uint8_t ivATK, uint8_t ivDEF,
-                            uint8_t ivSPD, uint8_t ivSPCL)
+        bool get_gen2_shiny(int ivATK, int ivDEF,
+                            int ivSPD, int ivSPCL)
         {
             return ((ivDEF == 10 and ivSPD == 10 and ivSPCL == 10) and
                     (ivATK == 2 or ivATK == 3 or ivATK == 6 or ivATK == 7
@@ -175,8 +175,8 @@ namespace pkmn
             return true;
         }
 
-        pkmn::pkstring get_gen2_unown_form(uint8_t ivATK, uint8_t ivDEF,
-                                           uint8_t ivSPD, uint8_t ivSPCL)
+        pkmn::pkstring get_gen2_unown_form(int ivATK, int ivDEF,
+                                           int ivSPD, int ivSPCL)
         {
             uint8_t form = (((ivATK & 6) << 6)
                          +  ((ivDEF & 6) << 4)
@@ -205,12 +205,12 @@ namespace pkmn
                                                        : Species::CASCOON);
         }
 
-        float get_type_damage_mod(const pkmn::pkstring& attacking_type,
-                                  const pkmn::pkstring& defending_type,
-                                  uint16_t gen)
+        float get_type_damage_mod(const pkmn::pkstring &attacking_type,
+                                  const pkmn::pkstring &defending_type,
+                                  int gen)
         {
-            uint16_t attacking_type_id = database::get_type_id(attacking_type);
-            uint16_t defending_type_id = database::get_type_id(defending_type);
+            int attacking_type_id = database::get_type_id(attacking_type);
+            int defending_type_id = database::get_type_id(defending_type);
 
             std::ostringstream query_stream;
             query_stream << "SELECT damage_factor FROM " << ((gen == 1) ? "gen1_" : "")
@@ -229,15 +229,15 @@ namespace pkmn
             return damage_mod;
         }
 
-        uint16_t get_base_damage(uint8_t level, uint16_t attack,
-                                 uint16_t defense, uint16_t base_power)
+        int get_base_damage(int level, int attack,
+                            int defense, int base_power)
         {
-            return std::max<uint16_t>(1, (uint16_t)(floor((((2.0 * double(level) + 10.0) / 250.0) *
+            return std::max<int>(1, (int)(floor((((2.0 * double(level) + 10.0) / 250.0) *
                    (double(attack) / double(defense)) * double(base_power) * 2.0))));
         }
 
-        uint16_t get_base_damage(pokemon::sptr attacker, pokemon::sptr defender,
-                                 const pkmn::pkstring& move)
+        int get_base_damage(pokemon::sptr attacker, pokemon::sptr defender,
+                            const pkmn::pkstring &move)
         {
             pkmn::pokemon_entry_t attacker_entry = attacker->get_pokedex_entry();
             pkmn::dict<pkmn::pkstring, int> attacker_stats = attacker->get_stats();
@@ -264,8 +264,8 @@ namespace pkmn
                                                                          : "Special Defense";
             }
 
-            uint16_t attack_stat = attacker_stats[attack_stat_name];
-            uint16_t defense_stat = defender_stats[defense_stat_name];
+            int attack_stat = attacker_stats[attack_stat_name];
+            int defense_stat = defender_stats[defense_stat_name];
 
             float damage_mod = get_type_damage_mod(move_entry.type, defender_entry.types.first,
                                                    attacker->get_generation())

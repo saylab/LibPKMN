@@ -549,7 +549,7 @@ namespace pkmn
         uint16_t get_pokemon_game_index(uint16_t pokemon_id, uint16_t version_id)
         {
             CONNECT_TO_DB(db);
-            if(version_id == Versions::NONE) return 0;
+            if(pokemon_id == Species::NONE or version_id == Versions::NONE) return 0;
 
             std::ostringstream query_stream;
             query_stream << "SELECT game_index FROM pokemon_game_indices WHERE pokemon_id=" << pokemon_id

@@ -26,7 +26,8 @@ namespace pkmn
                                        int level,
                                        int move1, int move2,
                                        int move3, int move4):
-        pokemon_impl(species, version),
+        pokemon_impl(database::get_pokemon_game_index(species, version),
+                     version, (species == Species::NONE)),
         _nickname(PKSTRING_UPPERCASE(database::get_species_name(species))),
         _otname("LIBPKMN")
     {
@@ -66,95 +67,51 @@ namespace pkmn
 
     pokemon_gen1impl::pokemon_gen1impl(const pkmn::native::gen1_pc_pokemon_t &raw,
                                        int version):
-        pokemon_impl(database::get_pokemon_id(raw.species, Versions::RED),
-                     version),
+        pokemon_impl(raw.species, version, false),
         _nickname(UPPERCASE_SPECIES_NAME(raw.species, Versions::RED)),
         _otname("LIBPKMN")
     {
         _raw.pc = raw;
-        _none = false;
-        try
+        if(not _none and not _invalid)
         {
-            PKMN_UNUSED(int pokemon_id) = database::get_pokemon_id(_raw.pc.species, Versions::RED);
-            _invalid = false;
+            _raw.pc.level = database::get_level(_species_id, get_experience());
+            _raw.level = database::get_level(_species_id, get_experience());
+            _set_stats(); // Will populate party portion of struct
         }
-        catch(...)
-        {
-            _invalid = true;
-        }
-
-        _raw.pc.level = database::get_level(_species_id, get_experience());
-        _raw.level = database::get_level(_species_id, get_experience());
-        _set_stats(); // Will populate party portion of struct
     }
 
     pokemon_gen1impl::pokemon_gen1impl(const pkmn::native::gen1_pc_pokemon_t &raw,
                                        const pkmn::pkstring &nickname,
                                        const pkmn::pkstring &otname,
                                        int version):
-        pokemon_impl(database::get_pokemon_id(raw.species, Versions::RED),
-                     version),
+        pokemon_impl(raw.species, version, false),
         _nickname(nickname),
         _otname(otname)
     {
         _raw.pc = raw;
-        _none = false;
-        try
+        if(not _none and not _invalid)
         {
-            PKMN_UNUSED(int pokemon_id) = database::get_pokemon_id(_raw.pc.species, Versions::RED);
-            _invalid = false;
+            _raw.pc.level = database::get_level(_species_id, get_experience());
+            _raw.level = database::get_level(_species_id, get_experience());
+            _set_stats(); // Will populate party portion of struct
         }
-        catch(...)
-        {
-            _invalid = true;
-        }
-
-        _raw.pc.level = database::get_level(_species_id, get_experience());
-        _raw.level = database::get_level(_species_id, get_experience());
-        _set_stats(); // Will populate party portion of struct
     }
 
     pokemon_gen1impl::pokemon_gen1impl(const pkmn::native::gen1_party_pokemon_t &raw,
                                        int version):
-        pokemon_impl(database::get_pokemon_id(raw.pc.species, Versions::RED),
-                     version),
+        pokemon_impl(raw.pc.species, version, false),
         _raw(raw),
         _nickname(UPPERCASE_SPECIES_NAME(raw.pc.species, Versions::RED)),
-        _otname("LIBPKMN")
-    {
-        _none = false;
-        try
-        {
-            PKMN_UNUSED(int pokemon_id) = database::get_pokemon_id(_raw.pc.species, Versions::RED);
-            _invalid = false;
-        }
-        catch(...)
-        {
-            _invalid = true;
-        }
-    }
+        _otname("LIBPKMN") {};
 
     pokemon_gen1impl::pokemon_gen1impl(const pkmn::native::gen1_party_pokemon_t &raw,
                                        const pkmn::pkstring &nickname,
                                        const pkmn::pkstring &otname,
                                        int version):
-        pokemon_impl(database::get_pokemon_id(raw.pc.species, Versions::RED),
-                     version),
+        pokemon_impl(raw.pc.species, version, false),
         _raw(raw),
         _nickname(nickname),
-        _otname(otname)
-    {
-        _none = false;
-        try
-        {
-            PKMN_UNUSED(int pokemon_id) = database::get_pokemon_id(_raw.pc.species, Versions::RED);
-            _invalid = false;
-        }
-        catch(...)
-        {
-            _invalid = true;
-        }
-    }
+        _otname(otname) {};
 
     pokemon_gen1impl::pokemon_gen1impl(const pokemon_gen1impl &other):
         pokemon_impl(other),

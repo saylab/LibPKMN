@@ -24,6 +24,11 @@ def database_usage_test():
         test_num2 = pkmn.database.get_species_id(pkmn.database.get_species_name(pkmn.Species.NIDORAN_M))
         if test_num2 != pkmn.Species.NIDORAN_M:
             raise Exception("test_num2 != pkmn.Species.NIDORAN_M")
+
+        test_string3 = pkmn.pkstring("5")
+        if test_string3 == 5:
+            raise Exception("test_string3 == 5")
+
         return True
     except:
         print
