@@ -82,7 +82,7 @@ namespace pkmn
             conversions::export_modern_text("LibPKMN",
                                             _blockD->otname, 7);
             _blockD->ot_friendship = _pokedex_entry.base_friendship;
-            // TODO: met dates
+            _blockD->eggmet_date = _blockD->met_date = pkmn::datetime_t();
             _blockD->eggmet_location = 2008; // Distant land
             _blockD->met_location = 2008; // Distant land
             _blockD->ball = Balls::LUXURY_BALL;
@@ -188,6 +188,11 @@ namespace pkmn
         return _blockA->pokerus;
     }
 
+    pkmn::datetime_t pokemon_gen6impl::get_met_date(bool as_egg) const
+    {
+        return as_egg ? _blockD->eggmet_date : _blockD->met_date;
+    }
+
     /*
      * Setting Non-Battle Info
      */
@@ -221,6 +226,12 @@ namespace pkmn
     {
         pkmn::pokerus_t _pokerus = pokerus;
         _blockA->pokerus = _pokerus;
+    }
+
+    void pokemon_gen6impl::set_met_date(pkmn::datetime_t &date, bool as_egg)
+    {
+        if(as_egg) _blockD->eggmet_date = date;
+        else       _blockD->met_date = date;
     }
 
     /*

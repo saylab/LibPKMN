@@ -90,7 +90,8 @@ namespace pkmn
             }
             _blockC->hometown = database::get_version_game_index(_version_id);
             // TODO: check for expected values in "unknown" fields
-            // TODO: met dates
+
+            _blockD->eggmet_date = _blockD->met_date = pkmn::datetime_t();
             if(_version_id == Versions::DIAMOND or _version_id == Versions::PEARL)
             {
                 _blockD->eggmet_dp = 2008; // Distant land
@@ -223,6 +224,11 @@ namespace pkmn
         return _blockD->pokerus;
     }
 
+    pkmn::datetime_t pokemon_ndsimpl::get_met_date(bool as_egg) const
+    {
+        return as_egg ? _blockD->eggmet_date : _blockD->met_date;
+    }
+
     /*
      * Setting Non-Battle Info
      */
@@ -258,6 +264,12 @@ namespace pkmn
     {
         pkmn::pokerus_t _pokerus = pokerus;
         _blockD->pokerus = _pokerus;
+    }
+
+    void pokemon_ndsimpl::set_met_date(pkmn::datetime_t &date, bool as_egg)
+    {
+        if(as_egg) _blockD->eggmet_date = date;
+        else       _blockD->met_date = date;
     }
 
     /*

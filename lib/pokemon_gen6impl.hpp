@@ -35,6 +35,7 @@ namespace pkmn
             pkmn::ribbons_t get_ribbons() const;
             pkmn::super_training_medals_t get_super_training_medals() const;
             pkmn::pokerus_t get_pokerus() const;
+            pkmn::datetime_t get_met_date(bool as_egg) const;
 
             // Setting Non-battle Info
             void set_contest_stats(const pkmn::contest_stats_t &contest_stats);
@@ -42,6 +43,7 @@ namespace pkmn
             void set_ribbons(const pkmn::ribbons_t &ribbons);
             void set_super_training_medals(const pkmn::super_training_medals_t &super_training_medals);
             void set_pokerus(const pkmn::pokerus_t &pokerus);
+            void set_met_date(pkmn::datetime_t &date, bool as_egg);
 
             // Getting Trainer Info
             pkmn::pkstring get_nickname() const;

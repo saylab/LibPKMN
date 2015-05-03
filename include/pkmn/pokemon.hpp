@@ -13,6 +13,7 @@
 #include <pkmn/pokedex.hpp>
 
 #include <pkmn/types/contest_stats.hpp>
+#include <pkmn/types/datetime.hpp>
 #include <pkmn/types/dict.hpp>
 #include <pkmn/types/markings.hpp>
 #include <pkmn/types/nature.hpp>
@@ -62,6 +63,7 @@ namespace pkmn
             virtual pkmn::ribbons_t get_ribbons() const = 0;
             virtual pkmn::super_training_medals_t get_super_training_medals() const = 0;
             virtual pkmn::pokerus_t get_pokerus() const = 0;
+            virtual pkmn::datetime_t get_met_date(bool as_egg = false) const = 0;
 
             // Setting Non-battle Info
             virtual void set_contest_stats(const pkmn::contest_stats_t &contest_stats) = 0;
@@ -69,6 +71,7 @@ namespace pkmn
             virtual void set_ribbons(const pkmn::ribbons_t &ribbons) = 0;
             virtual void set_super_training_medals(const pkmn::super_training_medals_t &super_training_medals) = 0;
             virtual void set_pokerus(const pkmn::pokerus_t &pokerus) = 0;
+            virtual void set_met_date(pkmn::datetime_t &date, bool as_egg = false) = 0;
 
             // Getting Trainer Info
             virtual pkmn::pkstring get_nickname() const = 0;
