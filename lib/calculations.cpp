@@ -40,7 +40,7 @@ namespace pkmn
             ivSATK %= 4;
             ivSDEF %= 4;
 
-            uint8_t power, type;
+            int power, type;
 
             power = (32 * (ivHP >> 1))
                   + (16 * (ivATK >> 1))
