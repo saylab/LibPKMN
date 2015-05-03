@@ -25,6 +25,7 @@
 
 %include "pkmn.i"
 
+%include "pkmn_datetime.i"
 %include "pkmn_dict.i"
 %include "pkmn_pkstring.i"
 %include "pkmn_nature.i"
@@ -71,16 +72,13 @@ namespace pkmn
 /*
  * std::pair templates
  */
-%template(BytePair)          std::pair<uint8_t, uint8_t>;
-%template(UShortPair)        std::pair<uint16_t, uint16_t>;
+%template(IntPair)           std::pair<int, int>;
 %template(StringPair)        std::pair<pkmn::pkstring, pkmn::pkstring>;
 
 /*
  * std::vector templates
  */
-%template(ByteVector)         std::vector<uint8_t>;
 %template(IntVector)          std::vector<int>;
-%template(UShortVector)       std::vector<uint16_t>;
 %template(PocketVector)       std::vector<pkmn::pocket::sptr>;
 %template(PokemonTeam)        std::vector<pkmn::pokemon::sptr>;
 %template(StringVector)       std::vector<pkmn::pkstring>;
@@ -88,10 +86,9 @@ namespace pkmn
 /*
  * pkmn::dict templates
  */
-JAVA_PKMN_DICT(StringIntDict, pkmn::pkstring, int, string, int)
-JAVA_PKMN_DICT(StringUShortDict, pkmn::pkstring, uint16_t, string, int)
-JAVA_PKMN_DICT(StringStringDict, pkmn::pkstring, pkmn::pkstring, string, string)
-JAVA_PKMN_DICT(PocketDict, pkmn::pkstring, pkmn::pocket::sptr, string, PocketSPtr)
+JAVA_PKMN_DICT(StringIntDict, pkmn::pkstring, int)
+JAVA_PKMN_DICT(StringStringDict, pkmn::pkstring, pkmn::pkstring)
+JAVA_PKMN_DICT(PocketDict, pkmn::pkstring, pkmn::pocket::sptr)
 
 /*
  * pkmn::shared_ptr templates

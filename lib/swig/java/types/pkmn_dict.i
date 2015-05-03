@@ -8,7 +8,7 @@
 /*
  * Macro for pkmn::dict templates
  */
-%define JAVA_PKMN_DICT(dict_name, ctype1, ctype2, javatype1, javatype2)
+%define JAVA_PKMN_DICT(dict_name, ctype1, ctype2)
     %rename(get) pkmn::dict<ctype1, ctype2>::at;
     %rename(put) pkmn::dict<ctype1, ctype2>::insert;
     %rename(containsKey) pkmn::dict<ctype1, ctype2>::has_key;
