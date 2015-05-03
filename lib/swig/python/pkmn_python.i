@@ -14,6 +14,7 @@
 %include "pkmn_python_docstrings.i"
 %include "pkmn.i"
 
+%include "pkmn_datetime.i"
 %include "pkmn_dict.i"
 %include "pkmn_nature.i"
 %include "pkmn_pkstring.i"

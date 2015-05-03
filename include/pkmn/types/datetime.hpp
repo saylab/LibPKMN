@@ -20,7 +20,7 @@ namespace pkmn
         datetime_t(const native::gen1_time_t &gen1_time);
         datetime_t(const native::gen2_time_t &gen2_time);
         datetime_t(const native::gen3_time_t &gen3_time);
-        datetime_t(const native::date_t  &date);
+        datetime_t(const native::date_t      &date);
 
         int year;
         int month;
