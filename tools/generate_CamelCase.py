@@ -69,6 +69,7 @@ overrides = dict(prng = "PRNG",
                  LIBPKMN_PUBLIC_ID = "LIBPKMN_PUBLIC_ID",
                  LIBPKMN_SECRET_ID = "LIBPKMN_SECRET_ID",
                  LIBPKMN_TRAINER_ID = "LIBPKMN_TRAINER_ID",
+                 datetime_t = "DateTime"
                 )
 
 replacements = dict(Ev = "EV",

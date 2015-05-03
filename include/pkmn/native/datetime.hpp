@@ -4,8 +4,8 @@
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
  */
-#ifndef INCLUDED_PKMN_NATIVE_TIME_HPP
-#define INCLUDED_PKMN_NATIVE_TIME_HPP
+#ifndef INCLUDED_PKMN_NATIVE_DATETIME_HPP
+#define INCLUDED_PKMN_NATIVE_DATETIME_HPP
 
 #include <cstdint>
 
@@ -39,12 +39,11 @@ namespace pkmn
 
         typedef struct
         {
-            uint16_t hours;
-            uint8_t minutes;
-            uint8_t seconds;
-        } nds_time_t;
-        typedef struct
+            uint8_t year; // 0-99
+            uint8_t month;
+            uint8_t day;
+        } date_t;
         #pragma pack(pop)
     }
 }
-#endif /* INCLUDED_PKMN_NATIVE_TIME_HPP */
+#endif /* INCLUDED_PKMN_NATIVE_DATETIME_HPP */

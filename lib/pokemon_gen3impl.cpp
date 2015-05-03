@@ -170,6 +170,12 @@ namespace pkmn
         return ribbons;
     }
 
+    // Met dates not recorded in Generation III
+    pkmn::datetime_t pokemon_gen3impl::get_met_date(PKMN_UNUSED(bool as_egg)) const
+    {
+        return pkmn::datetime_t();
+    }
+
     // No Super Training in Generation III
     pkmn::super_training_medals_t pokemon_gen3impl::get_super_training_medals() const
     {
@@ -212,6 +218,11 @@ namespace pkmn
     {
         pkmn::pokerus_t _pokerus = pokerus;
         _misc->pokerus = _pokerus;
+    }
+
+    void pokemon_gen3impl::set_met_date(PKMN_UNUSED(pkmn::datetime_t &date), PKMN_UNUSED(bool as_egg))
+    {
+        /* NOP */
     }
 
     /*

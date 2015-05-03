@@ -25,6 +25,7 @@
 
 %include "pkmn.i"
 
+%include "pkmn_datetime.i"
 %include "pkmn_dict.i"
 %include "pkmn_pkstring.i"
 %include "pkmn_nature.i"

@@ -170,6 +170,12 @@ namespace pkmn
         return _raw.pc.pokerus;
     }
 
+    // Met dates not recorded in Generation II
+    pkmn::datetime_t pokemon_gen2impl::get_met_date(PKMN_UNUSED(bool as_egg)) const
+    {
+        return pkmn::datetime_t();
+    }
+
     /*
      * Setting Non-battle Info
      */
@@ -202,6 +208,11 @@ namespace pkmn
     {
         pkmn::pokerus_t _pokerus = pokerus;
         _raw.pc.pokerus = _pokerus;
+    }
+
+    void pokemon_gen2impl::set_met_date(PKMN_UNUSED(pkmn::datetime_t &date), PKMN_UNUSED(bool as_egg))
+    {
+        /* NOP */
     }
 
     /*
