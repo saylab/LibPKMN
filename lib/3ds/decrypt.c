@@ -6,6 +6,12 @@
 #include <utils.h>
 #include <sys/stat.h>
 
+#ifdef _MSC_VER
+#include <direct.h>
+#else
+#include <unistd.h>
+#endif
+
 #define XORPAD_SIZE	512
 #define SECTOR_SIZE	0x1000
 
