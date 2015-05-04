@@ -33,17 +33,18 @@ ELSE()
     )
 ENDIF(WIN32)
 
-SET(3dsfuse_sources
+SET(3ds_sources
     crypto.c
+    decrypt.c
     fs.c
     fuse_glue.c
     helper.c
     utils.c
     wearlevel.c
 )
-ADD_LIBRARY(3dsfuse SHARED ${3dsfuse_sources})
-TARGET_LINK_LIBRARIES(3dsfuse ${3DS_DECRYPTION_LIBRARIES})
-INSTALL(TARGETS 3dsfuse
+ADD_LIBRARY(3ds SHARED ${3ds_sources})
+TARGET_LINK_LIBRARIES(3ds ${3DS_DECRYPTION_LIBRARIES})
+INSTALL(TARGETS 3ds
     LIBRARY DESTINATION ${LIBRARY_DIR} COMPONENT Runtime #.so
     RUNTIME DESTINATION ${RUNTIME_DIR} COMPONENT Runtime #.dll
 )
