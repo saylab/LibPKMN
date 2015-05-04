@@ -452,8 +452,8 @@ struct fuse_operations {
  *
  * Do not call this directly, use fuse_main()
  */
-int fuse_main_real(int argc, char *argv[], const struct fuse_operations *op,
-		   size_t op_size, void *user_data);
+int __declspec(dllexport) fuse_main_real(int argc, char *argv[], const struct fuse_operations *op,
+                                         size_t op_size, void *user_data);
 
 
 #ifdef __cplusplus

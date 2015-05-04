@@ -9,10 +9,13 @@
 FILE(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${PKG_DATA_DIR} LIBPKMN_PKG_DATA_PATH)
 
 IF(ENABLE_LIBPKMN)
+
+    ADD_DEFINITIONS(-D_FILE_OFFSET_BITS=64)
     ADD_SUBDIRECTORY(3dsfuse)
 
     INCLUDE_DIRECTORIES(
         ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/3dsfuse
         ${CMAKE_CURRENT_SOURCE_DIR}/SQLiteCpp
         ${LIBPKMN_SOURCE_DIR}/sqlite3
     )
@@ -41,6 +44,9 @@ IF(ENABLE_LIBPKMN)
         ${QT_QTMAIN_LIBRARY}
         sqlite3
     )
+    IF(ENABLE_3DS_DECRYPTION)
+        LIST(APPEND libpkmn_libs 3dsfuse)
+    ENDIF(ENABLE_3DS_DECRYPTION)
 
     #
     # The MOC generation must be done in this directory or CMake
