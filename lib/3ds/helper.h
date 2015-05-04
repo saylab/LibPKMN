@@ -5,6 +5,10 @@
 
 #define CRC16_DEFAULT_SEED 0xFFFF
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 u16 DLL_EXPORT getle16(const void* ptr);
 u16 DLL_EXPORT getbe16(const void* ptr);
 u32 DLL_EXPORT getle32(const void* ptr);
@@ -17,5 +21,9 @@ u16 DLL_EXPORT crc16(u8 *buf, u32 size, u16 seed);
 u16 DLL_EXPORT calc_crc16(u8 *buf, u32 size, u16 initval, u16 outxor);
 void DLL_EXPORT xor_3dsfuse(u8 *in, u32 len, u8 *out, u8 *key, u32 keylen);
 void DLL_EXPORT hexdump(void *ptr, int buflen);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

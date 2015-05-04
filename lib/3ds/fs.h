@@ -3,6 +3,10 @@
 
 #include "config.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct {
 	u8 magic[4];//"DISA"
 	u8 magicnum[4];//0x40000
@@ -96,5 +100,9 @@ int DLL_EXPORT fs_verifyupdatehashtree_fsdata(u32 offset, u32 size, u8 *databuf,
 
 DLL_EXPORT fst_entry *fs_get_by_name(u8 *part, const char *name);
 int DLL_EXPORT fs_num_entries(u8 *buf);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

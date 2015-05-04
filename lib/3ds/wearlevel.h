@@ -5,6 +5,10 @@
 
 #define MAXBLOCKMAPENTRIES	0x80
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct {
 	u8 phys_no;
 	u8 virt_no;
@@ -40,5 +44,9 @@ typedef struct {
 } journal_entry;
 
 int DLL_EXPORT rearrange(u8 *buf, u8 *out, int size);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
