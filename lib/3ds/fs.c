@@ -438,8 +438,8 @@ int fs_verifyhashtree(u8 *part, u8 *part2, int datapart, u8 *hashtree, ivfc_head
 				printf("\nhash-table hash: \n");
 				for(i=0; i<0x20; i++)printf("%02x", hashtable[curhashpos + i]);
 				printf("\n");
-				printf("part off %x\n", (u32)part - (u32)savectx.sav);
-				if(part2)printf("part2 off %x\n", (u32)part2 - (u32)savectx.sav);
+				//printf("part off %x\n", (u32)part - (u32)savectx.sav);
+				//if(part2)printf("part2 off %x\n", (u32)part2 - (u32)savectx.sav);
 				//free(hashdata);
 				//return 3;
 			}

@@ -1,4 +1,9 @@
+#ifdef _MSC_VER
+#include "winfuse/fuse.h"
+#else
 #include <fuse.h>
+#endif
+
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
