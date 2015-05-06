@@ -33,7 +33,7 @@ namespace pkmn
         GEN1_PIKACHU_FRIENDSHIP      = 0x271C,
         GEN1_ITEM_PC                 = 0x27E6,
         GEN1_CURRENT_POKEMON_BOX_NUM = 0x284C,
-        GEN1_TIME_PLAYED             = 0x2CEE,
+        GEN1_TIME_PLAYED             = 0x2CED,
         GEN1_POKEMON_PARTY           = 0x2F2C,
         GEN1_CURRENT_POKEMON_BOX     = 0x30C0,
         GEN1_CHECKSUM                = 0x3523,
