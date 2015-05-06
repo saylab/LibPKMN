@@ -240,12 +240,14 @@ namespace pkmn
 
     pkmn::pkstring pokemon_gen6impl::get_nickname() const
     {
-        return conversions::import_modern_text(_blockB->nickname, 12);
+        if(_species_id == Species::NONE) return "None";
+        else return conversions::import_modern_text(_blockB->nickname, 12);
     }
 
     pkmn::pkstring pokemon_gen6impl::get_trainer_name() const
     {
-        return conversions::import_modern_text(_blockD->otname, 7);
+        if(_species_id == Species::NONE) return "None";
+        else return conversions::import_modern_text(_blockD->otname, 7);
     }
 
     pkmn::pkstring pokemon_gen6impl::get_trainer_gender() const

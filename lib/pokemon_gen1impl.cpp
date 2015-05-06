@@ -36,6 +36,8 @@ namespace pkmn
          */
         if(_none or _invalid)
         {
+            _nickname = "NONE";
+            _otname = "LIBPKMN";
             memset(&_raw, 0x0, sizeof(pkmn::native::gen1_party_pokemon_t));
         }
         else

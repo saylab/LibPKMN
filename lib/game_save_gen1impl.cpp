@@ -51,12 +51,16 @@ namespace pkmn
         conversions::import_gen1_bag(_trainer->get_bag(), _item_bag);
 
         pokemon_team_t team(6);
-        for(size_t i = 0; i < _pokemon_party->count; i++)
+        for(size_t i = 0; i < 6; i++)
         {
-            team[i] = conversions::import_gen1_pokemon(_pokemon_party->party[i],
-                                                       _pokemon_party->nicknames[i],
-                                                       _pokemon_party->otnames[i],
-                                                       get_game());
+            if(i < _pokemon_party->count)
+                team[i] = conversions::import_gen1_pokemon(_pokemon_party->party[i],
+                                                           _pokemon_party->nicknames[i],
+                                                           _pokemon_party->otnames[i],
+                                                           get_game());
+            else
+                team[i] = pokemon::make(Species::NONE, _version_id, 50, Moves::NONE, Moves::NONE,
+                                                                        Moves::NONE, Moves::NONE);
         }
         _trainer->set_party(team);
 
@@ -86,14 +90,10 @@ namespace pkmn
         _pokemon_party->count = 0;
         for(size_t i = 0; i < 6; i++)
         {
-            if(team[i]->get_species_id() == Species::NONE) break;
-            else
-            {
-                _pokemon_party->count++;
-                conversions::export_gen1_pokemon(team[i], _pokemon_party->party[i],
-                                                 _pokemon_party->nicknames[i],
-                                                 _pokemon_party->otnames[i]);
-            }
+            conversions::export_gen1_pokemon(team[i], _pokemon_party->party[i],
+                                             _pokemon_party->nicknames[i],
+                                             _pokemon_party->otnames[i]);
+            if(team[i]->get_species_id() != Species::NONE) _pokemon_party->count++;
         }
     }
 } /* namespace pkmn */

@@ -278,14 +278,16 @@ namespace pkmn
 
     pkmn::pkstring pokemon_ndsimpl::get_nickname() const
     {
-        return (get_generation() == 4) ? conversions::import_gen4_text(_blockC->nickname, 10)
-                                       : conversions::import_modern_text(_blockC->nickname, 10);
+        if(_species_id == Species::NONE) return "None";
+        else return (get_generation() == 4) ? conversions::import_gen4_text(_blockC->nickname, 10)
+                                            : conversions::import_modern_text(_blockC->nickname, 10);
     }
 
     pkmn::pkstring pokemon_ndsimpl::get_trainer_name() const
     {
-        return (get_generation() == 4) ? conversions::import_gen4_text(_blockD->otname, 7)
-                                       : conversions::import_modern_text(_blockD->otname, 7);
+        if(_species_id == Species::NONE) return "None";
+        else return (get_generation() == 4) ? conversions::import_gen4_text(_blockD->otname, 7)
+                                            : conversions::import_modern_text(_blockD->otname, 7);
     }
 
     pkmn::pkstring pokemon_ndsimpl::get_trainer_gender() const

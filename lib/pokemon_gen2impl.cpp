@@ -221,12 +221,12 @@ namespace pkmn
 
     pkmn::pkstring pokemon_gen2impl::get_nickname() const
     {
-        return _nickname;
+        return (_species_id == Species::NONE) ? "None" : _nickname;
     }
 
     pkmn::pkstring pokemon_gen2impl::get_trainer_name() const
     {
-        return _otname;
+        return (_species_id == Species::NONE) ? "None" : _otname;
     }
 
     // All trainers are male in Gold/Silver

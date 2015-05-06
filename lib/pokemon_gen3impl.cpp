@@ -231,12 +231,14 @@ namespace pkmn
 
     pkmn::pkstring pokemon_gen3impl::get_nickname() const
     {
-        return conversions::import_gen3_text(_raw.pc.nickname, 10);
+        if(_species_id == Species::NONE) return "None";
+        else return conversions::import_gen3_text(_raw.pc.nickname, 10);
     }
 
     pkmn::pkstring pokemon_gen3impl::get_trainer_name() const
     {
-        return conversions::import_gen3_text(_raw.pc.otname, 7);
+        if(_species_id == Species::NONE) return "None";
+        else return conversions::import_gen3_text(_raw.pc.otname, 7);
     }
 
     pkmn::pkstring pokemon_gen3impl::get_trainer_gender() const
