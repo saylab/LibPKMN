@@ -62,6 +62,16 @@ namespace pkmn
         _trainer->set_money(_save->section1.data32[MONEY/4] ^ _security_key);
     }
 
+    pkmn::datetime_t game_save_gen3impl::get_time_played() const
+    {
+        return _save->trainer_info.time_played;
+    }
+
+    void game_save_gen3impl::set_time_played(pkmn::datetime_t &datetime)
+    {
+        _save->trainer_info.time_played = datetime;
+    }
+
     void game_save_gen3impl::_write_data()
     {
         conversions::export_gen3_bag(_trainer->get_bag(), _item_storage, _security_key);

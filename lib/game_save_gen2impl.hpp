@@ -12,6 +12,7 @@
 #include "game_save_impl.hpp"
 
 #include <pkmn/native/checksum.hpp>
+#include <pkmn/native/datetime.hpp>
 #include <pkmn/native/items.hpp>
 #include <pkmn/native/pokemon.hpp>
 
@@ -84,6 +85,9 @@ namespace pkmn
 
             void load();
 
+            pkmn::datetime_t get_time_played() const;
+            void set_time_played(pkmn::datetime_t &datetime);
+
         private:
 
             void _write_data();
@@ -95,6 +99,7 @@ namespace pkmn
             uint16_t _pokedex_seen_offset, _current_pokemon_box_offset, _player_gender_offset;
             uint16_t _pokemon_pc_offset;
 
+            native::gen2_time_t*          _time_played;
             native::gen2_item_bag_t*      _item_bag;
             native::gen2_item_pc_t*       _item_pc;
             native::gen2_pokemon_party_t* _pokemon_party;

@@ -20,7 +20,7 @@ namespace fs = boost::filesystem;
 
 namespace pkmn
 {
-    game_save_gen2impl::game_save_gen2impl(const pkmn::pkstring& filename, bool crystal):
+    game_save_gen2impl::game_save_gen2impl(const pkmn::pkstring &filename, bool crystal):
         game_save_impl(filename)
     {
         _version_id = crystal ? Versions::CRYSTAL : Versions::GOLD;
@@ -47,10 +47,11 @@ namespace pkmn
 
     void game_save_gen2impl::load()
     {
-        _item_bag = reinterpret_cast<native::gen2_item_bag_t*>(&_data[_item_bag_offset]);
-        _item_pc = reinterpret_cast<native::gen2_item_pc_t*>(&_data[_item_pc_offset]);
+        _time_played   = reinterpret_cast<native::gen2_time_t*>(&_data[_time_played_offset]);
+        _item_bag      = reinterpret_cast<native::gen2_item_bag_t*>(&_data[_item_bag_offset]);
+        _item_pc       = reinterpret_cast<native::gen2_item_pc_t*>(&_data[_item_pc_offset]);
         _pokemon_party = reinterpret_cast<native::gen2_pokemon_party_t*>(&_data[_pokemon_party_offset]);
-        _pokemon_pc = reinterpret_cast<native::gen2_pokemon_pc_t*>(&_data[_pokemon_pc_offset]);
+        _pokemon_pc    = reinterpret_cast<native::gen2_pokemon_pc_t*>(&_data[_pokemon_pc_offset]);
 
         _trainer = trainer::make(_version_id,
                                  conversions::import_gen2_text(&_data[_player_name_offset], 7),
@@ -68,6 +69,16 @@ namespace pkmn
         _trainer->set_id(*reinterpret_cast<uint16_t*>(&_data[_player_id_offset]));
 
         _trainer->set_money(conversions::import_gb_money(&_data[_money_offset]));
+    }
+
+    pkmn::datetime_t game_save_gen2impl::get_time_played() const
+    {
+        return *_time_played;
+    }
+
+    void game_save_gen2impl::set_time_played(pkmn::datetime_t &datetime)
+    {
+        *_time_played = datetime;
     }
 
     void game_save_gen2impl::_write_data()

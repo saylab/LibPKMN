@@ -39,10 +39,11 @@ namespace pkmn
 
     void game_save_gen1impl::load()
     {
-        _item_bag = reinterpret_cast<native::gen1_item_bag_t*>(&_data[GEN1_ITEM_BAG]);
-        _item_pc = reinterpret_cast<native::gen1_item_pc_t*>(&_data[GEN1_ITEM_PC]);
+        _time_played   = reinterpret_cast<native::gen1_time_t*>(&_data[GEN1_TIME_PLAYED]);
+        _item_bag      = reinterpret_cast<native::gen1_item_bag_t*>(&_data[GEN1_ITEM_BAG]);
+        _item_pc       = reinterpret_cast<native::gen1_item_pc_t*>(&_data[GEN1_ITEM_PC]);
         _pokemon_party = reinterpret_cast<native::gen1_pokemon_party_t*>(&_data[GEN1_POKEMON_PARTY]);
-        _pokemon_pc = reinterpret_cast<native::gen1_pokemon_pc_t*>(&_data[GEN1_POKEMON_PC]);
+        _pokemon_pc    = reinterpret_cast<native::gen1_pokemon_pc_t*>(&_data[GEN1_POKEMON_PC]);
 
         _trainer = trainer::make(Versions::YELLOW,
                                  conversions::import_gen1_text(&_data[GEN1_PLAYER_NAME], 7),
@@ -62,6 +63,16 @@ namespace pkmn
         _trainer->set_id(*reinterpret_cast<uint16_t*>(&_data[GEN1_PLAYER_ID]));
 
         _trainer->set_money(conversions::import_gb_money(&_data[GEN1_MONEY]));
+    }
+
+    pkmn::datetime_t game_save_gen1impl::get_time_played() const
+    {
+        return *_time_played;
+    }
+
+    void game_save_gen1impl::set_time_played(pkmn::datetime_t &datetime)
+    {
+        *_time_played = datetime;
     }
 
     void game_save_gen1impl::_write_data()

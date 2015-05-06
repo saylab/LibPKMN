@@ -39,28 +39,30 @@ namespace pkmn
 
     typedef enum
     {
-        gen4_blockA,
-        gen4_blockB,
-        gen4_footerA,
-        gen4_footerB,
-        gen4_party,
-        gen4_items,
-        gen4_name,
-        gen4_tid,
-        gen4_money,
-        gen4_gender,
-        gen4_country,
-        gen4_badges1,
-        gen4_badges2,
-        gen4_rivalname
+        GEN4_BLOCKA,
+        GEN4_BLOCKB,
+        GEN4_FOOTERA,
+        GEN4_FOOTERB,
+        GEN4_TIMEPLAYED,
+        GEN4_PARTY,
+        GEN4_ITEMS,
+        GEN4_NAME,
+        GEN4_TID,
+        GEN4_MONEY,
+        GEN4_GENDER,
+        GEN4_COUNTRY,
+        GEN4_BADGES1,
+        GEN4_BADGES2,
+        GEN4_RIVALNAME
     } gen4_offsets_t;
 
-    static uint32_t gen4_offsets[14][4] =
+    static uint32_t gen4_offsets[15][4] =
     {
         {0x0,     0x0,     0x0,     0x0}, // Block A
         {0x0,  0xC100,  0xCF2C,  0xF700}, // Block B
         {0x0,  0xC0EC,  0xCF18,  0xF618}, // Footer A
         {0x0, 0x1E2CC, 0x1F0FC, 0x21A00}, // Footer B
+        {0x0,    0x86,    0x86,    0x86}, // Playtime
         {0x0,    0x98,    0xA0,    0x98}, // Party
         {0x0,   0x624,   0x630,   0x644}, // Items
         {0x0,  0x0064,  0x0068,  0x0064}, // Trainer Name
@@ -90,7 +92,7 @@ namespace pkmn
         Versions::HEARTGOLD
     };
 
-    gen4_games_t PKMN_INLINE get_gen4_save_type(std::vector<uint8_t>& data)
+    gen4_games_t PKMN_INLINE get_gen4_save_type(std::vector<uint8_t> &data)
     {
         uint32_t* data32 = reinterpret_cast<uint32_t*>(&data);
 
@@ -105,9 +107,12 @@ namespace pkmn
         public:
 
             game_save_gen4impl();
-            game_save_gen4impl(const pkmn::pkstring& filename, gen4_games_t game, bool small);
+            game_save_gen4impl(const pkmn::pkstring &filename, gen4_games_t game, bool small);
 
             void load();
+
+            pkmn::datetime_t get_time_played() const;
+            void set_time_played(pkmn::datetime_t &datetime);
 
         private:
 

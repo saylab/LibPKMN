@@ -11,6 +11,7 @@
 
 #include <pkmn/config.hpp>
 #include <pkmn/trainer.hpp>
+#include <pkmn/types/datetime.hpp>
 #include <pkmn/types/shared_ptr.hpp>
 
 namespace pkmn
@@ -32,7 +33,9 @@ namespace pkmn
             virtual void load() = 0;
             virtual void save() = 0;
             virtual void save_as(const pkmn::pkstring &filename) = 0;
-            //virtual bool check() = 0;
+
+            virtual pkmn::datetime_t get_time_played() const = 0;
+            virtual void set_time_played(pkmn::datetime_t &datetime) = 0;
 
             virtual trainer::sptr get_trainer() const = 0;
 

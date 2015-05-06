@@ -9,7 +9,8 @@
 
 #include <cstdint>
 
-#include "pokemon.hpp"
+#include <pkmn/native/datetime.hpp>
+#include <pkmn/native/pokemon.hpp>
 
 namespace pkmn
 {

@@ -29,18 +29,19 @@ namespace pkmn
         load();
     }
 
-    #define GEN4_DATA(arr,name)           (&arr[gen4_offsets[name][_game_type]])
-    #define GEN4_DATA_CAST(arr,name,type) (reinterpret_cast<type*>(GEN4_DATA(arr,name)))
+    #define GEN4_DATA(arr,name)                 (&arr[gen4_offsets[name][_game_type]])
+    #define GEN4_DATA_CAST(arr,name,type)       (reinterpret_cast<type*>(GEN4_DATA(arr,name)))
+    #define GEN4_DATA_CONST_CAST(arr,name,type) (reinterpret_cast<const type*>(GEN4_DATA(arr,name)))
 
     void game_save_gen4impl::load()
     {
         uint8_t* data2 = &_data[0x40000];
 
-        uint8_t* blockA1 = GEN4_DATA(_data, gen4_blockA);
-        native::gen4_footer_t* footerA1 = GEN4_DATA_CAST(_data, gen4_footerA, native::gen4_footer_t);
+        uint8_t* blockA1 = GEN4_DATA(_data, GEN4_BLOCKA);
+        native::gen4_footer_t* footerA1 = GEN4_DATA_CAST(_data, GEN4_FOOTERA, native::gen4_footer_t);
 
-        uint8_t* blockB1 = GEN4_DATA(_data, gen4_blockB);
-        native::gen4_footer_t* footerB1 = GEN4_DATA_CAST(_data, gen4_footerB, native::gen4_footer_t);
+        uint8_t* blockB1 = GEN4_DATA(_data, GEN4_BLOCKB);
+        native::gen4_footer_t* footerB1 = GEN4_DATA_CAST(_data, GEN4_FOOTERB, native::gen4_footer_t);
 
         if(_small)
         {
@@ -51,11 +52,11 @@ namespace pkmn
         }
         else
         {
-            uint8_t* blockA2 = GEN4_DATA(data2, gen4_blockA);
-            native::gen4_footer_t* footerA2 = GEN4_DATA_CAST(data2, gen4_footerA, native::gen4_footer_t);
+            uint8_t* blockA2 = GEN4_DATA(data2, GEN4_BLOCKA);
+            native::gen4_footer_t* footerA2 = GEN4_DATA_CAST(data2, GEN4_FOOTERA, native::gen4_footer_t);
 
-            uint8_t* blockB2 = GEN4_DATA(data2, gen4_blockB);
-            native::gen4_footer_t* footerB2 = GEN4_DATA_CAST(data2, gen4_footerB, native::gen4_footer_t);
+            uint8_t* blockB2 = GEN4_DATA(data2, GEN4_BLOCKB);
+            native::gen4_footer_t* footerB2 = GEN4_DATA_CAST(data2, GEN4_FOOTERB, native::gen4_footer_t);
 
             if(_game_type == HGSS)
             {
@@ -107,12 +108,12 @@ namespace pkmn
             }
         }
 
-        _party   = GEN4_DATA_CAST(_blocks[A], gen4_party, native::nds_pokemon_party_t);
-        _items   = GEN4_DATA_CAST(_blocks[A], gen4_items, void);
+        _party   = GEN4_DATA_CAST(_blocks[A], GEN4_PARTY, native::nds_pokemon_party_t);
+        _items   = GEN4_DATA_CAST(_blocks[A], GEN4_ITEMS, void);
 
         _trainer = trainer::make(_game_id,
-                                 conversions::import_gen4_text(GEN4_DATA_CAST(_data, gen4_name, uint16_t), 8),
-                                 *GEN4_DATA(_data, gen4_gender) ? Genders::FEMALE : Genders::MALE);
+                                 conversions::import_gen4_text(GEN4_DATA_CAST(_data, GEN4_NAME, uint16_t), 8),
+                                 *GEN4_DATA(_data, GEN4_GENDER) ? Genders::FEMALE : Genders::MALE);
 
         for(size_t i = 0; i < _party->count; i++)
         {
@@ -121,8 +122,18 @@ namespace pkmn
         }
         conversions::import_gen4_bag(_trainer->get_bag(), _items);
 
-        _trainer->set_id(*GEN4_DATA_CAST(_data, gen4_tid, uint32_t));
-        _trainer->set_money(*GEN4_DATA_CAST(_data, gen4_money, uint32_t));
+        _trainer->set_id(*GEN4_DATA_CAST(_data, GEN4_TID, uint32_t));
+        _trainer->set_money(*GEN4_DATA_CAST(_data, GEN4_MONEY, uint32_t));
+    }
+
+    pkmn::datetime_t game_save_gen4impl::get_time_played() const
+    {
+        return *GEN4_DATA_CONST_CAST(_data, GEN4_TIMEPLAYED, uint32_t);
+    }
+
+    void game_save_gen4impl::set_time_played(pkmn::datetime_t &datetime)
+    {
+        *GEN4_DATA_CAST(_data, GEN4_TIMEPLAYED, uint32_t) = datetime;
     }
 
     void game_save_gen4impl::_write_data()

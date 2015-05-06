@@ -171,11 +171,14 @@ namespace pkmn
     {
         public:
 
-            game_save_gen3impl(const pkmn::pkstring& filename, uint16_t game_id);
+            game_save_gen3impl(const pkmn::pkstring &filename, uint16_t game_id);
             ~game_save_gen3impl() {delete _save;}
-            
+
             void load();
-            
+
+            pkmn::datetime_t get_time_played() const;
+            void set_time_played(pkmn::datetime_t &datetime);
+
         private:
 
             void _write_data();
