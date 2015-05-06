@@ -27,17 +27,20 @@
 #include "pokemon_gen6impl.hpp"
 
 #include "internal.hpp"
+#include "io/3gpkm.hpp"
+#include "io/pkm.hpp"
+#include "io/pksql.hpp"
 #include "SQLiteCpp/SQLiteC++.h"
 
 namespace fs = boost::filesystem;
 
 namespace pkmn
 {
-    pokemon::sptr pokemon::make(uint16_t species, uint16_t version, uint16_t level,
-                                uint16_t move1,   uint16_t move2,   uint16_t move3,
-                                uint16_t move4)
+    pokemon::sptr pokemon::make(int species, int version, int level,
+                                int move1,   int move2,   int move3,
+                                int move4)
     {
-        uint8_t generation = database::get_generation(version);
+        int generation = database::get_generation(version);
 
         // Check if Pokémon is valid and was present in given version
         std::ostringstream query_stream;
@@ -49,7 +52,7 @@ namespace pkmn
         {
             if(not query.executeStep())
                 throw std::runtime_error("Invalid Pokémon species.");
-            if(uint8_t(query.getColumn(0)) > generation)
+            if(int(query.getColumn(0)) > generation)
                 throw std::runtime_error("This Pokémon was not present in the given version.");
         }
 
@@ -77,9 +80,9 @@ namespace pkmn
         }
     }
 
-    pokemon::sptr pokemon::make(const pkmn::pkstring& name,  const pkmn::pkstring& game, uint16_t level,
-                                const pkmn::pkstring& move1, const pkmn::pkstring& move2,
-                                const pkmn::pkstring& move3, const pkmn::pkstring& move4)
+    pokemon::sptr pokemon::make(const pkmn::pkstring &name,  const pkmn::pkstring &game, int level,
+                                const pkmn::pkstring &move1, const pkmn::pkstring &move2,
+                                const pkmn::pkstring &move3, const pkmn::pkstring &move4)
     {
         return make(database::get_species_id(name),
                     database::get_version_id(game),
@@ -90,9 +93,55 @@ namespace pkmn
                     database::get_move_id(move4));
     }
 
+    pokemon::sptr pokemon::make(const pkmn::pkstring &filename)
+    {
+        if(fs::extension(fs::path(filename)) == ".pksql" and io::pksql::valid(filename))
+            return io::pksql::from(filename);
+        else if(fs::extension(fs::path(filename)) == ".3gpkm" and io::_3gpkm::valid(filename))
+            return io::_3gpkm::from(filename);
+        else if(fs::extension(fs::path(filename)) == ".pkm" and io::pkm::valid(filename))
+            return io::pkm::from(filename);
+        else
+            throw std::runtime_error("Invalid file.");
+    }
+
+    void pokemon::export_to(pokemon::sptr pkmn, const pkmn::pkstring &filename)
+    {
+        std::string ext = fs::extension(fs::path(filename));
+
+        if(ext == ".pksql")
+        {
+            pkmn::database_sptr output = io::pksql::to(pkmn, filename);
+            if(not io::pksql::valid(filename))
+            {
+                fs::remove(fs::path(filename));
+                throw std::runtime_error("Failed to export to PKSQL.");
+            }
+        }
+        else if(ext == ".3gpkm")
+        {
+            io::_3gpkm::to(pkmn, filename);
+            if(not io::_3gpkm::valid(filename))
+            {
+                fs::remove(fs::path(filename));
+                throw std::runtime_error("Failed to export to .3gpkm.");
+            }
+        }
+        else if(ext == ".pkm")
+        {
+            io::pkm::to(pkmn, filename);
+            if(not io::pkm::valid(filename))
+            {
+                fs::remove(fs::path(filename));
+                throw std::runtime_error("Failed to export to .pkm.");
+            }
+        }
+        else throw std::runtime_error("Extension must be .pksql, .3gpkm, or .pkm.");
+    }
+
     pkmn::shared_ptr<SQLite::Database> pokemon_impl::_db;
 
-    pkmn::dict<uint8_t, std::string> pokemon_impl::_version_dirs = boost::assign::map_list_of
+    pkmn::dict<int, std::string> pokemon_impl::_version_dirs = boost::assign::map_list_of
         (Versions::GOLD,       "gold")
         (Versions::SILVER,     "silver")
         (Versions::CRYSTAL,    "crystal")
@@ -116,33 +165,52 @@ namespace pkmn
     boost::format pokemon_impl::_pokemon_format      = boost::format("%d.png");
     boost::format pokemon_impl::_pokemon_form_format = boost::format("%d-%s.png");
 
-    pokemon_impl::pokemon_impl(uint16_t species_id, uint16_t version_id):
+    pokemon_impl::pokemon_impl(int game_index, int version_id, bool none):
         pokemon(),
-        _pokedex(pokedex::make(database::get_version_name(version_id))),
-        _prng(prng::make(database::get_generation(version_id))),
-        _species_id(species_id),
-        _form_id(species_id),
         _version_id(version_id),
-        _none(species_id == Species::NONE),
-        _invalid(species_id == Species::INVALID)
+        _none(none),
+        _pokedex(pokedex::make(database::get_version_name(version_id))),
+        _prng(prng::make(database::get_generation(version_id)))
     {
         CONNECT_TO_DB(_db);
+
+        if(none)
+        {
+            _species_id = Species::NONE;
+            _form_id = Species::NONE;
+            _invalid = false;
+        }
+        else
+        {
+            try
+            {
+                _species_id = database::get_pokemon_id(game_index, version_id);
+                _invalid = false;
+            }
+            catch(...)
+            {
+                _species_id = Species::INVALID;
+                _invalid = true;
+            }
+
+            _form_id = _species_id;
+        }
 
         _pokedex_entry = _pokedex->get_pokemon_entry(_species_id);
     }
 
-    pokemon_impl::pokemon_impl(const pokemon_impl& other):
-        _pokedex(copy_pokedex(other._pokedex)),
-        _pokedex_entry(other._pokedex_entry),
-        _prng(copy_prng(other._prng)),
+    pokemon_impl::pokemon_impl(const pokemon_impl &other):
         _species_id(other._species_id),
         _form_id(other._form_id),
         _version_id(other._version_id),
-        _attributes(other._attributes),
         _none(other._none),
-        _invalid(other._invalid) {}
+        _invalid(other._invalid),
+        _attributes(other._attributes),
+        _pokedex(copy_pokedex(other._pokedex)),
+        _pokedex_entry(other._pokedex_entry),
+        _prng(copy_prng(other._prng)) {}
 
-    pokemon_impl& pokemon_impl::operator=(const pokemon_impl& other)
+    pokemon_impl& pokemon_impl::operator=(const pokemon_impl &other)
     {
         _pokedex       = copy_pokedex(other._pokedex);
         _pokedex_entry = other._pokedex_entry;
@@ -187,12 +255,12 @@ namespace pkmn
         return database::get_version_name(_version_id);
     }
 
-    uint16_t pokemon_impl::get_generation() const
+    int pokemon_impl::get_generation() const
     {
         return database::get_generation(_version_id);
     }
 
-    int pokemon_impl::get_attribute(const pkmn::pkstring& attribute) const
+    int pokemon_impl::get_attribute(const pkmn::pkstring &attribute) const
     {
         return _attributes.at(attribute);
     }
@@ -202,12 +270,12 @@ namespace pkmn
         return _attributes;
     }
 
-    bool pokemon_impl::has_attribute(const pkmn::pkstring& attribute) const
+    bool pokemon_impl::has_attribute(const pkmn::pkstring &attribute) const
     {
         return _attributes.has_key(attribute);
     }
 
-    void pokemon_impl::set_attribute(const pkmn::pkstring& attribute, int value)
+    void pokemon_impl::set_attribute(const pkmn::pkstring &attribute, int value)
     {
         _attributes[attribute] = value;
     }
@@ -262,22 +330,22 @@ namespace pkmn
      * Database Info
      */
 
-    uint16_t pokemon_impl::get_species_id() const
+    int pokemon_impl::get_species_id() const
     {
         return _species_id;
     }
 
-    uint16_t pokemon_impl::get_pokemon_id() const
+    int pokemon_impl::get_pokemon_id() const
     {
         return database::get_pokemon_id(_form_id);
     }
 
-    uint16_t pokemon_impl::get_game_id() const
+    int pokemon_impl::get_game_id() const
     {
         return _version_id;
     }
 
-    uint16_t pokemon_impl::get_form_id() const
+    int pokemon_impl::get_form_id() const
     {
         return _form_id;
     }

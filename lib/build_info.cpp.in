@@ -9,7 +9,7 @@
 
 #include <pkmn/build_info.hpp>
 
-#include "SQLiteCpp/sqlite3.h"
+#include "sqlite3.h"
 #include "SQLiteCpp/SQLiteC++.h"
 
 namespace pkmn

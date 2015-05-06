@@ -32,10 +32,6 @@ overrides = dict(prng = "PRNG",
                  arng = "ARNG",
                  reset_mtrng = "resetMTRNG",
                  mtrng = "MTRNG",
-                 export_to_3gpkm = "exportTo3GPKM",
-                 import_from_3gpkm = "importFrom3GPKM",
-                 export_to_pkm = "exportToPKM",
-                 import_from_pkm = "importFromPKM",
                  get_appdata_path = "getAppDataPath",
                  get_libpkmn_commit = "getLibPKMNCommit",
                  get_sqlite3_version = "getSQLite3Version",
@@ -73,6 +69,7 @@ overrides = dict(prng = "PRNG",
                  LIBPKMN_PUBLIC_ID = "LIBPKMN_PUBLIC_ID",
                  LIBPKMN_SECRET_ID = "LIBPKMN_SECRET_ID",
                  LIBPKMN_TRAINER_ID = "LIBPKMN_TRAINER_ID",
+                 datetime_t = "DateTime"
                 )
 
 replacements = dict(Ev = "EV",

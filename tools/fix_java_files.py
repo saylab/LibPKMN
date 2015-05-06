@@ -8,7 +8,7 @@
 
 ################################################################
 # This script is called at build-time to add Doxygen tags to
-# SWIG's Java output
+# SWIG's Java output and perform other miscellaneous fixes
 ################################################################
 
 import datetime
@@ -113,6 +113,29 @@ def fix_sptr_file(filename):
         f.write(line)
     f.close()
 
+def fix_pokerus(filename):
+    f = open(filename, "r")
+    flines = f.readlines()[:-1]
+    f.close()
+
+    if "fix_pokerus" in flines[0] or "fix_pokerus" in flines[1]:
+        return
+
+    # Hide SWIG-generate enum functions
+    for i in range(len(flines)):
+        if "D;" in flines[i]:
+            flines[i] = flines[i].replace("D;","D,;")
+        elif "swigValue() {" in flines[i]:
+            flines[i-1] = "// \\cond\n"
+        elif "static int next" in flines[i]:
+            flines = flines[:i+2] + ["// \\endcond\n"] + flines[i+1:]
+
+    f = open(filename, "w")
+    f.write("// fix_pokerus\n")
+    for line in flines:
+        f.write(line)
+    f.close()
+
 if __name__ == "__main__":
 
     parser = OptionParser()
@@ -125,3 +148,5 @@ if __name__ == "__main__":
             hide_ctors(file)
             if file.endswith("SPtr.java"):
                 fix_sptr_file(file)
+            if file == "Pokerus.java":
+                fix_pokerus(file)

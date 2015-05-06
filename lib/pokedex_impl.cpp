@@ -51,6 +51,14 @@ namespace pkmn
     const pokemon_entry_t& pokedex_impl::get_pokemon_entry(int species_id,
                                                            int form_id)
     {
+        if(species_id == Species::NONE or species_id == Species::INVALID)
+        {
+            _pokemon_entry_cache[_version_id][species_id] = pokemon_entry_t(_version_id,
+                                                                            species_id,
+                                                                            form_id);
+            return _pokemon_entry_cache[_version_id][species_id];
+        }
+
         int pokemon_id;
         if(form_id == 0 or form_id == species_id)
         {
@@ -84,7 +92,7 @@ namespace pkmn
     }
 
     const pokemon_entry_t& pokedex_impl::get_pokemon_entry(const pkmn::pkstring &species_name,
-                                                    const pkmn::pkstring &form_name)
+                                                           const pkmn::pkstring &form_name)
     {
         int form_id;
         if(form_name == "Standard" or form_name == species_name or form_name == "")
@@ -97,6 +105,14 @@ namespace pkmn
 
     const move_entry_t& pokedex_impl::get_move_entry(int move_id)
     {
+        if(move_id == Moves::NONE or move_id == Moves::INVALID)
+        {
+            _move_entry_cache[_version_id][move_id] = move_entry_t(_version_id,
+                                                                   move_id);
+
+            return _move_entry_cache[_version_id][move_id];
+        }
+
         std::ostringstream query_stream;
         query_stream << "SELECT generation_id FROM moves WHERE id=" << move_id;
         if(int(_db->execAndGet(query_stream.str().c_str())) > _generation)
@@ -117,6 +133,14 @@ namespace pkmn
 
     const item_entry_t& pokedex_impl::get_item_entry(int item_id)
     {
+        if(item_id == Items::NONE or item_id == Items::INVALID)
+        {
+            _item_entry_cache[_version_id][item_id] = item_entry_t(_version_id,
+                                                                   item_id);
+
+            return _item_entry_cache[_version_id][item_id];
+        }
+
         std::ostringstream query_stream;
         query_stream << "SELECT generation_id FROM item_game_indices WHERE item_id="
                      << item_id;

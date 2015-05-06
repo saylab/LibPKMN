@@ -7,8 +7,6 @@
 #ifndef INCLUDED_PKMN_POKEDEX_ITEM_ENTRY_HPP
 #define INCLUDED_PKMN_POKEDEX_ITEM_ENTRY_HPP
 
-#include <cstdint>
-
 #include <pkmn/config.hpp>
 #include <pkmn/types/pkstring.hpp>
 
@@ -25,8 +23,8 @@ namespace pkmn
         item_entry_t() {};
 
         //! Create an entry using the SQLite ID's of the game version and item.
-        item_entry_t(uint16_t version_id,
-                     uint16_t item_id);
+        item_entry_t(int version_id,
+                     int item_id);
 
         //! Create an entry using the names of the game version and item.
         item_entry_t(const pkmn::pkstring &version_name,
@@ -45,10 +43,10 @@ namespace pkmn
         pkmn::pkstring description;
 
         //! Cost when bought at Poké Mart.
-        uint16_t cost;
+        int cost;
 
         //! Base power when used by the move Fling.
-        uint16_t fling_power;
+        int fling_power;
     };
 }
 

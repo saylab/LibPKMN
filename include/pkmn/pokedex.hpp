@@ -7,8 +7,6 @@
 #ifndef INCLUDED_PKMN_POKEDEX_HPP
 #define INCLUDED_PKMN_POKEDEX_HPP
 
-#include <cstdint>
-
 #include <pkmn/config.hpp>
 #include <pkmn/pokedex/item_entry.hpp>
 #include <pkmn/pokedex/move_entry.hpp>

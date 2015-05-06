@@ -9,6 +9,7 @@
 
 #include <cstdint>
 
+#include <pkmn/native/datetime.hpp>
 #include <pkmn/types/contest_stats.hpp>
 
 namespace pkmn
@@ -321,8 +322,8 @@ namespace pkmn
         typedef struct
         {
             uint16_t otname[8];
-            uint8_t eggmet_date[3];
-            uint8_t met_date[3];
+            native::date_t eggmet_date;
+            native::date_t met_date;
             uint16_t eggmet_dp;
             uint16_t met_dp;
             uint8_t pokerus;
@@ -477,8 +478,8 @@ namespace pkmn
             uint8_t ot_memory_line;
             uint16_t ot_memory_textvar;
             uint8_t ot_memory_feeling;
-            uint8_t eggmet_date[3];
-            uint8_t met_date[3];
+            native::date_t eggmet_date;
+            native::date_t met_date;
             uint8_t unused_D7;
             uint16_t eggmet_location;
             uint16_t met_location;

@@ -153,16 +153,17 @@ namespace pkmn
         void export_gen3_pokemon(pokemon::sptr pkmn, native::gen3_pc_pokemon_t &native,
                                  bool encrypt)
         {
-            set_gen3_pokemon_checksum(native);
             memcpy(&native, pkmn->get_native(), sizeof(native::gen3_pc_pokemon_t));
+
+            set_gen3_pokemon_checksum(native);
             if(encrypt) native::gen3_encrypt(native);
         }
 
         void export_gen3_pokemon(pokemon::sptr pkmn, native::gen3_party_pokemon_t &native,
                                  bool encrypt)
         {
-            set_gen3_pokemon_checksum(native.pc);
             memcpy(&native, pkmn->get_native(), sizeof(native::gen3_party_pokemon_t));
+            set_gen3_pokemon_checksum(native.pc);
             if(encrypt) native::gen3_encrypt(native.pc);
         }
 
@@ -229,7 +230,7 @@ namespace pkmn
                          << database::get_pokemon_id(dst.pc.species, Versions::GOLD)
                          << " AND base_stat IN (4,5)";
             SQLite::Statement stats_query(*db, query_stream.str().c_str());
-            pkmn::dict<pkmn::pkstring, uint16_t> IVs = conversions::import_gb_IVs(dst.pc.iv_data);
+            pkmn::dict<pkmn::pkstring, int> IVs = conversions::import_gb_IVs(dst.pc.iv_data);
 
             dst.spatk = calculations::get_retro_stat("Special Attack",
                                                      get_num_from_query<uint16_t>(stats_query),
@@ -284,7 +285,7 @@ namespace pkmn
                          << database::get_pokemon_id(dst.pc.species, Versions::RED)
                          << " AND base_stat=9";
             SQLite::Statement stats_query(*db, query_stream.str().c_str());
-            pkmn::dict<pkmn::pkstring, uint16_t> IVs = conversions::import_gb_IVs(dst.pc.iv_data);
+            pkmn::dict<pkmn::pkstring, int> IVs = conversions::import_gb_IVs(dst.pc.iv_data);
 
             dst.spcl = calculations::get_retro_stat("Special",
                                                     get_num_from_query<uint16_t>(stats_query),
@@ -361,9 +362,28 @@ namespace pkmn
             gen4_blockD->encounter_info = 0; // Pal Park
             gen4_blockD->ball_hgss = uint8_t((gen3_misc->origin_info & 0x7800) >> 11);
 
+            set_nds_pokemon_checksum(dst.pc);
+
             // Party info
             dst.level = src.level;
             memcpy(&(dst.current_hp), &(src.current_hp), 14);
+        }
+
+        void gen4_to_gen5(const native::nds_party_pokemon_t &src, native::nds_party_pokemon_t &dst)
+        {
+            CONNECT_TO_DB(db);
+
+            const native::nds_pokemon_blockA_t* src_blockA = &(src.pc.blocks.blockA);
+            native::nds_pokemon_blockA_t* dst_blockA = &(dst.pc.blocks.blockA);
+            native::nds_pokemon_blockB_t* dst_blockB = &(dst.pc.blocks.blockB);
+
+            dst = src;
+
+            dst_blockA->species = CONVERT_POKEMON_GAME_INDEX(src_blockA->species, Versions::HEARTGOLD, Versions::BLACK_2);
+            dst_blockA->held_item = CONVERT_ITEM_GAME_INDEX(src_blockA->species, Versions::HEARTGOLD, Versions::BLACK_2);
+            dst_blockB->nature = dst.pc.personality % 24;
+
+            set_nds_pokemon_checksum(dst.pc);
         }
     } /* namespace conversions */
 } /* namespace pkmn */

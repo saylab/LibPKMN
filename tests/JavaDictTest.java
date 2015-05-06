@@ -149,82 +149,12 @@ public class JavaDictTest
         }
     }
 
-    /*
-     * pkmn::dict<pkmn::pkstring, uint16_t>
-     */
-    public static boolean StringUShortDictTest()
-    {
-        try
-        {
-            StringUShortDict dict = new StringUShortDict();
-            dict.put("abc", 25);
-            dict.put("def", 5);
-            dict.put("ghi", 57);
-
-            // Test adding and swapping
-            if(dict.get("abc") != 25)
-                throw new RuntimeException("dict.get(\"abc\") != 25");
-            if(dict.get("def") != 5)
-                throw new RuntimeException("dict.get(\"def\") != 5");
-            if(dict.get("ghi") != 57)
-                throw new RuntimeException("dict.get(\"ghi\") != 57");
-            if(dict.get("abc", 5) != 25)
-                throw new RuntimeException("dict.get(\"abc\", 5) != 25");
-            if(dict.get("ade", 250) != 250)
-                throw new RuntimeException("dict.get(\"abe\", 250) != 250");
-            dict.swap("abc", "ghi");
-            if(dict.get("abc") != 57)
-                throw new RuntimeException("dict.get(\"abc\") != 57");
-            if(dict.get("ghi") != 25)
-                throw new RuntimeException("dict.get(\"ghi\") != 25");
-
-            // Make sure key vector is in correct order
-            StringVector keys = dict.KeySet();
-            if(keys.size() != 3)
-                throw new RuntimeException("keys.size() != 3");
-            if(!keys.get(0).equals("abc"))
-                throw new RuntimeException("keys.get(0) != \"abc\"");
-            if(!keys.get(1).equals("def"))
-                throw new RuntimeException("keys.get(0) != \"def\"");
-            if(!keys.get(2).equals("ghi"))
-                throw new RuntimeException("keys.get(0) != \"ghi\"");
-
-            // Make sure val vector is in correct order
-            UShortVector vals = dict.values();
-            if(vals.size() != 3)
-                throw new RuntimeException("vals.size() != 3");
-            if(vals.get(0) != 57)
-                throw new RuntimeException("vals.get(0) != 57");
-            if(vals.get(1) != 5)
-                throw new RuntimeException("vals.get(1) != 5");
-            if(vals.get(2) != 25)
-                throw new RuntimeException("vals.get(2) != 25");
-
-            // Make sure clearing works
-            dict.clear();
-            if(dict.size() != 0)
-                throw new RuntimeException("dict.size() != 0");
-
-            return true;
-        }
-        catch(RuntimeException ex)
-        {
-            System.out.println("\nCaught exception: " + ex.getMessage());
-            System.out.println("Stacktrace:");
-            for(int i = 0; i < ex.getStackTrace().length; i++)
-                System.out.println(" * " + ex.getStackTrace()[i]);
-
-            return false;
-        }
-    }
-
     public static void main(String[] args)
     {
         boolean successful = true;
 
         successful = StringIntDictTest();
         successful = StringStringDictTest() && successful;
-        successful = StringUShortDictTest() && successful;
 
         System.exit(successful ? 0 : 1);
     }

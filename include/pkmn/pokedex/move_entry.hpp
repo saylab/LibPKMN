@@ -7,7 +7,6 @@
 #ifndef INCLUDED_PKMN_POKEDEX_MOVE_ENTRY_HPP
 #define INCLUDED_PKMN_POKEDEX_MOVE_ENTRY_HPP
 
-#include <cstdint>
 #include <vector>
 
 #include <pkmn/config.hpp>
@@ -26,8 +25,8 @@ namespace pkmn
         move_entry_t() {};
 
         //! Create an entry using the SQLite ID's of the game version and item.
-        move_entry_t(uint16_t version_id,
-                     uint16_t move_id);
+        move_entry_t(int version_id,
+                     int move_id);
 
         //! Create an entry using the names of the game version and item.
         move_entry_t(const pkmn::pkstring &version_name,
@@ -49,16 +48,16 @@ namespace pkmn
         pkmn::pkstring target;
 
         //! Move's base power
-        uint16_t power;
+        int power;
 
         //! Move's base <a href="http://bulbapedia.bulbagarden.net/wiki/PP">PP</a>, without using any items.
-        uint16_t pp;
+        int pp;
 
         //! Move's base accuracy (0.0-1.0).
         float accuracy;
 
         //! Move's <a href="http://bulbapedia.bulbagarden.net/wiki/Priority">move priority</a> (-8 - 8).
-        int8_t priority;
+        int priority;
 
         //! Move's effect (paralysis, etc).
         pkmn::pkstring effect;

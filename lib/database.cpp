@@ -118,11 +118,15 @@ namespace pkmn
             if(species_id == 0 or level == 0) return 0;
 
             std::ostringstream query_stream;
-            query_stream << "SELECT experience FROM experience WHERE level=" << level
-                         << " AND growth_rate_id=(SELECT growth_rate_id FROM pokemon_species"
-                         << " WHERE id=" << species_id << ")";
+            query_stream << "SELECT experience.experience "
+                         << "FROM   pokemon_species "
+                         << " INNER JOIN experience "
+                         << " ON pokemon_species.growth_rate_id = experience.growth_rate_id "
+                         << "WHERE  ( pokemon_species.id = " << species_id << " ) "
+                         << " AND ( experience.level = " << level << " ) "
+                         << "ORDER  BY experience.experience";
             SQLite::Statement query(*db, query_stream.str().c_str());
-            return get_num_from_query<uint16_t>(query);
+            return get_num_from_query<uint32_t>(query);
         }
 
         uint32_t get_experience(const pkmn::pkstring& species_name, uint16_t level)
@@ -545,7 +549,7 @@ namespace pkmn
         uint16_t get_pokemon_game_index(uint16_t pokemon_id, uint16_t version_id)
         {
             CONNECT_TO_DB(db);
-            if(version_id == Versions::NONE) return 0;
+            if(pokemon_id == Species::NONE or version_id == Versions::NONE) return 0;
 
             std::ostringstream query_stream;
             query_stream << "SELECT game_index FROM pokemon_game_indices WHERE pokemon_id=" << pokemon_id

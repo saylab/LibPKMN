@@ -31,6 +31,7 @@ namespace pkmn
         srand((unsigned int)time(NULL));
         seed_lcrng(rand());
         seed_arng(rand());
+        reset_mtrng();
     }
 
     uint16_t prng_impl::lcrng()

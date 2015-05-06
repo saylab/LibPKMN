@@ -6,6 +6,7 @@
  */
 
 #include <boost/assign.hpp>
+#include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 
 #include <pkmn/enums.hpp>
@@ -16,6 +17,9 @@
 #include <pkmn/types/prng.hpp>
 
 #include "trainer_impl.hpp"
+#include "io/trsql.hpp"
+
+namespace fs = boost::filesystem;
 
 namespace pkmn
 {
@@ -29,6 +33,24 @@ namespace pkmn
         return make(database::get_version_id(game),
                     name,
                     ((gender == "Female") ? Genders::FEMALE : Genders::MALE));
+    }
+
+    trainer::sptr trainer::make(const pkmn::pkstring &filename)
+    {
+        if(fs::extension(fs::path(filename)) == ".trsql" and io::trsql::valid(filename))
+            return io::trsql::from(filename);
+        else
+            throw std::runtime_error("Invalid file.");
+    }
+
+    void trainer::export_to(trainer::sptr tr, const pkmn::pkstring &filename)
+    {
+        pkmn::database_sptr output = io::trsql::to(tr, filename);
+        if(not io::trsql::valid(filename))
+        {
+            //fs::remove(fs::path(filename));
+            throw std::runtime_error("Failed to export to TRSQL.");
+        }
     }
 
     trainer_impl::trainer_impl(int game, const pkmn::pkstring &name, int gender): trainer()

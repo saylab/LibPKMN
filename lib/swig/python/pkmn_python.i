@@ -14,9 +14,11 @@
 %include "pkmn_python_docstrings.i"
 %include "pkmn.i"
 
+%include "pkmn_datetime.i"
 %include "pkmn_dict.i"
 %include "pkmn_nature.i"
 %include "pkmn_pkstring.i"
+%include "pkmn_pokemon.i"
 %include "pkmn_shared_ptr.i"
 
 %{
@@ -31,6 +33,7 @@
 
     #include "pkmn/types/contest_stats.hpp"
     #include "pkmn/types/markings.hpp"
+    #include "pkmn/types/pokerus.hpp"
     #include "pkmn/types/prng.hpp"
     #include "pkmn/types/ribbons.hpp"
     #include "pkmn/types/super_training_medals.hpp"
@@ -40,6 +43,7 @@
 %}
 
 %include "pkmn/types/markings.hpp"
+%include "pkmn/types/pokerus.hpp"
 %include "pkmn/types/prng.hpp"
 %include "pkmn/types/ribbons.hpp"
 %include "pkmn/types/super_training_medals.hpp"

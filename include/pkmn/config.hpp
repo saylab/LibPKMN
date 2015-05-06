@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 Nicholas Corgan (n.corgan@gmail.com)
+ * Copyright (c) 2013-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -21,6 +21,7 @@
     #define PKMN_INLINE         __forceinline
     #define PKMN_DEPRECATED     __declspec(deprecated)
     #define PKMN_ALIGNED(x)     __declspec(align(x))
+    #define PKMN_UNUSED(x)      x
     #pragma warning(disable: 4251) // class 'A<T>' needs to have dll-interface to be used by clients of class 'B'
 #elif defined(__GNUG__) && __GNUG__ >= 4
     #define PKMN_EXPORT         __attribute__((visibility("default")))
@@ -28,12 +29,14 @@
     #define PKMN_INLINE         inline __attribute__((always_inline))
     #define PKMN_DEPRECATED     __attribute__((deprecated))
     #define PKMN_ALIGNED(x)     __attribute__((aligned(x)))
+    #define PKMN_UNUSED(x)      x __attribute__((unused))
 #else
     #define PKMN_EXPORT
     #define PKMN_IMPORT
     #define PKMN_INLINE         inline
     #define PKMN_DEPRECATED
     #define PKMN_ALIGNED(x)
+    #define PKMN_UNUSED(x)
 #endif
 
 #ifdef PKMN_DLL_EXPORTS

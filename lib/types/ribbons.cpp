@@ -113,7 +113,7 @@ namespace pkmn
 
     sinnoh_ribbons1_t::operator uint16_t()
     {
-        uint16_t ribbonint;
+        uint16_t ribbonint = 0;
 
         if(sinnoh_champ)   ribbonint |= 0x1;
         if(ability)        ribbonint |= 0x2;
@@ -153,7 +153,7 @@ namespace pkmn
 
     sinnoh_ribbons2_t::operator uint16_t()
     {
-        uint16_t ribbonint;
+        uint16_t ribbonint = 0;
 
         if(gorgeous_royal) ribbonint |= 0x1;
         if(footprint)      ribbonint |= 0x2;
@@ -241,7 +241,7 @@ namespace pkmn
 
     unova_ribbons_t::operator uint16_t()
     {
-        uint16_t ribbonint;
+        uint16_t ribbonint = 0;
 
         if(gorgeous_royal) ribbonint |= 0x1;
         if(footprint)      ribbonint |= 0x2;

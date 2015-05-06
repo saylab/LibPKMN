@@ -21,14 +21,6 @@ namespace pkmn
          */
         typedef struct
         {
-            uint16_t hours;
-            uint8_t minutes;
-            uint8_t seconds;
-            uint8_t frames;
-        } gen3_time_t;
-
-        typedef struct
-        {
             uint8_t name[7];
             uint8_t padding_0x2;
             uint8_t gender;

@@ -4,7 +4,7 @@
  * @brief   Management of a SQLite Database Connection.
  *
  * Copyright (c) 2012-2013 Sebastien Rombauts (sebastien.rombauts@gmail.com)
- *               2014      Nicholas Corgan (n.corgan@gmail.com)
+ *               2014-2015 Nicholas Corgan (n.corgan@gmail.com)
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
@@ -16,6 +16,7 @@
 #include "Column.h"
 
 #include <pkmn/types/pkstring.hpp>
+#include <pkmn/types/shared_ptr.hpp>
 
 namespace SQLite
 {
@@ -173,3 +174,8 @@ private:
 
 
 }  // namespace SQLite
+
+namespace pkmn
+{
+    typedef pkmn::shared_ptr<SQLite::Database> database_sptr;
+}

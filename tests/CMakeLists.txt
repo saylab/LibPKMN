@@ -101,7 +101,9 @@ ENDMACRO(LIBPKMN_ADD_PYTHON_TEST)
 # C++ tests
 ##################################################
 SET(cpp_test_sources
+    datetime_test.cpp
     dict_test.cpp
+    io_test.cpp
     markings_test.cpp
     pkstring_test.cpp
     prng_test.cpp

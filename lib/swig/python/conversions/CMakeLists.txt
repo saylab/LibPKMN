@@ -20,7 +20,6 @@ SET(python_conversions_libraries
 
 SET(pkmn_conversions_python_sources
     pokemon.cpp
-    text.cpp
 )
 
 ADD_LIBRARY(pkmn_conversions_python STATIC ${pkmn_conversions_python_sources})
