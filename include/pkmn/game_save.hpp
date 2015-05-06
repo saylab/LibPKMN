@@ -27,7 +27,7 @@ namespace pkmn
             virtual ~game_save() {};
 
             virtual pkmn::pkstring get_game() const = 0;
-            virtual uint16_t get_generation() const = 0;
+            virtual int get_generation() const = 0;
 
             virtual void load() = 0;
             virtual void save() = 0;
@@ -42,9 +42,9 @@ namespace pkmn
             virtual pkmn::pkstring get_trainer_name() const = 0;
             virtual void set_trainer_name(const pkmn::pkstring &trainer_name) = 0;
 
-            virtual const std::vector<uint8_t>& get_raw() const = 0;
+            virtual const std::vector<uint8_t>& get_raw() = 0;
 
-            virtual uint16_t get_game_id() const = 0;            
+            virtual int get_game_id() const = 0;            
     };
 }
 #endif /* INCLUDED_PKMN_GAME_SAVE_HPP */

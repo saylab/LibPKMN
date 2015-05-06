@@ -25,7 +25,7 @@ namespace pkmn
     {
         _version_id = crystal ? Versions::CRYSTAL : Versions::GOLD;
 
-        uint8_t game = crystal ? gen2_games::CRYSTAL : gen2_games::GS;
+        int game = crystal ? gen2_games::CRYSTAL : gen2_games::GS;
         _player_id_offset = offsets[game][GEN2_PLAYER_ID];
         _player_name_offset = offsets[game][GEN2_PLAYER_NAME];
         _rival_name_offset = offsets[game][GEN2_RIVAL_NAME];
@@ -70,7 +70,7 @@ namespace pkmn
         _trainer->set_money(conversions::import_gb_money(&_data[_money_offset]));
     }
 
-    void game_save_gen2impl::save_as(const pkmn::pkstring &filename)
+    void game_save_gen2impl::_write_data()
     {
         conversions::export_gen2_bag(_trainer->get_bag(), _item_bag);
         *reinterpret_cast<uint16_t*>(&_data[_player_id_offset]) = _trainer->get_public_id();
@@ -90,17 +90,5 @@ namespace pkmn
                                                  _pokemon_party->otnames[i]);
             }
         }
-
-        std::ofstream ofile(filename.const_char());
-        ofile.write((char*)&_data[0], _data.size());
-        ofile.close();
-
-        _filepath = fs::path(filename);
-    };
-
-    bool game_save_gen2impl::check()
-    {
-        return (_version_id == Versions::CRYSTAL) ? crystal_check(_data)
-                                                  : gs_check(_data);
     }
 } /* namespace pkmn */

@@ -175,10 +175,10 @@ namespace pkmn
             ~game_save_gen3impl() {delete _save;}
             
             void load();
-            void save_as(const pkmn::pkstring& filename);
-            bool check();
             
         private:
+
+            void _write_data();
 
             native::gen3_save_t* _raw_save; //Main save
             native::gen3_save_t* _save; //Unscrambled, what we'll actually be using

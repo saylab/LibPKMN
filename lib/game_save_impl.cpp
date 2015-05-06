@@ -101,14 +101,19 @@ namespace pkmn
         return database::get_version_name(_version_id);
     }
 
-    uint16_t game_save_impl::get_generation() const
+    int game_save_impl::get_generation() const
     {
         return database::get_generation(_version_id);
     }
 
-    void game_save_impl::save()
+    void game_save_impl::save_as(const pkmn::pkstring &filename)
     {
-        save_as(_filepath.string());
+        _write_data();
+        std::ofstream ofile(_filepath.string().c_str(), (std::ios::binary | std::ios::out));
+        ofile.write((char*)&_data[0], _data.size());
+        ofile.close();
+
+        _filepath = fs::path(filename);
     }
 
     trainer::sptr game_save_impl::get_trainer() const
@@ -139,10 +144,5 @@ namespace pkmn
     void game_save_impl::set_trainer_name(const pkmn::pkstring &trainer_name)
     {
         _trainer->set_name(trainer_name);
-    }
-
-    uint16_t game_save_impl::get_game_id() const
-    {
-        return _version_id;
     }
 } /* namespace pkmn */

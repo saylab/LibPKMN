@@ -21,7 +21,7 @@ namespace fs = boost::filesystem;
 
 namespace pkmn
 {
-    game_save_gen3impl::game_save_gen3impl(const pkmn::pkstring& filename, uint16_t game_id):
+    game_save_gen3impl::game_save_gen3impl(const pkmn::pkstring &filename, uint16_t game_id):
         game_save_impl(filename)
     {
         _version_id = game_id;
@@ -62,7 +62,7 @@ namespace pkmn
         _trainer->set_money(_save->section1.data32[MONEY/4] ^ _security_key);
     }
 
-    void game_save_gen3impl::save_as(const pkmn::pkstring& filename)
+    void game_save_gen3impl::_write_data()
     {
         conversions::export_gen3_bag(_trainer->get_bag(), _item_storage, _security_key);
         _save->trainer_info.tid = _trainer->get_id();
@@ -82,17 +82,5 @@ namespace pkmn
         }
 
         gen3_crypt_save_sections(_save, _raw_save);
-        std::ofstream ofile(filename.const_char());
-        ofile.write((char*)&_data[0], _data.size());
-        ofile.close();
-        
-        _filepath = fs::path(filename);
-    }
-
-    bool game_save_gen3impl::check()
-    {
-        if(_version_id == Versions::RUBY) return rs_check(_data);
-        else if(_version_id == Versions::EMERALD) return emerald_check(_data);
-        else return frlg_check(_data);
     }
 } /* namespace pkmn */

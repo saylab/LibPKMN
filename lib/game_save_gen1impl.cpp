@@ -19,7 +19,7 @@ namespace fs = boost::filesystem;
 
 namespace pkmn
 {
-    game_save_gen1impl::game_save_gen1impl(const pkmn::pkstring& filename):
+    game_save_gen1impl::game_save_gen1impl(const pkmn::pkstring &filename):
         game_save_impl(filename)
     {
         /*
@@ -64,7 +64,7 @@ namespace pkmn
         _trainer->set_money(conversions::import_gb_money(&_data[GEN1_MONEY]));
     }
 
-    void game_save_gen1impl::save_as(const pkmn::pkstring& filename)
+    void game_save_gen1impl::_write_data()
     {
         conversions::export_gen1_bag(_trainer->get_bag(), _item_bag);
         *reinterpret_cast<uint16_t*>(&_data[GEN1_PLAYER_ID]) = _trainer->get_public_id();
@@ -84,13 +84,5 @@ namespace pkmn
                                                  _pokemon_party->otnames[i]);
             }
         }
-
-        std::ofstream ofile(filename.const_char(), std::ios::out | std::ios::binary);
-        ofile.write((char*)&_data[0], _data.size());
-        ofile.close();
-        
-        _filepath = fs::path(filename);
-    };
-
-    bool game_save_gen1impl::check() {return gen1_check(_data);}
+    }
 } /* namespace pkmn */

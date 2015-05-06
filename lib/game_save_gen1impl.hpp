@@ -55,10 +55,10 @@ namespace pkmn
             game_save_gen1impl(const pkmn::pkstring &filename);
 
             void load();
-            void save_as(const pkmn::pkstring &filename);
-            bool check();
 
         private:
+
+            void _write_data();
 
             native::gen1_item_bag_t*      _item_bag;
             native::gen1_item_pc_t*       _item_pc;

@@ -83,10 +83,10 @@ namespace pkmn
             game_save_gen2impl(const pkmn::pkstring& filename, bool crystal);
 
             void load();
-            void save_as(const pkmn::pkstring& filename);
-            bool check();
 
         private:
+
+            void _write_data();
 
             uint16_t _player_id_offset, _player_name_offset, _rival_name_offset;
             uint16_t _daylight_savings_offset, _time_played_offset, _money_offset;

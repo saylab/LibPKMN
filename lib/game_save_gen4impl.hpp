@@ -108,12 +108,13 @@ namespace pkmn
             game_save_gen4impl(const pkmn::pkstring& filename, gen4_games_t game, bool small);
 
             void load();
-            void save_as(const pkmn::pkstring& filename);
 
         private:
 
+            void _write_data();
+
             gen4_games_t _game_type;
-            uint8_t      _game_id;
+            int          _game_id;
             bool         _small;
 
             uint8_t*               _blocks[2];

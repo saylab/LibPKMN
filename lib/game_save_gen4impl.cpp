@@ -18,7 +18,7 @@ namespace fs = boost::filesystem;
 
 namespace pkmn
 {
-    game_save_gen4impl::game_save_gen4impl(const pkmn::pkstring& filename,
+    game_save_gen4impl::game_save_gen4impl(const pkmn::pkstring &filename,
                                            gen4_games_t game,
                                            bool small):
         game_save_impl(filename),
@@ -34,7 +34,7 @@ namespace pkmn
 
     void game_save_gen4impl::load()
     {
-        uint8_t* data2 =& _data[0x40000];
+        uint8_t* data2 = &_data[0x40000];
 
         uint8_t* blockA1 = GEN4_DATA(_data, gen4_blockA);
         native::gen4_footer_t* footerA1 = GEN4_DATA_CAST(_data, gen4_footerA, native::gen4_footer_t);
@@ -125,9 +125,7 @@ namespace pkmn
         _trainer->set_money(*GEN4_DATA_CAST(_data, gen4_money, uint32_t));
     }
 
-    void game_save_gen4impl::save_as(const pkmn::pkstring& filename)
+    void game_save_gen4impl::_write_data()
     {
-        //TODO: actual saving stuff
-        _filepath = fs::path(filename);
     }
 } /* namespace pkmn */
