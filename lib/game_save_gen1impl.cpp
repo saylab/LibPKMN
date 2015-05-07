@@ -88,6 +88,7 @@ namespace pkmn
 
         pokemon_team_t team = _trainer->get_party();
         _pokemon_party->count = 0;
+        memset(_pokemon_party->species, 0xFF, 7);
         for(size_t i = 0; i < 6; i++)
         {
             conversions::export_gen1_pokemon(team[i], _pokemon_party->party[i],
