@@ -23,6 +23,8 @@
 
 #define PKSTRING_UPPERCASE(str) boost::algorithm::to_upper_copy(str.std_wstring())
 
+#define BYTESWAP16(num) (((uint16_t(num) & 0xFF) << 8) | ((uint16_t(num) & 0xFF00) >> 8))
+
 namespace pkmn
 {
     uint8_t PKMN_INLINE count_ones(uint16_t val)

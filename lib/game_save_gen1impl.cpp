@@ -81,10 +81,10 @@ namespace pkmn
 
     void game_save_gen1impl::_write_data()
     {
+        conversions::export_gen1_text(_trainer->get_name(), &_data[GEN1_PLAYER_NAME], 7);
         conversions::export_gen1_bag(_trainer->get_bag(), _item_bag);
         *reinterpret_cast<uint16_t*>(&_data[GEN1_PLAYER_ID]) = _trainer->get_public_id();
         conversions::export_gb_money(_trainer->get_money(), &_data[GEN1_MONEY]);
-        native::set_gen1_save_checksum(_data);
 
         pokemon_team_t team = _trainer->get_party();
         _pokemon_party->count = 0;
@@ -93,7 +93,13 @@ namespace pkmn
             conversions::export_gen1_pokemon(team[i], _pokemon_party->party[i],
                                              _pokemon_party->nicknames[i],
                                              _pokemon_party->otnames[i]);
-            if(team[i]->get_species_id() != Species::NONE) _pokemon_party->count++;
+            if(team[i]->get_species_id() != Species::NONE)
+            {
+                _pokemon_party->species[i] = database::get_pokemon_game_index(team[i]->get_species_id(), _version_id);
+                _pokemon_party->count++;
+            }
         }
+
+        native::set_gen1_save_checksum(_data);
     }
 } /* namespace pkmn */

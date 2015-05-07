@@ -7,12 +7,57 @@
 #ifndef INCLUDED_POKEMON_GEN1IMPL_HPP
 #define INCLUDED_POKEMON_GEN1IMPL_HPP
 
+#include <boost/assign.hpp>
+
 #include <pkmn/native/pokemon.hpp>
 
 #include "pokemon_impl.hpp"
 
 namespace pkmn
 {
+    typedef enum
+    {
+        GEN1_NORMAL = 0x00,
+        GEN1_FIGHTING = 0x01,
+        GEN1_FLYING = 0x02,
+        GEN1_POISON = 0x03,
+        GEN1_GROUND = 0x04,
+        GEN1_ROCK = 0x05,
+        GEN1_BIRD = 0x06,
+        GEN1_BUG = 0x07,
+        GEN1_GHOST = 0x08,
+        GEN1_UNUSED_x09 = 0x09,
+        GEN1_UNUSED_x10 = 0x10,
+        GEN1_UNUSED_x11 = 0x11,
+        GEN1_UNUSED_x12 = 0x12,
+        GEN1_UNUSED_x13 = 0x13,
+        GEN1_FIRE = 0x14,
+        GEN1_WATER = 0x15,
+        GEN1_GRASS = 0x16,
+        GEN1_ELECTRIC = 0x17,
+        GEN1_PSYCHIC = 0x18,
+        GEN1_ICE = 0x19,
+        GEN1_DRAGON = 0x1A
+    } gen1_types_t;
+
+    static const pkmn::dict<pkmn::pkstring, uint8_t> gen1_type_indices = boost::assign::map_list_of
+        ("Normal", GEN1_NORMAL)
+        ("Fighting", GEN1_FIGHTING)
+        ("Flying", GEN1_FLYING)
+        ("Poison", GEN1_POISON)
+        ("Ground", GEN1_GROUND)
+        ("Rock", GEN1_GROUND)
+        ("Bug", GEN1_BUG)
+        ("Ghost", GEN1_GHOST)
+        ("Fire", GEN1_FIRE)
+        ("Water", GEN1_WATER)
+        ("Grass", GEN1_GRASS)
+        ("Electric", GEN1_ELECTRIC)
+        ("Psychic", GEN1_PSYCHIC)
+        ("Ice", GEN1_ICE)
+        ("Dragon", GEN1_DRAGON)
+    ;
+
     class pokemon_gen1impl: public pokemon_impl
     {
         public:

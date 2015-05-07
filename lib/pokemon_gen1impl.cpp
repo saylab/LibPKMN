@@ -17,6 +17,7 @@
 #include <pkmn/conversions/misc.hpp>
 #include <pkmn/types/prng.hpp>
 
+#include "internal.hpp"
 #include "pokemon_gen1impl.hpp"
 #include "conversions/utils.hpp"
 
@@ -46,8 +47,9 @@ namespace pkmn
             // current_hp populated by _set_stats()
             _set_level(level);
             _raw.pc.status = 0x00;
-            _raw.pc.types[0] = database::get_type_id(_pokedex_entry.types.first);
-            _raw.pc.types[1] = database::get_type_id(_pokedex_entry.types.second);
+            _raw.pc.types[0] = gen1_type_indices.at(_pokedex_entry.types.first, 0x09);
+            _raw.pc.types[1] = (_pokedex_entry.types.first == _pokedex_entry.types.first) ? _raw.pc.types[0]
+                                                                                          : gen1_type_indices.at(_pokedex_entry.types.second, 0x09);
             _raw.pc.catch_rate = conversions::gen1_catch_rates[_species_id];
             _raw.pc.moves[0] = move1;
             _raw.pc.moves[1] = move2;
@@ -408,11 +410,11 @@ namespace pkmn
     pkmn::dict<pkmn::pkstring, int> pokemon_gen1impl::get_EVs() const
     {
         pkmn::dict<pkmn::pkstring, int> EVs;
-        EVs["HP"]      = _raw.pc.ev_hp;
-        EVs["Attack"]  = _raw.pc.ev_atk;
-        EVs["Defense"] = _raw.pc.ev_def;
-        EVs["Speed"]   = _raw.pc.ev_spd;
-        EVs["Special"] = _raw.pc.ev_spcl;
+        EVs["HP"]      = BYTESWAP16(_raw.pc.ev_hp);
+        EVs["Attack"]  = BYTESWAP16(_raw.pc.ev_atk);
+        EVs["Defense"] = BYTESWAP16(_raw.pc.ev_def);
+        EVs["Speed"]   = BYTESWAP16(_raw.pc.ev_spd);
+        EVs["Special"] = BYTESWAP16(_raw.pc.ev_spcl);
 
         return EVs;
     }
@@ -502,23 +504,23 @@ namespace pkmn
         switch(database::get_stat_id(stat)) // Will throw if stat is invalid
         {
             case Stats::HP:
-                _raw.pc.ev_hp = value;
+                _raw.pc.ev_hp = BYTESWAP16(value);
                 break;
 
             case Stats::ATTACK:
-                _raw.pc.ev_atk = value;
+                _raw.pc.ev_atk = BYTESWAP16(value);
                 break;
 
             case Stats::DEFENSE:
-                _raw.pc.ev_def = value;
+                _raw.pc.ev_def = BYTESWAP16(value);
                 break;
 
             case Stats::SPEED:
-                _raw.pc.ev_spd = value;
+                _raw.pc.ev_spd = BYTESWAP16(value);
                 break;
 
             default: // Stats::SPECIAL
-                _raw.pc.ev_spcl = value;
+                _raw.pc.ev_spcl = BYTESWAP16(value);
                 break;
         }
 
@@ -686,18 +688,19 @@ namespace pkmn
     void pokemon_gen1impl::_set_stats()
     {
         pkmn::dict<pkmn::pkstring, int> stats = _pokedex_entry.base_stats;
+        pkmn::dict<pkmn::pkstring, int> EVs   = get_EVs();
         pkmn::dict<pkmn::pkstring, int> IVs   = get_IVs();
 
-        _raw.max_hp = calculations::get_retro_stat("HP", stats["HP"], _raw.level,
-                                                   _raw.pc.ev_hp, IVs["HP"]);
+        _raw.max_hp = BYTESWAP16(calculations::get_retro_stat("HP", stats["HP"], _raw.level,
+                                                   EVs["HP"], IVs["HP"]));
         _raw.pc.current_hp = _raw.max_hp;
-        _raw.atk  = calculations::get_retro_stat("Attack", stats["Attack"], _raw.level,
-                                                 _raw.pc.ev_atk, IVs["Attack"]);
-        _raw.def  = calculations::get_retro_stat("Defense", stats["Defense"], _raw.level,
-                                                 _raw.pc.ev_def, IVs["Defense"]);
-        _raw.spd  = calculations::get_retro_stat("Speed", stats["Speed"], _raw.level,
-                                                 _raw.pc.ev_spd, IVs["Speed"]);
-        _raw.spcl  = calculations::get_retro_stat("Special", stats["Special"], _raw.level,
-                                                  _raw.pc.ev_spcl, IVs["Special"]);
+        _raw.atk  = BYTESWAP16(calculations::get_retro_stat("Attack", stats["Attack"], _raw.level,
+                                                 EVs["Attack"], IVs["Attack"]));
+        _raw.def  = BYTESWAP16(calculations::get_retro_stat("Defense", stats["Defense"], _raw.level,
+                                                 EVs["Defense"], IVs["Defense"]));
+        _raw.spd  = BYTESWAP16(calculations::get_retro_stat("Speed", stats["Speed"], _raw.level,
+                                                 EVs["Speed"], IVs["Speed"]));
+        _raw.spcl  = BYTESWAP16(calculations::get_retro_stat("Special", stats["Special"], _raw.level,
+                                                  EVs["Special"], IVs["Special"]));
     }
 }
